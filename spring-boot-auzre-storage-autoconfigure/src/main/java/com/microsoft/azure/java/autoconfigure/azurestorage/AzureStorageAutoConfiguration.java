@@ -32,28 +32,36 @@ public class AzureStorageAutoConfiguration {
         this.properties = properties;
     }
 
+    /**
+     * Declare CloudStorageAccount bean.
+     *
+     * @return
+     */
     @Bean
     public CloudStorageAccount cloudStorageAccount() {
         LOG.debug("cloudStorageAccount called, account name = " + properties.getName());
         return createCloudStorageAccount();
     }
 
+    /**
+     * Helper function for creating CloudStorageAccount instance from storage connection string.
+     *
+     * @return
+     */
     private CloudStorageAccount createCloudStorageAccount() {
         LOG.debug("createCloudStorageAccount called, account name = " + properties.getName());
 
         CloudStorageAccount account = null;
         if (properties.getName() != null) {
             try {
-                String connectionString = properties.buildStorageConnectString();
+                final String connectionString = properties.buildStorageConnectString();
                 LOG.debug("Connection String is " + connectionString);
                 account = CloudStorageAccount.parse(connectionString);
                 LOG.debug("createCloudStorageAccount created account " + account);
             } catch (InvalidKeyException e) {
-                String msg = "Error creating CloudStorageAccount: " + e.getMessage();
-                LOG.error(msg, e);
+                LOG.error("Error creating CloudStorageAccount: " + e.getMessage(), e);
             } catch (URISyntaxException e) {
-                String msg = "Error creating CloudStorageAccount: " + e.getMessage();
-                LOG.error(msg, e);
+                LOG.error("Error creating CloudStorageAccount: " + e.getMessage(), e);
             }
         }
         return account;

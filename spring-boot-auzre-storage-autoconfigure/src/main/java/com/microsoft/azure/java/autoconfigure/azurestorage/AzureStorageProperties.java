@@ -20,30 +20,51 @@ public class AzureStorageProperties {
     private String name;
     private String key;
 
+    /**
+     * Get storage account name.
+     *
+     * @return storage account name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Set storage account name.
+     *
+     * @param accountName
+     */
     public void setName(String accountName) {
         this.name = accountName;
     }
 
+    /**
+     * Get azure storage account key.
+     *
+     * @return azure storage account key
+     */
     public String getKey() {
         return key;
     }
 
+    /**
+     * Set azure storage account key.
+     *
+     * @param accountKey
+     */
     public void setKey(String accountKey) {
         this.key = accountKey;
     }
 
+    /**
+     * Construct azure storage connnection string.
+     *
+     * @return azure storage connection string
+     */
     public String buildStorageConnectString() {
-        String storageConnectionString = "DefaultEndpointsProtocol=http;" + "AccountName=" + getName() + ";" + "AccountKey=" + getKey();
+         String storageConnectionString =
+                "DefaultEndpointsProtocol=http;" + "AccountName=" + getName() + ";" + "AccountKey=" + getKey();
         LOG.debug("storageConnectionString = " + storageConnectionString);
         return storageConnectionString;
-    }
-
-    @Override
-    public String toString() {
-        return "AzureStorageProperties [name=" + name + ", key=" + key + "]";
     }
 }
