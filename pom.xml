@@ -46,4 +46,8 @@
          </plugin>
       </plugins>
    </build>
+
+   <modules>
+      <module>spring-boot-auzre-storage-autoconfigure</module>
+   </modules>
 </project>

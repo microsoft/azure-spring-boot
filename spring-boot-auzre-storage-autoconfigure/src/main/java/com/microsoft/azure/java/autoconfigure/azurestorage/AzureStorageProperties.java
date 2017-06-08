@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See License.txt in the project root for
+ * license information.
+ */
+
 package com.microsoft.azure.java.autoconfigure.azurestorage;
 
 import org.slf4j.Logger;
@@ -14,36 +20,30 @@ public class AzureStorageProperties {
     private String name;
     private String key;
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(String accountName)
-    {
+    public void setName(String accountName) {
         this.name = accountName;
     }
 
-    public String getKey()
-    {
+    public String getKey() {
         return key;
     }
 
-    public void setKey(String accountKey)
-    {
+    public void setKey(String accountKey) {
         this.key = accountKey;
     }
 
-    public String buildStorageConnectString()
-    {
+    public String buildStorageConnectString() {
         String storageConnectionString = "DefaultEndpointsProtocol=http;" + "AccountName=" + getName() + ";" + "AccountKey=" + getKey();
         LOG.debug("storageConnectionString = " + storageConnectionString);
         return storageConnectionString;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "AzureStorageProperties [name=" + name + ", key=" + key + "]";
     }
 }

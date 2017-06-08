@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See License.txt in the project root for
+ * license information.
+ */
+
 package com.microsoft.azure.java.autoconfigure.azurestorage;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
@@ -27,31 +33,25 @@ public class AzureStorageAutoConfiguration {
     }
 
     @Bean
-    public CloudStorageAccount cloudStorageAccount()
-    {
+    public CloudStorageAccount cloudStorageAccount() {
         LOG.debug("cloudStorageAccount called, account name = " + properties.getName());
         return createCloudStorageAccount();
     }
 
-    private CloudStorageAccount createCloudStorageAccount()
-    {
+    private CloudStorageAccount createCloudStorageAccount() {
         LOG.debug("createCloudStorageAccount called, account name = " + properties.getName());
 
         CloudStorageAccount account = null;
-        if (properties.getName() !=  null)
-        {
-            try
-            {
+        if (properties.getName() != null) {
+            try {
                 String connectionString = properties.buildStorageConnectString();
                 LOG.debug("Connection String is " + connectionString);
                 account = CloudStorageAccount.parse(connectionString);
                 LOG.debug("createCloudStorageAccount created account " + account);
-            } catch (InvalidKeyException e)
-            {
+            } catch (InvalidKeyException e) {
                 String msg = "Error creating CloudStorageAccount: " + e.getMessage();
                 LOG.error(msg, e);
-            } catch (URISyntaxException e)
-            {
+            } catch (URISyntaxException e) {
                 String msg = "Error creating CloudStorageAccount: " + e.getMessage();
                 LOG.error(msg, e);
             }
