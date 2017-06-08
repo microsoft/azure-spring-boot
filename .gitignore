@@ -25,5 +25,8 @@ hs_err_pid*
 .idea
 *.iml
 
+# Eclipse
+.metadata
+
 # Maven
 target

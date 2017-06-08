@@ -10,9 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * Created by zhijzhao on 6/8/2017.
- */
 @ConfigurationProperties("azure.storage.account")
 public class AzureStorageProperties {
     private static final Logger LOG = LoggerFactory.getLogger(AzureStorageProperties.class);

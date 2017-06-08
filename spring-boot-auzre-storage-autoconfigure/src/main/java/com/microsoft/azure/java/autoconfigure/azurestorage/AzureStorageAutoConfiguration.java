@@ -17,9 +17,6 @@ import org.springframework.context.annotation.Configuration;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 
-/**
- * Created by zhijzhao on 6/8/2017.
- */
 @Configuration
 @ConditionalOnMissingBean(CloudStorageAccount.class)
 @EnableConfigurationProperties(AzureStorageProperties.class)
