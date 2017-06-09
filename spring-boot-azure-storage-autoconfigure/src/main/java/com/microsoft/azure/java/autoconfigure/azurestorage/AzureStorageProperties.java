@@ -59,7 +59,7 @@ public class AzureStorageProperties {
      * @return azure storage connection string
      */
     public String buildStorageConnectString() {
-         String storageConnectionString =
+         final String storageConnectionString =
                 "DefaultEndpointsProtocol=http;" + "AccountName=" + getName() + ";" + "AccountKey=" + getKey();
         LOG.debug("storageConnectionString = " + storageConnectionString);
         return storageConnectionString;

@@ -52,7 +52,7 @@ public class AzureStorageAutoConfiguration {
         if (properties.getName() != null) {
             try {
                 final String connectionString = properties.buildStorageConnectString();
-                LOG.debug("Connection String is " + connectionString);
+                LOG.debug("Connection string is " + connectionString);
                 account = CloudStorageAccount.parse(connectionString);
                 LOG.debug("createCloudStorageAccount created account " + account);
             } catch (InvalidKeyException e) {

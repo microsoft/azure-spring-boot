@@ -7,8 +7,8 @@
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Microsoft Azure spring boot starters</name>
-    <description>spring boot starters for Microsoft Azure</description>
+    <name>Microsoft Azure Spring Boot Starters</name>
+    <description>Spring Boot starters for Microsoft Azure services</description>
     <url>https://github.com/microsoft/azure-spring-boot-starters</url>
 
     <licenses>
@@ -64,6 +64,6 @@
     </build>
 
     <modules>
-        <module>spring-boot-auzre-storage-autoconfigure</module>
+        <module>spring-boot-azure-storage-autoconfigure</module>
     </modules>
 </project>
