@@ -32,26 +32,26 @@ public class AzureStorageAutoConfiguration {
     /**
      * Declare CloudStorageAccount bean.
      *
-     * @return
+     * @return CloudStorageAccount bean
      */
     @Bean
     public CloudStorageAccount cloudStorageAccount() {
-        LOG.debug("cloudStorageAccount called, account name = " + properties.getName());
+        LOG.debug("cloudStorageAccount called, connection string = " + properties.getConnectionString());
         return createCloudStorageAccount();
     }
 
     /**
      * Helper function for creating CloudStorageAccount instance from storage connection string.
      *
-     * @return
+     * @return CloudStorageAccount object
      */
     private CloudStorageAccount createCloudStorageAccount() {
-        LOG.debug("createCloudStorageAccount called, account name = " + properties.getName());
+        LOG.debug("createCloudStorageAccount called");
 
         CloudStorageAccount account = null;
-        if (properties.getName() != null) {
+        if (properties.getConnectionString() != null) {
             try {
-                final String connectionString = properties.buildStorageConnectString();
+                final String connectionString = properties.getConnectionString();
                 LOG.debug("Connection string is " + connectionString);
                 account = CloudStorageAccount.parse(connectionString);
                 LOG.debug("createCloudStorageAccount created account " + account);
