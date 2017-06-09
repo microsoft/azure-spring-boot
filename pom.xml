@@ -1,49 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-   <modelVersion>4.0.0</modelVersion>
-   <groupId>com.microsoft.azure</groupId>
-   <artifactId>azure-spring-boot-starters</artifactId>
-   <version>0.1.0-SNAPSHOT</version>
-   <packaging>pom</packaging>
-   
-   <name>Microsoft Azure spring boot starters</name>
-   <description>spring boot starters for Microsoft Azure</description>
-   <url>https://github.com/microsoft/azure-spring-boot-starters</url>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.microsoft.azure</groupId>
+    <artifactId>azure-spring-boot-starters</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-   <licenses>
-       <license>
-           <name>The MIT License (MIT)</name>
-           <url>http://opensource.org/licenses/MIT</url>
-           <distribution>repo</distribution>
-       </license>
+    <name>Microsoft Azure Spring Boot Starters</name>
+    <description>Spring Boot starters for Microsoft Azure services</description>
+    <url>https://github.com/microsoft/azure-spring-boot-starters</url>
+
+    <licenses>
+        <license>
+            <name>The MIT License (MIT)</name>
+            <url>http://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
     </licenses>
 
-   <build>  
-      <plugins>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>2.17</version>
-            <executions>
-               <execution>
-                  <id>validate</id>
-                  <phase>validate</phase>
-                  <configuration>
-                     <configLocation>checkstyle.xml</configLocation>
-                     <encoding>UTF-8</encoding>
-                     <consoleOutput>true</consoleOutput>
-                     <failsOnError>true</failsOnError>
-                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                  </configuration>
-                  <goals>
-                     <goal>check</goal>
-                  </goals>
-               </execution>
-            </executions>
-            <configuration>
-               <linkXRef>false</linkXRef>
-            </configuration>
-         </plugin>
-      </plugins>
-   </build>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>1.5.3.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.17</version>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <configuration>
+                            <configLocation>checkstyle.xml</configLocation>
+                            <encoding>UTF-8</encoding>
+                            <consoleOutput>true</consoleOutput>
+                            <failsOnError>true</failsOnError>
+                            <failOnViolation>true</failOnViolation>
+                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                        </configuration>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <linkXRef>false</linkXRef>
+                </configuration>
+                <inherited>true</inherited>
+            </plugin>
+        </plugins>
+    </build>
+
+    <modules>
+        <module>spring-boot-azure-storage-autoconfigure</module>
+    </modules>
 </project>
