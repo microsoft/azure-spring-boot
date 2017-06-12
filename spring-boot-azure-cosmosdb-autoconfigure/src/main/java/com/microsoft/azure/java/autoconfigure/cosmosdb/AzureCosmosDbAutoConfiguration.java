@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 @Configuration
 @ConditionalOnMissingBean(DocumentClient.class)
@@ -29,12 +30,13 @@ public class AzureCosmosDbAutoConfiguration {
     }
 
     @Bean
+    @Scope("prototype")
     public DocumentClient documentClient() {
         return createDocumentClient();
     }
 
     private DocumentClient createDocumentClient() {
-        LOG.debug("createDocumentClient: hostname = " + properties.getUri() + ", masterkey = " + properties.getKey());
+        LOG.debug("createDocumentClient: URI = " + properties.getUri() + ", key = " + properties.getKey());
 
         DocumentClient client = null;
         if (properties.getUri() != null && properties.getKey() != null) {
