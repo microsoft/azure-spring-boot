@@ -6,8 +6,6 @@
 
 package com.microsoft.azure.java.autoconfigure.cosmosdb;
 
-import com.microsoft.azure.documentdb.ConnectionPolicy;
-import com.microsoft.azure.documentdb.ConsistencyLevel;
 import com.microsoft.azure.documentdb.DocumentClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +38,8 @@ public class AzureCosmosDbAutoConfiguration {
 
         DocumentClient client = null;
         if (properties.getUri() != null && properties.getKey() != null) {
-            client = new DocumentClient(
-                    properties.getUri(), properties.getKey(), ConnectionPolicy.GetDefault(), ConsistencyLevel.Session);
+            client = new DocumentClient(properties.getUri(), properties.getKey(),
+                    properties.getConnectionPolicy(), properties.getConsistencyLevel());
         }
         return client;
     }
