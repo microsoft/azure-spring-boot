@@ -39,7 +39,7 @@ public class AzureCosmosDbAutoConfiguration {
         DocumentClient client = null;
         if (properties.getUri() != null && properties.getKey() != null) {
             client = new DocumentClient(properties.getUri(), properties.getKey(),
-                    properties.getConnectionPolicy(), properties.getConsistencyLevel());
+                    properties.getConnectionPolicySettings().toConnectionPolicy(), properties.getConsistencyLevel());
         }
         return client;
     }
