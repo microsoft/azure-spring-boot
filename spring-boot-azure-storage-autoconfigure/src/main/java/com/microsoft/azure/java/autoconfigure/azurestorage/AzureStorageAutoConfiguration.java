@@ -58,9 +58,13 @@ public class AzureStorageAutoConfiguration {
                 account = CloudStorageAccount.parse(connectionString);
                 LOG.debug("createCloudStorageAccount created account " + account);
             } catch (InvalidKeyException e) {
-                LOG.error("Error creating CloudStorageAccount: " + e.getMessage(), e);
+                final String msg = "Error creating CloudStorageAccount: " + e.getMessage();
+                LOG.error(msg, e);
+                throw new AzureStorageAutoConfigureException(msg, e);
             } catch (URISyntaxException e) {
-                LOG.error("Error creating CloudStorageAccount: " + e.getMessage(), e);
+                final String msg = "Error creating CloudStorageAccount: " + e.getMessage();
+                LOG.error(msg, e);
+                throw new AzureStorageAutoConfigureException(msg, e);
             }
         }
         return account;
