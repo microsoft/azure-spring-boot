@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AzureCosmosDbPropertiesTest {
     @BeforeClass
     public static void beforeClass() {
-        Utils.setProperties();
+        PropertySettingUtil.setProperties();
     }
 
     @Test
@@ -27,35 +27,35 @@ public class AzureCosmosDbPropertiesTest {
         context.refresh();
         final AzureCosmosDbProperties properties = context.getBean(AzureCosmosDbProperties.class);
 
-        assertThat(properties.getUri()).isEqualTo(Utils.URI);
-        assertThat(properties.getKey()).isEqualTo(Utils.KEY);
+        assertThat(properties.getUri()).isEqualTo(PropertySettingUtil.URI);
+        assertThat(properties.getKey()).isEqualTo(PropertySettingUtil.KEY);
 
         assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getRequestTimeout()).
-                isEqualTo(Utils.REQUEST_TIMEOUT);
+                isEqualTo(PropertySettingUtil.REQUEST_TIMEOUT);
         assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getMediaRequestTimeout()).
-                isEqualTo(Utils.MEDIA_REQUEST_TIMEOUT);
+                isEqualTo(PropertySettingUtil.MEDIA_REQUEST_TIMEOUT);
         assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getConnectionMode()).
-                isEqualTo(Utils.CONNECTION_MODE);
+                isEqualTo(PropertySettingUtil.CONNECTION_MODE);
         assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getMediaReadMode()).
-                isEqualTo(Utils.MEDIA_READ_MODE);
+                isEqualTo(PropertySettingUtil.MEDIA_READ_MODE);
         assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getMaxPoolSize()).
-                isEqualTo(Utils.MAX_POOL_SIZE);
+                isEqualTo(PropertySettingUtil.MAX_POOL_SIZE);
         assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getIdleConnectionTimeout()).
-                isEqualTo(Utils.IDLE_CONNECTION_TIMEOUT);
+                isEqualTo(PropertySettingUtil.IDLE_CONNECTION_TIMEOUT);
         assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getUserAgentSuffix()).
-                isEqualTo(Utils.USER_AGENT_SUFFIX);
+                isEqualTo(PropertySettingUtil.USER_AGENT_SUFFIX);
         assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getRetryOptions().
                 getMaxRetryAttemptsOnThrottledRequests()).
-                isEqualTo(Utils.RETRY_OPTIONS_MAX_RETRY_ATTEMPS_ON_THROTTLED_REQUESTS);
+                isEqualTo(PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_ATTEMPS_ON_THROTTLED_REQUESTS);
         assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getRetryOptions().
                 getMaxRetryWaitTimeInSeconds()).
-                isEqualTo(Utils.RETRY_OPTIONS_MAX_RETRY_WAIT_TIME_IN_SECONDS);
+                isEqualTo(PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_WAIT_TIME_IN_SECONDS);
         assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getEnableEndpointDiscovery()).
-                isEqualTo(Utils.ENABLE_ENDPOINT_DISCOVERY);
+                isEqualTo(PropertySettingUtil.ENABLE_ENDPOINT_DISCOVERY);
         assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getPreferredLocations().toString()).
-                isEqualTo(Utils.PREFERRED_LOCATIONS.toString());
+                isEqualTo(PropertySettingUtil.PREFERRED_LOCATIONS.toString());
 
-        assertThat(properties.getConsistencyLevel()).isEqualTo(Utils.CONSISTENCY_LEVEL);
+        assertThat(properties.getConsistencyLevel()).isEqualTo(PropertySettingUtil.CONSISTENCY_LEVEL);
     }
 
     @Configuration

@@ -71,9 +71,6 @@ public class AzureCosmosDbProperties {
         private boolean enableEndpointDiscovery;
         private Collection<String> preferredLocations;
 
-        // Will not expose HttpsHost related properties, since its settings are complicated.
-        // private HttpHost httpHost;
-
         public ConnectionPolicySettings() {
             final ConnectionPolicy defaultConnectionPolicy = ConnectionPolicy.GetDefault();
 

@@ -16,7 +16,7 @@ public class AzureStorageAutoConfigurationTest {
     private static final String INVALID_CONNECTION_STRING = "invalid connection string";
     private static final String CONNECTION_STRING_WITH_VALID_FORMAT = "DefaultEndpointsProtocol=https;" +
             "AccountName=account-name;" +
-            "AccountKey=9ycDniQThM+dT18TmcfhgLyHQCKju9/B9VOtTQ4BOLPhpVbWXbyf9zvNTGe7LB3p2zm5Yl89IQyNgLWw1Wnjxw==;" +
+            "AccountKey=9ycDniQThM+dT18TmcfhgLyHQCKju9/B9VOtTQ4BOLPhpVbWXbyf9zvNTGe7LB3p2zm5Yl89IQyNgLWw1Wnjxzzj;" +
             "EndpointSuffix=core.windows.net";
 
     @Test

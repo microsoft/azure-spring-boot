@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 import java.util.Arrays;
 import java.util.List;
 
-public class Utils {
+public class PropertySettingUtil {
     public static final String URI = "https://test.documents.azure.com:443/";
     public static final String KEY = "KeyString";
 
