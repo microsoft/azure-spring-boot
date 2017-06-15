@@ -65,5 +65,6 @@
 
     <modules>
         <module>spring-boot-azure-storage-autoconfigure</module>
+        <module>spring-boot-azure-cosmosdb-autoconfigure</module>
     </modules>
 </project>

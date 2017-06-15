@@ -6,62 +6,28 @@
 
 package com.microsoft.azure.java.autoconfigure.azurestorage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties("azure.storage.account")
+@ConfigurationProperties("azure.storage")
 public class AzureStorageProperties {
-    private static final Logger LOG = LoggerFactory.getLogger(AzureStorageProperties.class);
 
-    private String name;
-    private String key;
+    private String connectionString;
 
     /**
-     * Get storage account name.
+     * Get storage account connection string.
      *
-     * @return storage account name
+     * @return storage account connection string
      */
-    public String getName() {
-        return name;
+    public String getConnectionString() {
+        return connectionString;
     }
 
     /**
-     * Set storage account name.
+     * Set storage account connection string.
      *
-     * @param accountName
+     * @param connectionString
      */
-    public void setName(String accountName) {
-        this.name = accountName;
-    }
-
-    /**
-     * Get azure storage account key.
-     *
-     * @return azure storage account key
-     */
-    public String getKey() {
-        return key;
-    }
-
-    /**
-     * Set azure storage account key.
-     *
-     * @param accountKey
-     */
-    public void setKey(String accountKey) {
-        this.key = accountKey;
-    }
-
-    /**
-     * Construct azure storage connnection string.
-     *
-     * @return azure storage connection string
-     */
-    public String buildStorageConnectString() {
-         final String storageConnectionString =
-                "DefaultEndpointsProtocol=http;" + "AccountName=" + getName() + ";" + "AccountKey=" + getKey();
-        LOG.debug("storageConnectionString = " + storageConnectionString);
-        return storageConnectionString;
+    public void setConnectionString(String connectionString) {
+        this.connectionString = connectionString;
     }
 }

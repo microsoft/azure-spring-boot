@@ -3,8 +3,10 @@
  * Licensed under the MIT License. See License.txt in the project root for
  * license information.
  */
-
-/**
- * The package provides auto configuration for Azure Storage SDK.
- */
 package com.microsoft.azure.java.autoconfigure.azurestorage;
+
+public class AzureStorageAutoConfigureException extends RuntimeException {
+    public AzureStorageAutoConfigureException(String msg, Throwable t) {
+        super(msg, t);
+    }
+}
