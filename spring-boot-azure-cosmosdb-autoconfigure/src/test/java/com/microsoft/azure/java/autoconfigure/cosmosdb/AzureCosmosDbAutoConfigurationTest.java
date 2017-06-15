@@ -55,7 +55,7 @@ public class AzureCosmosDbAutoConfigurationTest {
         assertThat(connectionPolicy.getIdleConnectionTimeout()).isEqualTo(PropertySettingUtil.IDLE_CONNECTION_TIMEOUT);
         assertThat(connectionPolicy.getUserAgentSuffix()).isEqualTo(PropertySettingUtil.USER_AGENT_SUFFIX);
         assertThat(connectionPolicy.getRetryOptions().getMaxRetryAttemptsOnThrottledRequests()).
-                isEqualTo(PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_ATTEMPS_ON_THROTTLED_REQUESTS);
+                isEqualTo(PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_ATTEMPTS_ON_THROTTLED_REQUESTS);
         assertThat(connectionPolicy.getRetryOptions().getMaxRetryWaitTimeInSeconds()).
                 isEqualTo(PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_WAIT_TIME_IN_SECONDS);
         assertThat(connectionPolicy.getEnableEndpointDiscovery()).
@@ -80,7 +80,7 @@ public class AzureCosmosDbAutoConfigurationTest {
 
             final RetryOptions retryOptions = new RetryOptions();
             retryOptions.setMaxRetryAttemptsOnThrottledRequests(
-                    PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_ATTEMPS_ON_THROTTLED_REQUESTS);
+                    PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_ATTEMPTS_ON_THROTTLED_REQUESTS);
             retryOptions.setMaxRetryWaitTimeInSeconds(
                     PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_WAIT_TIME_IN_SECONDS);
             connectionPolicy.setRetryOptions(retryOptions);
