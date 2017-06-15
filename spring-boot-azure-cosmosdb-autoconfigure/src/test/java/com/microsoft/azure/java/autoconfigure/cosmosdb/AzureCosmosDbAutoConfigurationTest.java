@@ -68,7 +68,7 @@ public class AzureCosmosDbAutoConfigurationTest {
     static class ConnectionPolicyConfig {
         @Bean
         public ConnectionPolicy connectionPolicy(){
-            ConnectionPolicy connectionPolicy = ConnectionPolicy.GetDefault();
+            final ConnectionPolicy connectionPolicy = ConnectionPolicy.GetDefault();
 
             connectionPolicy.setRequestTimeout(PropertySettingUtil.REQUEST_TIMEOUT);
             connectionPolicy.setMediaRequestTimeout(PropertySettingUtil.MEDIA_REQUEST_TIMEOUT);
@@ -78,7 +78,7 @@ public class AzureCosmosDbAutoConfigurationTest {
             connectionPolicy.setIdleConnectionTimeout(PropertySettingUtil.IDLE_CONNECTION_TIMEOUT);
             connectionPolicy.setUserAgentSuffix(PropertySettingUtil.USER_AGENT_SUFFIX);
 
-            RetryOptions retryOptions = new RetryOptions();
+            final RetryOptions retryOptions = new RetryOptions();
             retryOptions.setMaxRetryAttemptsOnThrottledRequests(
                     PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_ATTEMPS_ON_THROTTLED_REQUESTS);
             retryOptions.setMaxRetryWaitTimeInSeconds(
