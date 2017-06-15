@@ -4,7 +4,7 @@
  * license information.
  */
 
-package com.microsoft.azure.java.autoconfigure.azurestorage;
+package com.microsoft.azure.autoconfigure.azurestorage;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
 import org.slf4j.Logger;
