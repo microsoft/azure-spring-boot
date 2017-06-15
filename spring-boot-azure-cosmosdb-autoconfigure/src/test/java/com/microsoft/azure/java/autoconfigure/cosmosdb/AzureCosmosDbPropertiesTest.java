@@ -29,32 +29,6 @@ public class AzureCosmosDbPropertiesTest {
 
         assertThat(properties.getUri()).isEqualTo(PropertySettingUtil.URI);
         assertThat(properties.getKey()).isEqualTo(PropertySettingUtil.KEY);
-
-        assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getRequestTimeout()).
-                isEqualTo(PropertySettingUtil.REQUEST_TIMEOUT);
-        assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getMediaRequestTimeout()).
-                isEqualTo(PropertySettingUtil.MEDIA_REQUEST_TIMEOUT);
-        assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getConnectionMode()).
-                isEqualTo(PropertySettingUtil.CONNECTION_MODE);
-        assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getMediaReadMode()).
-                isEqualTo(PropertySettingUtil.MEDIA_READ_MODE);
-        assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getMaxPoolSize()).
-                isEqualTo(PropertySettingUtil.MAX_POOL_SIZE);
-        assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getIdleConnectionTimeout()).
-                isEqualTo(PropertySettingUtil.IDLE_CONNECTION_TIMEOUT);
-        assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getUserAgentSuffix()).
-                isEqualTo(PropertySettingUtil.USER_AGENT_SUFFIX);
-        assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getRetryOptions().
-                getMaxRetryAttemptsOnThrottledRequests()).
-                isEqualTo(PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_ATTEMPS_ON_THROTTLED_REQUESTS);
-        assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getRetryOptions().
-                getMaxRetryWaitTimeInSeconds()).
-                isEqualTo(PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_WAIT_TIME_IN_SECONDS);
-        assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getEnableEndpointDiscovery()).
-                isEqualTo(PropertySettingUtil.ENABLE_ENDPOINT_DISCOVERY);
-        assertThat(properties.getConnectionPolicySettings().toConnectionPolicy().getPreferredLocations().toString()).
-                isEqualTo(PropertySettingUtil.PREFERRED_LOCATIONS.toString());
-
         assertThat(properties.getConsistencyLevel()).isEqualTo(PropertySettingUtil.CONSISTENCY_LEVEL);
     }
 

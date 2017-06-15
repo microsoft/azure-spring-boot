@@ -8,9 +8,12 @@ package com.microsoft.azure.java.autoconfigure.cosmosdb;
 
 import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.DocumentClient;
+import com.microsoft.azure.documentdb.RetryOptions;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.net.URI;
 
@@ -33,6 +36,16 @@ public class AzureCosmosDbAutoConfigurationTest {
         final URI uri = documentClient.getServiceEndpoint();
         assertThat(uri.toString()).isEqualTo(PropertySettingUtil.URI);
 
+        assertThat(documentClient.getConnectionPolicy()).isEqualTo(ConnectionPolicy.GetDefault());
+    }
+
+    @Test
+    public void canSetConnectionPolicyToDocumentClient(){
+        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.register(AzureCosmosDbAutoConfiguration.class, ConnectionPolicyConfig.class);
+        context.refresh();
+        final DocumentClient documentClient = context.getBean(DocumentClient.class);
+
         final ConnectionPolicy connectionPolicy = documentClient.getConnectionPolicy();
         assertThat(connectionPolicy.getRequestTimeout()).isEqualTo(PropertySettingUtil.REQUEST_TIMEOUT);
         assertThat(connectionPolicy.getMediaRequestTimeout()).isEqualTo(PropertySettingUtil.MEDIA_REQUEST_TIMEOUT);
@@ -49,5 +62,33 @@ public class AzureCosmosDbAutoConfigurationTest {
                 isEqualTo(PropertySettingUtil.ENABLE_ENDPOINT_DISCOVERY);
         assertThat(connectionPolicy.getPreferredLocations().toString()).
                 isEqualTo(PropertySettingUtil.PREFERRED_LOCATIONS.toString());
+    }
+
+    @Configuration
+    static class ConnectionPolicyConfig {
+        @Bean
+        public ConnectionPolicy connectionPolicy(){
+            ConnectionPolicy connectionPolicy = ConnectionPolicy.GetDefault();
+
+            connectionPolicy.setRequestTimeout(PropertySettingUtil.REQUEST_TIMEOUT);
+            connectionPolicy.setMediaRequestTimeout(PropertySettingUtil.MEDIA_REQUEST_TIMEOUT);
+            connectionPolicy.setConnectionMode(PropertySettingUtil.CONNECTION_MODE);
+            connectionPolicy.setMediaReadMode(PropertySettingUtil.MEDIA_READ_MODE);
+            connectionPolicy.setMaxPoolSize(PropertySettingUtil.MAX_POOL_SIZE);
+            connectionPolicy.setIdleConnectionTimeout(PropertySettingUtil.IDLE_CONNECTION_TIMEOUT);
+            connectionPolicy.setUserAgentSuffix(PropertySettingUtil.USER_AGENT_SUFFIX);
+
+            RetryOptions retryOptions = new RetryOptions();
+            retryOptions.setMaxRetryAttemptsOnThrottledRequests(
+                    PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_ATTEMPS_ON_THROTTLED_REQUESTS);
+            retryOptions.setMaxRetryWaitTimeInSeconds(
+                    PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_WAIT_TIME_IN_SECONDS);
+            connectionPolicy.setRetryOptions(retryOptions);
+
+            connectionPolicy.setEnableEndpointDiscovery(PropertySettingUtil.ENABLE_ENDPOINT_DISCOVERY);
+            connectionPolicy.setPreferredLocations(PropertySettingUtil.PREFERRED_LOCATIONS);
+
+            return connectionPolicy;
+        }
     }
 }
