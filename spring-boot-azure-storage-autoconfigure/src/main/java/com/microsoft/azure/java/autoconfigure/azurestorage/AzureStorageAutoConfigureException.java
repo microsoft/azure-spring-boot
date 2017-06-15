@@ -5,10 +5,7 @@
  */
 package com.microsoft.azure.java.autoconfigure.azurestorage;
 
-
-import org.springframework.core.NestedRuntimeException;
-
-public class AzureStorageAutoConfigureException extends NestedRuntimeException {
+public class AzureStorageAutoConfigureException extends RuntimeException {
     public AzureStorageAutoConfigureException(String msg, Throwable t) {
         super(msg, t);
     }
