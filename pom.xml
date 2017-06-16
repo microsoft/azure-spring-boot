@@ -106,7 +106,7 @@
     </build>
 
     <modules>
-        <module>spring-boot-azure-storage-autoconfigure</module>
-        <module>spring-boot-azure-cosmosdb-autoconfigure</module>
+        <module>azure-documentdb-spring-boot-autoconfigure</module>
+        <module>azure-storage-spring-boot-autoconfigure</module>
     </modules>
 </project>

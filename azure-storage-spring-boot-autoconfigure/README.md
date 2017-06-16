@@ -2,13 +2,13 @@
 
 ### Add the dependency
 
-"spring-boot-azure-storage-autoconfigure" is published on Maven Central Repository.  
+"azure-storage-spring-boot-autoconfigure" is published on Maven Central Repository.  
 If you are using Maven, add the following dependency.  
 
 ```xml
 <dependency>
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>spring-boot-azure-storage-autoconfigure</artifactId>
+    <artifactId>azure-storage-spring-boot-autoconfigure</artifactId>
     <version>0.1.0</version>
 </dependency>
 ```

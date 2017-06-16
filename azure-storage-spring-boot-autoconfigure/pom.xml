@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>spring-boot-azure-storage-autoconfigure</artifactId>
+    <artifactId>azure-storage-spring-boot-autoconfigure</artifactId>
     <version>0.1.0</version>
 
     <parent>

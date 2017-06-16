@@ -2,13 +2,13 @@
 
 ### Add the dependency
 
-"spring-boot-azure-cosmosdb-autoconfigure" is published on Maven Central Repository.  
+"azure-documentdb-spring-boot-autoconfigure" is published on Maven Central Repository.  
 If you are using Maven, add the following dependency.  
 
 ```xml
 <dependency>
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>spring-boot-azure-cosmosdb-autoconfigure</artifactId>
+    <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
     <version>0.1.0</version>
 </dependency>
 ```
