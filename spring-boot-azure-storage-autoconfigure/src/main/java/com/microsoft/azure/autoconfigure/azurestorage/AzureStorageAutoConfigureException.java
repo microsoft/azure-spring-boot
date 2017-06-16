@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See License.txt in the project root for
  * license information.
  */
-package com.microsoft.azure.java.autoconfigure.azurestorage;
+package com.microsoft.azure.autoconfigure.azurestorage;
 
 public class AzureStorageAutoConfigureException extends RuntimeException {
     public AzureStorageAutoConfigureException(String msg, Throwable t) {

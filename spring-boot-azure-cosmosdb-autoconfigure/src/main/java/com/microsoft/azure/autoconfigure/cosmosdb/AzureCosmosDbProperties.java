@@ -4,7 +4,7 @@
  * license information.
  */
 
-package com.microsoft.azure.java.autoconfigure.cosmosdb;
+package com.microsoft.azure.autoconfigure.cosmosdb;
 
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import org.springframework.boot.context.properties.ConfigurationProperties;
