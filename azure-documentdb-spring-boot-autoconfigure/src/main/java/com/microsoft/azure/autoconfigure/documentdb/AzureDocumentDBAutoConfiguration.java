@@ -4,7 +4,7 @@
  * license information.
  */
 
-package com.microsoft.azure.autoconfigure.cosmosdb;
+package com.microsoft.azure.autoconfigure.documentdb;
 
 import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.DocumentClient;
@@ -19,15 +19,15 @@ import org.springframework.context.annotation.Scope;
 
 @Configuration
 @ConditionalOnMissingBean(DocumentClient.class)
-@EnableConfigurationProperties(AzureCosmosDbProperties.class)
-public class AzureCosmosDbAutoConfiguration {
-    private static final Logger LOG = LoggerFactory.getLogger(AzureCosmosDbAutoConfiguration.class);
+@EnableConfigurationProperties(AzureDocumentDBProperties.class)
+public class AzureDocumentDBAutoConfiguration {
+    private static final Logger LOG = LoggerFactory.getLogger(AzureDocumentDBAutoConfiguration.class);
 
-    private final AzureCosmosDbProperties properties;
+    private final AzureDocumentDBProperties properties;
     private final ConnectionPolicy connectionPolicy;
 
-    public AzureCosmosDbAutoConfiguration(AzureCosmosDbProperties properties,
-                                          ObjectProvider<ConnectionPolicy> connectionPolicyObjectProvider) {
+    public AzureDocumentDBAutoConfiguration(AzureDocumentDBProperties properties,
+                                            ObjectProvider<ConnectionPolicy> connectionPolicyObjectProvider) {
         this.properties = properties;
         connectionPolicy = connectionPolicyObjectProvider.getIfAvailable();
     }

@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See License.txt in the project root for
  * license information.
  */
-package com.microsoft.azure.autoconfigure.cosmosdb;
+package com.microsoft.azure.autoconfigure.documentdb;
 
 
 import com.microsoft.azure.documentdb.ConnectionPolicy;
@@ -19,7 +19,7 @@ import java.net.URI;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AzureCosmosDbAutoConfigurationTest {
+public class AzureDocumentDBAutoConfigurationTest {
     @BeforeClass
     public static void beforeClass() {
         PropertySettingUtil.setProperties();
@@ -28,7 +28,7 @@ public class AzureCosmosDbAutoConfigurationTest {
     @Test
     public void canSetAllPropertiesToDocumentClient() {
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(AzureCosmosDbAutoConfiguration.class);
+        context.register(AzureDocumentDBAutoConfiguration.class);
         context.refresh();
         final DocumentClient documentClient = context.getBean(DocumentClient.class);
 
@@ -42,7 +42,7 @@ public class AzureCosmosDbAutoConfigurationTest {
     @Test
     public void canSetConnectionPolicyToDocumentClient(){
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(AzureCosmosDbAutoConfiguration.class, ConnectionPolicyConfig.class);
+        context.register(AzureDocumentDBAutoConfiguration.class, ConnectionPolicyConfig.class);
         context.refresh();
         final DocumentClient documentClient = context.getBean(DocumentClient.class);
 

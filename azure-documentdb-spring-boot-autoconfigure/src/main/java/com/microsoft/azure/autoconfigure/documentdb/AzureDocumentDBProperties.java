@@ -4,13 +4,13 @@
  * license information.
  */
 
-package com.microsoft.azure.autoconfigure.cosmosdb;
+package com.microsoft.azure.autoconfigure.documentdb;
 
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties("azure.cosmosdb")
-public class AzureCosmosDbProperties {
+@ConfigurationProperties("azure.documentdb")
+public class AzureDocumentDBProperties {
     private String uri;
     private String key;
 

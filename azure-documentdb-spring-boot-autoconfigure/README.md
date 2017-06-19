@@ -15,14 +15,14 @@ If you are using Maven, add the following dependency.
 
 ### Add the property setting
 
-Open `application.properties` file and add below properties with your Cosmos DB credentials.
+Open `application.properties` file and add below properties with your Document DB credentials.
 
 ```
-azure.cosmosdb.uri=your-cosmosdb-uri
-azure.cosmosdb.key=your-cosmosdb-key
+azure.documentdb.uri=your-documentdb-uri
+azure.documentdb.key=your-documentdb-key
 ```
 
-Property `azure.cosmosdb.consistency-level` is also supported.
+Property `azure.documentdb.consistency-level` is also supported.
 
 ### Add auto-wiring code
 

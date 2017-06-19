@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See License.txt in the project root for
  * license information.
  */
-package com.microsoft.azure.autoconfigure.cosmosdb;
+package com.microsoft.azure.autoconfigure.documentdb;
 
 import com.microsoft.azure.documentdb.ConnectionMode;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
@@ -30,8 +30,8 @@ public class PropertySettingUtil {
     public static final List<String> PREFERRED_LOCATIONS = Arrays.asList("East US", "West US", "North Europe");
 
     public static void setProperties() {
-        System.setProperty("azure.cosmosdb.uri", URI);
-        System.setProperty("azure.cosmosdb.key", KEY);
-        System.setProperty("azure.cosmosdb.consistency-level", CONSISTENCY_LEVEL.name());
+        System.setProperty("azure.documentdb.uri", URI);
+        System.setProperty("azure.documentdb.key", KEY);
+        System.setProperty("azure.documentdb.consistency-level", CONSISTENCY_LEVEL.name());
     }
 }
