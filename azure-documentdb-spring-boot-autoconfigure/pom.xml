@@ -6,13 +6,12 @@
 
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
-    <version>0.1.0</version>
 
     <parent>
         <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-spring-boot-starters</artifactId>
+        <artifactId>azure-spring-boot-dependencies</artifactId>
         <version>0.1.0</version>
-        <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
+        <relativePath>../azure-spring-boot-dependencies/pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
 
     <dependencies>
