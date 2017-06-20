@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See License.txt in the project root for
  * license information.
  */
-package com.microsoft.azure.autoconfigure.cosmosdb;
+package com.microsoft.azure.autoconfigure.documentdb;
 
 
 import org.junit.BeforeClass;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AzureCosmosDbPropertiesTest {
+public class AzureDocumentDBPropertiesTest {
     @BeforeClass
     public static void beforeClass() {
         PropertySettingUtil.setProperties();
@@ -25,7 +25,7 @@ public class AzureCosmosDbPropertiesTest {
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(Config.class);
         context.refresh();
-        final AzureCosmosDbProperties properties = context.getBean(AzureCosmosDbProperties.class);
+        final AzureDocumentDBProperties properties = context.getBean(AzureDocumentDBProperties.class);
 
         assertThat(properties.getUri()).isEqualTo(PropertySettingUtil.URI);
         assertThat(properties.getKey()).isEqualTo(PropertySettingUtil.KEY);
@@ -33,7 +33,7 @@ public class AzureCosmosDbPropertiesTest {
     }
 
     @Configuration
-    @EnableConfigurationProperties(AzureCosmosDbProperties.class)
+    @EnableConfigurationProperties(AzureDocumentDBProperties.class)
     static class Config {
     }
 }

@@ -9,61 +9,21 @@
 
     <name>Microsoft Azure Spring Boot Starters</name>
     <description>Spring Boot starters for Microsoft Azure services</description>
-    <url>https://github.com/microsoft/azure-spring-boot-starters</url>
-
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0</url>
         </license>
     </licenses>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <!-- Import dependency management from Spring Boot -->
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>1.5.3.RELEASE</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.17</version>
-                <executions>
-                    <execution>
-                        <id>validate</id>
-                        <phase>validate</phase>
-                        <configuration>
-                            <configLocation>checkstyle.xml</configLocation>
-                            <encoding>UTF-8</encoding>
-                            <consoleOutput>true</consoleOutput>
-                            <failsOnError>true</failsOnError>
-                            <failOnViolation>true</failOnViolation>
-                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                        </configuration>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <linkXRef>false</linkXRef>
-                </configuration>
-                <inherited>true</inherited>
-            </plugin>
-        </plugins>
-    </build>
+    <scm>
+        <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
+    </scm>
 
     <modules>
-        <module>spring-boot-azure-storage-autoconfigure</module>
-        <module>spring-boot-azure-cosmosdb-autoconfigure</module>
+        <module>azure-spring-boot-dependencies</module>
+        <module>azure-documentdb-spring-boot-autoconfigure</module>
+        <module>azure-storage-spring-boot-autoconfigure</module>
+        <module>azure-documentdb-spring-boot-starter</module>
+        <module>azure-storage-spring-boot-starter</module>
     </modules>
 </project>
