@@ -10,7 +10,11 @@
     <packaging>pom</packaging>
     <name>Azure Spring Boot Dependencies</name>
     <description>Azure Spring Boot Dependencies</description>
-    <url>https://github.com/Microsoft/azure-spring-boot-starters/</url>
+    <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
+
+    <scm>
+        <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
+    </scm>
 
     <licenses>
         <license>
