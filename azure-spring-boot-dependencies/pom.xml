@@ -8,6 +8,9 @@
     <artifactId>azure-spring-boot-dependencies</artifactId>
     <version>0.1.0</version>
     <packaging>pom</packaging>
+    <name>Azure Spring Boot Dependencies</name>
+    <description>Azure Spring Boot Dependencies</description>
+    <url>https://github.com/Microsoft/azure-spring-boot-starters/</url>
 
     <licenses>
         <license>
@@ -15,9 +18,14 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0</url>
         </license>
     </licenses>
-    <scm>
-        <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
-    </scm>
+
+    <developers>
+        <developer>
+            <id>ZhijunZhao</id>
+            <name>Zhijun Zhao</name>
+            <email>zhijzhao@microsoft.com</email>
+        </developer>
+    </developers>
 
     <dependencyManagement>
         <dependencies>
