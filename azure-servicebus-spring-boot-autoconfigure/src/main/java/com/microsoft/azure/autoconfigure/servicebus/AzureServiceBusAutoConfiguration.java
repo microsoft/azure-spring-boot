@@ -7,8 +7,6 @@
 package com.microsoft.azure.autoconfigure.servicebus;
 
 import com.microsoft.azure.servicebus.QueueClient;
-import com.microsoft.azure.servicebus.SubscriptionClient;
-import com.microsoft.azure.servicebus.TopicClient;
 import com.microsoft.azure.servicebus.primitives.ConnectionStringBuilder;
 import com.microsoft.azure.servicebus.primitives.ServiceBusException;
 import org.slf4j.Logger;
@@ -34,9 +32,17 @@ public class AzureServiceBusAutoConfiguration {
     @Scope("prototype")
     @ConditionalOnMissingBean
     public QueueClient queueClient() throws InterruptedException, ServiceBusException {
-        if (properties.getQueueConnectionString() != null ){
+        if (properties.getQueueConnectionString() != null && properties.getQueueReceiveMode() != null) {
             return new QueueClient(new ConnectionStringBuilder(properties.getQueueConnectionString()),
                     properties.getQueueReceiveMode());
+        }
+
+        if (properties.getQueueConnectionString() == null) {
+            LOG.error("Property azure.servicebus.queue-connection-string is not set.");
+        }
+
+        if (properties.getQueueReceiveMode() == null) {
+            LOG.error("Property azure.servicebus.queue-receive-mode is not set.");
         }
 
         return null;
