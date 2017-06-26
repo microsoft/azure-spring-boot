@@ -47,6 +47,14 @@ public class AzureDocumentDBAutoConfiguration {
                     connectionPolicy == null ? ConnectionPolicy.GetDefault() : connectionPolicy,
                     properties.getConsistencyLevel());
         }
+
+        if (properties.getUri() == null) {
+            LOG.error("Property azure.documentdb.uri is not set.");
+        }
+
+        if (properties.getKey() == null) {
+            LOG.error("Property azure.documentdb.key is not set.");
+        }
         return client;
     }
 }
