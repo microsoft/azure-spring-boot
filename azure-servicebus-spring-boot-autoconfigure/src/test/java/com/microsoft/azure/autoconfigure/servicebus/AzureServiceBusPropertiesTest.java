@@ -21,8 +21,8 @@ public class AzureServiceBusPropertiesTest {
 
     @BeforeClass
     public static void beforeClass() {
-        System.setProperty("azure.servicebus.queue-connection-string", QUEUE_CONNECTION_STRING);
-        System.setProperty("azure.servicebus.queue-receive-mode", QUEUE_RECEIVE_MODE.name());
+        System.setProperty(Constants.QUEUE_CONNECTION_STRING_PROPERTY, QUEUE_CONNECTION_STRING);
+        System.setProperty(Constants.QUEUE_RECEIVE_MODE_PROPERTY, QUEUE_RECEIVE_MODE.name());
     }
 
     @Test

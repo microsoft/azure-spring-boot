@@ -23,38 +23,42 @@ public class AzureServiceBusAutoConfigurationTest {
         context.register(AzureServiceBusAutoConfiguration.class);
         context.refresh();
 
-        QueueClient queueClient = context.getBean(QueueClient.class);
+        final QueueClient queueClient = context.getBean(QueueClient.class);
         assertThat(queueClient).isNull();
     }
 
     @Test
     public void returnNullQueueClientIfNoReceiveModeSet() {
-        System.setProperty("azure.servicebus.queue-connection-string", DUMMY_QUEUE_CONNECTION_STRING);
+        System.setProperty(Constants.QUEUE_CONNECTION_STRING_PROPERTY, DUMMY_QUEUE_CONNECTION_STRING);
 
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(AzureServiceBusAutoConfiguration.class);
         context.refresh();
 
-        QueueClient queueClient = context.getBean(QueueClient.class);
+        final QueueClient queueClient = context.getBean(QueueClient.class);
         assertThat(queueClient).isNull();
+
+        System.clearProperty(Constants.QUEUE_CONNECTION_STRING_PROPERTY);
     }
 
     @Test
     public void returnNullQueueClientIfNoConnectionStringSet() {
-        System.setProperty("azure.servicebus.queue-receive-mode", QUEUE_RECEIVE_MODE.name());
+        System.setProperty(Constants.QUEUE_RECEIVE_MODE_PROPERTY, QUEUE_RECEIVE_MODE.name());
 
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(AzureServiceBusAutoConfiguration.class);
         context.refresh();
 
-        QueueClient queueClient = context.getBean(QueueClient.class);
+        final QueueClient queueClient = context.getBean(QueueClient.class);
         assertThat(queueClient).isNull();
+
+        System.clearProperty(Constants.QUEUE_RECEIVE_MODE_PROPERTY);
     }
 
     @Test
     public void cannotAutowireQueueClientWithInvalidConnectionString() {
-        System.setProperty("azure.servicebus.queue-connection-string", DUMMY_QUEUE_CONNECTION_STRING);
-        System.setProperty("azure.servicebus.queue-receive-mode", QUEUE_RECEIVE_MODE.name());
+        System.setProperty(Constants.QUEUE_CONNECTION_STRING_PROPERTY, DUMMY_QUEUE_CONNECTION_STRING);
+        System.setProperty(Constants.QUEUE_RECEIVE_MODE_PROPERTY, QUEUE_RECEIVE_MODE.name());
 
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(AzureServiceBusAutoConfiguration.class);
@@ -65,10 +69,14 @@ public class AzureServiceBusAutoConfigurationTest {
         try {
             queueClient = context.getBean(QueueClient.class);
         } catch (Exception e) {
-            assertThat(e.getMessage()).contains("IllegalConnectionStringFormatException: Connection String cannot be parsed");
+            assertThat(e.getMessage()).contains(
+                    "IllegalConnectionStringFormatException: Connection String cannot be parsed");
             assertThat(e).isExactlyInstanceOf(BeanCreationException.class);
         }
 
         assertThat(queueClient).isNull();
+
+        System.clearProperty(Constants.QUEUE_CONNECTION_STRING_PROPERTY);
+        System.clearProperty(Constants.QUEUE_RECEIVE_MODE_PROPERTY);
     }
 }

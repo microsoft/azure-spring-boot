@@ -37,7 +37,7 @@ public class AzureStorageAutoConfiguration {
      */
     @Bean
     @Scope("prototype")
-    public CloudStorageAccount cloudStorageAccount() {
+    public CloudStorageAccount cloudStorageAccount() throws URISyntaxException, InvalidKeyException {
         LOG.debug("cloudStorageAccount called");
         return createCloudStorageAccount();
     }
@@ -47,26 +47,18 @@ public class AzureStorageAutoConfiguration {
      *
      * @return CloudStorageAccount object
      */
-    private CloudStorageAccount createCloudStorageAccount() {
+    private CloudStorageAccount createCloudStorageAccount() throws URISyntaxException, InvalidKeyException {
         LOG.debug("createCloudStorageAccount called");
 
         CloudStorageAccount account = null;
         if (properties.getConnectionString() != null) {
-            try {
-                final String connectionString = properties.getConnectionString();
-                LOG.debug("Connection string is " + connectionString);
-                account = CloudStorageAccount.parse(connectionString);
-                LOG.debug("createCloudStorageAccount created account " + account);
-            } catch (InvalidKeyException e) {
-                final String msg = "Error creating CloudStorageAccount: " + e.getMessage();
-                LOG.error(msg, e);
-                throw new AzureStorageAutoConfigureException(msg, e);
-            } catch (URISyntaxException e) {
-                final String msg = "Error creating CloudStorageAccount: " + e.getMessage();
-                LOG.error(msg, e);
-                throw new AzureStorageAutoConfigureException(msg, e);
-            }
+            account = CloudStorageAccount.parse(properties.getConnectionString());
         }
+
+        if (properties.getConnectionString() == null) {
+            LOG.error("Property azure.storage.connection-string is not set.");
+        }
+
         return account;
     }
 }
