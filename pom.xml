@@ -25,5 +25,6 @@
         <module>azure-storage-spring-boot-autoconfigure</module>
         <module>azure-documentdb-spring-boot-starter</module>
         <module>azure-storage-spring-boot-starter</module>
+        <module>azure-servicebus-spring-boot-autoconfigure</module>
     </modules>
 </project>

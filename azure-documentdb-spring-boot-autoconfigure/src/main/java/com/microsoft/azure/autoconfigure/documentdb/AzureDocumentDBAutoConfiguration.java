@@ -39,7 +39,7 @@ public class AzureDocumentDBAutoConfiguration {
     }
 
     private DocumentClient createDocumentClient() {
-        LOG.debug("createDocumentClient: URI = " + properties.getUri() + ", key = " + properties.getKey());
+        LOG.debug("createDocumentClient");
 
         DocumentClient client = null;
         if (properties.getUri() != null && properties.getKey() != null) {

@@ -38,7 +38,7 @@ public class AzureStorageAutoConfiguration {
     @Bean
     @Scope("prototype")
     public CloudStorageAccount cloudStorageAccount() {
-        LOG.debug("cloudStorageAccount called, connection string = " + properties.getConnectionString());
+        LOG.debug("cloudStorageAccount called");
         return createCloudStorageAccount();
     }
 

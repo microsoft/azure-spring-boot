@@ -40,7 +40,7 @@ public class AzureDocumentDBAutoConfigurationTest {
     }
 
     @Test
-    public void canSetConnectionPolicyToDocumentClient(){
+    public void canSetConnectionPolicyToDocumentClient() {
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(AzureDocumentDBAutoConfiguration.class, ConnectionPolicyConfig.class);
         context.refresh();
@@ -67,7 +67,7 @@ public class AzureDocumentDBAutoConfigurationTest {
     @Configuration
     static class ConnectionPolicyConfig {
         @Bean
-        public ConnectionPolicy connectionPolicy(){
+        public ConnectionPolicy connectionPolicy() {
             final ConnectionPolicy connectionPolicy = ConnectionPolicy.GetDefault();
 
             connectionPolicy.setRequestTimeout(PropertySettingUtil.REQUEST_TIMEOUT);
