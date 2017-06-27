@@ -19,15 +19,15 @@ import org.springframework.context.annotation.Scope;
 
 @Configuration
 @ConditionalOnMissingBean(DocumentClient.class)
-@EnableConfigurationProperties(AzureDocumentDBProperties.class)
-public class AzureDocumentDBAutoConfiguration {
-    private static final Logger LOG = LoggerFactory.getLogger(AzureDocumentDBAutoConfiguration.class);
+@EnableConfigurationProperties(DocumentDBProperties.class)
+public class DocumentDBAutoConfiguration {
+    private static final Logger LOG = LoggerFactory.getLogger(DocumentDBAutoConfiguration.class);
 
-    private final AzureDocumentDBProperties properties;
+    private final DocumentDBProperties properties;
     private final ConnectionPolicy connectionPolicy;
 
-    public AzureDocumentDBAutoConfiguration(AzureDocumentDBProperties properties,
-                                            ObjectProvider<ConnectionPolicy> connectionPolicyObjectProvider) {
+    public DocumentDBAutoConfiguration(DocumentDBProperties properties,
+                                       ObjectProvider<ConnectionPolicy> connectionPolicyObjectProvider) {
         this.properties = properties;
         connectionPolicy = connectionPolicyObjectProvider.getIfAvailable();
     }

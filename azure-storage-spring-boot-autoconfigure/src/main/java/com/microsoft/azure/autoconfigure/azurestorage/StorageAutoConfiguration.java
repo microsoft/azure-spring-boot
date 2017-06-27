@@ -20,13 +20,13 @@ import java.security.InvalidKeyException;
 
 @Configuration
 @ConditionalOnMissingBean(CloudStorageAccount.class)
-@EnableConfigurationProperties(AzureStorageProperties.class)
-public class AzureStorageAutoConfiguration {
-    private static final Logger LOG = LoggerFactory.getLogger(AzureStorageAutoConfiguration.class);
+@EnableConfigurationProperties(StorageProperties.class)
+public class StorageAutoConfiguration {
+    private static final Logger LOG = LoggerFactory.getLogger(StorageAutoConfiguration.class);
 
-    private final AzureStorageProperties properties;
+    private final StorageProperties properties;
 
-    public AzureStorageAutoConfiguration(AzureStorageProperties properties) {
+    public StorageAutoConfiguration(StorageProperties properties) {
         this.properties = properties;
     }
 

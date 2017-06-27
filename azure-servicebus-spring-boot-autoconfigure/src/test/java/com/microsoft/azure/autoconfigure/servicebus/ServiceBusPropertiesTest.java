@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AzureServiceBusPropertiesTest {
+public class ServiceBusPropertiesTest {
 
     private static final String QUEUE_CONNECTION_STRING = "queue connection string";
     private static final ReceiveMode QUEUE_RECEIVE_MODE = ReceiveMode.PeekLock;
@@ -30,14 +30,14 @@ public class AzureServiceBusPropertiesTest {
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(Config.class);
         context.refresh();
-        final AzureServiceBusProperties properties = context.getBean(AzureServiceBusProperties.class);
+        final ServiceBusProperties properties = context.getBean(ServiceBusProperties.class);
 
         assertThat(properties.getQueueConnectionString()).isEqualTo(QUEUE_CONNECTION_STRING);
         assertThat(properties.getQueueReceiveMode()).isEqualTo(QUEUE_RECEIVE_MODE);
     }
 
     @Configuration
-    @EnableConfigurationProperties(AzureServiceBusProperties.class)
+    @EnableConfigurationProperties(ServiceBusProperties.class)
     static class Config {
     }
 }
