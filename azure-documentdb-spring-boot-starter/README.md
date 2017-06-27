@@ -2,13 +2,13 @@
 
 ### Add the dependency
 
-"azure-documentdb-spring-boot-autoconfigure" is published on Maven Central Repository.  
+"azure-documentdb-spring-boot-starter" is published on Maven Central Repository.  
 If you are using Maven, add the following dependency.  
 
 ```xml
 <dependency>
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
+    <artifactId>azure-documentdb-spring-boot-starter</artifactId>
     <version>0.1.0</version>
 </dependency>
 ```
