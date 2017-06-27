@@ -10,7 +10,7 @@ import com.microsoft.azure.documentdb.ConsistencyLevel;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("azure.documentdb")
-public class AzureDocumentDBProperties {
+public class DocumentDBProperties {
     private String uri;
     private String key;
 

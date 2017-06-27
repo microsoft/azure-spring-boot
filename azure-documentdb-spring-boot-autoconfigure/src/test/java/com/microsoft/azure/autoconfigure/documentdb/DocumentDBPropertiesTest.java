@@ -3,7 +3,8 @@
  * Licensed under the MIT License. See License.txt in the project root for
  * license information.
  */
-package com.microsoft.azure.autoconfigure.azurestorage;
+package com.microsoft.azure.autoconfigure.documentdb;
+
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,27 +14,26 @@ import org.springframework.context.annotation.Configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AzureStoragePropertiesTest {
-
-    private static final String CONNECTION_STRING = "some connection string";
-
+public class DocumentDBPropertiesTest {
     @BeforeClass
     public static void beforeClass() {
-        System.setProperty("azure.storage.connection-string", CONNECTION_STRING);
+        PropertySettingUtil.setProperties();
     }
 
     @Test
-    public void canSetProperties() {
+    public void canSetAllProperties() {
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(Config.class);
         context.refresh();
-        final AzureStorageProperties properties = context.getBean(AzureStorageProperties.class);
+        final DocumentDBProperties properties = context.getBean(DocumentDBProperties.class);
 
-        assertThat(properties.getConnectionString()).isEqualTo(CONNECTION_STRING);
+        assertThat(properties.getUri()).isEqualTo(PropertySettingUtil.URI);
+        assertThat(properties.getKey()).isEqualTo(PropertySettingUtil.KEY);
+        assertThat(properties.getConsistencyLevel()).isEqualTo(PropertySettingUtil.CONSISTENCY_LEVEL);
     }
 
     @Configuration
-    @EnableConfigurationProperties(AzureStorageProperties.class)
+    @EnableConfigurationProperties(DocumentDBProperties.class)
     static class Config {
     }
 }

@@ -19,7 +19,7 @@ import java.net.URI;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AzureDocumentDBAutoConfigurationTest {
+public class DocumentDBAutoConfigurationTest {
     @BeforeClass
     public static void beforeClass() {
         PropertySettingUtil.setProperties();
@@ -28,7 +28,7 @@ public class AzureDocumentDBAutoConfigurationTest {
     @Test
     public void canSetAllPropertiesToDocumentClient() {
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(AzureDocumentDBAutoConfiguration.class);
+        context.register(DocumentDBAutoConfiguration.class);
         context.refresh();
         final DocumentClient documentClient = context.getBean(DocumentClient.class);
 
@@ -42,7 +42,7 @@ public class AzureDocumentDBAutoConfigurationTest {
     @Test
     public void canSetConnectionPolicyToDocumentClient() {
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(AzureDocumentDBAutoConfiguration.class, ConnectionPolicyConfig.class);
+        context.register(DocumentDBAutoConfiguration.class, ConnectionPolicyConfig.class);
         context.refresh();
         final DocumentClient documentClient = context.getBean(DocumentClient.class);
 

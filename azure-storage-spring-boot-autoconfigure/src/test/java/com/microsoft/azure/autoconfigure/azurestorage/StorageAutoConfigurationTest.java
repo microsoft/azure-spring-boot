@@ -12,7 +12,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AzureStorageAutoConfigurationTest {
+public class StorageAutoConfigurationTest {
     private static final String INVALID_CONNECTION_STRING = "invalid connection string";
     private static final String CONNECTION_STRING_WITH_VALID_FORMAT = "DefaultEndpointsProtocol=https;" +
             "AccountName=account-name;" +
@@ -24,7 +24,7 @@ public class AzureStorageAutoConfigurationTest {
         System.setProperty("azure.storage.connection-string", INVALID_CONNECTION_STRING);
 
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(AzureStorageAutoConfiguration.class);
+        context.register(StorageAutoConfiguration.class);
         context.refresh();
 
         CloudStorageAccount cloudStorageAccount = null;
@@ -42,7 +42,7 @@ public class AzureStorageAutoConfigurationTest {
         System.setProperty("azure.storage.connection-string", CONNECTION_STRING_WITH_VALID_FORMAT);
 
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(AzureStorageAutoConfiguration.class);
+        context.register(StorageAutoConfiguration.class);
         context.refresh();
 
         final CloudStorageAccount cloudStorageAccount = context.getBean(CloudStorageAccount.class);

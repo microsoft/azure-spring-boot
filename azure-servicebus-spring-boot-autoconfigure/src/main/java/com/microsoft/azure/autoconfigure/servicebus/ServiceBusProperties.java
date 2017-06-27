@@ -10,7 +10,7 @@ import com.microsoft.azure.servicebus.ReceiveMode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("azure.servicebus")
-public class AzureServiceBusProperties {
+public class ServiceBusProperties {
     private String queueConnectionString;
     private ReceiveMode queueReceiveMode;
 

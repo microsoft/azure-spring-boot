@@ -18,13 +18,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 @Configuration
-@EnableConfigurationProperties(AzureServiceBusProperties.class)
-public class AzureServiceBusAutoConfiguration {
-    private static final Logger LOG = LoggerFactory.getLogger(AzureServiceBusAutoConfiguration.class);
+@EnableConfigurationProperties(ServiceBusProperties.class)
+public class ServiceBusAutoConfiguration {
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceBusAutoConfiguration.class);
 
-    private final AzureServiceBusProperties properties;
+    private final ServiceBusProperties properties;
 
-    public AzureServiceBusAutoConfiguration(AzureServiceBusProperties properties) {
+    public ServiceBusAutoConfiguration(ServiceBusProperties properties) {
         this.properties = properties;
     }
 
