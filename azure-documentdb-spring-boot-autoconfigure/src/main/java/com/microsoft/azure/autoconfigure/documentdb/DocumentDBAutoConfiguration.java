@@ -7,6 +7,7 @@
 package com.microsoft.azure.autoconfigure.documentdb;
 
 import com.microsoft.azure.documentdb.ConnectionPolicy;
+import com.microsoft.azure.documentdb.ConsistencyLevel;
 import com.microsoft.azure.documentdb.DocumentClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,8 @@ public class DocumentDBAutoConfiguration {
         if (properties.getUri() != null && properties.getKey() != null) {
             client = new DocumentClient(properties.getUri(), properties.getKey(),
                     connectionPolicy == null ? ConnectionPolicy.GetDefault() : connectionPolicy,
-                    properties.getConsistencyLevel());
+                    properties.getConsistencyLevel() == null ?
+                            ConsistencyLevel.Session : properties.getConsistencyLevel());
         }
 
         if (properties.getUri() == null) {

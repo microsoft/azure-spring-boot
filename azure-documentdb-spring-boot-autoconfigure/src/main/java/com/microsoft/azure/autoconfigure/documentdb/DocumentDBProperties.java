@@ -13,9 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class DocumentDBProperties {
     private String uri;
     private String key;
-
-    private ConsistencyLevel consistencyLevel = ConsistencyLevel.Session;
-
+    private ConsistencyLevel consistencyLevel;
 
     public String getUri() {
         return uri;
