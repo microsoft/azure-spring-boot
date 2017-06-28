@@ -18,11 +18,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.net.URISyntaxException;
 
 @SpringBootApplication
-public class StorageSampleApplication implements CommandLineRunner{
+public class StorageSampleApplication implements CommandLineRunner {
     @Autowired
     private CloudStorageAccount cloudStorageAccount;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         SpringApplication.run(StorageSampleApplication.class);
     }
 

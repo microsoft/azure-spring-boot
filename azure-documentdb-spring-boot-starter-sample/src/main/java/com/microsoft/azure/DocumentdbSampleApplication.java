@@ -16,15 +16,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DocumentdbSampleApplication implements CommandLineRunner {
 
-	@Autowired
-	private DocumentClient documentClient;
+    @Autowired
+    private DocumentClient documentClient;
 
-	public static void main(String[] args) {
-		SpringApplication.run(DocumentdbSampleApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DocumentdbSampleApplication.class, args);
+    }
 
-    public void run(String... var1) throws Exception{
-	    createDatabaseIfNotExists("testDB");
+    public void run(String... var1) throws Exception {
+        createDatabaseIfNotExists("testDB");
     }
 
     // Note: Here is the minimum sample code that demonstrates how DocumentClient is autowired and used.
