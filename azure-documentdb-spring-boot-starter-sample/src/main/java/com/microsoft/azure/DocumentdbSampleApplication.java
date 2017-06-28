@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See License.txt in the project root for
+ * license information.
+ */
 package com.microsoft.azure;
 
 import com.microsoft.azure.documentdb.Database;
@@ -8,16 +13,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.IOException;
-
 @SpringBootApplication
-public class AzureDocumentdbSpringBootStarterSampleApplication implements CommandLineRunner {
+public class DocumentdbSampleApplication implements CommandLineRunner {
 
 	@Autowired
 	private DocumentClient documentClient;
 
 	public static void main(String[] args) {
-		SpringApplication.run(AzureDocumentdbSpringBootStarterSampleApplication.class, args);
+		SpringApplication.run(DocumentdbSampleApplication.class, args);
 	}
 
     public void run(String... var1) throws Exception{
