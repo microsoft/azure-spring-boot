@@ -9,6 +9,7 @@ package com.microsoft.azure.autoconfigure.documentdb;
 import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.documentdb.RetryOptions;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -23,6 +24,11 @@ public class DocumentDBAutoConfigurationTest {
     @BeforeClass
     public static void beforeClass() {
         PropertySettingUtil.setProperties();
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        PropertySettingUtil.unsetProperties();
     }
 
     @Test

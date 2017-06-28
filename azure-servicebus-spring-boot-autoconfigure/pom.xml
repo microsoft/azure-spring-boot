@@ -6,11 +6,37 @@
 
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-servicebus-spring-boot-autoconfigure</artifactId>
+    <packaging>jar</packaging>
+
+    <name>Azure Service Bus Spring Boot Autoconfigure</name>
+    <description>Spring Boot auto configuration package for Azure Service Bus service</description>
+    <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>ZhijunZhao</id>
+            <name>Zhijun Zhao</name>
+            <email>zhijzhao@microsoft.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
+        <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
+    </scm>
 
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-dependencies</artifactId>
-        <version>0.1.0</version>
+        <version>0.1.1</version>
         <relativePath>../azure-spring-boot-dependencies/pom.xml</relativePath> <!-- lookup parent from repository -->
     </parent>
 
