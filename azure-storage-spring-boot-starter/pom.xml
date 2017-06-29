@@ -44,7 +44,6 @@
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-storage-spring-boot-autoconfigure</artifactId>
-            <version>0.1.1</version>
         </dependency>
     </dependencies>
 
