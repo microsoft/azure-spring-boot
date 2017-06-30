@@ -32,7 +32,8 @@ public class StorageSampleApplication implements CommandLineRunner {
     }
 
     // Note: Here is the minimum sample code that demonstrates how CloudStorageAccount is autowired and used.
-    // For more complete Azure Storage API usage, please go to https://github.com/Azure-Samples and search repositories with key words `storage` and 'java'.
+    // For more complete Azure Storage API usage, please go to https://github.com/Azure-Samples and search repositories
+    // with key words `storage` and 'java'.
     private void createContainerIfNotExists(String containerName) throws URISyntaxException, StorageException {
         // Create the blob client.
         final CloudBlobClient blobClient = cloudStorageAccount.createCloudBlobClient();
