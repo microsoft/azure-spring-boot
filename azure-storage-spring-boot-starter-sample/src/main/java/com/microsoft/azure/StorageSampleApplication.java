@@ -36,11 +36,11 @@ public class StorageSampleApplication implements CommandLineRunner {
     // with key words `storage` and 'java'.
     private void createContainerIfNotExists(String containerName) throws URISyntaxException, StorageException {
         // Create the blob client.
-        CloudBlobClient blobClient = cloudStorageAccount.createCloudBlobClient();
+        final CloudBlobClient blobClient = cloudStorageAccount.createCloudBlobClient();
 
         // Get a reference to a container.
         // The container name must be lower case
-        CloudBlobContainer container = blobClient.getContainerReference(containerName);
+        final CloudBlobContainer container = blobClient.getContainerReference(containerName);
 
         // Create the container if it does not exist.
         container.createIfNotExists();
