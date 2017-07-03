@@ -31,7 +31,7 @@ public class DocumentdbSampleApplication implements CommandLineRunner {
     // For more complete Document DB sample code, please reference
     // https://github.com/Azure-Samples/azure-cosmos-db-documentdb-java-getting-started
     private void createDatabaseIfNotExists(String databaseName) throws DocumentClientException {
-        String databaseLink = String.format("/dbs/%s", databaseName);
+        final String databaseLink = String.format("/dbs/%s", databaseName);
 
         // Check to verify a database with the id=FamilyDB does not exist
         try {
@@ -40,7 +40,7 @@ public class DocumentdbSampleApplication implements CommandLineRunner {
         } catch (DocumentClientException de) {
             // If the database does not exist, create a new database
             if (de.getStatusCode() == 404) {
-                Database database = new Database();
+                final Database database = new Database();
                 database.setId(databaseName);
 
                 documentClient.createDatabase(database, null);

@@ -4,6 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>com.microsoft.azure</groupId>
+        <artifactId>azure-spring-boot-starter-parent</artifactId>
+        <version>0.1.2</version>
+        <relativePath>../azure-spring-boot-starter-parent/pom.xml</relativePath>
+    </parent>
+
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-storage-spring-boot-autoconfigure</artifactId>
     <packaging>jar</packaging>
@@ -32,13 +39,6 @@
         <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
         <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
     </scm>
-
-    <parent>
-        <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-spring-boot-dependencies</artifactId>
-        <version>0.1.1</version>
-        <relativePath>../azure-spring-boot-dependencies/pom.xml</relativePath> <!-- lookup parent from repository -->
-    </parent>
 
     <dependencies>
         <dependency>
