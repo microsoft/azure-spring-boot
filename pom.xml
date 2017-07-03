@@ -36,6 +36,7 @@
     <properties>
         <azure.doucmentdb.starter.version>0.1.2</azure.doucmentdb.starter.version>
         <azure.doucmentdb.autoconfigure.version>0.1.2</azure.doucmentdb.autoconfigure.version>
+        <spring.data.documentdb.version>0.1.2</spring.data.documentdb.version>
         <azure.storage.starter.version>0.1.2</azure.storage.starter.version>
         <azure.storage.autoconfigure.version>0.1.2</azure.storage.autoconfigure.version>
         <azure.servicebus.autoconfigue.version>0.1.2</azure.servicebus.autoconfigue.version>
@@ -79,6 +80,12 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-servicebus-spring-boot-autoconfigure</artifactId>
                 <version>${azure.servicebus.autoconfigure.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.microsoft.azure.java</groupId>
+                <artifactId>spring-data-azure-documentdb</artifactId>
+                <version>${spring.data.documentdb.version}</version>
             </dependency>
 
             <!-- Azure related -->

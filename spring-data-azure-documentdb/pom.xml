@@ -11,7 +11,7 @@
         <relativePath>../azure-spring-boot-starter-parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.microsoft.azure.java</groupId>
+    <groupId>com.microsoft.azure</groupId>
     <artifactId>spring-data-azure-documentdb</artifactId>
     <packaging>jar</packaging>
 
@@ -41,8 +41,6 @@
     </scm>
 
     <properties>
-        <springdata.commons.version>1.13.4.RELEASE</springdata.commons.version>
-        <springcore.version>4.3.9.RELEASE</springcore.version>
         <mockito.version>1.10.19</mockito.version>
     </properties>
 
@@ -51,7 +49,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>${springcore.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
@@ -63,37 +60,31 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>${springcore.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>${springcore.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
-            <version>${springdata.commons.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-expression</artifactId>
-            <version>${springcore.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <version>${springcore.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>1.5.4.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -117,7 +108,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>4.1.6.RELEASE</version>
             <scope>test</scope>
         </dependency>
 
@@ -134,26 +124,4 @@
         </dependency>
 
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <configuration>
-                    <systemPropertyVariables>
-                    </systemPropertyVariables>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>integration-test</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>
