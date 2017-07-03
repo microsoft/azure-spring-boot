@@ -4,13 +4,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>com.microsoft.azure</groupId>
+        <artifactId>azure-spring-boot-starter-bom</artifactId>
+        <version>0.1.2</version>
+    </parent>
+
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-spring-boot-dependencies</artifactId>
-    <version>0.1.1</version>
+    <artifactId>azure-spring-boot-starter-parent</artifactId>
+    <version>0.1.2</version>
     <packaging>pom</packaging>
 
-    <name>Azure Spring Boot Dependencies</name>
-    <description>Azure Spring Boot Dependencies</description>
+    <name>Azure Spring Boot Starter Parent</name>
+    <description>Parent package for Azure Spring Boot Starters</description>
     <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
 
     <scm>
@@ -34,61 +40,6 @@
         </developer>
     </developers>
 
-    <properties>
-        <azure.documentdb.version>1.11.0</azure.documentdb.version>
-        <azure.servicebus.version>1.0.0-PREVIEW-3</azure.servicebus.version>
-        <azure.storage.version>5.3.1</azure.storage.version>
-    </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <!-- Import dependency management from Spring Boot -->
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>1.5.4.RELEASE</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
-                <version>0.1.1</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-documentdb-spring-boot-starter</artifactId>
-                <version>0.1.1</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-storage-spring-boot-autoconfigure</artifactId>
-                <version>0.1.1</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-storage-spring-boot-starter</artifactId>
-                <version>0.1.1</version>
-            </dependency>
-
-            <!-- Azure related -->
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-documentdb</artifactId>
-                <version>${azure.documentdb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-servicebus</artifactId>
-                <version>${azure.servicebus.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-storage</artifactId>
-                <version>${azure.storage.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
     <profiles>
         <profile>
             <id>doclint-java8-disable</id>
@@ -191,4 +142,13 @@
         </plugins>
     </build>
 
+    <modules>
+        <module>../azure-documentdb-spring-boot-autoconfigure</module>
+        <module>../azure-documentdb-spring-boot-starter</module>
+        <module>../azure-documentdb-spring-boot-starter-sample</module>
+        <module>../azure-storage-spring-boot-autoconfigure</module>
+        <module>../azure-storage-spring-boot-starter</module>
+        <module>../azure-storage-spring-boot-starter-sample</module>
+        <module>../azure-servicebus-spring-boot-autoconfigure</module>
+    </modules>
 </project>
