@@ -90,7 +90,6 @@
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-documentdb</artifactId>
-            <version>1.11.0</version>
         </dependency>
 
         <dependency>
