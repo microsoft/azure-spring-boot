@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-spring-boot-starters</artifactId>
-    <version>0.1.2-SNAPSHOT</version>
+    <artifactId>azure-spring-boot-starter-bom</artifactId>
+    <version>0.1.2</version>
     <packaging>pom</packaging>
 
-    <name>Microsoft Azure Spring Boot Starters</name>
-    <description>Spring Boot starters for Microsoft Azure services</description>
+    <name>Azure Spring Boot Starter BOM</name>
+    <description>BOM for Microsoft Azure Spring Boot Starters</description>
     <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
 
     <licenses>
@@ -33,15 +33,74 @@
         <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
     </scm>
 
+    <properties>
+        <azure.doucmentdb.starter.version>0.1.2</azure.doucmentdb.starter.version>
+        <azure.doucmentdb.autoconfigure.version>0.1.2</azure.doucmentdb.autoconfigure.version>
+        <azure.storage.starter.version>0.1.2</azure.storage.starter.version>
+        <azure.storage.autoconfigure.version>0.1.2</azure.storage.autoconfigure.version>
+        <azure.servicebus.autoconfigue.version>0.1.2</azure.servicebus.autoconfigue.version>
+        <azure.documentdb.version>1.11.0</azure.documentdb.version>
+        <azure.servicebus.version>1.0.0-PREVIEW-3</azure.servicebus.version>
+        <azure.storage.version>5.3.1</azure.storage.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>1.5.4.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
+                <version>${azure.doucmentdb.autoconfigure.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-documentdb-spring-boot-starter</artifactId>
+                <version>${azure.doucmentdb.starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-storage-spring-boot-autoconfigure</artifactId>
+                <version>${azure.storage.autoconfigure.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-storage-spring-boot-starter</artifactId>
+                <version>${azure.storage.starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-servicebus-spring-boot-autoconfigure</artifactId>
+                <version>${azure.servicebus.autoconfigure.version}</version>
+            </dependency>
+
+            <!-- Azure related -->
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-documentdb</artifactId>
+                <version>${azure.documentdb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-servicebus</artifactId>
+                <version>${azure.servicebus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-storage</artifactId>
+                <version>${azure.storage.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <modules>
-        <module>azure-spring-boot-dependencies</module>
-        <module>azure-documentdb-spring-boot-autoconfigure</module>
-        <module>azure-documentdb-spring-boot-starter</module>
-        <module>azure-documentdb-spring-boot-starter-sample</module>
-        <module>azure-storage-spring-boot-autoconfigure</module>
-        <module>azure-storage-spring-boot-starter</module>
-        <module>azure-storage-spring-boot-starter-sample</module>
-        <module>azure-servicebus-spring-boot-autoconfigure</module>
-        <module>spring-data-azure-documentdb</module>
+        <module>azure-spring-boot-starter-parent</module>
     </modules>
 </project>

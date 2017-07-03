@@ -4,25 +4,27 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>com.microsoft.azure</groupId>
+        <artifactId>azure-spring-boot-starter-parent</artifactId>
+        <version>0.1.2</version>
+        <relativePath>../azure-spring-boot-starter-parent/pom.xml</relativePath>
+    </parent>
+
     <groupId>com.microsoft.azure.java</groupId>
     <artifactId>spring-data-azure-documentdb</artifactId>
-    <version>0.1.0</version>
+    <packaging>jar</packaging>
+
     <name>Azure Document DB Spring Data</name>
     <description>Azure Document DB Spring Data Support</description>
     <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
 
-    <parent>
-        <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-spring-boot-dependencies</artifactId>
-        <version>0.1.1</version>
-        <relativePath>../azure-spring-boot-dependencies/pom.xml</relativePath> <!-- lookup parent from repository -->
-    </parent>
-
-    <scm>
-        <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
-        <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
-        <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
-    </scm>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
 
     <developers>
         <developer>
@@ -31,6 +33,12 @@
             <email>yungez@microsoft.com</email>
         </developer>
     </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
+        <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
+    </scm>
 
     <properties>
         <springdata.commons.version>1.13.4.RELEASE</springdata.commons.version>
