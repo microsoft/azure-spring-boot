@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @ConditionalOnClass({DocumentDbRepository.class})
 @ConditionalOnMissingBean({DocumentDbRepositoryFactoryBean.class, DocumentDbRepositoryConfigurationExtension.class})
-@ConditionalOnProperty(prefix = "azure.mongodb.repositories",
+@ConditionalOnProperty(prefix = "azure.documentdb.repositories",
         name = "enabled",
         havingValue = "true",
         matchIfMissing = true)
