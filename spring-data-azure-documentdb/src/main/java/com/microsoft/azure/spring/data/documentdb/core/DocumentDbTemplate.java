@@ -245,7 +245,8 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
             documentDbFactory.getDocumentClient()
                     .deleteCollection(getCollectionLink(this.databaseName, collectionName), null);
         } catch (DocumentClientException ex) {
-            LOGGER.warn("deleteAll in database {} collection {} met exception: \n{}", this.databaseName, col );
+            LOGGER.warn("deleteAll in database {} collection {} met exception: \n{}",
+                    this.databaseName, collectionName, ex.getMessage() );
         }
 
     }
