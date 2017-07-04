@@ -17,8 +17,6 @@ import java.util.Arrays;
 import static org.mockito.Mockito.when;
 import static org.junit.Assert.assertEquals;
 
-
-
 @RunWith(MockitoJUnitRunner.class)
 public class SimpleDocumentDbRepositoryUnitTest {
 

@@ -1,6 +1,5 @@
 package com.microsoft.azure.spring.data.documentdb.repository.support;
 
-import com.microsoft.azure.spring.data.documentdb.core.DocumentDbOperations;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.repository.core.EntityInformation;
 import org.springframework.data.repository.core.RepositoryInformation;
@@ -13,16 +12,10 @@ import java.io.Serializable;
 public class DocumentDbRepositoryFactory extends RepositoryFactorySupport {
 
     private final ApplicationContext applicationContext;
-    private final DocumentDbOperations documentDbOperations;
 
     public DocumentDbRepositoryFactory(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
-        this.documentDbOperations = applicationContext.getBean(DocumentDbOperations.class);
-    }
 
-    public DocumentDbRepositoryFactory(DocumentDbOperations dbOperations, ApplicationContext applicationContext) {
-        this.documentDbOperations = dbOperations;
-        this.applicationContext = applicationContext;
     }
 
     @Override
@@ -39,14 +32,8 @@ public class DocumentDbRepositoryFactory extends RepositoryFactorySupport {
 
         final EntityInformation<?, Serializable> entityInformation = getEntityInformation(metadata.getDomainType());
 
-        Object repository;
-        if (this.documentDbOperations != null) {
-            repository = new SimpleDocumentDbRepository(
-                    (DocumentDbEntityInformation) entityInformation, this.documentDbOperations);
-        } else {
-            repository = new SimpleDocumentDbRepository(
-                    (DocumentDbEntityInformation) entityInformation, this.applicationContext);
-        }
+        final Object repository = new SimpleDocumentDbRepository(
+                (DocumentDbEntityInformation) entityInformation, this.applicationContext);
 
         return repository;
     }

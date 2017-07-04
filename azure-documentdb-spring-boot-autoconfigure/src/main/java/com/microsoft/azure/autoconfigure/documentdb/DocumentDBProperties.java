@@ -14,6 +14,7 @@ public class DocumentDBProperties {
     private String uri;
     private String key;
     private ConsistencyLevel consistencyLevel;
+    private String database;
 
     public String getUri() {
         return uri;
@@ -27,6 +28,10 @@ public class DocumentDBProperties {
         return key;
     }
 
+    public String getDatabase() {
+        return database;
+    }
+
     public void setKey(String key) {
         this.key = key;
     }
@@ -38,4 +43,9 @@ public class DocumentDBProperties {
     public void setConsistencyLevel(ConsistencyLevel consistencyLevel) {
         this.consistencyLevel = consistencyLevel;
     }
+
+    public void setDatabase(String databaseName) {
+        this.database = databaseName;
+    }
+
 }

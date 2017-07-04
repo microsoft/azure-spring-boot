@@ -4,19 +4,13 @@ import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.documentdb.core.convert.DocumentDbConverter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public abstract class AbstractDocumentDbConfiguration extends DocumentDbConfigurationSupport {
 
-    @Value("${azure.documentdb.databasename}")
-    private String dbName;
-
-    public String getDatabaseName() {
-        return this.dbName;
-    }
+    public abstract String getDatabase();
 
     public abstract DocumentClient documentClient();
 
@@ -32,7 +26,7 @@ public abstract class AbstractDocumentDbConfiguration extends DocumentDbConfigur
 
     @Bean
     public DocumentDbTemplate documentDbTemplate() throws Exception {
-        return new DocumentDbTemplate(this.documentDbFactory(), this.documentDbConverter(), this.getDatabaseName());
+        return new DocumentDbTemplate(this.documentDbFactory(), this.documentDbConverter(), this.getDatabase());
     }
 
     protected String getMappingBasePackage() {

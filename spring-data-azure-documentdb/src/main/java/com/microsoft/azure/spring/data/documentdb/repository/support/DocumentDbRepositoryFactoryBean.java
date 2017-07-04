@@ -25,7 +25,6 @@ public class DocumentDbRepositoryFactoryBean<T extends Repository<S, ID>, S, ID 
         super(repositoryInterface);
     }
 
-
     public void setDocumentDbOperations(DocumentDbOperations operations) {
         this.operations = operations;
     }
