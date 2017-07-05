@@ -48,10 +48,6 @@
             <artifactId>spring-data-azure-documentdb</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-documentdb</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

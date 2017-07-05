@@ -1,5 +1,9 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See LICENSE in the project root for
+ * license information.
+ */
 package com.microsoft.azure.sample;
-
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,15 +14,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.util.Assert;
 
 @SpringBootApplication
-public class SampleApplication implements CommandLineRunner {
+public class DocumentDbSampleApplication implements CommandLineRunner {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SampleApplication.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DocumentDbSampleApplication.class);
 
     @Autowired
     private UserRepository repository;
 
     public static void main(String[] args) {
-        SpringApplication.run(SampleApplication.class, args);
+        SpringApplication.run(DocumentDbSampleApplication.class, args);
     }
 
     public void run(String... var1) throws Exception {
