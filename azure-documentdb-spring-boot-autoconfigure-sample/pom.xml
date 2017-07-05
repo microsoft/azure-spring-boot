@@ -11,12 +11,12 @@
     </parent>
 
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-documentdb-spring-boot-starter-sample</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>azure-documentdb-spring-boot-autoconfigure-sample</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Azure Document DB Spring Boot Starter Sample</name>
-    <description>Sample project for Azure Document DB Starter</description>
+    <name>Azure Document DB Spring Boot AutoConfigure Sample</name>
+    <description>Sample project for Azure Document DB AutoConfigure</description>
     <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
 
     <licenses>
@@ -33,12 +33,6 @@
             <name>Zhijun Zhao</name>
             <email>zhijzhao@microsoft.com</email>
         </developer>
-
-        <developer>
-            <id>yungez</id>
-            <name>yunge zhu</name>
-            <email>yungez@microsoft.com</email>
-        </developer>
     </developers>
 
     <scm>
@@ -47,10 +41,12 @@
         <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
     </scm>
 
+    <!-- TODO: Add notes for the case if user don't want use the azure-spring-boot-starter-parent package as parent -->
+
     <dependencies>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-documentdb-spring-boot-starter</artifactId>
+            <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
         </dependency>
     </dependencies>
 
@@ -69,5 +65,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

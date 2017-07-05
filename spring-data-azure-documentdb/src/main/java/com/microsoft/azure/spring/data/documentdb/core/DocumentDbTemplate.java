@@ -16,7 +16,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
-import sun.rmi.runtime.Log;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -77,7 +76,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
             final DocumentCollection collection = getCollection(this.databaseName, getCollectionName(entityClass));
 
             documentDbFactory.getDocumentClient()
-                             .createDocument(collection.getSelfLink(), document, null, false);
+                    .createDocument(collection.getSelfLink(), document, null, false);
             return objectToSave;
         } catch (DocumentClientException e) {
             throw new RuntimeException(e.getMessage());
@@ -252,7 +251,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                     .deleteCollection(getCollectionLink(this.databaseName, collectionName), null);
         } catch (DocumentClientException ex) {
             LOGGER.warn("deleteAll in database {} collection {} met exception: \n{}",
-                    this.databaseName, collectionName, ex.getMessage() );
+                    this.databaseName, collectionName, ex.getMessage());
         }
 
     }

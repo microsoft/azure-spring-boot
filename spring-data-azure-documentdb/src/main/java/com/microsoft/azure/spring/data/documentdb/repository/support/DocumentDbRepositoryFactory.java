@@ -31,17 +31,8 @@ public class DocumentDbRepositoryFactory extends RepositoryFactorySupport {
 
     @Override
     protected Object getTargetRepository(RepositoryInformation information) {
-        return getTargetRepository((RepositoryMetadata) information);
-    }
-
-    protected Object getTargetRepository(RepositoryMetadata metadata) {
-
-        final EntityInformation<?, Serializable> entityInformation = getEntityInformation(metadata.getDomainType());
-
-        final Object repository = new SimpleDocumentDbRepository(
-                (DocumentDbEntityInformation) entityInformation, this.applicationContext);
-
-        return repository;
+        final EntityInformation<?, Serializable> entityInformation = getEntityInformation(information.getDomainType());
+        return getTargetRepositoryViaReflection(information, entityInformation, this.applicationContext);
     }
 
     @Override

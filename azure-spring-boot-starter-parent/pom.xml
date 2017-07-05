@@ -145,6 +145,7 @@
 
     <modules>
         <module>../azure-documentdb-spring-boot-autoconfigure</module>
+        <module>../azure-documentdb-spring-boot-autoconfigure-sample</module>
         <module>../azure-documentdb-spring-boot-starter</module>
         <module>../azure-documentdb-spring-boot-starter-sample</module>
         <module>../azure-storage-spring-boot-autoconfigure</module>
@@ -152,5 +153,6 @@
         <module>../azure-storage-spring-boot-starter-sample</module>
         <module>../azure-servicebus-spring-boot-autoconfigure</module>
         <module>../spring-data-azure-documentdb</module>
+        <module>../spring-data-azure-documentdb-sample</module>
     </modules>
 </project>
