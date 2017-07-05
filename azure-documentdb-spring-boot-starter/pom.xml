@@ -46,5 +46,10 @@
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>spring-data-azure-documentdb</artifactId>
+        </dependency>
     </dependencies>
 </project>

@@ -151,5 +151,6 @@
         <module>../azure-storage-spring-boot-starter</module>
         <module>../azure-storage-spring-boot-starter-sample</module>
         <module>../azure-servicebus-spring-boot-autoconfigure</module>
+        <module>../spring-data-azure-documentdb</module>
     </modules>
 </project>
