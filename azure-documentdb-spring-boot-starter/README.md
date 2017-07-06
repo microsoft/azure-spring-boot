@@ -9,7 +9,7 @@ If you are using Maven, add the following dependency.
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-documentdb-spring-boot-starter</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.3</version>
 </dependency>
 ```
 
