@@ -1,4 +1,10 @@
-## Usage
+## Overview
+Azure DocumentDB Spring boot starter is Spring starter for [Azure Cosmos DB Document API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) based on Spring Data framework. Key functionality supports so far including save, delete and find.
+
+## Sample Code
+Pls refer to [sample project here](../azure-documentdb-spring-boot-sample).
+
+## Quick Start
 
 ### Add the dependency
 
@@ -20,21 +26,80 @@ Open `application.properties` file and add below properties with your Document D
 ```
 azure.documentdb.uri=your-documentdb-uri
 azure.documentdb.key=your-documentdb-key
+azure.documentdb.database=your-documentdb-databasename
 ```
 
 Property `azure.documentdb.consistency-level` is also supported.
 
-### Add auto-wiring code
-
-Add below alike code to auto-wire the `DocumentClient` object. For more sample code, please check this [tutorial](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-java-application).
+### Define en entity
+Define a simple entity as Document in DocumentDB.
 
 ```
-@Autowired
-private DocumentClient client;
+public class User {
+    private String id;
+    private String firstName;
+    private String lastName;
+ 
+    ... // setters and getters
+
+    public User(String id, String firstName, String lastName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("User: %s %s, %s", firstName, lastName);
+    }
+}
+```
+`id` field will be used as document id in Azure DocumentDB. `id` field is must.
+
+
+### Create repositories
+Extends DocumentDbRepository interface, which provides Spring Data repository support.
+
+```
+import com.microsoft.azure.spring.data.documentdb.repository.DocumentDbRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserRepository extends DocumentDbRepository<User, String> {
+}
 ```
 
-### Further customization
+So far DocumentDbRepository provides basic save, delete and find operations. More operations will be supported later.
 
-The `DocumentClient` object also accepts `ConnectionPolicy` parameter. You can customize one `ConnectionPolicy` object and add it as a `ConnectionPolicy` bean in your configuration class. This bean will be used when `DocumentClient` object is auto-wired. If such bean not exists, a `ConnectionPolicy` object with default values is used.
+### Create an Application class
+Here create an application class with all the components
+```
+@SpringBootApplication
+public class SampleApplication implements CommandLineRunner {
+
+    @Autowired
+    private UserRepository repository;
+
+    public static void main(String[] args) {
+        SpringApplication.run(SampleApplication.class, args);
+    }
+
+    public void run(String... var1) throws Exception {
+
+        final User testUser = new User("testId", "testFirstName", "testLastName");
+
+        repository.deleteAll();
+        repository.save(testUser);
+
+        final User result = repository.findOne(testUser.getId());
+    }
+}
+```
+Autowired UserRepository interface, then can do save, delete and find operations.
+
+
+### Furthur info
+
+Besides using Azure DocumentDB Spring boot starter, you can directly use Azure DocumentDB Spring Data package to more complex scenario, detail pls refer to [Azure DocumentDB Spring Data](../spring-data-azure-documentdb/README.md).
 
 
