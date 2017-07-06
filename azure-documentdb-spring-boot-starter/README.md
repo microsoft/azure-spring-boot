@@ -50,14 +50,14 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("User: %s %s, %s", firstName, lastName, address);
+        return String.format("User: %s %s, %s", firstName, lastName);
     }
 }
 ```
-*id* field will be used as document id in Azure DocumentDB. *id* field is must.
+`id` field will be used as document id in Azure DocumentDB. `id` field is must.
 
 
-### Create simple queries
+### Create repositories
 Extends DocumentDbRepository interface, which provides Spring Data repository support.
 
 ```
@@ -86,7 +86,7 @@ public class SampleApplication implements CommandLineRunner {
 
     public void run(String... var1) throws Exception {
 
-        final User testUser = new User("testId", "testFirstName", "testLastName", "test address line one");
+        final User testUser = new User("testId", "testFirstName", "testLastName");
 
         repository.deleteAll();
         repository.save(testUser);
@@ -98,7 +98,7 @@ public class SampleApplication implements CommandLineRunner {
 Autowired UserRepository interface, then can do save, delete and find operations.
 
 
-### Further customization
+### Furthur info
 
 Besides using Azure DocumentDB Spring boot starter, you can directly use Azure DocumentDB Spring Data package to more complex scenario, detail pls refer to [Azure DocumentDB Spring Data](../spring-data-azure-documentdb/README.md).
 

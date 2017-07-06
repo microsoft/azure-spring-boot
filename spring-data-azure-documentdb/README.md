@@ -19,10 +19,9 @@ If you are using Maven, add the following dependency.
 ```
 
 ### Setup Configuration
-Setup Azure DocumentDB configuration. Enabling Spring Data Azure DocumentDB repository support is autoconfigured.
+Setup Azure DocumentDB configuration class. Enabling Spring Data Azure DocumentDB repository support is autoconfigured.
 
 ```
-@Configuration
 @Configuration
 public class AppConfiguration extends AbstractDocumentDbConfiguration {
 
@@ -73,14 +72,14 @@ public class User {
 
     @Override
     public String toString() {
-        return String.format("User: %s %s, %s", firstName, lastName, address);
+        return String.format("User: %s %s, %s", firstName, lastName);
     }
 }
 ```
 *id* field will be used as document id in Azure DocumentDB. *id* field is must.
 
 
-### Create simple queries
+### Create repositories
 Extends DocumentDbRepository interface, which provides Spring Data repository support.
 
 ```
@@ -109,7 +108,7 @@ public class SampleApplication implements CommandLineRunner {
 
     public void run(String... var1) throws Exception {
 
-        final User testUser = new User("testId", "testFirstName", "testLastName", "test address line one");
+        final User testUser = new User("testId", "testFirstName", "testLastName");
 
         repository.deleteAll();
         repository.save(testUser);
@@ -119,3 +118,6 @@ public class SampleApplication implements CommandLineRunner {
 }
 ```
 Autowired UserRepository interface, then can do save, delete and find operations. Azure DocumentDB Spring Data uses the DocumentTemplate to execute the quries behind *find*, *save* methods. You can use the template yourself for more complex queries.
+
+## Furthur info
+If you'd like to save effort of configuration, you could directly use Azure DocumentDB Spring boot starter at [here](../azure-documentdb-spring-boot-start).
