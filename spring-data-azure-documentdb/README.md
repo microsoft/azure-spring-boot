@@ -1,8 +1,8 @@
 ## Overview
-Azure DocumentDB Spring Data provides initial Spring Data support for [Azure Cosmos DB Document API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) based on Spring Data framework. Key functionality supports so far including save, delete and find. More features will coming soon.
+Azure DocumentDB Spring Data provides initial Spring Data support for [Azure Cosmos DB Document API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) based on Spring Data framework. Key functionalities supported so far include save, delete and find. More features will coming soon.
 
-## Sample Codes
-Pls refer to [sample projects here](../spring-data-azure-documentdb-sample).
+## Sample Code
+Pls refer to [sample project here](../spring-data-azure-documentdb-sample).
 
 ## Quick Start
 
@@ -43,7 +43,7 @@ public class AppConfiguration extends AbstractDocumentDbConfiguration {
     }
 }
 ```
-By default, @EnableDocumentDbRepositories will scan the current package for any interfaces that extend one of Spring Data's repository interfaces. Use it's to annotate your Configuration class to scan a different root package by type if your project layout has multiple projects and it's not finding your repositories.
+By default, @EnableDocumentDbRepositories will scan the current package for any interfaces that extend one of Spring Data's repository interfaces. Using it to annotate your Configuration class to scan a different root package by type if your project layout has multiple projects and it's not finding your repositories.
 ```
 @Configuration
 @EnableDocumentDbRepositories(basePackageClass=UserRepository.class)
@@ -76,7 +76,7 @@ public class User {
     }
 }
 ```
-*id* field will be used as document id in Azure DocumentDB. *id* field is must.
+`id` field will be used as document id in Azure DocumentDB. `id` field is must.
 
 
 ### Create repositories

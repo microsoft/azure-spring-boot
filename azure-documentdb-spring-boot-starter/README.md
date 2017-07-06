@@ -1,8 +1,8 @@
 ## Overview
 Azure DocumentDB Spring boot starter is Spring starter for [Azure Cosmos DB Document API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) based on Spring Data framework. Key functionality supports so far including save, delete and find.
 
-## Sample Codes
-Pls refer to [sample projects here](../azure-documentdb-spring-boot-sample).
+## Sample Code
+Pls refer to [sample project here](../azure-documentdb-spring-boot-sample).
 
 ## Quick Start
 
