@@ -1,35 +1,58 @@
 ## Overview
-Azure DocumentDB Spring boot starter is Spring starter for [Azure Cosmos DB Document API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) based on Spring Data framework. Key functionality supports so far including save, delete and find.
+Azure DocumentDB Spring Data provides initial Spring Data support for [Azure Cosmos DB Document API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) based on Spring Data framework. Key functionality supports so far including save, delete and find. More features will coming soon.
 
 ## Sample Codes
-Pls refer to [sample projects here](../azure-documentdb-spring-boot-sample).
+Pls refer to [sample projects here](../spring-data-azure-documentdb-sample).
 
 ## Quick Start
 
 ### Add the dependency
-
-"azure-documentdb-spring-boot-starter" is published on Maven Central Repository.  
+"spring-data-azure-documentdb" is published on Maven Central Repository.  
 If you are using Maven, add the following dependency.  
 
 ```xml
 <dependency>
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-documentdb-spring-boot-starter</artifactId>
+    <artifactId>spring-data-azure-documentdb</artifactId>
     <version>0.1.3</version>
 </dependency>
 ```
 
-### Add the property setting
-
-Open `application.properties` file and add below properties with your Document DB credentials.
+### Setup Configuration
+Setup Azure DocumentDB configuration. Enabling Spring Data Azure DocumentDB repository support is autoconfigured.
 
 ```
-azure.documentdb.uri=your-documentdb-uri
-azure.documentdb.key=your-documentdb-key
-azure.documentdb.database=your-documentdb-databasename
+@Configuration
+@Configuration
+public class AppConfiguration extends AbstractDocumentDbConfiguration {
+
+    @Value("${azure.documentdb.uri}")
+    private String uri;
+
+    @Value("${azure.documentdb.key}")
+    private String key;
+
+    @Value("${azure.documentdb.database}")
+    private String dbName;
+
+    public DocumentClient documentClient() {
+        return new DocumentClient(uri, key, ConnectionPolicy.GetDefault(), ConsistencyLevel.Session);
+    }
+
+    public String getDatabase() {
+        return dbName;
+    }
+}
+```
+By default, @EnableDocumentDbRepositories will scan the current package for any interfaces that extend one of Spring Data's repository interfaces. Use it's to annotate your Configuration class to scan a different root package by type if your project layout has multiple projects and it's not finding your repositories.
+```
+@Configuration
+@EnableDocumentDbRepositories(basePackageClass=UserRepository.class)
+public class AppConfiguration extends AbstractDocumentDbConfiguration {
+    // configuration code
+}
 ```
 
-Property `azure.documentdb.consistency-level` is also supported.
 
 ### Define en entity
 Define a simple entity as Document in DocumentDB.
@@ -95,11 +118,4 @@ public class SampleApplication implements CommandLineRunner {
     }
 }
 ```
-Autowired UserRepository interface, then can do save, delete and find operations.
-
-
-### Further customization
-
-Besides using Azure DocumentDB Spring boot starter, you can directly use Azure DocumentDB Spring Data package to more complex scenario, detail pls refer to [Azure DocumentDB Spring Data](../spring-data-azure-documentdb/README.md).
-
-
+Autowired UserRepository interface, then can do save, delete and find operations. Azure DocumentDB Spring Data uses the DocumentTemplate to execute the quries behind *find*, *save* methods. You can use the template yourself for more complex queries.
