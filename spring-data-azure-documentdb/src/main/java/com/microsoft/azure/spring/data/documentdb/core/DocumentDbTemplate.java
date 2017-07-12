@@ -195,16 +195,18 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                 return dbList.get(0);
             } else {
                 // create new database
-                Database db = new Database();
+                final Database db = new Database();
                 db.setId(dbName);
 
                 final Resource resource = documentDbFactory.getDocumentClient()
                         .createDatabase(db, null).getResource();
 
                 if (resource instanceof Database) {
-                    db = (Database) resource;
+                    return (Database) resource;
+                } else {
+                    LOGGER.error("create database {} get unexpected result: {}" + resource.getSelfLink());
+                    throw new RuntimeException("create database {} get unexpected result: " + resource.getSelfLink());
                 }
-                return db;
             }
         } catch (DocumentClientException ex) {
             throw new RuntimeException(ex.getMessage());
