@@ -12,7 +12,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 
 @SpringBootApplication
@@ -72,7 +71,7 @@ public class ServiceBusSampleApplication implements CommandLineRunner {
         subscriptionClient.close();
     }
 
-    private class MessageHandler implements IMessageHandler{
+    private class MessageHandler implements IMessageHandler {
         public CompletableFuture<Void> onMessageAsync(IMessage message) {
             final String messageString = new String(message.getBody());
             System.out.println("Received message: " + messageString);
