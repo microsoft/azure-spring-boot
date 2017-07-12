@@ -28,6 +28,9 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     private final DocumentDbConverter dbConverter;
     private final String databaseName;
 
+    private Database databaseCache;
+    private List<String> collectionCache;
+
     public DocumentDbTemplate(String host,
                               String key,
                               String dbName,
@@ -43,40 +46,34 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         this.documentDbFactory = documentDbFactory;
         this.dbConverter = documentDbConverter;
         this.databaseName = dbName;
+        this.collectionCache = new ArrayList<String>();
     }
 
-    public DocumentDbTemplate(DocumentClient client) {
-        this(new DocumentDbFactory(client), new DocumentDbConverter(), null);
+    public DocumentDbTemplate(DocumentClient client, String dbName) {
+        this(new DocumentDbFactory(client), new DocumentDbConverter(), dbName);
     }
 
-    public DocumentDbTemplate(DocumentDbFactory dbFactory) {
-        this(dbFactory, new DocumentDbConverter(), null);
-    }
 
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
     }
 
-    public String getCollectionName(Class<?> entityClass) {
-
-        return entityClass.getSimpleName();
-    }
-
     public <T> T insert(T objectToSave) {
-        // get collection name
         final Class entityClass = objectToSave.getClass();
         final Document document = dbConverter.convertToDocument(objectToSave);
+        final String collectionName = getCollectionName(entityClass);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("execute createDocument in database {} collection {}",
-                    this.databaseName, getCollectionName(entityClass));
+                    this.databaseName, collectionName);
         }
 
         try {
-            // check if collection exists
-            final DocumentCollection collection = getCollection(this.databaseName, getCollectionName(entityClass));
-
+            if (!this.collectionCache.contains(collectionName)) {
+                createOrGetCollection(this.databaseName, collectionName);
+                this.collectionCache.add(collectionName);
+            }
             documentDbFactory.getDocumentClient()
-                    .createDocument(collection.getSelfLink(), document, null, false);
+                    .createDocument(getCollectionLink(this.databaseName, collectionName), document, null, false);
             return objectToSave;
         } catch (DocumentClientException e) {
             throw new RuntimeException(e.getMessage());
@@ -84,22 +81,26 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     }
 
     public <T> T findById(Object id, Class<T> entityClass) {
-        final String query = "SELECT * FROM c WHERE c.id='" + id.toString() + "'";
+        final String collectionName = getCollectionName(entityClass);
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("execute queryDocument in database {} collection {} with id {}",
-                    this.databaseName, getCollectionName(entityClass), id.toString());
+            LOGGER.debug("execute readDocument in database {} collection {} with id {}",
+                    this.databaseName, collectionName, id.toString());
         }
+        try {
+            final Resource resource = documentDbFactory.getDocumentClient()
+                    .readDocument(
+                            getDocumentLink(this.databaseName, collectionName, id.toString()), null)
+                    .getResource();
 
-        final List<Document> results = documentDbFactory.getDocumentClient()
-                .queryDocuments(getCollectionLink(this.databaseName, getCollectionName(entityClass)), query, null)
-                .getQueryIterable().toList();
-
-        if (results == null || results.size() == 0) {
-            return null;
-        } else {
-            final Document d = results.get(0);
-            return dbConverter.convertFromDocument(d, entityClass);
+            if (resource instanceof Document) {
+                final Document document = (Document) resource;
+                return dbConverter.convertFromDocument(document, entityClass);
+            } else {
+                return null;
+            }
+        } catch (DocumentClientException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -107,7 +108,83 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         throw new UnsupportedOperationException("not supported");
     }
 
-    private Database getDb(String dbName) {
+
+    public <T> void update(T object) {
+        final Field idField = ReflectionUtils.findField(object.getClass(), "id");
+
+        String id;
+        try {
+            id = idField.get(object).toString();
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
+        try {
+            final Resource resource = documentDbFactory.getDocumentClient()
+                    .readDocument(getDocumentLink(this.databaseName, getCollectionName(object.getClass()), id), null)
+                    .getResource();
+
+            if (resource instanceof Document) {
+                final Document originalDoc = (Document) resource;
+
+                documentDbFactory.getDocumentClient().replaceDocument(
+                        originalDoc.getSelfLink(),
+                        dbConverter.convertToDocument(object),
+                        null);
+            } else {
+                LOGGER.error("invalid Document to update {}", resource.getSelfLink());
+            }
+        } catch (DocumentClientException ex) {
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
+
+    public <T> List<T> findAll(Class<T> entityClass) {
+        throw new UnsupportedOperationException("not supported");
+    }
+
+    public void deleteAll(String collectionName) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("execute deleteCollection in database {} collection {} with id {}",
+                    this.databaseName, collectionName);
+        }
+
+        try {
+            documentDbFactory.getDocumentClient()
+                    .deleteCollection(getCollectionLink(this.databaseName, collectionName), null);
+        } catch (DocumentClientException ex) {
+            if (ex.getStatusCode() == 404) {
+                LOGGER.warn("deleteAll in database {} collection {} met NOTFOUND: \n{}",
+                        this.databaseName, collectionName, ex.getMessage());
+            } else {
+                throw new RuntimeException(ex.getMessage());
+            }
+        }
+
+    }
+
+    public <T> List<T> findAll(String collectionName, final Class<T> entityClass) {
+        final List<Document> results = documentDbFactory.getDocumentClient()
+                .queryDocuments(getCollectionLink(this.databaseName, collectionName),
+                        "SELECT * FROM c", null)
+                .getQueryIterable().toList();
+
+        final List<T> entities = new ArrayList<T>();
+
+        for (int i = 0; i < results.size(); i++) {
+            final T entity = dbConverter.convertFromDocument(results.get(i), entityClass);
+            entities.add(entity);
+        }
+
+        return entities;
+    }
+
+    public String getCollectionName(Class<?> entityClass) {
+
+        return entityClass.getSimpleName();
+    }
+
+    private Database createOrGetDatabase(String dbName) {
         final String query = "SELECT * FROM root r WHERE r.id='" + dbName + "'";
 
         try {
@@ -144,7 +221,6 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         }
 
         try {
-
             final Resource resource = documentDbFactory.getDocumentClient()
                     .createCollection(getDatabaseLink(this.databaseName), collection, collectionOptions)
                     .getResource();
@@ -158,32 +234,27 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
 
     }
 
-    private DocumentCollection getCollection(String dbName, String collectionName) {
+    private DocumentCollection createOrGetCollection(String dbName, String collectionName) {
         final String query = "SELECT * FROM root r WHERE r.id='" + collectionName + "'";
 
-        try {
-            final List<DocumentCollection> collectionList = documentDbFactory.getDocumentClient()
-                    .queryCollections(getDb(dbName).getSelfLink(), query, null).getQueryIterable().toList();
+        if (this.databaseCache == null) {
+            this.databaseCache = createOrGetDatabase(dbName);
+        }
 
-            if (collectionList.size() > 0) {
-                return collectionList.get(0);
-            } else {
-                DocumentCollection collection = new DocumentCollection();
-                collection.setId(collectionName);
+        final List<DocumentCollection> collectionList = documentDbFactory.getDocumentClient()
+                .queryCollections(getDatabaseLink(dbName), query, null).getQueryIterable().toList();
 
-                final RequestOptions requestOptions = new RequestOptions();
-                requestOptions.setOfferThroughput(1000);
+        if (collectionList.size() > 0) {
+            return collectionList.get(0);
+        } else {
+            DocumentCollection collection = new DocumentCollection();
+            collection.setId(collectionName);
 
-                final Resource resource = documentDbFactory.getDocumentClient()
-                        .createCollection(getDatabaseLink(this.databaseName), collection, requestOptions)
-                        .getResource();
-                if (resource instanceof DocumentCollection) {
-                    collection = (DocumentCollection) resource;
-                }
-                return collection;
-            }
-        } catch (DocumentClientException ex) {
-            throw new RuntimeException(ex.getMessage());
+            final RequestOptions requestOptions = new RequestOptions();
+            requestOptions.setOfferThroughput(1000);
+
+            collection = createCollection(collectionName, requestOptions);
+            return collection;
         }
     }
 
@@ -202,76 +273,6 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
 
     }
 
-    public <T> void update(T object) {
-        final Field idField = ReflectionUtils.findField(object.getClass(), "id");
-
-        String id;
-        try {
-            id = idField.get(object).toString();
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-
-        final String query = "SELECT * FROM c WHERE c.id='" + id + "'";
-
-        final List<Document> results = documentDbFactory.getDocumentClient()
-                .queryDocuments(getCollectionLink(this.databaseName, getCollectionName(object.getClass())),
-                        query, null)
-                .getQueryIterable().toList();
-
-        if (results == null || results.size() == 0) {
-            LOGGER.warn("enitity to update not exists!");
-        } else {
-            final Document originalDoc = results.get(0);
-            final DocumentDbConverter converter = new DocumentDbConverter();
-
-            try {
-                documentDbFactory.getDocumentClient().replaceDocument(
-                        originalDoc.getSelfLink(),
-                        converter.convertToDocument(object), null);
-            } catch (DocumentClientException ex) {
-                throw new RuntimeException(ex.getMessage());
-            }
-        }
-    }
-
-    public <T> List<T> findAll(Class<T> entityClass) {
-        throw new UnsupportedOperationException("not supported");
-    }
-
-
-    public void deleteAll(String collectionName) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("execute deleteCollection in database {} collection {} with id {}",
-                    this.databaseName, collectionName);
-        }
-
-        try {
-            documentDbFactory.getDocumentClient()
-                    .deleteCollection(getCollectionLink(this.databaseName, collectionName), null);
-        } catch (DocumentClientException ex) {
-            LOGGER.warn("deleteAll in database {} collection {} met exception: \n{}",
-                    this.databaseName, collectionName, ex.getMessage());
-        }
-
-    }
-
-    public <T> List<T> findAll(String collectionName, final Class<T> entityClass) {
-        final List<Document> results = documentDbFactory.getDocumentClient()
-                .queryDocuments(getCollectionLink(this.databaseName, collectionName),
-                        "SELECT * FROM c", null)
-                .getQueryIterable().toList();
-
-        final List<T> entities = new ArrayList<T>();
-
-        for (int i = 0; i < results.size(); i++) {
-            final T entity = dbConverter.convertFromDocument(results.get(i), entityClass);
-            entities.add(entity);
-        }
-
-        return entities;
-    }
-
     public DocumentDbFactory getDocumentDbFactory() {
         return documentDbFactory;
     }
@@ -285,6 +286,10 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     }
 
     private String getCollectionLink(String databaseName, String collectionName) {
-        return "dbs/" + databaseName + "/colls/" + collectionName;
+        return getDatabaseLink(databaseName) + "/colls/" + collectionName;
+    }
+
+    private String getDocumentLink(String databaseName, String collectionName, String documentId) {
+        return getCollectionLink(databaseName, collectionName) + "/docs/" + documentId;
     }
 }

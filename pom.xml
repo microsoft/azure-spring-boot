@@ -26,6 +26,12 @@
             <name>Zhijun Zhao</name>
             <email>zhijzhao@microsoft.com</email>
         </developer>
+        
+         <developer>
+            <id>yungez</id>
+            <name>Yunge Zhu</name>
+            <email>yungez@microsoft.com</email>
+        </developer>
     </developers>
 
     <scm>
