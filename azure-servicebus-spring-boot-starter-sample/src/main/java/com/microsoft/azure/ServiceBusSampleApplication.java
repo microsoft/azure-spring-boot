@@ -12,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 
 @SpringBootApplication
@@ -44,7 +45,7 @@ public class ServiceBusSampleApplication implements CommandLineRunner {
     private void sendQueueMessage() throws ServiceBusException, InterruptedException {
         final String messageBody = "queue message";
         System.out.println("Sending message: " + messageBody);
-        final Message message = new Message(messageBody.getBytes());
+        final Message message = new Message(messageBody.getBytes(StandardCharsets.UTF_8));
         queueClientForSending.send(message);
         queueClientForSending.close();
     }
@@ -59,7 +60,7 @@ public class ServiceBusSampleApplication implements CommandLineRunner {
     private void sendTopicMessage() throws ServiceBusException, InterruptedException {
         final String messageBody = "topic message";
         System.out.println("Sending message: " + messageBody);
-        final Message message = new Message(messageBody.getBytes());
+        final Message message = new Message(messageBody.getBytes(StandardCharsets.UTF_8));
         topicClient.send(message);
         topicClient.close();
     }
@@ -71,9 +72,9 @@ public class ServiceBusSampleApplication implements CommandLineRunner {
         subscriptionClient.close();
     }
 
-    private class MessageHandler implements IMessageHandler {
+    static class MessageHandler implements IMessageHandler {
         public CompletableFuture<Void> onMessageAsync(IMessage message) {
-            final String messageString = new String(message.getBody());
+            final String messageString = new String(message.getBody(), StandardCharsets.UTF_8);
             System.out.println("Received message: " + messageString);
             return CompletableFuture.completedFuture(null);
         }
