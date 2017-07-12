@@ -5,6 +5,7 @@
  */
 package com.microsoft.azure.autoconfigure.servicebus;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,6 +24,16 @@ public class ServiceBusPropertiesTest {
         System.setProperty(Constants.TOPIC_NAME_PROPERTY, Constants.TOPIC_NAME);
         System.setProperty(Constants.SUBSCRIPTION_NAME_PROPERTY, Constants.SUBSCRIPTION_NAME);
         System.setProperty(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY, Constants.SUBSCRIPTION_RECEIVE_MODE.name());
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        System.clearProperty(Constants.CONNECTION_STRING_PROPERTY);
+        System.clearProperty(Constants.QUEUE_NAME_PROPERTY);
+        System.clearProperty(Constants.QUEUE_RECEIVE_MODE_PROPERTY);
+        System.clearProperty(Constants.TOPIC_NAME_PROPERTY);
+        System.clearProperty(Constants.SUBSCRIPTION_NAME_PROPERTY);
+        System.clearProperty(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY);
     }
 
     @Test
