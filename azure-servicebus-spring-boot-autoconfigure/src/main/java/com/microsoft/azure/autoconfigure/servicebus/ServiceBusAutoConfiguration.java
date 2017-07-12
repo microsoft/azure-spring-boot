@@ -82,7 +82,8 @@ public class ServiceBusAutoConfiguration {
         if (properties.getConnectionString() != null && properties.getSubscriptionName() != null
                 && properties.getSubscriptionReceiveMode() != null) {
             return new SubscriptionClient(new ConnectionStringBuilder(
-                    properties.getConnectionString(), properties.getSubscriptionName()),
+                    properties.getConnectionString(),
+                    properties.getTopicName() + "/subscriptions/" + properties.getSubscriptionName()),
                     properties.getSubscriptionReceiveMode());
         }
 
