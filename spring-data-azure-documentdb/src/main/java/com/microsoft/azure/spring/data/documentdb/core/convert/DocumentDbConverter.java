@@ -22,7 +22,6 @@ public class DocumentDbConverter {
         return new Document(json);
     }
 
-    // todo: implement converter based on Spring data converter
     public <T> T convertFromDocument(Document document, Class<T> entityClass) {
         return this.gson.fromJson(document.toJson(), entityClass);
     }
