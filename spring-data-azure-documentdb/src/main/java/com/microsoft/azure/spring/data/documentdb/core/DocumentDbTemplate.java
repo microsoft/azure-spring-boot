@@ -83,10 +83,6 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     public <T> T findById(Object id, Class<T> entityClass) {
         final String collectionName = getCollectionName(entityClass);
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("execute readDocument in database {} collection {} with id {}",
-                    this.databaseName, collectionName, id.toString());
-        }
         try {
             final Resource resource = documentDbFactory.getDocumentClient()
                     .readDocument(
@@ -127,12 +123,18 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
             if (resource instanceof Document) {
                 final Document originalDoc = (Document) resource;
 
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("execute replaceDocument in database {} collection {} with id {}",
+                            this.databaseName, getCollectionName(object.getClass()), id);
+                }
+
                 documentDbFactory.getDocumentClient().replaceDocument(
                         originalDoc.getSelfLink(),
                         dbConverter.convertToDocument(object),
                         null);
             } else {
                 LOGGER.error("invalid Document to update {}", resource.getSelfLink());
+                throw new RuntimeException("invalid Document to update " + resource.getSelfLink());
             }
         } catch (DocumentClientException ex) {
             throw new RuntimeException(ex.getMessage());
@@ -154,7 +156,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                     .deleteCollection(getCollectionLink(this.databaseName, collectionName), null);
         } catch (DocumentClientException ex) {
             if (ex.getStatusCode() == 404) {
-                LOGGER.warn("deleteAll in database {} collection {} met NOTFOUND: \n{}",
+                LOGGER.warn("deleteAll in database {} collection {} met NOTFOUND error {}",
                         this.databaseName, collectionName, ex.getMessage());
             } else {
                 throw new RuntimeException(ex.getMessage());
@@ -180,7 +182,6 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     }
 
     public String getCollectionName(Class<?> entityClass) {
-
         return entityClass.getSimpleName();
     }
 
@@ -198,6 +199,10 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                 final Database db = new Database();
                 db.setId(dbName);
 
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("execute createDatabase {}", dbName);
+                }
+
                 final Resource resource = documentDbFactory.getDocumentClient()
                         .createDatabase(db, null).getResource();
 
@@ -214,17 +219,22 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     }
 
     public DocumentCollection createCollection(String collectionName, RequestOptions collectionOptions) {
+        return createCollection(this.databaseName, collectionName, collectionOptions);
+    }
+
+    public DocumentCollection createCollection(String dbName,
+                                               String collectionName,
+                                               RequestOptions collectionOptions) {
         DocumentCollection collection = new DocumentCollection();
         collection.setId(collectionName);
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("execute createCollection in database {} collection {}",
-                    this.databaseName, collectionName);
+            LOGGER.debug("execute createCollection in database {} collection {}", dbName, collectionName);
         }
 
         try {
             final Resource resource = documentDbFactory.getDocumentClient()
-                    .createCollection(getDatabaseLink(this.databaseName), collection, collectionOptions)
+                    .createCollection(getDatabaseLink(dbName), collection, collectionOptions)
                     .getResource();
             if (resource instanceof DocumentCollection) {
                 collection = (DocumentCollection) resource;
@@ -249,21 +259,16 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         if (collectionList.size() > 0) {
             return collectionList.get(0);
         } else {
-            DocumentCollection collection = new DocumentCollection();
-            collection.setId(collectionName);
-
             final RequestOptions requestOptions = new RequestOptions();
             requestOptions.setOfferThroughput(1000);
 
-            collection = createCollection(collectionName, requestOptions);
-            return collection;
+            return createCollection(dbName, collectionName, requestOptions);
         }
     }
 
     public void dropCollection(String collectionName) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("execute deleteCollection in database {} collection {}",
-                    this.databaseName, collectionName);
+            LOGGER.debug("execute deleteCollection in database {} collection {}", this.databaseName, collectionName);
         }
 
         try {
@@ -273,14 +278,6 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
             throw new RuntimeException(ex.getMessage());
         }
 
-    }
-
-    public DocumentDbFactory getDocumentDbFactory() {
-        return documentDbFactory;
-    }
-
-    public DocumentDbConverter getDocumentDbConverter() {
-        return this.dbConverter;
     }
 
     private String getDatabaseLink(String databaseName) {
