@@ -40,7 +40,8 @@ public class ServiceBusSampleApplication implements CommandLineRunner {
         receiveTopicMessage();
     }
 
-
+    // NOTE: Please be noted that below are the minimum code for demonstrating the usage of autowired clients.
+    // For complete documentation of Service Bus, reference https://azure.microsoft.com/en-us/services/service-bus/
     private void sendQueueMessage() throws ServiceBusException, InterruptedException {
         final String messageBody = "queue message";
         System.out.println("Sending message: " + messageBody);
