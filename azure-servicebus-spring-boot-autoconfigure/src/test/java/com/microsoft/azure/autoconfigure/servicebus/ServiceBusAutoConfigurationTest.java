@@ -20,8 +20,8 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class ServiceBusAutoConfigurationTest {
     @Test
     public void returnNullIfNoPropertiesSet() {
-        final ByteArrayOutputStream outConent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outConent));
+        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
 
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(ServiceBusAutoConfiguration.class);
@@ -36,7 +36,7 @@ public class ServiceBusAutoConfigurationTest {
         final SubscriptionClient subscriptionClient = context.getBean(SubscriptionClient.class);
         assertThat(subscriptionClient).isNull();
 
-        final String outContentString = outConent.toString();
+        final String outContentString = outContent.toString();
         assertThat(outContentString).contains("Property azure.servicebus.connection-string is not set.");
         assertThat(outContentString).contains("Property azure.servicebus.subscription-name is not set.");
         assertThat(outContentString).contains("Property azure.servicebus.subscription-receive-mode is not set.");
