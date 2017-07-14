@@ -43,7 +43,7 @@ azure.servicebus.subscription-receive-mode=peeklock
 
 ### Add auto-wiring code
 
-Add below alike code to autowire the clients you want to use in your application. You can reference the sample code in azure-servicebus-spring-boot-starter-sample folder.
+You can use the following code to autowire the Azure Service Bus Queue, Topic, and Subscription clients in your Spring Boot application. Please see sample code in the [azure-servicebus-spring-boot-starter-sample](../azure-servicebus-spring-boot-starter-sample) folder as a reference.
 
 ```
 @Autowired
