@@ -7,21 +7,19 @@
 package com.microsoft.azure.spring.data.documentdb.repository;
 
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbOperations;
+import com.microsoft.azure.spring.data.documentdb.repository.domain.Person;
 import com.microsoft.azure.spring.data.documentdb.repository.support.DocumentDbEntityInformation;
 import com.microsoft.azure.spring.data.documentdb.repository.support.SimpleDocumentDbRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.microsoft.azure.spring.data.documentdb.repository.domain.*;
-
 import java.util.Arrays;
 
-import static org.mockito.Mockito.when;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SimpleDocumentDbRepositoryUnitTest {
@@ -30,11 +28,9 @@ public class SimpleDocumentDbRepositoryUnitTest {
 
     @Mock
     DocumentDbOperations dbOperations;
-
-    private Person testPerson1;
-
     @Mock
     DocumentDbEntityInformation<Person, String> entityInformation;
+    private Person testPerson1;
 
     @Before
     public void setUp() {

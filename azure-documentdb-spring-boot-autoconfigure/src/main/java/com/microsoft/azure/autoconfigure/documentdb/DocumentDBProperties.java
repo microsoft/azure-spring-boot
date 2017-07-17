@@ -28,12 +28,16 @@ public class DocumentDBProperties {
         return key;
     }
 
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public String getDatabase() {
         return database;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setDatabase(String databaseName) {
+        this.database = databaseName;
     }
 
     public ConsistencyLevel getConsistencyLevel() {
@@ -42,10 +46,6 @@ public class DocumentDBProperties {
 
     public void setConsistencyLevel(ConsistencyLevel consistencyLevel) {
         this.consistencyLevel = consistencyLevel;
-    }
-
-    public void setDatabase(String databaseName) {
-        this.database = databaseName;
     }
 
 }
