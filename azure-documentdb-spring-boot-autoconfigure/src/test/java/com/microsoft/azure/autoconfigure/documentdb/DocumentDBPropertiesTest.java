@@ -46,6 +46,6 @@ public class DocumentDBPropertiesTest {
 
     @Configuration
     @EnableConfigurationProperties(DocumentDBProperties.class)
-    private static class Config {
+    static class Config {
     }
 }

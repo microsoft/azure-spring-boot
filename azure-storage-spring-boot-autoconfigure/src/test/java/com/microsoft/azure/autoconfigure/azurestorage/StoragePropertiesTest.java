@@ -35,6 +35,6 @@ public class StoragePropertiesTest {
 
     @Configuration
     @EnableConfigurationProperties(StorageProperties.class)
-    private static class Config {
+    static class Config {
     }
 }

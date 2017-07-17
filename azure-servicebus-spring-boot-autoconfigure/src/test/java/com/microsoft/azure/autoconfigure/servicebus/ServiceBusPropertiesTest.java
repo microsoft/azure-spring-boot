@@ -66,6 +66,6 @@ public class ServiceBusPropertiesTest {
 
     @Configuration
     @EnableConfigurationProperties(ServiceBusProperties.class)
-    private static class Config {
+    static class Config {
     }
 }
