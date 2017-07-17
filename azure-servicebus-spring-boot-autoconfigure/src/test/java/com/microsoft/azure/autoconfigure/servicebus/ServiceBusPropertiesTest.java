@@ -23,17 +23,18 @@ public class ServiceBusPropertiesTest {
         System.setProperty(Constants.SUBSCRIPTION_NAME_PROPERTY, Constants.SUBSCRIPTION_NAME);
         System.setProperty(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY, Constants.SUBSCRIPTION_RECEIVE_MODE.name());
 
-        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(Config.class);
-        context.refresh();
-        final ServiceBusProperties properties = context.getBean(ServiceBusProperties.class);
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(Config.class);
+            context.refresh();
+            final ServiceBusProperties properties = context.getBean(ServiceBusProperties.class);
 
-        assertThat(properties.getConnectionString()).isEqualTo(Constants.CONNECTION_STRING);
-        assertThat(properties.getQueueName()).isEqualTo(Constants.QUEUE_NAME);
-        assertThat(properties.getQueueReceiveMode()).isEqualTo(Constants.QUEUE_RECEIVE_MODE);
-        assertThat(properties.getTopicName()).isEqualTo(Constants.TOPIC_NAME);
-        assertThat(properties.getSubscriptionName()).isEqualTo(Constants.SUBSCRIPTION_NAME);
-        assertThat(properties.getSubscriptionReceiveMode()).isEqualTo(Constants.SUBSCRIPTION_RECEIVE_MODE);
+            assertThat(properties.getConnectionString()).isEqualTo(Constants.CONNECTION_STRING);
+            assertThat(properties.getQueueName()).isEqualTo(Constants.QUEUE_NAME);
+            assertThat(properties.getQueueReceiveMode()).isEqualTo(Constants.QUEUE_RECEIVE_MODE);
+            assertThat(properties.getTopicName()).isEqualTo(Constants.TOPIC_NAME);
+            assertThat(properties.getSubscriptionName()).isEqualTo(Constants.SUBSCRIPTION_NAME);
+            assertThat(properties.getSubscriptionReceiveMode()).isEqualTo(Constants.SUBSCRIPTION_RECEIVE_MODE);
+        }
 
         System.clearProperty(Constants.CONNECTION_STRING_PROPERTY);
         System.clearProperty(Constants.QUEUE_NAME_PROPERTY);

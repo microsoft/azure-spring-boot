@@ -25,8 +25,8 @@ public class StoragePropertiesTest {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(Config.class);
             context.refresh();
-            final StorageProperties properties = context.getBean(StorageProperties.class);
 
+            final StorageProperties properties = context.getBean(StorageProperties.class);
             assertThat(properties.getConnectionString()).isEqualTo(CONNECTION_STRING);
         }
 
@@ -50,6 +50,10 @@ public class StoragePropertiesTest {
             assertThat(exception.getCause().getMessage()).contains(
                     "Field error in object 'azure.storage' on field 'connectionString': " +
                             "rejected value [null];");
+=======
+
+            assertThat(properties.getConnectionString()).isEqualTo(CONNECTION_STRING);
+>>>>>>> master
         }
     }
 

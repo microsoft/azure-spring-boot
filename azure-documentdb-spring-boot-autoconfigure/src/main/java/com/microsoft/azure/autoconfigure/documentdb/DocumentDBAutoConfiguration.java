@@ -30,6 +30,7 @@ import org.springframework.context.annotation.Scope;
 @EnableConfigurationProperties(DocumentDBProperties.class)
 public class DocumentDBAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(DocumentDBAutoConfiguration.class);
+    private static final String USER_AGENT_SUFFIX = "azure-documentdb-spring-boot-starter/0.1.3";
 
     private final DocumentDBProperties properties;
     private final ConnectionPolicy connectionPolicy;

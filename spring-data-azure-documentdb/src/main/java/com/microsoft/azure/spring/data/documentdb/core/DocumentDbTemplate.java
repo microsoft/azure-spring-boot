@@ -108,7 +108,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     public <T> void update(T object) {
         final Field idField = ReflectionUtils.findField(object.getClass(), "id");
 
-        String id;
+        final String id;
         try {
             id = idField.get(object).toString();
         } catch (IllegalAccessException e) {

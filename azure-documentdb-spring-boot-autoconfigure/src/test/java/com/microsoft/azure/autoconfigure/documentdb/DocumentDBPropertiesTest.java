@@ -19,14 +19,15 @@ public class DocumentDBPropertiesTest {
     public void canSetAllProperties() {
         PropertySettingUtil.setProperties();
 
-        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(Config.class);
-        context.refresh();
-        final DocumentDBProperties properties = context.getBean(DocumentDBProperties.class);
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(Config.class);
+            context.refresh();
+            final DocumentDBProperties properties = context.getBean(DocumentDBProperties.class);
 
-        assertThat(properties.getUri()).isEqualTo(PropertySettingUtil.URI);
-        assertThat(properties.getKey()).isEqualTo(PropertySettingUtil.KEY);
-        assertThat(properties.getConsistencyLevel()).isEqualTo(PropertySettingUtil.CONSISTENCY_LEVEL);
+            assertThat(properties.getUri()).isEqualTo(PropertySettingUtil.URI);
+            assertThat(properties.getKey()).isEqualTo(PropertySettingUtil.KEY);
+            assertThat(properties.getConsistencyLevel()).isEqualTo(PropertySettingUtil.CONSISTENCY_LEVEL);
+        }
 
         PropertySettingUtil.unsetProperties();
     }

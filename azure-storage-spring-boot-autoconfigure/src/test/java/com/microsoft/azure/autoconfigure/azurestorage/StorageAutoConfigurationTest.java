@@ -24,15 +24,18 @@ public class StorageAutoConfigurationTest {
     public void createStorageAccountWithInvalidConnectionString() {
         System.setProperty(CONNECTION_STRING_PROPERTY, INVALID_CONNECTION_STRING);
 
-        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(StorageAutoConfiguration.class);
-        context.refresh();
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(StorageAutoConfiguration.class);
+            context.refresh();
 
-        CloudStorageAccount cloudStorageAccount = null;
-        try {
-            cloudStorageAccount = context.getBean(CloudStorageAccount.class);
-        } catch (Exception e) {
-            assertThat(e).isExactlyInstanceOf(BeanCreationException.class);
+            CloudStorageAccount cloudStorageAccount = null;
+            try {
+                cloudStorageAccount = context.getBean(CloudStorageAccount.class);
+            } catch (Exception e) {
+                assertThat(e).isExactlyInstanceOf(BeanCreationException.class);
+            }
+
+            assertThat(cloudStorageAccount).isNull();
         }
 
         System.clearProperty(CONNECTION_STRING_PROPERTY);
