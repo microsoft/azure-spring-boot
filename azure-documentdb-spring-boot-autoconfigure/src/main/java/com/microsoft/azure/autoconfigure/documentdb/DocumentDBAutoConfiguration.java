@@ -30,7 +30,7 @@ import org.springframework.context.annotation.Scope;
 @EnableConfigurationProperties(DocumentDBProperties.class)
 public class DocumentDBAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(DocumentDBAutoConfiguration.class);
-    private static final String UserAgentSuffix = "azure-documentdb-spring-boot-starter/0.1.3";
+    private static final String USERAGENTSUFFIX = "azure-documentdb-spring-boot-starter/0.1.3";
 
     private final DocumentDBProperties properties;
     private final ConnectionPolicy connectionPolicy;
@@ -54,7 +54,7 @@ public class DocumentDBAutoConfiguration {
         DocumentClient client = null;
         final ConnectionPolicy policy = connectionPolicy == null ? ConnectionPolicy.GetDefault() : connectionPolicy;
         final String existingUserAgentSuffix = policy.getUserAgentSuffix() == null ? "" : policy.getUserAgentSuffix();
-        policy.setUserAgentSuffix(UserAgentSuffix + ";" + existingUserAgentSuffix);
+        policy.setUserAgentSuffix(USERAGENTSUFFIX + ";" + existingUserAgentSuffix);
 
         if (properties.getUri() != null && properties.getKey() != null) {
             client = new DocumentClient(properties.getUri(), properties.getKey(), policy,

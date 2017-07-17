@@ -13,13 +13,13 @@ import com.microsoft.azure.documentdb.DocumentClient;
 
 public class DocumentDbFactory {
 
-    private static final String UserAgentSuffix = "spring-data-azure-documentdb/0.1.3";
+    private static final String USERAGENTSUFFIX = "spring-data-azure-documentdb/0.1.3";
 
     private DocumentClient documentClient;
 
     public DocumentDbFactory(String host, String key) {
         final ConnectionPolicy policy = ConnectionPolicy.GetDefault();
-        policy.setUserAgentSuffix(UserAgentSuffix);
+        policy.setUserAgentSuffix(USERAGENTSUFFIX);
         documentClient = new DocumentClient(host, key, policy, ConsistencyLevel.Session);
     }
 
