@@ -141,10 +141,10 @@
                 <version>${azure.storage.version}</version>
             </dependency>
             <dependency>
-			    <groupId>com.microsoft.azure</groupId>
-			    <artifactId>azure-media</artifactId>
-			    <version>${azure.media.version}</version>
-			</dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-media</artifactId>
+                <version>${azure.media.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

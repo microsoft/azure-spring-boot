@@ -159,7 +159,7 @@
         <module>../azure-servicebus-spring-boot-starter-sample</module>
         <module>../spring-data-azure-documentdb</module>
         <module>../spring-data-azure-documentdb-sample</module>
-		<module>../azure-media-spring-boot-autoconfigure</module>
+        <module>../azure-media-spring-boot-autoconfigure</module>
         <module>../azure-media-spring-boot-starter</module>
         <module>../azure-media-spring-boot-starter-sample</module>
     </modules>
