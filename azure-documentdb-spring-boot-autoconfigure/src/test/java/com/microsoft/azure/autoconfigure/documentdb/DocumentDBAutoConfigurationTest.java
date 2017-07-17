@@ -62,7 +62,7 @@ public class DocumentDBAutoConfigurationTest {
             assertThat(connectionPolicy.getMaxPoolSize()).isEqualTo(PropertySettingUtil.MAX_POOL_SIZE);
             assertThat(connectionPolicy.getIdleConnectionTimeout()).
                     isEqualTo(PropertySettingUtil.IDLE_CONNECTION_TIMEOUT);
-            assertThat(connectionPolicy.getUserAgentSuffix()).isEqualTo(PropertySettingUtil.USER_AGENT_SUFFIX);
+            assertThat(connectionPolicy.getUserAgentSuffix()).contains(PropertySettingUtil.USER_AGENT_SUFFIX);
             assertThat(connectionPolicy.getRetryOptions().getMaxRetryAttemptsOnThrottledRequests()).
                     isEqualTo(PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_ATTEMPTS_ON_THROTTLED_REQUESTS);
             assertThat(connectionPolicy.getRetryOptions().getMaxRetryWaitTimeInSeconds()).

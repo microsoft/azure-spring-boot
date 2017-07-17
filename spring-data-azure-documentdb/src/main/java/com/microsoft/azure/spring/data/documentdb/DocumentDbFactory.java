@@ -13,10 +13,14 @@ import com.microsoft.azure.documentdb.DocumentClient;
 
 public class DocumentDbFactory {
 
+    private static final String USER_AGENT_SUFFIX = "spring-data-azure-documentdb/0.1.3";
+
     private DocumentClient documentClient;
 
     public DocumentDbFactory(String host, String key) {
-        documentClient = new DocumentClient(host, key, ConnectionPolicy.GetDefault(), ConsistencyLevel.Session);
+        final ConnectionPolicy policy = ConnectionPolicy.GetDefault();
+        policy.setUserAgentSuffix(USER_AGENT_SUFFIX);
+        documentClient = new DocumentClient(host, key, policy, ConsistencyLevel.Session);
     }
 
     public DocumentDbFactory(DocumentClient client) {
