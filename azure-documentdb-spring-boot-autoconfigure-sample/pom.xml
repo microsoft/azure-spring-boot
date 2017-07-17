@@ -10,7 +10,6 @@
         <relativePath>../azure-spring-boot-starter-parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-documentdb-spring-boot-autoconfigure-sample</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>

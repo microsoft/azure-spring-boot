@@ -24,12 +24,13 @@ public class StoragePropertiesTest {
 
     @Test
     public void canSetProperties() {
-        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(Config.class);
-        context.refresh();
-        final StorageProperties properties = context.getBean(StorageProperties.class);
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(Config.class);
+            context.refresh();
+            final StorageProperties properties = context.getBean(StorageProperties.class);
 
-        assertThat(properties.getConnectionString()).isEqualTo(CONNECTION_STRING);
+            assertThat(properties.getConnectionString()).isEqualTo(CONNECTION_STRING);
+        }
     }
 
     @Configuration
