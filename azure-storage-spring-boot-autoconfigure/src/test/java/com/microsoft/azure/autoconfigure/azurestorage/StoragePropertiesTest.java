@@ -50,10 +50,6 @@ public class StoragePropertiesTest {
             assertThat(exception.getCause().getMessage()).contains(
                     "Field error in object 'azure.storage' on field 'connectionString': " +
                             "rejected value [null];");
-=======
-
-            assertThat(properties.getConnectionString()).isEqualTo(CONNECTION_STRING);
->>>>>>> master
         }
     }
 
