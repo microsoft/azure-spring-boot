@@ -27,7 +27,7 @@ public abstract class DocumentDbConfigurationSupport {
     @Bean
     public DocumentDbMappingContext documentDbMappingContext() throws ClassNotFoundException {
         final DocumentDbMappingContext mappingContext = new DocumentDbMappingContext();
-        mappingContext.setInitialEntitySet(getIntialEntitySet());
+        mappingContext.setInitialEntitySet(getInitialEntitySet());
 
         return mappingContext;
     }
@@ -44,7 +44,7 @@ public abstract class DocumentDbConfigurationSupport {
                         new MappingContext[]{documentDbMappingContext()}))));
     }
 
-    protected Set<Class<?>> getIntialEntitySet() throws ClassNotFoundException {
+    protected Set<Class<?>> getInitialEntitySet() throws ClassNotFoundException {
         final Set<Class<?>> initialEntitySet = new HashSet<Class<?>>();
 
         for (final String basePackage : getMappingBasePackages()) {

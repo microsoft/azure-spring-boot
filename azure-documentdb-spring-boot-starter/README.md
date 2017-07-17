@@ -98,7 +98,7 @@ public class SampleApplication implements CommandLineRunner {
 Autowired UserRepository interface, then can do save, delete and find operations.
 
 
-### Furthur info
+### Further info
 
 Besides using Azure DocumentDB Spring boot starter, you can directly use Azure DocumentDB Spring Data package to more complex scenario, detail pls refer to [Azure DocumentDB Spring Data](../spring-data-azure-documentdb/README.md).
 

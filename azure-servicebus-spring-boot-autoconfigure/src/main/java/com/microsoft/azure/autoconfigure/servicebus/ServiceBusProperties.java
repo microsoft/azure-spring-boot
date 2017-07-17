@@ -9,17 +9,32 @@ package com.microsoft.azure.autoconfigure.servicebus;
 import com.microsoft.azure.servicebus.ReceiveMode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import javax.validation.constraints.NotNull;
+
 @ConfigurationProperties("azure.servicebus")
 public class ServiceBusProperties {
-    private String queueConnectionString;
+    @NotNull
+    private String connectionString;
+    private String queueName;
     private ReceiveMode queueReceiveMode;
+    private String topicName;
+    private String subscriptionName;
+    private ReceiveMode subscriptionReceiveMode;
 
-    public String getQueueConnectionString() {
-        return queueConnectionString;
+    public String getConnectionString() {
+        return connectionString;
     }
 
-    public void setQueueConnectionString(String queueConnectionString) {
-        this.queueConnectionString = queueConnectionString;
+    public void setConnectionString(String connectionString) {
+        this.connectionString = connectionString;
+    }
+
+    public String getQueueName() {
+        return queueName;
+    }
+
+    public void setQueueName(String queueName) {
+        this.queueName = queueName;
     }
 
     public ReceiveMode getQueueReceiveMode() {
@@ -28,6 +43,30 @@ public class ServiceBusProperties {
 
     public void setQueueReceiveMode(ReceiveMode queueReceiveMode) {
         this.queueReceiveMode = queueReceiveMode;
+    }
+
+    public String getTopicName() {
+        return topicName;
+    }
+
+    public void setTopicName(String topicName) {
+        this.topicName = topicName;
+    }
+
+    public String getSubscriptionName() {
+        return subscriptionName;
+    }
+
+    public void setSubscriptionName(String subscriptionName) {
+        this.subscriptionName = subscriptionName;
+    }
+
+    public ReceiveMode getSubscriptionReceiveMode() {
+        return subscriptionReceiveMode;
+    }
+
+    public void setSubscriptionReceiveMode(ReceiveMode subscriptionReceiveMode) {
+        this.subscriptionReceiveMode = subscriptionReceiveMode;
     }
 }
 
