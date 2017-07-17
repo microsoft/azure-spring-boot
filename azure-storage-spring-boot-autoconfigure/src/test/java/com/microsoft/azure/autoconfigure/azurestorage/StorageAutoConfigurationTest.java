@@ -23,29 +23,31 @@ public class StorageAutoConfigurationTest {
     public void createStorageAccountWithInvalidConnectionString() {
         System.setProperty("azure.storage.connection-string", INVALID_CONNECTION_STRING);
 
-        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(StorageAutoConfiguration.class);
-        context.refresh();
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(StorageAutoConfiguration.class);
+            context.refresh();
 
-        CloudStorageAccount cloudStorageAccount = null;
-        try {
-            cloudStorageAccount = context.getBean(CloudStorageAccount.class);
-        } catch (Exception e) {
-            assertThat(e).isExactlyInstanceOf(BeanCreationException.class);
+            CloudStorageAccount cloudStorageAccount = null;
+            try {
+                cloudStorageAccount = context.getBean(CloudStorageAccount.class);
+            } catch (Exception e) {
+                assertThat(e).isExactlyInstanceOf(BeanCreationException.class);
+            }
+
+            assertThat(cloudStorageAccount).isNull();
         }
-
-        assertThat(cloudStorageAccount).isNull();
     }
 
     @Test
     public void createStorageAccountWithValidConnectionStringFormat() {
         System.setProperty("azure.storage.connection-string", CONNECTION_STRING_WITH_VALID_FORMAT);
 
-        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(StorageAutoConfiguration.class);
-        context.refresh();
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(StorageAutoConfiguration.class);
+            context.refresh();
 
-        final CloudStorageAccount cloudStorageAccount = context.getBean(CloudStorageAccount.class);
-        assertThat(cloudStorageAccount).isNotNull();
+            final CloudStorageAccount cloudStorageAccount = context.getBean(CloudStorageAccount.class);
+            assertThat(cloudStorageAccount).isNotNull();
+        }
     }
 }

@@ -25,25 +25,26 @@ public class ServiceBusAutoConfigurationTest {
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
-        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(ServiceBusAutoConfiguration.class);
-        context.refresh();
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(ServiceBusAutoConfiguration.class);
+            context.refresh();
 
-        final QueueClient queueClient = context.getBean(QueueClient.class);
-        assertThat(queueClient).isNull();
+            final QueueClient queueClient = context.getBean(QueueClient.class);
+            assertThat(queueClient).isNull();
 
-        final TopicClient topicClient = context.getBean(TopicClient.class);
-        assertThat(topicClient).isNull();
+            final TopicClient topicClient = context.getBean(TopicClient.class);
+            assertThat(topicClient).isNull();
 
-        final SubscriptionClient subscriptionClient = context.getBean(SubscriptionClient.class);
-        assertThat(subscriptionClient).isNull();
+            final SubscriptionClient subscriptionClient = context.getBean(SubscriptionClient.class);
+            assertThat(subscriptionClient).isNull();
 
-        final String outContentString = outContent.toString();
-        assertThat(outContentString).contains("Property azure.servicebus.subscription-name is not set.");
-        assertThat(outContentString).contains("Property azure.servicebus.subscription-receive-mode is not set.");
-        assertThat(outContentString).contains("Property azure.servicebus.topic-name is not set.");
-        assertThat(outContentString).contains("Property azure.servicebus.queue-name is not set.");
-        assertThat(outContentString).contains("Property azure.servicebus.queue-receive-mode is not set.");
+            final String outContentString = outContent.toString();
+            assertThat(outContentString).contains("Property azure.servicebus.subscription-name is not set.");
+            assertThat(outContentString).contains("Property azure.servicebus.subscription-receive-mode is not set.");
+            assertThat(outContentString).contains("Property azure.servicebus.topic-name is not set.");
+            assertThat(outContentString).contains("Property azure.servicebus.queue-name is not set.");
+            assertThat(outContentString).contains("Property azure.servicebus.queue-receive-mode is not set.");
+        }
 
         System.setErr(null);
         System.clearProperty(Constants.CONNECTION_STRING_PROPERTY);
@@ -55,25 +56,26 @@ public class ServiceBusAutoConfigurationTest {
         System.setProperty(Constants.QUEUE_NAME_PROPERTY, Constants.QUEUE_NAME);
         System.setProperty(Constants.QUEUE_RECEIVE_MODE_PROPERTY, Constants.QUEUE_RECEIVE_MODE.name());
 
-        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(ServiceBusAutoConfiguration.class);
-        context.refresh();
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(ServiceBusAutoConfiguration.class);
+            context.refresh();
 
-        QueueClient queueClient = null;
+            QueueClient queueClient = null;
 
-        Exception exception = null;
-        try {
-            queueClient = context.getBean(QueueClient.class);
-        } catch (Exception e) {
-            exception = e;
+            Exception exception = null;
+            try {
+                queueClient = context.getBean(QueueClient.class);
+            } catch (Exception e) {
+                exception = e;
+            }
+
+            assertThat(exception).isNotNull();
+            assertThat(exception.getMessage()).contains(
+                    "IllegalConnectionStringFormatException: Connection String cannot be parsed");
+            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
+
+            assertThat(queueClient).isNull();
         }
-
-        assertThat(exception).isNotNull();
-        assertThat(exception.getMessage()).contains(
-                "IllegalConnectionStringFormatException: Connection String cannot be parsed");
-        assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
-
-        assertThat(queueClient).isNull();
 
         System.clearProperty(Constants.CONNECTION_STRING_PROPERTY);
         System.clearProperty(Constants.QUEUE_NAME_PROPERTY);
@@ -85,25 +87,26 @@ public class ServiceBusAutoConfigurationTest {
         System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.CONNECTION_STRING);
         System.setProperty(Constants.TOPIC_NAME_PROPERTY, Constants.TOPIC_NAME);
 
-        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(ServiceBusAutoConfiguration.class);
-        context.refresh();
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(ServiceBusAutoConfiguration.class);
+            context.refresh();
 
-        TopicClient topicClient = null;
+            TopicClient topicClient = null;
 
-        Exception exception = null;
-        try {
-            topicClient = context.getBean(TopicClient.class);
-        } catch (Exception e) {
-            exception = e;
+            Exception exception = null;
+            try {
+                topicClient = context.getBean(TopicClient.class);
+            } catch (Exception e) {
+                exception = e;
+            }
+
+            assertThat(exception).isNotNull();
+            assertThat(exception.getMessage()).contains(
+                    "IllegalConnectionStringFormatException: Connection String cannot be parsed");
+            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
+
+            assertThat(topicClient).isNull();
         }
-
-        assertThat(exception).isNotNull();
-        assertThat(exception.getMessage()).contains(
-                "IllegalConnectionStringFormatException: Connection String cannot be parsed");
-        assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
-
-        assertThat(topicClient).isNull();
 
         System.clearProperty(Constants.CONNECTION_STRING_PROPERTY);
         System.clearProperty(Constants.TOPIC_NAME_PROPERTY);
@@ -116,25 +119,26 @@ public class ServiceBusAutoConfigurationTest {
         System.setProperty(Constants.SUBSCRIPTION_NAME_PROPERTY, Constants.SUBSCRIPTION_NAME);
         System.setProperty(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY, Constants.SUBSCRIPTION_RECEIVE_MODE.name());
 
-        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(ServiceBusAutoConfiguration.class);
-        context.refresh();
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(ServiceBusAutoConfiguration.class);
+            context.refresh();
 
-        SubscriptionClient subscriptionClient = null;
+            SubscriptionClient subscriptionClient = null;
 
-        Exception exception = null;
-        try {
-            subscriptionClient = context.getBean(SubscriptionClient.class);
-        } catch (Exception e) {
-            exception = e;
+            Exception exception = null;
+            try {
+                subscriptionClient = context.getBean(SubscriptionClient.class);
+            } catch (Exception e) {
+                exception = e;
+            }
+
+            assertThat(exception).isNotNull();
+            assertThat(exception.getMessage()).contains(
+                    "IllegalConnectionStringFormatException: Connection String cannot be parsed");
+            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
+
+            assertThat(subscriptionClient).isNull();
         }
-
-        assertThat(exception).isNotNull();
-        assertThat(exception.getMessage()).contains(
-                "IllegalConnectionStringFormatException: Connection String cannot be parsed");
-        assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
-
-        assertThat(subscriptionClient).isNull();
 
         System.clearProperty(Constants.CONNECTION_STRING_PROPERTY);
         System.clearProperty(Constants.TOPIC_NAME_PROPERTY);
