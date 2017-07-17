@@ -8,8 +8,8 @@ package com.microsoft.azure.autoconfigure.azurestorage;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,7 +53,7 @@ public class StoragePropertiesTest {
         }
     }
 
-    @Configuration
+    @TestConfiguration
     @EnableConfigurationProperties(StorageProperties.class)
     static class Config {
     }
