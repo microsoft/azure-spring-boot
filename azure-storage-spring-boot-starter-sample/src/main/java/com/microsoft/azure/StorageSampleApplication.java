@@ -26,7 +26,6 @@ public class StorageSampleApplication implements CommandLineRunner {
         SpringApplication.run(StorageSampleApplication.class);
     }
 
-    // NOTE:
     public void run(String... var1) throws URISyntaxException, StorageException {
         createContainerIfNotExists("mycontainer");
     }
