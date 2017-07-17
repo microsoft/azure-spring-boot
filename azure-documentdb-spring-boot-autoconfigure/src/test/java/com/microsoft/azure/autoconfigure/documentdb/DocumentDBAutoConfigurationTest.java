@@ -33,41 +33,45 @@ public class DocumentDBAutoConfigurationTest {
 
     @Test
     public void canSetAllPropertiesToDocumentClient() {
-        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(DocumentDBAutoConfiguration.class);
-        context.refresh();
-        final DocumentClient documentClient = context.getBean(DocumentClient.class);
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(DocumentDBAutoConfiguration.class);
+            context.refresh();
+            final DocumentClient documentClient = context.getBean(DocumentClient.class);
 
-        // No way to verify the setting of key value and ConsistencyLevel.
-        final URI uri = documentClient.getServiceEndpoint();
-        assertThat(uri.toString()).isEqualTo(PropertySettingUtil.URI);
+            // No way to verify the setting of key value and ConsistencyLevel.
+            final URI uri = documentClient.getServiceEndpoint();
+            assertThat(uri.toString()).isEqualTo(PropertySettingUtil.URI);
 
-        assertThat(documentClient.getConnectionPolicy()).isEqualTo(ConnectionPolicy.GetDefault());
+            assertThat(documentClient.getConnectionPolicy()).isEqualTo(ConnectionPolicy.GetDefault());
+        }
     }
 
     @Test
     public void canSetConnectionPolicyToDocumentClient() {
-        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(DocumentDBAutoConfiguration.class, ConnectionPolicyConfig.class);
-        context.refresh();
-        final DocumentClient documentClient = context.getBean(DocumentClient.class);
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(DocumentDBAutoConfiguration.class, ConnectionPolicyConfig.class);
+            context.refresh();
+            final DocumentClient documentClient = context.getBean(DocumentClient.class);
 
-        final ConnectionPolicy connectionPolicy = documentClient.getConnectionPolicy();
-        assertThat(connectionPolicy.getRequestTimeout()).isEqualTo(PropertySettingUtil.REQUEST_TIMEOUT);
-        assertThat(connectionPolicy.getMediaRequestTimeout()).isEqualTo(PropertySettingUtil.MEDIA_REQUEST_TIMEOUT);
-        assertThat(connectionPolicy.getConnectionMode()).isEqualTo(PropertySettingUtil.CONNECTION_MODE);
-        assertThat(connectionPolicy.getMediaReadMode()).isEqualTo(PropertySettingUtil.MEDIA_READ_MODE);
-        assertThat(connectionPolicy.getMaxPoolSize()).isEqualTo(PropertySettingUtil.MAX_POOL_SIZE);
-        assertThat(connectionPolicy.getIdleConnectionTimeout()).isEqualTo(PropertySettingUtil.IDLE_CONNECTION_TIMEOUT);
-        assertThat(connectionPolicy.getUserAgentSuffix()).isEqualTo(PropertySettingUtil.USER_AGENT_SUFFIX);
-        assertThat(connectionPolicy.getRetryOptions().getMaxRetryAttemptsOnThrottledRequests()).
-                isEqualTo(PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_ATTEMPTS_ON_THROTTLED_REQUESTS);
-        assertThat(connectionPolicy.getRetryOptions().getMaxRetryWaitTimeInSeconds()).
-                isEqualTo(PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_WAIT_TIME_IN_SECONDS);
-        assertThat(connectionPolicy.getEnableEndpointDiscovery()).
-                isEqualTo(PropertySettingUtil.ENABLE_ENDPOINT_DISCOVERY);
-        assertThat(connectionPolicy.getPreferredLocations().toString()).
-                isEqualTo(PropertySettingUtil.PREFERRED_LOCATIONS.toString());
+            final ConnectionPolicy connectionPolicy = documentClient.getConnectionPolicy();
+            assertThat(connectionPolicy.getRequestTimeout()).isEqualTo(PropertySettingUtil.REQUEST_TIMEOUT);
+            assertThat(connectionPolicy.getMediaRequestTimeout()).
+                    isEqualTo(PropertySettingUtil.MEDIA_REQUEST_TIMEOUT);
+            assertThat(connectionPolicy.getConnectionMode()).isEqualTo(PropertySettingUtil.CONNECTION_MODE);
+            assertThat(connectionPolicy.getMediaReadMode()).isEqualTo(PropertySettingUtil.MEDIA_READ_MODE);
+            assertThat(connectionPolicy.getMaxPoolSize()).isEqualTo(PropertySettingUtil.MAX_POOL_SIZE);
+            assertThat(connectionPolicy.getIdleConnectionTimeout()).
+                    isEqualTo(PropertySettingUtil.IDLE_CONNECTION_TIMEOUT);
+            assertThat(connectionPolicy.getUserAgentSuffix()).isEqualTo(PropertySettingUtil.USER_AGENT_SUFFIX);
+            assertThat(connectionPolicy.getRetryOptions().getMaxRetryAttemptsOnThrottledRequests()).
+                    isEqualTo(PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_ATTEMPTS_ON_THROTTLED_REQUESTS);
+            assertThat(connectionPolicy.getRetryOptions().getMaxRetryWaitTimeInSeconds()).
+                    isEqualTo(PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_WAIT_TIME_IN_SECONDS);
+            assertThat(connectionPolicy.getEnableEndpointDiscovery()).
+                    isEqualTo(PropertySettingUtil.ENABLE_ENDPOINT_DISCOVERY);
+            assertThat(connectionPolicy.getPreferredLocations().toString()).
+                    isEqualTo(PropertySettingUtil.PREFERRED_LOCATIONS.toString());
+        }
     }
 
     @Configuration
