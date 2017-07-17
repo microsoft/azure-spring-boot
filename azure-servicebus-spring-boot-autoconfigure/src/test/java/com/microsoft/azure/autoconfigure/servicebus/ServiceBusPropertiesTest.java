@@ -45,7 +45,7 @@ public class ServiceBusPropertiesTest {
     }
 
     @Test
-    public void connectionStingNotNull() {
+    public void connectionStringIsNull() {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(Config.class);
 

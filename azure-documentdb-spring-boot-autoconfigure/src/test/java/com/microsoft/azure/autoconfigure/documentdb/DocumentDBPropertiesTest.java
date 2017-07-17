@@ -7,6 +7,7 @@ package com.microsoft.azure.autoconfigure.documentdb;
 
 
 import org.junit.Test;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -32,15 +33,23 @@ public class DocumentDBPropertiesTest {
     }
 
     @Test
-    public void shouldAllBeNullIfNotSet() {
+    public void emptySettingNotAllowed() {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(Config.class);
-            context.refresh();
-            final DocumentDBProperties properties = context.getBean(DocumentDBProperties.class);
 
-            assertThat(properties.getUri()).isNull();
-            assertThat(properties.getKey()).isNull();
-            assertThat(properties.getConsistencyLevel()).isNull();
+            Exception exception = null;
+            try {
+                context.refresh();
+            } catch (Exception e) {
+                exception = e;
+            }
+
+            assertThat(exception).isNotNull();
+            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
+            assertThat(exception.getCause().getMessage()).contains(
+                    "Field error in object 'azure.documentdb' on field 'uri': rejected value [null];");
+            assertThat(exception.getCause().getMessage()).contains(
+                    "Field error in object 'azure.documentdb' on field 'key': rejected value [null];");
         }
     }
 

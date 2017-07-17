@@ -58,7 +58,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     }
 
     public <T> T insert(T objectToSave) {
-        final Class entityClass = objectToSave.getClass();
+        final Class<? extends Object> entityClass = objectToSave.getClass();
         final Document document = dbConverter.convertToDocument(objectToSave);
         final String collectionName = getCollectionName(entityClass);
 

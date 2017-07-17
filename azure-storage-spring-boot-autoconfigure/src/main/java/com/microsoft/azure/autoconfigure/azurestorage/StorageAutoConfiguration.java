@@ -49,16 +49,6 @@ public class StorageAutoConfiguration {
      */
     private CloudStorageAccount createCloudStorageAccount() throws URISyntaxException, InvalidKeyException {
         LOG.debug("createCloudStorageAccount called");
-
-        CloudStorageAccount account = null;
-        if (properties.getConnectionString() != null) {
-            account = CloudStorageAccount.parse(properties.getConnectionString());
-        }
-
-        if (properties.getConnectionString() == null) {
-            LOG.error("Property azure.storage.connection-string is not set.");
-        }
-
-        return account;
+        return CloudStorageAccount.parse(properties.getConnectionString());
     }
 }

@@ -8,9 +8,12 @@ package com.microsoft.azure.autoconfigure.azurestorage;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import javax.validation.constraints.NotNull;
+
 @ConfigurationProperties("azure.storage")
 public class StorageProperties {
 
+    @NotNull
     private String connectionString;
 
     /**

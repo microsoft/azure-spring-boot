@@ -9,10 +9,15 @@ package com.microsoft.azure.autoconfigure.documentdb;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import javax.validation.constraints.NotNull;
+
 @ConfigurationProperties("azure.documentdb")
 public class DocumentDBProperties {
+    @NotNull
     private String uri;
+    @NotNull
     private String key;
+
     private ConsistencyLevel consistencyLevel;
     private String database;
 
