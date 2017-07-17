@@ -20,6 +20,8 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class ServiceBusAutoConfigurationTest {
     @Test
     public void returnNullIfNoPropertiesSet() {
+        System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.CONNECTION_STRING);
+
         final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
 
@@ -37,7 +39,6 @@ public class ServiceBusAutoConfigurationTest {
         assertThat(subscriptionClient).isNull();
 
         final String outContentString = outContent.toString();
-        assertThat(outContentString).contains("Property azure.servicebus.connection-string is not set.");
         assertThat(outContentString).contains("Property azure.servicebus.subscription-name is not set.");
         assertThat(outContentString).contains("Property azure.servicebus.subscription-receive-mode is not set.");
         assertThat(outContentString).contains("Property azure.servicebus.topic-name is not set.");
@@ -45,6 +46,7 @@ public class ServiceBusAutoConfigurationTest {
         assertThat(outContentString).contains("Property azure.servicebus.queue-receive-mode is not set.");
 
         System.setErr(null);
+        System.clearProperty(Constants.CONNECTION_STRING_PROPERTY);
     }
 
     @Test
@@ -110,6 +112,7 @@ public class ServiceBusAutoConfigurationTest {
     @Test
     public void cannotAutowireSubscriptionClientWithInvalidConnectionString() {
         System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.CONNECTION_STRING);
+        System.setProperty(Constants.TOPIC_NAME_PROPERTY, Constants.TOPIC_NAME);
         System.setProperty(Constants.SUBSCRIPTION_NAME_PROPERTY, Constants.SUBSCRIPTION_NAME);
         System.setProperty(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY, Constants.SUBSCRIPTION_RECEIVE_MODE.name());
 
@@ -134,6 +137,7 @@ public class ServiceBusAutoConfigurationTest {
         assertThat(subscriptionClient).isNull();
 
         System.clearProperty(Constants.CONNECTION_STRING_PROPERTY);
+        System.clearProperty(Constants.TOPIC_NAME_PROPERTY);
         System.clearProperty(Constants.SUBSCRIPTION_NAME_PROPERTY);
         System.clearProperty(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY);
     }

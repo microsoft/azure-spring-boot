@@ -34,14 +34,9 @@ public class ServiceBusAutoConfiguration {
     @Scope("prototype")
     @ConditionalOnMissingBean
     public QueueClient queueClient() throws InterruptedException, ServiceBusException {
-        if (properties.getConnectionString() != null && properties.getQueueName() != null &&
-                properties.getQueueReceiveMode() != null) {
+        if (properties.getQueueName() != null && properties.getQueueReceiveMode() != null) {
             return new QueueClient(new ConnectionStringBuilder(properties.getConnectionString(),
                     properties.getQueueName()), properties.getQueueReceiveMode());
-        }
-
-        if (properties.getConnectionString() == null) {
-            LOG.error("Property azure.servicebus.connection-string is not set.");
         }
 
         if (properties.getQueueName() == null) {
@@ -59,13 +54,9 @@ public class ServiceBusAutoConfiguration {
     @Scope("prototype")
     @ConditionalOnMissingBean
     public TopicClient topicClient() throws InterruptedException, ServiceBusException {
-        if (properties.getConnectionString() != null && properties.getTopicName() != null) {
+        if (properties.getTopicName() != null) {
             return new TopicClient(new ConnectionStringBuilder(properties.getConnectionString(),
                     properties.getTopicName()));
-        }
-
-        if (properties.getConnectionString() == null) {
-            LOG.error("Property azure.servicebus.connection-string is not set.");
         }
 
         if (properties.getTopicName() == null) {
@@ -79,7 +70,7 @@ public class ServiceBusAutoConfiguration {
     @Scope("prototype")
     @ConditionalOnMissingBean
     public SubscriptionClient subscriptionClient() throws ServiceBusException, InterruptedException {
-        if (properties.getConnectionString() != null && properties.getSubscriptionName() != null
+        if (properties.getTopicName() != null && properties.getSubscriptionName() != null
                 && properties.getSubscriptionReceiveMode() != null) {
             return new SubscriptionClient(new ConnectionStringBuilder(
                     properties.getConnectionString(),
@@ -87,8 +78,8 @@ public class ServiceBusAutoConfiguration {
                     properties.getSubscriptionReceiveMode());
         }
 
-        if (properties.getConnectionString() == null) {
-            LOG.error("Property azure.servicebus.connection-string is not set.");
+        if (properties.getTopicName() == null) {
+            LOG.error("Property azure.servicebus.topic-name is not set.");
         }
 
         if (properties.getSubscriptionName() == null) {
