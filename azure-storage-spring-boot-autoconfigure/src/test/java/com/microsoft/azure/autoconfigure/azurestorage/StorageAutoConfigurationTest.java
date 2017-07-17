@@ -13,6 +13,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StorageAutoConfigurationTest {
+    private static final String CONNECTION_STRING_PROPERTY = "azure.storage.connection-string";
     private static final String INVALID_CONNECTION_STRING = "invalid connection string";
     private static final String CONNECTION_STRING_WITH_VALID_FORMAT = "DefaultEndpointsProtocol=https;" +
             "AccountName=account-name;" +
@@ -21,7 +22,7 @@ public class StorageAutoConfigurationTest {
 
     @Test
     public void createStorageAccountWithInvalidConnectionString() {
-        System.setProperty("azure.storage.connection-string", INVALID_CONNECTION_STRING);
+        System.setProperty(CONNECTION_STRING_PROPERTY, INVALID_CONNECTION_STRING);
 
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(StorageAutoConfiguration.class);
@@ -34,18 +35,21 @@ public class StorageAutoConfigurationTest {
             assertThat(e).isExactlyInstanceOf(BeanCreationException.class);
         }
 
-        assertThat(cloudStorageAccount).isNull();
+        System.clearProperty(CONNECTION_STRING_PROPERTY);
     }
 
     @Test
     public void createStorageAccountWithValidConnectionStringFormat() {
-        System.setProperty("azure.storage.connection-string", CONNECTION_STRING_WITH_VALID_FORMAT);
+        System.setProperty(CONNECTION_STRING_PROPERTY, CONNECTION_STRING_WITH_VALID_FORMAT);
 
-        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(StorageAutoConfiguration.class);
-        context.refresh();
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(StorageAutoConfiguration.class);
+            context.refresh();
 
-        final CloudStorageAccount cloudStorageAccount = context.getBean(CloudStorageAccount.class);
-        assertThat(cloudStorageAccount).isNotNull();
+            final CloudStorageAccount cloudStorageAccount = context.getBean(CloudStorageAccount.class);
+            assertThat(cloudStorageAccount).isNotNull();
+        }
+
+        System.clearProperty(CONNECTION_STRING_PROPERTY);
     }
 }

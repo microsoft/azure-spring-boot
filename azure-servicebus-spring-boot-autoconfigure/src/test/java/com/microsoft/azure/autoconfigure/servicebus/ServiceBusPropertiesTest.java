@@ -44,22 +44,23 @@ public class ServiceBusPropertiesTest {
     }
 
     @Test
-    public void connectionStingNotNull() {
-        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(Config.class);
+    public void connectionStringIsNull() {
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(Config.class);
 
-        Exception exception = null;
-        try {
-            context.refresh();
-        } catch (Exception e) {
-            exception = e;
+            Exception exception = null;
+            try {
+                context.refresh();
+            } catch (Exception e) {
+                exception = e;
+            }
+
+            assertThat(exception).isNotNull();
+            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
+            assertThat(exception.getCause().getMessage()).contains(
+                    "Field error in object 'azure.servicebus' on field 'connectionString': "
+                            + "rejected value [null];");
         }
-
-        assertThat(exception).isNotNull();
-        assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
-        assertThat(exception.getCause().getMessage()).contains(
-                "Field error in object 'azure.servicebus' on field 'connectionString': "
-                        + "rejected value [null];");
     }
 
     @Configuration
