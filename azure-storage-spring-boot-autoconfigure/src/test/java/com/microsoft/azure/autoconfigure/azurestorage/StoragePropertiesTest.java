@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.autoconfigure.azurestorage;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -18,11 +17,6 @@ public class StoragePropertiesTest {
 
     private static final String CONNECTION_STRING = "some connection string";
     private static final String CONNECTION_STRING_PROPERTY = "azure.storage.connection-string";
-
-    @BeforeClass
-    public static void beforeClass() {
-
-    }
 
     @Test
     public void canSetProperties() {
