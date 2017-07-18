@@ -18,6 +18,10 @@ import com.microsoft.windowsazure.services.media.MediaConfiguration;
 import com.microsoft.windowsazure.services.media.MediaContract;
 import com.microsoft.windowsazure.services.media.MediaService;
 
+/**
+ * @author rajakolli
+ *
+ */
 @Configuration
 @ConditionalOnMissingBean(MediaContract.class)
 @EnableConfigurationProperties(MediaServicesProperties.class)

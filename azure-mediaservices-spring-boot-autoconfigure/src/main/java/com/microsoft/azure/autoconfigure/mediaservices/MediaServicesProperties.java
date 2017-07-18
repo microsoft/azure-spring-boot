@@ -6,8 +6,6 @@
 
 package com.microsoft.azure.autoconfigure.mediaservices;
 
-import javax.validation.constraints.NotNull;
-
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -16,13 +14,12 @@ public class MediaServicesProperties {
 
     private String mediaServiceUri = "https://media.windows.net/API/";
     private String oAuthUri = "https://wamsprodglobal001acs.accesscontrol.windows.net/v2/OAuth2-13";
-    @NotNull
+    private String scope = "urn:WindowsAzureMediaServices";
     @NotEmpty
     private String accountName;
-    @NotNull
     @NotEmpty
     private String accountKey;
-    private String scope = "urn:WindowsAzureMediaServices";
+    
     
     /**
      * @return the mediaServiceUri
