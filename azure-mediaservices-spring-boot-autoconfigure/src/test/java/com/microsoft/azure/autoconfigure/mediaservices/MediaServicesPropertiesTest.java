@@ -1,4 +1,4 @@
-package com.microsoft.azure.autoconfigure.azuremedia;
+package com.microsoft.azure.autoconfigure.mediaservices;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -8,14 +8,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
-import com.microsoft.azure.autoconfigure.mediaservices.MediaServicesProperties;
-
 public class MediaServicesPropertiesTest {
 
     private static final String ACCOUNT_NAME = "some accountname";
-    private static final String ACCOUNT_NAME_PROPERTY = "azure.mediaservices.accountName";
+    private static final String ACCOUNT_NAME_PROPERTY = "azure.mediaservices.account-name";
     private static final String ACCOUNT_KEY = "some accountKey";
-    private static final String ACCOUNT_KEY_PROPERTY = "azure.mediaservices.accountKey";
+    private static final String ACCOUNT_KEY_PROPERTY = "azure.mediaservices.account-key";
 
     @Test
     public void canSetProperties() {
