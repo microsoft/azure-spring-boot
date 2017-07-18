@@ -37,7 +37,7 @@ public class ServiceBusSampleApplication implements CommandLineRunner {
         receiveQueueMessage();
 
         sendTopicMessage();
-        receiveTopicMessage();
+        receiveSubscriptionMessage();
     }
 
     // NOTE: Please be noted that below are the minimum code for demonstrating the usage of autowired clients.
@@ -65,7 +65,7 @@ public class ServiceBusSampleApplication implements CommandLineRunner {
         topicClient.close();
     }
 
-    private void receiveTopicMessage() throws ServiceBusException, InterruptedException {
+    private void receiveSubscriptionMessage() throws ServiceBusException, InterruptedException {
         subscriptionClient.registerMessageHandler(new MessageHandler(), new MessageHandlerOptions());
 
         Thread.sleep(5 * 1000);
