@@ -52,10 +52,13 @@
         <azure.storage.autoconfigure.version>0.1.3</azure.storage.autoconfigure.version>
         <azure.servicebus.autoconfigure.version>0.1.3</azure.servicebus.autoconfigure.version>
         <azure.servicebus.starter.version>0.1.3</azure.servicebus.starter.version>
+        <azure.mediaservices.starter.version>0.1.3</azure.mediaservices.starter.version>
+        <azure.mediaservices.autoconfigure.version>0.1.3</azure.mediaservices.autoconfigure.version>
 
         <azure.documentdb.version>1.11.0</azure.documentdb.version>
         <azure.servicebus.version>1.0.0-PREVIEW-3</azure.servicebus.version>
         <azure.storage.version>5.3.1</azure.storage.version>
+        <azure.media.version>0.9.7</azure.media.version>
 
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
@@ -110,6 +113,16 @@
                 <artifactId>spring-data-azure-documentdb</artifactId>
                 <version>${spring.data.documentdb.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-mediaservices-spring-boot-autoconfigure</artifactId>
+                <version>${azure.mediaservices.autoconfigure.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-mediaservices-spring-boot-starter</artifactId>
+                <version>${azure.mediaservices.starter.version}</version>
+            </dependency>
 
             <!-- Azure related -->
             <dependency>
@@ -126,6 +139,11 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-storage</artifactId>
                 <version>${azure.storage.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-media</artifactId>
+                <version>${azure.media.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

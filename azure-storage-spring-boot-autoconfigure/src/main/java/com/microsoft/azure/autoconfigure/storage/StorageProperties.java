@@ -4,16 +4,15 @@
  * license information.
  */
 
-package com.microsoft.azure.autoconfigure.azurestorage;
+package com.microsoft.azure.autoconfigure.storage;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import javax.validation.constraints.NotNull;
 
 @ConfigurationProperties("azure.storage")
 public class StorageProperties {
 
-    @NotNull
+    @NotEmpty
     private String connectionString;
 
     /**

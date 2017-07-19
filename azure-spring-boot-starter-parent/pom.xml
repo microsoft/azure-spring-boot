@@ -162,5 +162,8 @@
         <module>../azure-iothub-spring-boot-autoconfigure</module>
         <module>../azure-iothub-spring-boot-starter</module>
         <module>../azure-iothub-spring-boot-starter-sample</module>
+        <module>../azure-mediaservices-spring-boot-autoconfigure</module>
+        <module>../azure-mediaservices-spring-boot-starter</module>
+        <module>../azure-mediaservices-spring-boot-starter-sample</module>
     </modules>
 </project>
