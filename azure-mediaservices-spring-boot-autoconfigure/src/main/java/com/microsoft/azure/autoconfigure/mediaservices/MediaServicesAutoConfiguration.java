@@ -6,6 +6,7 @@
 
 package com.microsoft.azure.autoconfigure.mediaservices;
 
+import com.microsoft.windowsazure.exception.ServiceException;
 import com.microsoft.windowsazure.services.media.MediaConfiguration;
 import com.microsoft.windowsazure.services.media.MediaContract;
 import com.microsoft.windowsazure.services.media.MediaService;
@@ -16,6 +17,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+
+import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_HOST;
+import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_PORT;
+import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_SCHEME;
+import static java.util.Objects.nonNull;
+import static java.util.Objects.isNull;
 
 @Configuration
 @ConditionalOnMissingBean(MediaContract.class)
@@ -34,15 +41,16 @@ public class MediaServicesAutoConfiguration {
      * Declare MediaContract bean.
      *
      * @return MediaContract bean
+     * @throws ServiceException 
      */
     @Bean
     @Scope("prototype")
-    public MediaContract mediaContract() {
+    public MediaContract mediaContract() throws ServiceException {
         LOG.debug("mediaContract called");
         return createMediaContract();
     }
 
-    private MediaContract createMediaContract() {
+    private MediaContract createMediaContract() throws ServiceException {
         LOG.debug("createMediaContract called");
         final com.microsoft.windowsazure.Configuration configuration = MediaConfiguration
                 .configureWithOAuthAuthentication(
@@ -51,6 +59,17 @@ public class MediaServicesAutoConfiguration {
                         mediaServicesProperties.getAccountName(),
                         mediaServicesProperties.getAccountKey(),
                         mediaServicesProperties.getScope());
+
+        if (nonNull(mediaServicesProperties.getProxyHost())
+                && nonNull(mediaServicesProperties.getProxyPort())) {
+            configuration.getProperties().put(PROPERTY_HTTP_PROXY_HOST, mediaServicesProperties.getProxyHost());
+            configuration.getProperties().put(PROPERTY_HTTP_PROXY_PORT, mediaServicesProperties.getProxyPort());
+            configuration.getProperties().put(PROPERTY_HTTP_PROXY_SCHEME, mediaServicesProperties.getProxyScheme());
+        } else if (nonNull(mediaServicesProperties.getProxyHost()) && isNull(mediaServicesProperties.getProxyPort())) {
+            throw new ServiceException("Please Set Network Proxy port in application.properties");
+        } else if (nonNull(mediaServicesProperties.getProxyPort()) && isNull(mediaServicesProperties.getProxyHost())) {
+            throw new ServiceException("Please Set Network Proxy host in application.properties");
+        }
         return MediaService.create(configuration);
     }
 }

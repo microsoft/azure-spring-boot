@@ -1,6 +1,8 @@
 package com.microsoft.azure.autoconfigure.mediaservices;
 
 import com.microsoft.windowsazure.services.media.MediaContract;
+import com.microsoft.windowsazure.services.media.implementation.MediaExceptionProcessor;
+
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -18,6 +20,7 @@ public class MediaServicesAutoConfigurationTest {
 
             final MediaContract mediaContract = context.getBean(MediaContract.class);
             assertThat(mediaContract).isNotNull();
+            assertThat(mediaContract).isExactlyInstanceOf(MediaExceptionProcessor.class);
         }
 
         System.clearProperty(Constants.ACCOUNT_KEY_PROPERTY);
