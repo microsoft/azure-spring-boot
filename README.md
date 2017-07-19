@@ -8,6 +8,7 @@ Below starters are available. You can find them in [Spring Initializr](http://st
 
 - [azure-documentdb-spring-boot-starter](azure-documentdb-spring-boot-starter/README.md)
 - [azure-storage-spring-boot-starter](azure-storage-spring-boot-starter/README.md)
+- [azure-mediaservices-spring-boot-starter](azure-mediaservices-spring-boot-starter/README.md)
 
 ### Filing Issues
 

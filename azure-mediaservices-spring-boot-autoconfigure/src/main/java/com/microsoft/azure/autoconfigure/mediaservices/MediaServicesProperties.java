@@ -15,6 +15,10 @@ public class MediaServicesProperties {
     private String accountName;
     @NotEmpty
     private String accountKey;
+    
+    private String proxyHost;
+    private String proxyPort;
+    private String proxyScheme = "http";
 
     private String mediaServiceUri = "https://media.windows.net/API/";
     private String oAuthUri = "https://wamsprodglobal001acs.accesscontrol.windows.net/v2/OAuth2-13";
@@ -88,6 +92,48 @@ public class MediaServicesProperties {
      */
     public void setScope(String scope) {
         this.scope = scope;
+    }
+
+    /**
+     * @return the proxyHost
+     */
+    public String getProxyHost() {
+        return proxyHost;
+    }
+
+    /**
+     * @param proxyHost the proxyHost to set
+     */
+    public void setProxyHost(String proxyHost) {
+        this.proxyHost = proxyHost;
+    }
+
+    /**
+     * @return the proxyPort
+     */
+    public String getProxyPort() {
+        return proxyPort;
+    }
+
+    /**
+     * @param proxyPort the proxyPort to set
+     */
+    public void setProxyPort(String proxyPort) {
+        this.proxyPort = proxyPort;
+    }
+
+    /**
+     * @return the proxyScheme
+     */
+    public String getProxyScheme() {
+        return proxyScheme;
+    }
+
+    /**
+     * @param proxyScheme the proxyScheme to set
+     */
+    public void setProxyScheme(String proxyScheme) {
+        this.proxyScheme = proxyScheme;
     }
 
 }
