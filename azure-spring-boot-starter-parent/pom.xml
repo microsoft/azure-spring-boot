@@ -167,5 +167,8 @@
         <module>../spring-data-azure-documentdb-sample</module>
         <module>../azure-keyvault-spring-boot</module>
         <module>../azure-keyvault-spring-boot-starter</module>
+        <module>../azure-mediaservices-spring-boot-autoconfigure</module>
+        <module>../azure-mediaservices-spring-boot-starter</module>
+        <module>../azure-mediaservices-spring-boot-starter-sample</module>
     </modules>
 </project>

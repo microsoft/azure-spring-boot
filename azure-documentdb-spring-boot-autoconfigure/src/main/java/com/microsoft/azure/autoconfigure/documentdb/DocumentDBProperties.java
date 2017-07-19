@@ -7,15 +7,14 @@
 package com.microsoft.azure.autoconfigure.documentdb;
 
 import com.microsoft.azure.documentdb.ConsistencyLevel;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import javax.validation.constraints.NotNull;
 
 @ConfigurationProperties("azure.documentdb")
 public class DocumentDBProperties {
-    @NotNull
+    @NotEmpty
     private String uri;
-    @NotNull
+    @NotEmpty
     private String key;
 
     private ConsistencyLevel consistencyLevel;

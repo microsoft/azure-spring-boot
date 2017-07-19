@@ -30,6 +30,12 @@ hs_err_pid*
 
 # Eclipse
 .metadata
+.checkstyle
+
+#Spring
+.springBeans
+.factorypath
 
 # Maven
 target
+/bin/

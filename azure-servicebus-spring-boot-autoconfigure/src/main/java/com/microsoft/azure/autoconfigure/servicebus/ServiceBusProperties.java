@@ -7,13 +7,12 @@
 package com.microsoft.azure.autoconfigure.servicebus;
 
 import com.microsoft.azure.servicebus.ReceiveMode;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
-import javax.validation.constraints.NotNull;
 
 @ConfigurationProperties("azure.servicebus")
 public class ServiceBusProperties {
-    @NotNull
+    @NotEmpty
     private String connectionString;
     private String queueName;
     private ReceiveMode queueReceiveMode;
