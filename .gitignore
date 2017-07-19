@@ -30,6 +30,8 @@ hs_err_pid*
 
 # Eclipse
 .metadata
+.checkstyle
+.factorypath
 
 # Maven
 target

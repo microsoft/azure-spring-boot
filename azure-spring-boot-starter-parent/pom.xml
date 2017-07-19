@@ -159,5 +159,8 @@
         <module>../azure-servicebus-spring-boot-starter-sample</module>
         <module>../spring-data-azure-documentdb</module>
         <module>../spring-data-azure-documentdb-sample</module>
+        <module>../azure-iothub-spring-boot-autoconfigure</module>
+        <module>../azure-iothub-spring-boot-starter</module>
+        <module>../azure-iothub-spring-boot-starter-sample</module>
     </modules>
 </project>
