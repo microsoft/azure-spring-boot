@@ -23,7 +23,7 @@ azure.mediaservices.account-key=put-your-media-services-account-key-here
 ```
 
 # Optional
-If you are using network proxy then add below properties to run azure media services behind proxy
+If you are using network proxy then add below properties to run azure media services behind proxy.
 
 ```
 azure.mediaservices.proxy-host=put-your-network-proxy-host
