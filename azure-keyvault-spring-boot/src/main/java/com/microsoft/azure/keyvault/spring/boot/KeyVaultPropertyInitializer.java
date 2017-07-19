@@ -22,7 +22,6 @@ public class KeyVaultPropertyInitializer implements ApplicationContextInitialize
         if (env.getProperty(Constants.AZURE_KEYVAULT_ENABLED) != null) {
             enabled = Boolean.parseBoolean(env.getProperty(Constants.AZURE_KEYVAULT_ENABLED));
         }
-        env.getProperty(Constants.AZURE_KEYVAULT_ENABLED, boolean.class);
 
         if (enabled) {
             final KeyVaultClient kvClient = new KeyVaultClient(
