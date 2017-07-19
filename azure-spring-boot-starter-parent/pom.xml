@@ -37,6 +37,12 @@
             <name>Zhijun Zhao</name>
             <email>zhijzhao@microsoft.com</email>
         </developer>
+        
+        <developer>
+            <id>yungez</id>
+            <name>Yunge Zhu</name>
+            <email>yungez@microsoft.com</email>
+        </developer>
     </developers>
 
     <profiles>
@@ -159,5 +165,7 @@
         <module>../azure-servicebus-spring-boot-starter-sample</module>
         <module>../spring-data-azure-documentdb</module>
         <module>../spring-data-azure-documentdb-sample</module>
+        <module>../azure-keyvault-spring-boot</module>
+        <module>../azure-keyvault-spring-boot-starter</module>
     </modules>
 </project>
