@@ -6,6 +6,9 @@
 
 package com.microsoft.azure.autoconfigure.mediaservices;
 
+import com.microsoft.windowsazure.services.media.MediaConfiguration;
+import com.microsoft.windowsazure.services.media.MediaContract;
+import com.microsoft.windowsazure.services.media.MediaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -14,14 +17,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
-import com.microsoft.windowsazure.services.media.MediaConfiguration;
-import com.microsoft.windowsazure.services.media.MediaContract;
-import com.microsoft.windowsazure.services.media.MediaService;
-
-/**
- * @author rajakolli
- *
- */
 @Configuration
 @ConditionalOnMissingBean(MediaContract.class)
 @EnableConfigurationProperties(MediaServicesProperties.class)

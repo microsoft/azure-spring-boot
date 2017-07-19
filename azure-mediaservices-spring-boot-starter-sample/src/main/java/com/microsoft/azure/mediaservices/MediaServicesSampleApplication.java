@@ -6,29 +6,21 @@
 
 package com.microsoft.azure.mediaservices;
 
+import com.microsoft.windowsazure.exception.ServiceException;
+import com.microsoft.windowsazure.services.media.MediaContract;
+import com.microsoft.windowsazure.services.media.WritableBlobContainerContract;
+import com.microsoft.windowsazure.services.media.models.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.io.ClassPathResource;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.EnumSet;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import com.microsoft.windowsazure.exception.ServiceException;
-import com.microsoft.windowsazure.services.media.MediaContract;
-import com.microsoft.windowsazure.services.media.WritableBlobContainerContract;
-import com.microsoft.windowsazure.services.media.models.AccessPolicy;
-import com.microsoft.windowsazure.services.media.models.AccessPolicyInfo;
-import com.microsoft.windowsazure.services.media.models.AccessPolicyPermission;
-import com.microsoft.windowsazure.services.media.models.Asset;
-import com.microsoft.windowsazure.services.media.models.AssetFile;
-import com.microsoft.windowsazure.services.media.models.AssetInfo;
-import com.microsoft.windowsazure.services.media.models.Locator;
-import com.microsoft.windowsazure.services.media.models.LocatorInfo;
-import com.microsoft.windowsazure.services.media.models.LocatorType;
 
 @SpringBootApplication
 public class MediaServicesSampleApplication implements CommandLineRunner {
@@ -47,7 +39,7 @@ public class MediaServicesSampleApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // Upload a local file to an Asset
-        final AssetInfo uploadAsset = uploadFileAndCreateAsset("BigBuckBunny.mp4");
+        final AssetInfo uploadAsset = uploadFileAndCreateAsset("video.mp4");
         System.out.println("Uploaded Asset Id: " + uploadAsset.getId());
         System.out.println("Sample completed!");
     }
@@ -75,7 +67,7 @@ public class MediaServicesSampleApplication implements CommandLineRunner {
         // Create the Blob Writer using the Locator
         uploader = mediaService.createBlobWriter(uploadLocator);
 
-        final File file = new File("BigBuckBunny.mp4");
+        final File file = new ClassPathResource(fileName).getFile();
 
         // The local file that will be uploaded to your Media Services account
         try (final InputStream input = new FileInputStream(file)) {

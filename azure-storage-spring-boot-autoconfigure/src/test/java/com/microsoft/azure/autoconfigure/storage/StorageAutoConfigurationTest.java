@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.autoconfigure.azurestorage;
+package com.microsoft.azure.autoconfigure.storage;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
 import org.junit.Test;

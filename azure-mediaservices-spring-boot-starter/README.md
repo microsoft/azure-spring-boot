@@ -2,27 +2,24 @@
 
 ### Add the dependency
 
-"azure-media-spring-boot-starter" is published on Maven Central Repository.  
+"azure-mediaservices-spring-boot-starter" is published on Maven Central Repository.  
 If you are using Maven, add the following dependency.  
 
 ```xml
 <dependency>
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-media-spring-boot-starter</artifactId>
+    <artifactId>azure-mediaservices-spring-boot-starter</artifactId>
     <version>0.1.3</version>
 </dependency>
 ```
 
 ### Add the property setting
 
-Open `application.properties` file and add below property with your Azure Storage connection string.
+Open `application.properties` file and add below properties with your Azure Media Services credentials.
 
 ```
-azure.media.mediaServiceUri=https://media.windows.net/API/
-azure.media.oAuthUri=https://wamsprodglobal001acs.accesscontrol.windows.net/v2/OAuth2-13
-azure.media.clientId=put-your-azure-media-clientId-here
-azure.media.clientSecret=put-your-azure-media-secret-here
-azure.media.scope=urn:WindowsAzureMediaServices
+azure.mediaservices.account-name=put-your-media-services-account-name-here
+azure.mediaservices.account-key=put-your-media-services-account-key-here
 ```
 
 ### Add auto-wiring code
