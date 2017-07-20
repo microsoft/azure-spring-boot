@@ -24,9 +24,9 @@ If you are using Maven, add the following dependency.
 Open `application.properties` file and add below properties to specify your Azure KeyVault url, Azure service principle client id and client key.
 
 ```
-#azure.keyvault.vaulturi=put-your-azure-keyvault-uri-here
-#azure.keyvault.clientid=put-your-azure-serviceprinciple-id-here
-#azure.keyvault.clientkey=put-your-azure-serviceprinciple-key-here
+#azure.keyvault.uri=put-your-azure-keyvault-uri-here
+#azure.keyvault.client-id=put-your-azure-client-id-here
+#azure.keyvault.client-key=put-your-azure-client-key-here
 #azure.keyvault.enabled=true
 ```
 

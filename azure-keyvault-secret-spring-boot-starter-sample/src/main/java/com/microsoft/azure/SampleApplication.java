@@ -23,10 +23,10 @@ public class SampleApplication implements CommandLineRunner {
 
     public void run(String... varl) throws Exception {
         LOGGER.info("property spring.datasource.url in Azure KeyVault: " + dbUrl);
-        LOGGER.info("property spring.data.mongodb.database in application.properties: " + mySecretProperty);
+        LOGGER.info("property yourSecretPropertyName in Azure KeyVault: " + mySecretProperty);
 
         System.out.println("property spring.datasource.url in Azure KeyVault: " + dbUrl);
-        System.out.println("property spring.data.mongodb.database in application.properties: " + mySecretProperty);
+        System.out.println("property yourSecretPropertyName in Azure KeyVault: " + mySecretProperty);
     }
 
 }
