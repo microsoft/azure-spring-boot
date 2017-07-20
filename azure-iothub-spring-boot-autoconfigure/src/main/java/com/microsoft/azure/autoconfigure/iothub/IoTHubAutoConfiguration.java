@@ -1,6 +1,9 @@
 /**
- * 
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See LICENSE in the project root for
+ * license information.
  */
+
 package com.microsoft.azure.autoconfigure.iothub;
 
 import java.net.URISyntaxException;
@@ -17,10 +20,6 @@ import org.springframework.context.annotation.Scope;
 import com.microsoft.azure.sdk.iot.device.DeviceClient;
 import com.microsoft.azure.sdk.iot.device.IotHubClientProtocol;
 
-/**
- * @author Juergen Mayrbaeurl
- *
- */
 @Configuration
 @EnableConfigurationProperties(IoTHubProperties.class)
 public class IoTHubAutoConfiguration {
