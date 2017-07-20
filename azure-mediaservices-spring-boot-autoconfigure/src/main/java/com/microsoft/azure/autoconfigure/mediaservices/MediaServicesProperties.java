@@ -15,7 +15,7 @@ public class MediaServicesProperties {
     private String accountName;
     @NotEmpty
     private String accountKey;
-    
+
     private String proxyHost;
     private String proxyPort;
     private String proxyScheme = "http";

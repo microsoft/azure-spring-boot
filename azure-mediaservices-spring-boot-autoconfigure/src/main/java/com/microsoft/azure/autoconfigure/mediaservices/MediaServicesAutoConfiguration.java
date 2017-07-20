@@ -18,11 +18,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
-import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_HOST;
-import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_PORT;
-import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_SCHEME;
-import static java.util.Objects.nonNull;
+import static com.microsoft.windowsazure.Configuration.*;
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Configuration
 @ConditionalOnMissingBean(MediaContract.class)
@@ -41,7 +39,7 @@ public class MediaServicesAutoConfiguration {
      * Declare MediaContract bean.
      *
      * @return MediaContract bean
-     * @throws ServiceException 
+     * @throws ServiceException
      */
     @Bean
     @Scope("prototype")
