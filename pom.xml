@@ -52,8 +52,8 @@
         <azure.storage.autoconfigure.version>0.1.3</azure.storage.autoconfigure.version>
         <azure.servicebus.autoconfigure.version>0.1.3</azure.servicebus.autoconfigure.version>
         <azure.servicebus.starter.version>0.1.3</azure.servicebus.starter.version>
-        <azure.keyvault.spring.boot.version>0.1.3</azure.keyvault.spring.boot.version>
-        <azure.keyvault.starter.version>0.1.3</azure.keyvault.starter.version>
+        <azure.keyvault.secret.spring.boot.version>0.1.3</azure.keyvault.secret.spring.boot.version>
+        <azure.keyvault.secret.starter.version>0.1.3</azure.keyvault.secret.starter.version>
         <azure.mediaservices.starter.version>0.1.3</azure.mediaservices.starter.version>
         <azure.mediaservices.autoconfigure.version>0.1.3</azure.mediaservices.autoconfigure.version>
 
@@ -119,13 +119,13 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-keyvault-spring-boot</artifactId>
-                <version>${azure.keyvault.spring.boot.version}</version>
+                <artifactId>azure-keyvault-secret-spring-boot</artifactId>
+                <version>${azure.keyvault.secret.spring.boot.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-keyvault-spring-boot-starter</artifactId>
-                <version>${azure.keyvault.starter.version}</version>
+                <artifactId>azure-keyvault-secret-spring-boot-starter</artifactId>
+                <version>${azure.keyvault.secret.starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
