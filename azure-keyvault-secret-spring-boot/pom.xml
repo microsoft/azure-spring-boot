@@ -15,8 +15,8 @@
         <relativePath>../azure-spring-boot-starter-parent/pom.xml</relativePath>
     </parent>
 
-    <name>Azure KeyVault Secret Spring Boot</name>
-    <description>Spring Boot package with Azure KeyVault Secret as PropertySource</description>
+    <name>Azure Key Vault Secret Spring Boot</name>
+    <description>Spring Boot package with Azure Key Vault Secret as PropertySource</description>
     <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
 
     <licenses>

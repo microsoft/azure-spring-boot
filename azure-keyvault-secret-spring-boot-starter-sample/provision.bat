@@ -32,7 +32,7 @@ rem FOR /F "tokens=*" %%B in ('az ad sp reset-credentials --name %OBJECTID% --qu
 ECHO clientKey=%SPKEY%
 
 :createKeyVault
-ECHO Create KeyVault %VAULTNAME%
+ECHO Create Key Vault %VAULTNAME%
 SET createkvcmd="az keyvault create --name %VAULTNAME% --resource-group %RESOURCEGROUPNAME% --location %LOCATION% --enabled-for-deployment true --enabled-for-disk-encryption true --enabled-for-template-deployment true --sku standard --query properties.vaultUri"
 FOR /F "tokens=*" %%A in ('%createkvcmd%') DO SET "KEYVAULTURI=%%A"
 ECHO vaultUri=https://%VAULTNAME%.vault.azure.net

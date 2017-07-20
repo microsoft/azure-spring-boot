@@ -22,11 +22,11 @@ public class SampleApplication implements CommandLineRunner {
     }
 
     public void run(String... varl) throws Exception {
-        LOGGER.info("property spring.datasource.url in Azure KeyVault: " + dbUrl);
-        LOGGER.info("property yourSecretPropertyName in Azure KeyVault: " + mySecretProperty);
+        LOGGER.info("property spring.datasource.url in Azure Key Vault: " + dbUrl);
+        LOGGER.info("property yourSecretPropertyName in Azure Key Vault: " + mySecretProperty);
 
-        System.out.println("property spring.datasource.url in Azure KeyVault: " + dbUrl);
-        System.out.println("property yourSecretPropertyName in Azure KeyVault: " + mySecretProperty);
+        System.out.println("property spring.datasource.url in Azure Key Vault: " + dbUrl);
+        System.out.println("property yourSecretPropertyName in Azure Key Vault: " + mySecretProperty);
     }
 
 }

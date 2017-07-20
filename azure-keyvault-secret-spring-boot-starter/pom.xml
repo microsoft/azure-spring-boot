@@ -14,8 +14,8 @@
     <artifactId>azure-keyvault-secret-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
 
-    <name>Azure KeyVault Secret Spring Boot Starter</name>
-    <description>Spring Boot Starter for Azure KeyVault Secret</description>
+    <name>Azure Key Vault Secret Spring Boot Starter</name>
+    <description>Spring Boot Starter for Azure Key Vault Secret</description>
     <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
 
     <licenses>
