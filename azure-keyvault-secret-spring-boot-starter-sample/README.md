@@ -1,32 +1,34 @@
-#Azure KeyVault secret Spring Boot Starter Sample
-This sample illustrate how to use [Azure KeyVault secret Spring Boot Starter](../azure-keyvault-secret-spring-boot-starter/README.md).
+#Azure Key Vault secret Spring Boot Starter Sample
+This sample illustrates how to use [Azure Key Vault secret Spring Boot Starter](../azure-keyvault-secret-spring-boot-starter/README.md).
 
-In this sample, a secret with name "spring-datasource-url" is set into Azure KeyVault, sample Spring application will read this as property out from Azure KeyVault.
+In this sample, a secret named "spring-datasource-url" is stored into an Azure Key Vault, and a sample Spring application will use its value as a configuraiton property value.
 
-## Setup Azure KeyVault
-First, we need to set secret "spring-datasource-url" into Azure KeyVault.
+## Setup Azure Key Vault
+First, we need to store secret "spring-datasource-url" into Azure Key Vault.
 
-- Create one azure service principle by Azure CLI or through [Azure Portal](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal). Save your service principle id and password, for later use.
-az cli commands as below.
+- Create one azure service principal by using Azure CLI or via [Azure Portal](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal). Save your service principal id and password for later use.
+You can use the following az cli commands to create a service principal:
 ```bash
 az login
 az account set --subscription <your_subscription_id>
 
-# create azure service principle by azure cli
+# create azure service principal by azure cli
 az ad app create --display-name <your_app_name> --identifier-uris http://test.com/test --homepage http://test.com/test
 # save the appId from output
 az ad sp create --id <app_id_created_from_above_step>
 ```
-Save the service principle id and password in output.
+Save the service principal id and password contained in the output of the previous command.
 
-- Create Azure KeyVault by Azure CLI or through [Azure Portal](http://www.rahulpnath.com/blog/managing-key-vault-through-azure-portal/). Give permission to service principle created at step 1. az cli command as below.
+- Create Azure Key Vault by using Azure CLI or via [Azure Portal](https://portal.azure.com). You also need to grant appropriate permissions to the service principal created.
+You can use the following az cli commands:
 ```bash
 az keyvault create --name <your_keyvault_name> --resource-group <your_resource_group> --location <location> --enabled-for-deployment true --enabled-for-disk-encryption true --enabled-for-template-deployment true --sku standard
 az keyvault set-policy --name <your_keyvault_name> --secret-permission all --object-id <your_sp_id_create_in_step1>
 ```
-Save the KeyVault uri in output for later use.
+Save the displayed Key Vault uri for later use.
 
-- Set secret in Azure KeyVault by Azure CLI or through Azure Portal. az cli commands as below
+- Set secret in Azure KeyVault by using Azure CLI or via Azure Portal. 
+You can use the following az cli commands:
 ```bash
 az keyvault secret set --name spring-datasource-url --value jdbc:mysql://localhost:3306/moviedb --vault-name <your_keyvault_name>
 az keyvault secret set --name <yourSecretPropertyName> --value <yourSecretPropertyVaule> --vault-name <your_keyvault_name>
@@ -55,8 +57,8 @@ Open `application.properties` file and add below properties to specify your Azur
 #azure.keyvault.enabled=true
 ```
 
-## Get KeyVault secret value as property
-Now, you can get Azure KeyVault secret value as property.
+## Get Key Vault secret value as property
+Now, you can use Azure Key Vault secret value as a configuration property.
 
 ```
 @SpringBootApplication
