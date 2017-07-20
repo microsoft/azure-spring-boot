@@ -1,5 +1,5 @@
 ## Overview
-Azure KeyVault secret Spring boot starter is Spring starter for [Azure KeyVault secret](https://docs.microsoft.com/en-us/rest/api/keyvault/about-keys--secrets-and-certificates#BKMK_WorkingWithSecrets). With this starter, Azure KeyVault is added as Spring PropertySource, so secrets saved in Azure KeyVault could be used easily and conviniently as normal property like other externalized property source, e.g. property files.
+Azure Key Vault secret Spring boot starter is Spring starter for [Azure Key Vault secret](https://docs.microsoft.com/en-us/rest/api/keyvault/about-keys--secrets-and-certificates#BKMK_WorkingWithSecrets). With this starter, Azure Key Vault is added as one of Spring PropertySource, so secrets stored in Azure Key Vault could be used easily and conviniently accessed like other externalized configuration property, e.g. properties in files.
 
 ## Sample Code
 Pls refer to [sample project here](../azure-keyvault-secret-spring-boot-starter-sample).
@@ -21,7 +21,7 @@ If you are using Maven, add the following dependency.
 
 ### Add the property setting
 
-Open `application.properties` file and add below properties to specify your Azure KeyVault url, Azure service principle client id and client key.
+Open `application.properties` file and add below properties to specify your Azure Key Vault url, Azure service principal client id and client key.
 
 ```
 #azure.keyvault.uri=put-your-azure-keyvault-uri-here
@@ -31,21 +31,21 @@ Open `application.properties` file and add below properties to specify your Azur
 ```
 
 
-### Set secrets in Azure KeyVault
-Set secrets in Azure KeyVault through [Azure Portal](https://blogs.technet.microsoft.com/kv/2016/09/12/manage-your-key-vaults-from-new-azure-portal/) or [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/keyvault/secret).
+### Save secrets in Azure Key Vault
+Save secrets in Azure Key Vault through [Azure Portal](https://blogs.technet.microsoft.com/kv/2016/09/12/manage-your-key-vaults-from-new-azure-portal/) or [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/keyvault/secret).
 
-Below is sample Azure CLI command to set secret, if KeyVault is already created.
+You can use the following Azure CLI command to save secret, if Key Vault is already created.
 ```
 az keyvault secret set --name <your-property-name> --value <your-secret-property-value> --vault-name <your-keyvault-name>
 ```
 > NOTE
-> To get detail steps of setup Azure KeyVault, please refer to sample code readme section ["Setup Azure KeyVault"](../azure-keyvault-secret-spring-boot-starter-sample/README.md)
+> To get detail steps on how setup Azure Key Vault, please refer to sample code readme section ["Setup Azure Key Vault"](../azure-keyvault-secret-spring-boot-starter-sample/README.md)
 
 > **IMPORTANT** 
-> Allowed secret name pattern in Azure KeyVault is ^[0-9a-zA-Z-]+$, so for some Spring system properties like spring.datasource.url, when you save it into Azure KeyVault, simply replace `.` to `-`, so save `spring-datasource-url` in Azure KeyVault to workaround it. While in client application, still use original `spring.datasource.url` to retrieve property value, this starter will take care of transformation for you. Purpose of using this way is to integrate with Spring existing property setting.
+> Allowed secret name pattern in Azure Key Vault is ^[0-9a-zA-Z-]+$, for some Spring system properties contains `.` like spring.datasource.url, do below workaround when you save it into Azure Key Vault: simply replace `.` to `-`. `spring.datasource.url` will be saved with name `spring-datasource-url` in Azure Key Vault. While in client application, use original `spring.datasource.url` to retrieve property value, this starter will take care of transformation for you. Purpose of using this way is to integrate with Spring existing property setting.
 
-### Get KeyVault secret value as property
-Now, you can get Azure KeyVault secret value as property.
+### Get Key Vault secret value as property
+Now, you can get Azure Key Vault secret value as a configuration property.
 
 ```
 @SpringBootApplication
@@ -64,6 +64,4 @@ public class SampleApplication implements CommandLineRunner {
 
 }
 ```
-
-
 
