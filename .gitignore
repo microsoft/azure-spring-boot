@@ -31,10 +31,10 @@ hs_err_pid*
 # Eclipse
 .metadata
 .checkstyle
+.factorypath
 
 #Spring
 .springBeans
-.factorypath
 
 # Maven
 target
