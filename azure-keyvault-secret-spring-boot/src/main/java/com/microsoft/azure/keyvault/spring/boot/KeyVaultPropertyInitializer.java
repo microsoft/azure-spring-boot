@@ -18,15 +18,21 @@ public class KeyVaultPropertyInitializer implements ApplicationContextInitialize
         final String clientId = getProperty(env, Constants.AZURE_CLIENTID);
         final String clientKey = getProperty(env, Constants.AZURE_CLIENTKEY);
         final String vaultUri = getProperty(env, Constants.AZURE_KEYVAULT_VAULT_URI);
-        boolean enabled = true;
 
+        boolean enabled = true;
         if (env.getProperty(Constants.AZURE_KEYVAULT_ENABLED) != null) {
             enabled = Boolean.parseBoolean(env.getProperty(Constants.AZURE_KEYVAULT_ENABLED));
         }
 
+        long timeAcquringTimeoutInSeconds = 60;
+        if (env.getProperty(Constants.AZURE_TOKEN_ACQUIRING_TIMEOUT_IN_SECONDS) != null) {
+            timeAcquringTimeoutInSeconds = Long.parseLong(
+                    env.getProperty(Constants.AZURE_TOKEN_ACQUIRING_TIMEOUT_IN_SECONDS));
+        }
+
         if (enabled) {
             final KeyVaultClient kvClient = new KeyVaultClient(
-                    new AzureKeyVaultCredential(clientId, clientKey));
+                    new AzureKeyVaultCredential(clientId, clientKey, timeAcquringTimeoutInSeconds));
 
             try {
                 final MutablePropertySources sources = env.getPropertySources();

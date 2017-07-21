@@ -21,13 +21,13 @@ If you are using Maven, add the following dependency.
 
 ### Add the property setting
 
-Open `application.properties` file and add below properties to specify your Azure Key Vault url, Azure service principal client id and client key.
-
+Open `application.properties` file and add below properties to specify your Azure Key Vault url, Azure service principal client id and client key. `azure.token.acquiring.timeout.seconds` is used to specify the timeout in seconds when acquiring token from Azure AAD. Default value is 60 seconds. This property is optional.
 ```
-#azure.keyvault.uri=put-your-azure-keyvault-uri-here
-#azure.keyvault.client-id=put-your-azure-client-id-here
-#azure.keyvault.client-key=put-your-azure-client-key-here
-#azure.keyvault.enabled=true
+azure.keyvault.uri=put-your-azure-keyvault-uri-here
+azure.keyvault.client-id=put-your-azure-client-id-here
+azure.keyvault.client-key=put-your-azure-client-key-here
+azure.keyvault.enabled=true
+azure.token.acquiring.timeout.seconds=60
 ```
 
 

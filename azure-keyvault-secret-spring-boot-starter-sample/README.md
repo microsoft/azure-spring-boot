@@ -1,10 +1,10 @@
 #Azure Key Vault secret Spring Boot Starter Sample
 This sample illustrates how to use [Azure Key Vault secret Spring Boot Starter](../azure-keyvault-secret-spring-boot-starter/README.md).
 
-In this sample, a secret named "spring-datasource-url" is stored into an Azure Key Vault, and a sample Spring application will use its value as a configuraiton property value.
+In this sample, a secret named `spring-datasource-url` is stored into an Azure Key Vault, and a sample Spring application will use its value as a configuraiton property value.
 
 ## Setup Azure Key Vault
-First, we need to store secret "spring-datasource-url" into Azure Key Vault.
+First, we need to store secret `spring-datasource-url` into Azure Key Vault.
 
 - Create one azure service principal by using Azure CLI or via [Azure Portal](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal). Save your service principal id and password for later use.
 You can use the following az cli commands to create a service principal:
@@ -34,6 +34,8 @@ az keyvault secret set --name spring-datasource-url --value jdbc:mysql://localho
 az keyvault secret set --name <yourSecretPropertyName> --value <yourSecretPropertyVaule> --vault-name <your_keyvault_name>
 ```
 
+> NOTE. For Windows user, you could directly run provision.bat file under root folder to save effort of typing those az commands. Usage: provision.bat <location of resource group> 
+ 
 ## Add Dependency
 
 "azure-keyvault-secret-spring-boot-starter" is published on Maven Central Repository.  
@@ -51,10 +53,10 @@ If you are using Maven, add the following dependency.
 Open `application.properties` file and add below properties to specify your Azure KeyVault url, Azure service principle client id and client key.
 
 ```
-#azure.keyvault.uri=put-your-azure-keyvault-uri-here
-#azure.keyvault.client-id=put-your-azure-client-id-here
-#azure.keyvault.client-key=put-your-azure-client-key-here
-#azure.keyvault.enabled=true
+azure.keyvault.uri=put-your-azure-keyvault-uri-here
+azure.keyvault.client-id=put-your-azure-client-id-here
+azure.keyvault.client-key=put-your-azure-client-key-here
+azure.keyvault.enabled=true
 ```
 
 ## Get Key Vault secret value as property

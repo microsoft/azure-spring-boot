@@ -14,12 +14,18 @@ import java.util.concurrent.TimeUnit;
 public class AzureKeyVaultCredential extends KeyVaultCredentials {
     private String clientId;
     private String clientKey;
+    private long timeoutInSeconds;
 
-    private static final Integer TOKEN_TIMEOUT_IN_MINUTES = 3;
+    private static final long DEFAULT_TOKEN_ACQURING_TIMEOUT_IN_SECONDS = 60L;
 
-    public AzureKeyVaultCredential(String clientId, String clientKey) {
+    public AzureKeyVaultCredential(String clientId, String clientKey, long timeoutInSeconds) {
         this.clientId = clientId;
         this.clientKey = clientKey;
+        this.timeoutInSeconds = timeoutInSeconds;
+    }
+
+    public AzureKeyVaultCredential(String clientId, String clientKey) {
+        this(clientId, clientKey, DEFAULT_TOKEN_ACQURING_TIMEOUT_IN_SECONDS);
     }
 
     @Override
@@ -33,7 +39,7 @@ public class AzureKeyVaultCredential extends KeyVaultCredentials {
             final ClientCredential credential = new ClientCredential(this.clientId, this.clientKey);
 
             final Future<AuthenticationResult> future = context.acquireToken(resource, credential, null);
-            result = future.get(TOKEN_TIMEOUT_IN_MINUTES, TimeUnit.MINUTES);
+            result = future.get(timeoutInSeconds, TimeUnit.SECONDS);
             token = result.getAccessToken();
 
         } catch (Exception e) {
