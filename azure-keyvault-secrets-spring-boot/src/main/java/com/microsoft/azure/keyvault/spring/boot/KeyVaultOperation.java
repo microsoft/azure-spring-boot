@@ -48,11 +48,7 @@ public class KeyVaultOperation {
                     lastUpdateTime.set(System.currentTimeMillis());
 
                     // refresh propertyNames
-                    new Thread() {
-                        public void run() {
-                            createOrUpdateHashMap();
-                        }
-                    }.start();
+                    createOrUpdateHashMap();
                 }
             }
         }
