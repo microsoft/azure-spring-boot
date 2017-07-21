@@ -31,9 +31,9 @@ public class KeyVaultPropertyInitializer implements ApplicationContextInitialize
         }
 
         long timeAcquringTimeoutInSeconds = 60;
-        if (env.getProperty(Constants.AZURE_TOKEN_ACQUIRING_TIMEOUT_IN_SECONDS) != null) {
+        if (env.getProperty(Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS) != null) {
             timeAcquringTimeoutInSeconds = Long.parseLong(
-                    env.getProperty(Constants.AZURE_TOKEN_ACQUIRING_TIMEOUT_IN_SECONDS));
+                    env.getProperty(Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS));
         }
 
         if (enabled) {

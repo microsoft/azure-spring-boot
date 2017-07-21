@@ -22,7 +22,7 @@ public class AzureKeyVaultCredential extends KeyVaultCredentials {
     private String clientKey;
     private long timeoutInSeconds;
 
-    private static final long DEFAULT_TOKEN_ACQURING_TIMEOUT_IN_SECONDS = 60L;
+    private static final long DEFAULT_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS = 60L;
 
     public AzureKeyVaultCredential(String clientId, String clientKey, long timeoutInSeconds) {
         this.clientId = clientId;
@@ -31,7 +31,7 @@ public class AzureKeyVaultCredential extends KeyVaultCredentials {
     }
 
     public AzureKeyVaultCredential(String clientId, String clientKey) {
-        this(clientId, clientKey, DEFAULT_TOKEN_ACQURING_TIMEOUT_IN_SECONDS);
+        this(clientId, clientKey, DEFAULT_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS);
     }
 
     @Override

@@ -32,7 +32,7 @@ public class InitializerTest {
         final MutablePropertySources sources =
                 ((ConfigurableEnvironment) context.getEnvironment()).getPropertySources();
 
-        assertFalse("PropertySources should contains azurekv when enabled=true",
-                sources.contains(Constants.AZURE_KEYVAULT_PROERTYSOURCE_NAME));
+        assertFalse("PropertySources should not contains azurekv when enabled=false",
+                sources.contains(Constants.AZURE_KEYVAULT_PROPERTYSOURCE_NAME));
     }
 }

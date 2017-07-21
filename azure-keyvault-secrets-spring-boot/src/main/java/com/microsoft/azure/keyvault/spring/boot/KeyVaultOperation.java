@@ -31,7 +31,6 @@ public class KeyVaultOperation {
             this.vaultUri = vaultUri.substring(0, vaultUri.length() - 1);
         }
         createOrUpdateHashMap();
-        lastUpdateTime.set(System.currentTimeMillis());
     }
 
     public String[] list() {
@@ -47,8 +46,13 @@ public class KeyVaultOperation {
             synchronized (refreshLock) {
                 if (System.currentTimeMillis() - lastUpdateTime.get() > CACHE_REFRESH_INTERVAL_IN_MS) {
                     lastUpdateTime.set(System.currentTimeMillis());
+
                     // refresh propertyNames
-                    createOrUpdateHashMap();
+                    new Thread() {
+                        public void run() {
+                            createOrUpdateHashMap();
+                        }
+                    }.start();
                 }
             }
         }
@@ -71,5 +75,6 @@ public class KeyVaultOperation {
         for (final SecretItem secret : secrets) {
             propertyNamesHashMap.putIfAbsent(secret.id().replaceFirst(vaultUri + "/secrets/", ""), secret.id());
         }
+        lastUpdateTime.set(System.currentTimeMillis());
     }
 }
