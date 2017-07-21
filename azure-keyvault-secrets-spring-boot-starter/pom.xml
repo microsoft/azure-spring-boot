@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-keyvault-secret-spring-boot</artifactId>
-    <packaging>jar</packaging>
 
     <parent>
         <groupId>com.microsoft.azure</groupId>
@@ -15,8 +11,11 @@
         <relativePath>../azure-spring-boot-starter-parent/pom.xml</relativePath>
     </parent>
 
-    <name>Azure Key Vault Secret Spring Boot</name>
-    <description>Spring Boot package with Azure Key Vault Secret as PropertySource</description>
+    <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
+    <packaging>jar</packaging>
+
+    <name>Azure Key Vault Secrets Spring Boot Starter</name>
+    <description>Spring Boot Starter for Azure Key Vault Secrets</description>
     <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
 
     <licenses>
@@ -43,21 +42,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-keyvault</artifactId>
+            <artifactId>azure-keyvault-secrets-spring-boot</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.microsoft.aad</groupId>
-            <artifactId>adal4j</artifactId>
-        </dependency>
+
     </dependencies>
 </project>

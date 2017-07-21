@@ -1,5 +1,5 @@
-#Azure Key Vault secret Spring Boot Starter Sample
-This sample illustrates how to use [Azure Key Vault secret Spring Boot Starter](../azure-keyvault-secret-spring-boot-starter/README.md).
+#Azure Key Vault Secrets Spring Boot Starter Sample
+This sample illustrates how to use [Azure Key Vault Secrets Spring Boot Starter](../azure-keyvault-secrets-spring-boot-starter/README.md).
 
 In this sample, a secret named `spring-datasource-url` is stored into an Azure Key Vault, and a sample Spring application will use its value as a configuraiton property value.
 
@@ -38,13 +38,13 @@ az keyvault secret set --name <yourSecretPropertyName> --value <yourSecretProper
  
 ## Add Dependency
 
-"azure-keyvault-secret-spring-boot-starter" is published on Maven Central Repository.  
+"azure-keyvault-secrets-spring-boot-starter" is published on Maven Central Repository.  
 If you are using Maven, add the following dependency.  
 
 ```xml
 <dependency>
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-keyvault-secret-spring-boot-starter</artifactId>
+    <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
     <version>0.1.3</version>
 </dependency>
 ```

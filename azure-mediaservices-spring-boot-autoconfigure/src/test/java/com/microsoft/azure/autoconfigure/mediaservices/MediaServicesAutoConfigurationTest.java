@@ -4,6 +4,8 @@ import com.microsoft.windowsazure.services.media.MediaContract;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class MediaServicesAutoConfigurationTest {
     @Test
     public void createMediaServiceAccount() {
