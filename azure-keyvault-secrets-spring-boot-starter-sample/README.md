@@ -1,4 +1,4 @@
-#Azure Key Vault Secrets Spring Boot Starter Sample
+# Azure Key Vault Secrets Spring Boot Starter Sample
 This sample illustrates how to use [Azure Key Vault Secrets Spring Boot Starter](../azure-keyvault-secrets-spring-boot-starter/README.md).
 
 In this sample, a secret named `spring-datasource-url` is stored into an Azure Key Vault, and a sample Spring application will use its value as a configuraiton property value.
@@ -34,7 +34,7 @@ az keyvault secret set --name spring-datasource-url --value jdbc:mysql://localho
 az keyvault secret set --name <yourSecretPropertyName> --value <yourSecretPropertyVaule> --vault-name <your_keyvault_name>
 ```
 
-> NOTE. For Windows user, you could directly run provision.bat file under root folder to save effort of typing those az commands. Usage: provision.bat <location of resource group> 
+> NOTE. For Windows user, you could directly run provision.bat file under root folder to save effort of typing those az commands. Usage: `provision.bat <location of resource group>` 
  
 ## Add Dependency
 
