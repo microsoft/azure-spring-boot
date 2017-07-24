@@ -63,6 +63,7 @@ public class DocumentDBAutoConfigurationTest {
             assertThat(connectionPolicy.getIdleConnectionTimeout()).
                     isEqualTo(PropertySettingUtil.IDLE_CONNECTION_TIMEOUT);
             assertThat(connectionPolicy.getUserAgentSuffix()).contains(PropertySettingUtil.USER_AGENT_SUFFIX);
+            assertThat(connectionPolicy.getUserAgentSuffix()).contains(PropertySettingUtil.DEFAULT_USER_AGENT_SUFFIX);
             assertThat(connectionPolicy.getRetryOptions().getMaxRetryAttemptsOnThrottledRequests()).
                     isEqualTo(PropertySettingUtil.RETRY_OPTIONS_MAX_RETRY_ATTEMPTS_ON_THROTTLED_REQUESTS);
             assertThat(connectionPolicy.getRetryOptions().getMaxRetryWaitTimeInSeconds()).
@@ -71,6 +72,22 @@ public class DocumentDBAutoConfigurationTest {
                     isEqualTo(PropertySettingUtil.ENABLE_ENDPOINT_DISCOVERY);
             assertThat(connectionPolicy.getPreferredLocations().toString()).
                     isEqualTo(PropertySettingUtil.PREFERRED_LOCATIONS.toString());
+        }
+    }
+
+    @Test
+    public void canSetBiDisabled() {
+        PropertySettingUtil.setBiEnabledFalse();
+
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(DocumentDBAutoConfiguration.class, ConnectionPolicyConfig.class);
+            context.refresh();
+            final DocumentClient documentClient = context.getBean(DocumentClient.class);
+
+            final ConnectionPolicy connectionPolicy = documentClient.getConnectionPolicy();
+            assertThat(connectionPolicy.getUserAgentSuffix()).contains(PropertySettingUtil.USER_AGENT_SUFFIX);
+            assertThat(connectionPolicy.getUserAgentSuffix()).contains(
+                    PropertySettingUtil.DEFAULT_USER_AGENT_SUFFIX);
         }
     }
 

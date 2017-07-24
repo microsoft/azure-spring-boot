@@ -9,7 +9,7 @@ package com.microsoft.azure.autoconfigure.documentdb;
 import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import com.microsoft.azure.documentdb.DocumentClient;
-import com.microsoft.azure.spring.common.GetMacAddress;
+import com.microsoft.azure.spring.common.GetHashMac;
 import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.documentdb.core.convert.DocumentDbConverter;
@@ -56,8 +56,8 @@ public class DocumentDBAutoConfiguration {
         String userAgent = (policy.getUserAgentSuffix() == null ? "" : ";" + policy.getUserAgentSuffix()) +
                 ";" + USER_AGENT_SUFFIX;
 
-        if (properties.isBiEnabled() && GetMacAddress.getMacHash() != null) {
-                userAgent += ";" + GetMacAddress.getMacHash();
+        if (properties.isBiEnabled() && GetHashMac.getHashMac() != null) {
+                userAgent += ";" + GetHashMac.getHashMac();
         }
         policy.setUserAgentSuffix(userAgent);
 

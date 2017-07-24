@@ -34,6 +34,21 @@ public class DocumentDBPropertiesTest {
     }
 
     @Test
+    public void canSetBiEnabledFalse() {
+        PropertySettingUtil.setBiEnabledFalse();
+
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(Config.class);
+            context.refresh();
+            final DocumentDBProperties properties = context.getBean(DocumentDBProperties.class);
+
+            assertThat(properties.isBiEnabled()).isEqualTo(PropertySettingUtil.BIDISABLED);
+        }
+
+        PropertySettingUtil.unsetProperties();
+    }
+
+    @Test
     public void emptySettingNotAllowed() {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(Config.class);

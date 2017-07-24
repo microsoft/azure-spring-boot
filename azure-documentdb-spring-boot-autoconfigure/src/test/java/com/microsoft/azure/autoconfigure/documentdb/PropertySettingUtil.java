@@ -16,6 +16,7 @@ public class PropertySettingUtil {
     public static final String URI = "https://test.documents.azure.com:443/";
     public static final String KEY = "KeyString";
     public static final boolean BIENABLED = true;
+    public static final boolean BIDISABLED = false;
     public static final ConsistencyLevel CONSISTENCY_LEVEL = ConsistencyLevel.Strong;
     public static final int REQUEST_TIMEOUT = 4;
     public static final int MEDIA_REQUEST_TIMEOUT = 3;
@@ -24,6 +25,7 @@ public class PropertySettingUtil {
     public static final int MAX_POOL_SIZE = 1;
     public static final int IDLE_CONNECTION_TIMEOUT = 2;
     public static final String USER_AGENT_SUFFIX = "suffix";
+    public static final String DEFAULT_USER_AGENT_SUFFIX = "azure-documentdb-spring-boot-starter/0.1.3";
     public static final int RETRY_OPTIONS_MAX_RETRY_ATTEMPTS_ON_THROTTLED_REQUESTS = 5;
     public static final int RETRY_OPTIONS_MAX_RETRY_WAIT_TIME_IN_SECONDS = 6;
     public static final boolean ENABLE_ENDPOINT_DISCOVERY = false;
@@ -38,6 +40,11 @@ public class PropertySettingUtil {
         System.setProperty(PROPERTY_KEY, KEY);
         System.setProperty(PROPERTY_CONSISTENCY_LEVEL, CONSISTENCY_LEVEL.name());
         System.setProperty(PROPERTY_BI_ENABLED, Boolean.toString(BIENABLED));
+    }
+
+    public static void setBiEnabledFalse() {
+        setProperties();
+        System.setProperty(PROPERTY_BI_ENABLED, Boolean.toString(BIDISABLED));
     }
 
     public static void unsetProperties() {
