@@ -56,8 +56,8 @@ public class DocumentDBAutoConfiguration {
         String userAgent = (policy.getUserAgentSuffix() == null ? "" : ";" + policy.getUserAgentSuffix()) +
                 ";" + USER_AGENT_SUFFIX;
 
-        if (properties.isBiEnabled() && GetHashMac.getHashMac() != null) {
-                userAgent += ";" + GetHashMac.getHashMac();
+        if (properties.isAllowTelemetry() && GetHashMac.getHashMac() != null) {
+            userAgent += ";" + GetHashMac.getHashMac();
         }
         policy.setUserAgentSuffix(userAgent);
 

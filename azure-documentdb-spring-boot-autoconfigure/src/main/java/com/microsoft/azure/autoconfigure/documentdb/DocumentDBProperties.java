@@ -19,7 +19,7 @@ public class DocumentDBProperties {
 
     private ConsistencyLevel consistencyLevel;
     private String database;
-    private boolean biEnabled = true;
+    private boolean allowTelemetry = true;
 
     public String getUri() {
         return uri;
@@ -53,12 +53,11 @@ public class DocumentDBProperties {
         this.consistencyLevel = consistencyLevel;
     }
 
-    public boolean isBiEnabled() {
-        return biEnabled;
+    public boolean isAllowTelemetry() {
+        return allowTelemetry;
     }
 
-    public void setBiEnabled(boolean biEnabled) {
-        this.biEnabled = biEnabled;
+    public void setAllowTelemetry(boolean allowTelemetry) {
+        this.allowTelemetry = allowTelemetry;
     }
-
 }

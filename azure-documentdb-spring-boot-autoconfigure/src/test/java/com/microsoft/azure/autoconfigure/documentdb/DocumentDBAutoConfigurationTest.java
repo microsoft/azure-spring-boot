@@ -76,8 +76,8 @@ public class DocumentDBAutoConfigurationTest {
     }
 
     @Test
-    public void canSetBiDisabled() {
-        PropertySettingUtil.setBiEnabledFalse();
+    public void canSetAllowTelemetryFalse() {
+        PropertySettingUtil.setAllowTelemetryFalse();
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(DocumentDBAutoConfiguration.class, ConnectionPolicyConfig.class);
@@ -89,7 +89,7 @@ public class DocumentDBAutoConfigurationTest {
             assertThat(connectionPolicy.getUserAgentSuffix()).contains(
                     PropertySettingUtil.DEFAULT_USER_AGENT_SUFFIX);
         }
-        PropertySettingUtil.unsetProperties();
+        PropertySettingUtil.unsetAllowTelemetry();
     }
 
     @Configuration
