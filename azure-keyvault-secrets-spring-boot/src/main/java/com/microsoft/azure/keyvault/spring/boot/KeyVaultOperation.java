@@ -37,6 +37,7 @@ public class KeyVaultOperation {
         return Collections.list(propertyNamesHashMap.keys()).toArray(new String[propertyNamesHashMap.size()]);
     }
 
+
     public Object get(String secretName) {
         // NOTE: azure keyvault secret name convention: ^[0-9a-zA-Z-]+$ "." is not allowed
         secretName = secretName.replace(".", "-");
@@ -63,14 +64,18 @@ public class KeyVaultOperation {
     }
 
     private void createOrUpdateHashMap() {
-        if (propertyNamesHashMap == null) {
-            propertyNamesHashMap = new ConcurrentHashMap<String, Object>();
-        }
 
-        final PagedList<SecretItem> secrets = keyVaultClient.listSecrets(vaultUri);
-        for (final SecretItem secret : secrets) {
-            propertyNamesHashMap.putIfAbsent(secret.id().replaceFirst(vaultUri + "/secrets/", ""), secret.id());
-        }
-        lastUpdateTime.set(System.currentTimeMillis());
+            if (propertyNamesHashMap == null) {
+                propertyNamesHashMap = new ConcurrentHashMap<String, Object>();
+            }
+
+
+            //propertyNamesHashMap.clear();
+
+            final PagedList<SecretItem> secrets = keyVaultClient.listSecrets(vaultUri);
+            for (final SecretItem secret : secrets) {
+                propertyNamesHashMap.putIfAbsent(secret.id().replaceFirst(vaultUri + "/secrets/", ""), secret.id());
+            }
+            lastUpdateTime.set(System.currentTimeMillis());
     }
 }
