@@ -9,7 +9,7 @@ package com.microsoft.azure.spring.data.documentdb;
 import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import com.microsoft.azure.documentdb.DocumentClient;
-
+import com.microsoft.azure.spring.common.GetHashMac;
 
 public class DocumentDbFactory {
 
@@ -18,8 +18,19 @@ public class DocumentDbFactory {
     private DocumentClient documentClient;
 
     public DocumentDbFactory(String host, String key) {
+        this(host, key, true);
+    }
+
+    public DocumentDbFactory(String host, String key, boolean isBiEnabled) {
+
         final ConnectionPolicy policy = ConnectionPolicy.GetDefault();
-        policy.setUserAgentSuffix(USER_AGENT_SUFFIX);
+
+        String userAgent = ";" + USER_AGENT_SUFFIX;
+        if (isBiEnabled && GetHashMac.getHashMac() != null) {
+            userAgent += ";" + GetHashMac.getHashMac();
+        }
+        policy.setUserAgentSuffix(userAgent);
+
         documentClient = new DocumentClient(host, key, policy, ConsistencyLevel.Session);
     }
 

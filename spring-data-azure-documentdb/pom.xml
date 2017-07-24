@@ -85,6 +85,11 @@
 
         <dependency>
             <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-spring-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-documentdb</artifactId>
         </dependency>
 

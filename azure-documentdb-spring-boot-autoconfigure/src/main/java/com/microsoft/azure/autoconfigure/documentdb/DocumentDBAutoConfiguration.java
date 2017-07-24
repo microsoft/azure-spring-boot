@@ -9,6 +9,7 @@ package com.microsoft.azure.autoconfigure.documentdb;
 import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import com.microsoft.azure.documentdb.DocumentClient;
+import com.microsoft.azure.spring.common.GetHashMac;
 import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.documentdb.core.convert.DocumentDbConverter;
@@ -50,8 +51,17 @@ public class DocumentDBAutoConfiguration {
 
     private DocumentClient createDocumentClient() {
         LOG.debug("createDocumentClient");
-        return new DocumentClient(properties.getUri(), properties.getKey(),
-                connectionPolicy == null ? ConnectionPolicy.GetDefault() : connectionPolicy,
+        final ConnectionPolicy policy = connectionPolicy == null ? ConnectionPolicy.GetDefault() : connectionPolicy;
+
+        String userAgent = (policy.getUserAgentSuffix() == null ? "" : ";" + policy.getUserAgentSuffix()) +
+                ";" + USER_AGENT_SUFFIX;
+
+        if (properties.isAllowTelemetry() && GetHashMac.getHashMac() != null) {
+            userAgent += ";" + GetHashMac.getHashMac();
+        }
+        policy.setUserAgentSuffix(userAgent);
+
+        return new DocumentClient(properties.getUri(), properties.getKey(), policy,
                 properties.getConsistencyLevel() == null ?
                         ConsistencyLevel.Session : properties.getConsistencyLevel());
     }

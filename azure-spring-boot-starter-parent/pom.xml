@@ -162,5 +162,6 @@
         <module>../azure-mediaservices-spring-boot-autoconfigure</module>
         <module>../azure-mediaservices-spring-boot-starter</module>
         <module>../azure-mediaservices-spring-boot-starter-sample</module>
+        <module>../common</module>
     </modules>
 </project>

@@ -19,6 +19,7 @@ public class DocumentDBProperties {
 
     private ConsistencyLevel consistencyLevel;
     private String database;
+    private boolean allowTelemetry = true;
 
     public String getUri() {
         return uri;
@@ -52,4 +53,11 @@ public class DocumentDBProperties {
         this.consistencyLevel = consistencyLevel;
     }
 
+    public boolean isAllowTelemetry() {
+        return allowTelemetry;
+    }
+
+    public void setAllowTelemetry(boolean allowTelemetry) {
+        this.allowTelemetry = allowTelemetry;
+    }
 }
