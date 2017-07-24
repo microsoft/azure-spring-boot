@@ -48,6 +48,8 @@
         <azure.doucmentdb.starter.version>0.1.3</azure.doucmentdb.starter.version>
         <azure.doucmentdb.autoconfigure.version>0.1.3</azure.doucmentdb.autoconfigure.version>
         <spring.data.documentdb.version>0.1.3</spring.data.documentdb.version>
+        <spring.social.microsoft.graph.version>0.1.3</spring.social.microsoft.graph.version>
+        <microsoft.grapch.autoconfigure.version>0.1.3</microsoft.grapch.autoconfigure.version>
         <azure.storage.starter.version>0.1.3</azure.storage.starter.version>
         <azure.storage.autoconfigure.version>0.1.3</azure.storage.autoconfigure.version>
         <azure.servicebus.autoconfigure.version>0.1.3</azure.servicebus.autoconfigure.version>
@@ -112,6 +114,16 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>spring-data-azure-documentdb</artifactId>
                 <version>${spring.data.documentdb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>spring-social-microsoft-graph</artifactId>
+                <version>${spring.social.microsoft.graph.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>microsoft-graph-spring-boot-autoconfigure</artifactId>
+                <version>${microsoft.grapch.autoconfigure.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
@@ -187,6 +199,5 @@
 
     <modules>
         <module>azure-spring-boot-starter-parent</module>
-        <module>../ms/complete</module>
     </modules>
 </project>

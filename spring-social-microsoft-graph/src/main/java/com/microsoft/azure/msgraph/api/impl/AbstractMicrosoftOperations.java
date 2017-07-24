@@ -4,7 +4,7 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.social.api.impl;
+package com.microsoft.azure.msgraph.api.impl;
 
 import org.springframework.social.MissingAuthorizationException;
 import org.springframework.social.support.URIBuilder;

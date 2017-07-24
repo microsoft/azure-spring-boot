@@ -164,5 +164,6 @@
         <module>../azure-mediaservices-spring-boot-starter-sample</module>
         <module>../spring-social-microsoft-graph</module>
         <module>../microsoft-graph-spring-boot-autoconfigure</module>
+        <module>../microsoft-graph-spring-social-starter</module>
     </modules>
 </project>

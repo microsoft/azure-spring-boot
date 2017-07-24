@@ -4,10 +4,10 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.social.connect;
+package com.microsoft.azure.msgraph.connect;
 
-import com.microsoft.azure.spring.social.api.Microsoft;
-import com.microsoft.azure.spring.social.api.impl.MicrosoftTemplate;
+import com.microsoft.azure.msgraph.api.Microsoft;
+import com.microsoft.azure.msgraph.api.impl.MicrosoftTemplate;
 import org.springframework.social.oauth2.AbstractOAuth2ServiceProvider;
 import org.springframework.social.oauth2.OAuth2Template;
 

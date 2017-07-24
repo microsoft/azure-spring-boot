@@ -4,10 +4,10 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.social.api.impl;
+package com.microsoft.azure.msgraph.api.impl;
 
-import com.microsoft.azure.spring.social.api.MeOperations;
-import com.microsoft.azure.spring.social.api.MyProfile;
+import com.microsoft.azure.msgraph.api.MeOperations;
+import com.microsoft.azure.msgraph.api.MyProfile;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;

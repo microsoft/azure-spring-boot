@@ -4,20 +4,16 @@
  * license information.
  */
 
-package com.microsoft.azure.autoconfigure.social;
+package com.microsoft.azure.autoconfigure.msgraph;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "spring.social.microsoft")
+@ConfigurationProperties(prefix = "spring.msgraph.microsoft")
 public class MicrosoftProperties {
-    /**
-     * Application id.
-     */
+    @NotEmpty
     private String appId;
-
-    /**
-     * Application secret.
-     */
+    @NotEmpty
     private String appSecret;
 
     public String getAppId() {

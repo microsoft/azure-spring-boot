@@ -4,15 +4,16 @@
  * license information.
  */
 
-package com.microsoft.azure.autoconfigure.social;
+package com.microsoft.azure.autoconfigure.msgraph;
 
-import com.microsoft.azure.spring.social.api.Microsoft;
-import com.microsoft.azure.spring.social.connect.MicrosoftConnectionFactory;
+import com.microsoft.azure.msgraph.api.Microsoft;
+import com.microsoft.azure.msgraph.connect.MicrosoftConnectionFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.social.SocialAutoConfigurerAdapter;
 import org.springframework.boot.autoconfigure.social.SocialWebAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
@@ -28,9 +29,6 @@ import org.springframework.social.connect.ConnectionFactory;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.web.GenericConnectionStatusView;
 
-//import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-//import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type;
-
 @Configuration
 @ConditionalOnClass({SocialConfigurerAdapter.class, MicrosoftConnectionFactory.class})
 @ConditionalOnProperty(prefix = "spring.social.microsoft", name = "app-id")
@@ -40,7 +38,7 @@ public class MicrosoftAutoConfiguration {
     @Configuration
     @EnableSocial
     @EnableConfigurationProperties(MicrosoftProperties.class)
-    //@ConditionalOnWebApplication(type = Type.SERVLET)
+    @ConditionalOnWebApplication
     protected static class MicrosoftConfigurerAdapter extends SocialAutoConfigurerAdapter {
         private final MicrosoftProperties properties;
 

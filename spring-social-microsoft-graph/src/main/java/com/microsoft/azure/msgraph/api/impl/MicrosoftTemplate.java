@@ -4,10 +4,10 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.social.api.impl;
+package com.microsoft.azure.msgraph.api.impl;
 
-import com.microsoft.azure.spring.social.api.MeOperations;
-import com.microsoft.azure.spring.social.api.Microsoft;
+import com.microsoft.azure.msgraph.api.MeOperations;
+import com.microsoft.azure.msgraph.api.Microsoft;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
 

@@ -4,9 +4,9 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.social.connect;
+package com.microsoft.azure.msgraph.connect;
 
-import com.microsoft.azure.spring.social.api.Microsoft;
+import com.microsoft.azure.msgraph.api.Microsoft;
 import org.springframework.social.connect.support.OAuth2ConnectionFactory;
 
 public class MicrosoftConnectionFactory extends OAuth2ConnectionFactory<Microsoft> {

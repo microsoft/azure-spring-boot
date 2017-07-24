@@ -4,8 +4,9 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.social.api;
+package com.microsoft.azure.msgraph.api;
 
-public interface MeOperations {
-    MyProfile getMyProfile();
+public interface Microsoft {
+
+    MeOperations meOperations();
 }

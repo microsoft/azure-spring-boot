@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.microsoft.azure.autoconfigure.social.MicrosoftAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.microsoft.azure.autoconfigure.msgraph.MicrosoftAutoConfiguration

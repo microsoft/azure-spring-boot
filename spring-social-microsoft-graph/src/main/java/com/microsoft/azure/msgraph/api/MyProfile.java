@@ -4,7 +4,7 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.social.api;
+package com.microsoft.azure.msgraph.api;
 
 public class MyProfile {
     private String id;

@@ -4,10 +4,10 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.social.connect;
+package com.microsoft.azure.msgraph.connect;
 
-import com.microsoft.azure.spring.social.api.Microsoft;
-import com.microsoft.azure.spring.social.api.MyProfile;
+import com.microsoft.azure.msgraph.api.Microsoft;
+import com.microsoft.azure.msgraph.api.MyProfile;
 import org.springframework.social.ApiException;
 import org.springframework.social.connect.ApiAdapter;
 import org.springframework.social.connect.ConnectionValues;
@@ -45,5 +45,4 @@ public class MicrosoftAdapter implements ApiAdapter<Microsoft> {
     public void updateStatus(Microsoft microsoft, String message) {
         // not yet implemented
     }
-
 }
