@@ -14,6 +14,8 @@ import com.microsoft.azure.keyvault.models.SecretItem;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class KeyVaultOperation {
     private KeyVaultClient keyVaultClient;
@@ -22,6 +24,8 @@ public class KeyVaultOperation {
     private ConcurrentHashMap<String, Object> propertyNamesHashMap;
     private AtomicLong lastUpdateTime = new AtomicLong();
     private final Object refreshLock = new Object();
+    private ReadWriteLock rwLock = new ReentrantReadWriteLock();
+
     private static final long CACHE_REFRESH_INTERVAL_IN_MS = 1800000L; // 30 minutes
 
     public KeyVaultOperation(KeyVaultClient keyVaultClient, String vaultUri) {
@@ -34,9 +38,13 @@ public class KeyVaultOperation {
     }
 
     public String[] list() {
-        return Collections.list(propertyNamesHashMap.keys()).toArray(new String[propertyNamesHashMap.size()]);
+        try {
+            rwLock.readLock().lock();
+            return Collections.list(propertyNamesHashMap.keys()).toArray(new String[propertyNamesHashMap.size()]);
+        } finally {
+            rwLock.readLock().unlock();
+        }
     }
-
 
     public Object get(String secretName) {
         // NOTE: azure keyvault secret name convention: ^[0-9a-zA-Z-]+$ "." is not allowed
@@ -47,8 +55,6 @@ public class KeyVaultOperation {
             synchronized (refreshLock) {
                 if (System.currentTimeMillis() - lastUpdateTime.get() > CACHE_REFRESH_INTERVAL_IN_MS) {
                     lastUpdateTime.set(System.currentTimeMillis());
-
-                    // refresh propertyNames
                     createOrUpdateHashMap();
                 }
             }
@@ -64,18 +70,20 @@ public class KeyVaultOperation {
     }
 
     private void createOrUpdateHashMap() {
+        if (propertyNamesHashMap == null) {
+            propertyNamesHashMap = new ConcurrentHashMap<String, Object>();
+        }
 
-            if (propertyNamesHashMap == null) {
-                propertyNamesHashMap = new ConcurrentHashMap<String, Object>();
-            }
-
-
-            //propertyNamesHashMap.clear();
-
+        try {
+            rwLock.writeLock().lock();
+            propertyNamesHashMap.clear();
             final PagedList<SecretItem> secrets = keyVaultClient.listSecrets(vaultUri);
             for (final SecretItem secret : secrets) {
                 propertyNamesHashMap.putIfAbsent(secret.id().replaceFirst(vaultUri + "/secrets/", ""), secret.id());
             }
             lastUpdateTime.set(System.currentTimeMillis());
+        } finally {
+            rwLock.writeLock().unlock();
+        }
     }
 }
