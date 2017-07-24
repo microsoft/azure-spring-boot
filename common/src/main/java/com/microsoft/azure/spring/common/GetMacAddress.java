@@ -7,6 +7,7 @@
 package com.microsoft.azure.spring.common;
 
 
+import java.io.*;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -18,25 +19,51 @@ public class GetMacAddress {
     private static final String HASH_ALGORITHM = "SHA-256";
 
     public static String getMacHash() {
-        final byte[] macAddress = getRawMacAddress();
+        final String macAddress = getRawMacAddress();
 
-        return hashRawBytes(macAddress);
+        if (macAddress == null || macAddress.isEmpty()) {
+            return null;
+        }
+        try {
+            final byte[] bytes = macAddress.getBytes("UTF-8");
+            return hashRawBytes(bytes);
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
     }
 
-    private static byte[] getRawMacAddress() {
+    private static String getRawMacAddress() {
+        String ret = null;
 
         try {
-            final InetAddress ip = InetAddress.getLocalHost();
-            final NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+            final String os = System.getProperty("os.name").toLowerCase();
+            String[] command = {"ifconfig", "-a"};
+            if (os != null && !os.isEmpty() && os.startsWith("win")) {
+                command = new String[] {"getmac"};
+            }
 
-            return network.getHardwareAddress();
+            final ProcessBuilder builder = new ProcessBuilder(command);
+            final Process process = builder.start();
+            final InputStream inputStream = process.getInputStream();
+            final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            final BufferedReader br = new BufferedReader(inputStreamReader);
+            String tmp;
+            while ((tmp = br.readLine()) != null) {
+                ret += tmp;
+            }
 
-        } catch (UnknownHostException e) {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (br != null) {
+                br.close();
+            }
+
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (SocketException e) {
-            e.printStackTrace();
+            return null;
         }
-        return new byte[0];
+        return ret;
     }
 
     private static String hashRawBytes(byte[] mac) {

@@ -98,10 +98,11 @@ public class SampleApplication implements CommandLineRunner {
 Autowired UserRepository interface, then can do save, delete and find operations.
 
 ### BI data collection
-Microsoft would like to collect data about how users use this Spring boot starter. Data collected is like hash of mac address. Microsoft uses this information to improve our tooling experience. Participation is voluntary. If you don't want to participate, just simple disable it by setting below configuration in `application.properties`.
+Microsoft would like to collect data about how users use this Spring boot starter. Microsoft uses this information to improve our tooling experience. Participation is voluntary. If you don't want to participate, just simply disable it by setting below configuration in `application.properties`.
 ```
 azure.documentdb.bi-enabled=false
 ```
+Find more information about Azure Service Privacy Satement, please check [Microsoft Online Services Privacy Statement](https://www.microsoft.com/en-us/privacystatement/OnlineServices/Default.aspx). 
 
 ### Further info
 
