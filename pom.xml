@@ -187,5 +187,6 @@
 
     <modules>
         <module>azure-spring-boot-starter-parent</module>
+        <module>../ms/complete</module>
     </modules>
 </project>
