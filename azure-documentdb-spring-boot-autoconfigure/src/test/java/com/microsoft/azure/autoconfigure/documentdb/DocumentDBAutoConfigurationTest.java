@@ -89,6 +89,7 @@ public class DocumentDBAutoConfigurationTest {
             assertThat(connectionPolicy.getUserAgentSuffix()).contains(
                     PropertySettingUtil.DEFAULT_USER_AGENT_SUFFIX);
         }
+        PropertySettingUtil.unsetProperties();
     }
 
     @Configuration
