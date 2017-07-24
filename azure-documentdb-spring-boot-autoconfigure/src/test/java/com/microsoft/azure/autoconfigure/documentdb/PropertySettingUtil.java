@@ -15,6 +15,7 @@ import java.util.List;
 public class PropertySettingUtil {
     public static final String URI = "https://test.documents.azure.com:443/";
     public static final String KEY = "KeyString";
+    public static final boolean BIENABLED = true;
     public static final ConsistencyLevel CONSISTENCY_LEVEL = ConsistencyLevel.Strong;
     public static final int REQUEST_TIMEOUT = 4;
     public static final int MEDIA_REQUEST_TIMEOUT = 3;
@@ -30,16 +31,19 @@ public class PropertySettingUtil {
     private static final String PROPERTY_URI = "azure.documentdb.uri";
     private static final String PROPERTY_KEY = "azure.documentdb.key";
     private static final String PROPERTY_CONSISTENCY_LEVEL = "azure.documentdb.consistency-level";
+    private static final String PROPERTY_BI_ENABLED = "azure.documentdb.bi-enabled";
 
     public static void setProperties() {
         System.setProperty(PROPERTY_URI, URI);
         System.setProperty(PROPERTY_KEY, KEY);
         System.setProperty(PROPERTY_CONSISTENCY_LEVEL, CONSISTENCY_LEVEL.name());
+        System.setProperty(PROPERTY_BI_ENABLED, Boolean.toString(BIENABLED));
     }
 
     public static void unsetProperties() {
         System.clearProperty(PROPERTY_URI);
         System.clearProperty(PROPERTY_KEY);
         System.clearProperty(PROPERTY_CONSISTENCY_LEVEL);
+        System.clearProperty(PROPERTY_BI_ENABLED);
     }
 }

@@ -27,6 +27,7 @@ public class DocumentDBPropertiesTest {
             assertThat(properties.getUri()).isEqualTo(PropertySettingUtil.URI);
             assertThat(properties.getKey()).isEqualTo(PropertySettingUtil.KEY);
             assertThat(properties.getConsistencyLevel()).isEqualTo(PropertySettingUtil.CONSISTENCY_LEVEL);
+            assertThat(properties.isBiEnabled()).isEqualTo(PropertySettingUtil.BIENABLED);
         }
 
         PropertySettingUtil.unsetProperties();

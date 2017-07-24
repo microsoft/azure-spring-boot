@@ -19,6 +19,7 @@ public class DocumentDBProperties {
 
     private ConsistencyLevel consistencyLevel;
     private String database;
+    private boolean biEnabled = true;
 
     public String getUri() {
         return uri;
@@ -50,6 +51,14 @@ public class DocumentDBProperties {
 
     public void setConsistencyLevel(ConsistencyLevel consistencyLevel) {
         this.consistencyLevel = consistencyLevel;
+    }
+
+    public boolean isBiEnabled() {
+        return biEnabled;
+    }
+
+    public void setBiEnabled(boolean biEnabled) {
+        this.biEnabled = biEnabled;
     }
 
 }
