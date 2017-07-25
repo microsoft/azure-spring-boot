@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-starter-parent</artifactId>
-        <version>0.1.3</version>
+        <version>0.1.4</version>
         <relativePath>../azure-spring-boot-starter-parent/pom.xml</relativePath>
     </parent>
 
@@ -15,7 +15,9 @@
     <packaging>jar</packaging>
 
     <name>Spring Social Microsoft Graph</name>
-    <description>extension for Spring Social to enable connectivity with Microsoft Graph and an API binding for Microsoft Graph API</description>
+    <description>extension for Spring Social to enable connectivity with Microsoft Graph and an API binding for
+        Microsoft Graph API
+    </description>
     <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
 
     <licenses>

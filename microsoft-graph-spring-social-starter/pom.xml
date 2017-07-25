@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <artifactId>azure-spring-boot-starter-parent</artifactId>
         <groupId>com.microsoft.azure</groupId>
-        <version>0.1.3</version>
+        <version>0.1.4</version>
         <relativePath>../azure-spring-boot-starter-parent/pom.xml</relativePath>
     </parent>
 
@@ -15,7 +15,9 @@
     <packaging>jar</packaging>
 
     <name>Microsoft Graph Spring Social Starter</name>
-    <description>A provider extension for Spring Social to enable connectivity with Microsoft Graph and an API binding for Microsoft Graph API</description>
+    <description>A provider extension for Spring Social to enable connectivity with Microsoft Graph and an API binding
+        for Microsoft Graph API
+    </description>
     <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
 
     <licenses>
