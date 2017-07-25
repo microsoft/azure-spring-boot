@@ -15,7 +15,7 @@ If you are using Maven, add the following dependency.
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-documentdb-spring-boot-starter</artifactId>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
 </dependency>
 ```
 
@@ -97,6 +97,12 @@ public class SampleApplication implements CommandLineRunner {
 ```
 Autowired UserRepository interface, then can do save, delete and find operations.
 
+### Allow telemetry
+Microsoft would like to collect data about how users use this Spring boot starter. Microsoft uses this information to improve our tooling experience. Participation is voluntary. If you don't want to participate, just simply disable it by setting below configuration in `application.properties`.
+```
+azure.documentdb.allow-telemetry=false
+```
+Find more information about Azure Service Privacy Satement, please check [Microsoft Online Services Privacy Statement](https://www.microsoft.com/en-us/privacystatement/OnlineServices/Default.aspx). 
 
 ### Further info
 

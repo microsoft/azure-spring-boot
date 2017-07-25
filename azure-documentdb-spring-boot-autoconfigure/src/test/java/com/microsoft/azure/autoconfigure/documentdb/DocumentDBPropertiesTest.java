@@ -27,6 +27,22 @@ public class DocumentDBPropertiesTest {
             assertThat(properties.getUri()).isEqualTo(PropertySettingUtil.URI);
             assertThat(properties.getKey()).isEqualTo(PropertySettingUtil.KEY);
             assertThat(properties.getConsistencyLevel()).isEqualTo(PropertySettingUtil.CONSISTENCY_LEVEL);
+            assertThat(properties.isAllowTelemetry()).isEqualTo(PropertySettingUtil.ALLOW_TELEMETRY_TRUE);
+        }
+
+        PropertySettingUtil.unsetProperties();
+    }
+
+    @Test
+    public void canSetAllowTelemetryFalse() {
+        PropertySettingUtil.setAllowTelemetryFalse();
+
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(Config.class);
+            context.refresh();
+            final DocumentDBProperties properties = context.getBean(DocumentDBProperties.class);
+
+            assertThat(properties.isAllowTelemetry()).isEqualTo(PropertySettingUtil.ALLOW_TELEMETRY_FALSE);
         }
 
         PropertySettingUtil.unsetProperties();

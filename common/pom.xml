@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -10,12 +11,11 @@
         <relativePath>../azure-spring-boot-starter-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>azure-documentdb-spring-boot-starter-sample</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>azure-spring-common</artifactId>
     <packaging>jar</packaging>
 
-    <name>Azure Document DB Spring Boot Starter Sample</name>
-    <description>Sample project for Azure Document DB Starter</description>
+    <name>Azure Spring Common</name>
+    <description>Azure Spring Common Utilities Package</description>
     <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
 
     <licenses>
@@ -28,14 +28,8 @@
 
     <developers>
         <developer>
-            <id>ZhijunZhao</id>
-            <name>Zhijun Zhao</name>
-            <email>zhijzhao@microsoft.com</email>
-        </developer>
-
-        <developer>
             <id>yungez</id>
-            <name>yunge zhu</name>
+            <name>Yunge Zhu</name>
             <email>yungez@microsoft.com</email>
         </developer>
     </developers>
@@ -48,25 +42,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-documentdb-spring-boot-starter</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
