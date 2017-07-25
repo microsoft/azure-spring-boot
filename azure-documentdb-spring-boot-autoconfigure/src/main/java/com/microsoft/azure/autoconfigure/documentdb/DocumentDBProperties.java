@@ -9,7 +9,9 @@ package com.microsoft.azure.autoconfigure.documentdb;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
+@Validated
 @ConfigurationProperties("azure.documentdb")
 public class DocumentDBProperties {
     @NotEmpty

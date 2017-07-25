@@ -13,7 +13,7 @@ import com.microsoft.azure.spring.common.GetHashMac;
 
 public class DocumentDbFactory {
 
-    private static final String USER_AGENT_SUFFIX = "spring-data-azure-documentdb/0.1.3";
+    private static final String USER_AGENT_SUFFIX = "spring-data-azure-documentdb/0.1.4";
 
     private DocumentClient documentClient;
 
