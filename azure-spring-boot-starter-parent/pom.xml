@@ -148,6 +148,9 @@
     </build>
 
     <modules>
+        <module>../common</module>
+        <module>../spring-data-azure-documentdb</module>
+        <module>../spring-data-azure-documentdb-sample</module>
         <module>../azure-documentdb-spring-boot-autoconfigure</module>
         <module>../azure-documentdb-spring-boot-autoconfigure-sample</module>
         <module>../azure-documentdb-spring-boot-starter</module>
@@ -158,11 +161,8 @@
         <module>../azure-servicebus-spring-boot-autoconfigure</module>
         <module>../azure-servicebus-spring-boot-starter</module>
         <module>../azure-servicebus-spring-boot-starter-sample</module>
-        <module>../spring-data-azure-documentdb</module>
-        <module>../spring-data-azure-documentdb-sample</module>
         <module>../azure-mediaservices-spring-boot-autoconfigure</module>
         <module>../azure-mediaservices-spring-boot-starter</module>
         <module>../azure-mediaservices-spring-boot-starter-sample</module>
-        <module>../common</module>
     </modules>
 </project>

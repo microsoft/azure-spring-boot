@@ -8,7 +8,9 @@ package com.microsoft.azure.autoconfigure.mediaservices;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
+@Validated
 @ConfigurationProperties("azure.mediaservices")
 public class MediaServicesProperties {
     @NotEmpty
