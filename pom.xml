@@ -49,7 +49,8 @@
         <azure.doucmentdb.autoconfigure.version>0.1.4</azure.doucmentdb.autoconfigure.version>
         <spring.data.documentdb.version>0.1.4</spring.data.documentdb.version>
         <spring.social.microsoft.graph.version>0.1.4</spring.social.microsoft.graph.version>
-        <microsoft.grapch.autoconfigure.version>0.1.4</microsoft.grapch.autoconfigure.version>
+        <microsoft.graph.autoconfigure.version>0.1.4</microsoft.graph.autoconfigure.version>
+        <microsoft.graph.starter.version>0.1.4</microsoft.graph.starter.version>
         <azure.storage.starter.version>0.1.4</azure.storage.starter.version>
         <azure.storage.autoconfigure.version>0.1.4</azure.storage.autoconfigure.version>
         <azure.servicebus.autoconfigure.version>0.1.4</azure.servicebus.autoconfigure.version>
@@ -124,7 +125,12 @@
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>microsoft-graph-spring-boot-autoconfigure</artifactId>
-                <version>${microsoft.grapch.autoconfigure.version}</version>
+                <version>${microsoft.graph.autoconfigure.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>microsoft-graph-spring-social-starter</artifactId>
+                <version>${microsoft.graph.starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
