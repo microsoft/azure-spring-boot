@@ -51,7 +51,7 @@
 
         <azure.doucmentdb.starter.version>${project.version}</azure.doucmentdb.starter.version>
         <azure.doucmentdb.autoconfigure.version>${project.version}</azure.doucmentdb.autoconfigure.version>
-        <spring.data.documentdb.version>0.1.4</spring.data.documentdb.version>
+        <spring.data.documentdb.version>${project.version}</spring.data.documentdb.version>
         <azure.storage.starter.version>${project.version}</azure.storage.starter.version>
         <azure.storage.autoconfigure.version>${project.version}</azure.storage.autoconfigure.version>
         <azure.servicebus.autoconfigure.version>${project.version}</azure.servicebus.autoconfigure.version>
