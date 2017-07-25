@@ -1,3 +1,7 @@
+[![Travis CI](https://travis-ci.org/Microsoft/azure-spring-boot-starters.svg?branch=master)](https://travis-ci.org/Microsoft/azure-spring-boot-starters)
+[![codecov](https://codecov.io/gh/microsoft/azure-spring-boot-starters/branch/master/graph/badge.svg)](https://codecov.io/gh/microsoft/azure-spring-boot-starters)
+[![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://travis-ci.org/Microsoft/azure-spring-boot-starters/blob/master/LICENSE)
+
 ### Introduction
 
 This repo is for Spring Boot Starters of Azure services. It helps Spring Boot developers to adopt Azure services.
