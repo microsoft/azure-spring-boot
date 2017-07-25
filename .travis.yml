@@ -1,8 +1,12 @@
 language: java
 jdk:
   - oraclejdk8
-script: mvn clean verify
+script: "mvn cobertura:cobertura"
 sudo: required
 cache:
   directories:
     - $HOME/.m2
+
+after_success:
+  # test coverage reporting
+  - bash <(curl -s https://codecov.io/bash)
