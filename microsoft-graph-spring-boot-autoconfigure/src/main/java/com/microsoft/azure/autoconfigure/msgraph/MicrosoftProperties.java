@@ -8,8 +8,10 @@ package com.microsoft.azure.autoconfigure.msgraph;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
-@ConfigurationProperties(prefix = "spring.msgraph.microsoft")
+@Validated
+@ConfigurationProperties(prefix = "spring.social.microsoft")
 public class MicrosoftProperties {
     @NotEmpty
     private String appId;
