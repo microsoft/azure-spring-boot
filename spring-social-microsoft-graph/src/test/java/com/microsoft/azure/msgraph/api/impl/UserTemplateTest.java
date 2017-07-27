@@ -17,7 +17,7 @@ import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
-public class UserTemplateTest extends AbstractMicrosoftApiTest{
+public class UserTemplateTest extends AbstractMicrosoftApiTest {
     @Test
     public void getUserProfileValid() throws Exception {
         mockServer

@@ -7,10 +7,6 @@
 package com.microsoft.azure.msgraph.api.impl;
 
 import org.springframework.social.MissingAuthorizationException;
-import org.springframework.social.support.URIBuilder;
-import org.springframework.util.MultiValueMap;
-
-import java.net.URI;
 
 public class AbstractMicrosoftOperations {
     private final boolean isAuthorized;

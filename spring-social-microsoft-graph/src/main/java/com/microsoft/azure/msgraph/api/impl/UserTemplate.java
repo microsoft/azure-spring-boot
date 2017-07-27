@@ -6,8 +6,8 @@
 
 package com.microsoft.azure.msgraph.api.impl;
 
-import com.microsoft.azure.msgraph.api.UserOperations;
 import com.microsoft.azure.msgraph.api.User;
+import com.microsoft.azure.msgraph.api.UserOperations;
 
 import java.util.List;
 import java.util.Map;
