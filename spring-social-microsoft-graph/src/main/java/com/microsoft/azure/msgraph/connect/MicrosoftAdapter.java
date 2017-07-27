@@ -7,18 +7,17 @@
 package com.microsoft.azure.msgraph.connect;
 
 import com.microsoft.azure.msgraph.api.Microsoft;
-import com.microsoft.azure.msgraph.api.MyProfile;
+import com.microsoft.azure.msgraph.api.UserProfile;
 import org.springframework.social.ApiException;
 import org.springframework.social.connect.ApiAdapter;
 import org.springframework.social.connect.ConnectionValues;
-import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.UserProfileBuilder;
 
 public class MicrosoftAdapter implements ApiAdapter<Microsoft> {
     @Override
     public boolean test(Microsoft live) {
         try {
-            live.meOperations().getMyProfile();
+            live.meOperations().getUserProfile();
             return true;
         } catch (ApiException e) {
             return false;
@@ -27,14 +26,14 @@ public class MicrosoftAdapter implements ApiAdapter<Microsoft> {
 
     @Override
     public void setConnectionValues(Microsoft microsoft, ConnectionValues values) {
-        final MyProfile profile = microsoft.meOperations().getMyProfile();
+        final UserProfile profile = microsoft.meOperations().getUserProfile();
         values.setProviderUserId(profile.getId());
         values.setDisplayName(profile.getDisplayName());
     }
 
     @Override
-    public UserProfile fetchUserProfile(Microsoft microsoft) {
-        final MyProfile profile = microsoft.meOperations().getMyProfile();
+    public org.springframework.social.connect.UserProfile fetchUserProfile(Microsoft microsoft) {
+        final UserProfile profile = microsoft.meOperations().getUserProfile();
         return new UserProfileBuilder()
                 .setName(profile.getDisplayName())
                 .setEmail(profile.getMail())

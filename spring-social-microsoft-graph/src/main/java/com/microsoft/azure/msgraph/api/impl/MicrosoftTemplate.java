@@ -34,6 +34,6 @@ public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Micro
     }
 
     private void initSubApis() {
-        meOperations = new MeTemplate(getRestTemplate(), isAuthorized());
+        meOperations = new UserTemplate(getRestTemplate(), isAuthorized());
     }
 }

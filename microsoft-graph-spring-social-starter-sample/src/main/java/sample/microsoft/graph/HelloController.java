@@ -7,7 +7,6 @@
 package sample.microsoft.graph;
 
 import com.microsoft.azure.msgraph.api.Microsoft;
-import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/")
 public class HelloController {
 
+    private Microsoft microsoft;
     private ConnectionRepository connectionRepository;
 
-    public HelloController(ConnectionRepository connectionRepository) {
+    public HelloController(Microsoft microsoft, ConnectionRepository connectionRepository) {
+        this.microsoft = microsoft;
         this.connectionRepository = connectionRepository;
     }
 
@@ -30,10 +31,7 @@ public class HelloController {
             return "redirect:/connect/microsoft";
         }
 
-        final Connection<Microsoft> connection = connectionRepository
-                .findPrimaryConnection(Microsoft.class);
-
-        model.addAttribute("myProfile", connection.getApi().meOperations().getMyProfile());
+        model.addAttribute("user", microsoft.meOperations().getUserProfile());
 
         return "hello";
     }
