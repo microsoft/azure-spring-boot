@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>azure-documentdb-spring-boot-autoconfigure-sample</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Azure Document DB Spring Boot AutoConfigure Sample</name>

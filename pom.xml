@@ -49,20 +49,21 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
         <java.version>1.8</java.version>
+        <bom.version>0.1.4</bom.version>
 
-        <azure.doucmentdb.starter.version>${project.version}</azure.doucmentdb.starter.version>
-        <azure.doucmentdb.autoconfigure.version>${project.version}</azure.doucmentdb.autoconfigure.version>
-        <spring.data.documentdb.version>${project.version}</spring.data.documentdb.version>
-        <spring.social.microsoft.graph.version>${project.version}</spring.social.microsoft.graph.version>
-        <microsoft.graph.autoconfigure.version>${project.version}</microsoft.graph.autoconfigure.version>
-        <microsoft.graph.starter.version>${project.version}</microsoft.graph.starter.version>
-        <azure.storage.starter.version>${project.version}</azure.storage.starter.version>
-        <azure.storage.autoconfigure.version>${project.version}</azure.storage.autoconfigure.version>
-        <azure.servicebus.autoconfigure.version>${project.version}</azure.servicebus.autoconfigure.version>
-        <azure.servicebus.starter.version>${project.version}</azure.servicebus.starter.version>
-        <azure.mediaservices.starter.version>${project.version}</azure.mediaservices.starter.version>
-        <azure.mediaservices.autoconfigure.version>${project.version}</azure.mediaservices.autoconfigure.version>
-        <azure.spring.common.version>${project.version}</azure.spring.common.version>
+        <azure.doucmentdb.starter.version>${bom.version}</azure.doucmentdb.starter.version>
+        <azure.doucmentdb.autoconfigure.version>${bom.version}</azure.doucmentdb.autoconfigure.version>
+        <spring.data.documentdb.version>${bom.version}</spring.data.documentdb.version>
+        <spring.social.microsoft.graph.version>${bom.version}</spring.social.microsoft.graph.version>
+        <microsoft.graph.autoconfigure.version>${bom.version}</microsoft.graph.autoconfigure.version>
+        <microsoft.graph.starter.version>${bom.version}</microsoft.graph.starter.version>
+        <azure.storage.starter.version>${bom.version}</azure.storage.starter.version>
+        <azure.storage.autoconfigure.version>${bom.version}</azure.storage.autoconfigure.version>
+        <azure.servicebus.autoconfigure.version>${bom.version}</azure.servicebus.autoconfigure.version>
+        <azure.servicebus.starter.version>${bom.version}</azure.servicebus.starter.version>
+        <azure.mediaservices.starter.version>${bom.version}</azure.mediaservices.starter.version>
+        <azure.mediaservices.autoconfigure.version>${bom.version}</azure.mediaservices.autoconfigure.version>
+        <azure.spring.common.version>${bom.version}</azure.spring.common.version>
 
         <azure.documentdb.version>1.11.0</azure.documentdb.version>
         <azure.servicebus.version>1.0.0-PREVIEW-3</azure.servicebus.version>

@@ -12,6 +12,7 @@
     </parent>
 
     <artifactId>spring-data-azure-documentdb-sample</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Spring Data Azure Document DB Sample</name>
