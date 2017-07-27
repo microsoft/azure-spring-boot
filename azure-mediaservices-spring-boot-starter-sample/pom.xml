@@ -12,7 +12,6 @@
     </parent>
 
     <artifactId>azure-mediaservices-spring-boot-starter-sample</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Azure Media Services Spring Boot Starter Sample</name>
