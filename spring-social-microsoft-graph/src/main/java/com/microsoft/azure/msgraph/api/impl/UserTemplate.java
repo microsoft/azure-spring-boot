@@ -7,63 +7,61 @@
 package com.microsoft.azure.msgraph.api.impl;
 
 import com.microsoft.azure.msgraph.api.UserOperations;
-import com.microsoft.azure.msgraph.api.UserProfile;
-import org.springframework.web.client.RestTemplate;
+import com.microsoft.azure.msgraph.api.User;
 
 import java.util.List;
 import java.util.Map;
 
 public class UserTemplate extends AbstractMicrosoftOperations implements UserOperations {
+    private final MicrosoftTemplate microsoft;
 
-    private final RestTemplate restTemplate;
-
-    public UserTemplate(RestTemplate restTemplate, boolean authorized) {
+    public UserTemplate(MicrosoftTemplate microsoft, boolean authorized) {
         super(authorized);
-        this.restTemplate = restTemplate;
+        this.microsoft = microsoft;
     }
 
     @Override
-    public UserProfile getUserProfile() {
-        final Map<String, ?> me = restTemplate.getForObject(buildUri("me"), Map.class);
+    public User getUserProfile() {
+        final Map<String, ?> me = microsoft.fetchObject("me", Map.class);
 
-        final UserProfile userProfile = new UserProfile();
+        final User user = new User();
 
         if (me.get("id") != null) {
-            userProfile.setId(String.valueOf(me.get("id")));
+            user.setId(String.valueOf(me.get("id")));
         }
         if (me.get("displayName") != null) {
-            userProfile.setDisplayName(String.valueOf(me.get("displayName")));
+            user.setDisplayName(String.valueOf(me.get("displayName")));
         }
         if (me.get("jobTitle") != null) {
-            userProfile.setJobTitle(String.valueOf(me.get("jobTitle")));
+            user.setJobTitle(String.valueOf(me.get("jobTitle")));
         }
         if (me.get("mail") != null) {
-            userProfile.setMail(String.valueOf(me.get("mail")));
+            user.setMail(String.valueOf(me.get("mail")));
         }
         if (me.get("surname") != null) {
-            userProfile.setSurname(String.valueOf(me.get("surname")));
+            user.setSurname(String.valueOf(me.get("surname")));
         }
         if (me.get("givenName") != null) {
-            userProfile.setGivenName(String.valueOf(me.get("givenName")));
+            user.setGivenName(String.valueOf(me.get("givenName")));
         }
         if (me.get("mobilePhone") != null) {
-            userProfile.setMobilePhone(String.valueOf(me.get("mobilePhone")));
+            user.setMobilePhone(String.valueOf(me.get("mobilePhone")));
         }
         if (me.get("officeLocation") != null) {
-            userProfile.setOfficeLocation(String.valueOf(me.get("officeLocation")));
+            user.setOfficeLocation(String.valueOf(me.get("officeLocation")));
         }
         if (me.get("preferredLanguage") != null) {
-            userProfile.setPreferredLanguage(String.valueOf(me.get("preferredLanguage")));
+            user.setPreferredLanguage(String.valueOf(me.get("preferredLanguage")));
         }
         if (me.get("userPrincipalName") != null) {
-            userProfile.setUserPrincipalName(String.valueOf(me.get("userPrincipalName")));
+            user.setUserPrincipalName(String.valueOf(me.get("userPrincipalName")));
         }
 
         final List<String> businessPhones = (List<String>) me.get("businessPhones");
         if (businessPhones != null) {
-            userProfile.setBusinessPhones(businessPhones);
+            user.setBusinessPhones(businessPhones);
         }
 
-        return userProfile;
+        return user;
     }
 }

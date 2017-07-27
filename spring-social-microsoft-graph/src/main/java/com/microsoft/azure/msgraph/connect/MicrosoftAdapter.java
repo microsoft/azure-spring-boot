@@ -7,17 +7,18 @@
 package com.microsoft.azure.msgraph.connect;
 
 import com.microsoft.azure.msgraph.api.Microsoft;
-import com.microsoft.azure.msgraph.api.UserProfile;
+import com.microsoft.azure.msgraph.api.User;
 import org.springframework.social.ApiException;
 import org.springframework.social.connect.ApiAdapter;
 import org.springframework.social.connect.ConnectionValues;
+import org.springframework.social.connect.UserProfile;
 import org.springframework.social.connect.UserProfileBuilder;
 
 public class MicrosoftAdapter implements ApiAdapter<Microsoft> {
     @Override
-    public boolean test(Microsoft live) {
+    public boolean test(Microsoft microsoft) {
         try {
-            live.userOperations().getUserProfile();
+            microsoft.userOperations().getUserProfile();
             return true;
         } catch (ApiException e) {
             return false;
@@ -26,15 +27,22 @@ public class MicrosoftAdapter implements ApiAdapter<Microsoft> {
 
     @Override
     public void setConnectionValues(Microsoft microsoft, ConnectionValues values) {
-        final UserProfile profile = microsoft.userOperations().getUserProfile();
+        final User profile = microsoft.userOperations().getUserProfile();
         values.setProviderUserId(profile.getId());
         values.setDisplayName(profile.getDisplayName());
+
+        // Not implemented yet.
+        values.setImageUrl(null);
+        values.setProfileUrl(null);
     }
 
     @Override
-    public org.springframework.social.connect.UserProfile fetchUserProfile(Microsoft microsoft) {
-        final UserProfile profile = microsoft.userOperations().getUserProfile();
+    public UserProfile fetchUserProfile(Microsoft microsoft) {
+        final User profile = microsoft.userOperations().getUserProfile();
         return new UserProfileBuilder()
+                .setId(profile.getId())
+                .setFirstName(profile.getGivenName())
+                .setLastName(profile.getSurname())
                 .setName(profile.getDisplayName())
                 .setEmail(profile.getMail())
                 .build();
@@ -42,6 +50,7 @@ public class MicrosoftAdapter implements ApiAdapter<Microsoft> {
 
     @Override
     public void updateStatus(Microsoft microsoft, String message) {
-        // not yet implemented
+        // not implemented yet.
+        // microsoft.userOperations().updateStatus(message);
     }
 }

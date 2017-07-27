@@ -7,5 +7,5 @@
 package com.microsoft.azure.msgraph.api;
 
 public interface UserOperations {
-    UserProfile getUserProfile();
+    User getUserProfile();
 }

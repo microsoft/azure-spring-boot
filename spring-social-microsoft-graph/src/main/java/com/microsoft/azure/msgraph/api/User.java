@@ -8,7 +8,7 @@ package com.microsoft.azure.msgraph.api;
 
 import java.util.List;
 
-public class UserProfile {
+public class User {
     private String id;
     private List<String> businessPhones;
     private String displayName;
