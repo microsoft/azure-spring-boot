@@ -6,13 +6,13 @@
 
 package com.microsoft.azure.msgraph.api.impl;
 
-import com.microsoft.azure.msgraph.api.MeOperations;
 import com.microsoft.azure.msgraph.api.Microsoft;
+import com.microsoft.azure.msgraph.api.UserOperations;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
 
 public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Microsoft {
-    private MeOperations meOperations;
+    private UserOperations userOperations;
 
     public MicrosoftTemplate() {
         initialize();
@@ -24,8 +24,8 @@ public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Micro
     }
 
     @Override
-    public MeOperations meOperations() {
-        return meOperations;
+    public UserOperations userOperations() {
+        return userOperations;
     }
 
     private void initialize() {
@@ -34,6 +34,6 @@ public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Micro
     }
 
     private void initSubApis() {
-        meOperations = new UserTemplate(getRestTemplate(), isAuthorized());
+        userOperations = new UserTemplate(getRestTemplate(), isAuthorized());
     }
 }

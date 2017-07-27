@@ -31,7 +31,7 @@ public class HelloController {
             return "redirect:/connect/microsoft";
         }
 
-        model.addAttribute("user", microsoft.meOperations().getUserProfile());
+        model.addAttribute("user", microsoft.userOperations().getUserProfile());
 
         return "hello";
     }

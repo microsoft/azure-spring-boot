@@ -17,7 +17,7 @@ public class MicrosoftAdapter implements ApiAdapter<Microsoft> {
     @Override
     public boolean test(Microsoft live) {
         try {
-            live.meOperations().getUserProfile();
+            live.userOperations().getUserProfile();
             return true;
         } catch (ApiException e) {
             return false;
@@ -26,14 +26,14 @@ public class MicrosoftAdapter implements ApiAdapter<Microsoft> {
 
     @Override
     public void setConnectionValues(Microsoft microsoft, ConnectionValues values) {
-        final UserProfile profile = microsoft.meOperations().getUserProfile();
+        final UserProfile profile = microsoft.userOperations().getUserProfile();
         values.setProviderUserId(profile.getId());
         values.setDisplayName(profile.getDisplayName());
     }
 
     @Override
     public org.springframework.social.connect.UserProfile fetchUserProfile(Microsoft microsoft) {
-        final UserProfile profile = microsoft.meOperations().getUserProfile();
+        final UserProfile profile = microsoft.userOperations().getUserProfile();
         return new UserProfileBuilder()
                 .setName(profile.getDisplayName())
                 .setEmail(profile.getMail())

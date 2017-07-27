@@ -8,5 +8,5 @@ package com.microsoft.azure.msgraph.api;
 
 public interface Microsoft {
 
-    MeOperations meOperations();
+    UserOperations userOperations();
 }
