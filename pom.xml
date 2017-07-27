@@ -70,6 +70,8 @@
         <azure.storage.version>5.3.1</azure.storage.version>
         <azure.media.version>0.9.7</azure.media.version>
 
+        <jackson.version>2.8.7</jackson.version>
+
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
@@ -174,6 +176,17 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-media</artifactId>
                 <version>${azure.media.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

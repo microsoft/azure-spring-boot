@@ -26,9 +26,9 @@ public class UserTemplateTest extends AbstractMicrosoftApiTest {
                 .andExpect(header("Authorization", "Bearer access token"))
                 .andRespond(withSuccess(jsonResource("user"), MediaType.APPLICATION_JSON));
 
-        User user = microsoft.userOperations().getUserProfile();
+        final User user = microsoft.userOperations().getUserProfile();
         assertThat(user.getDisplayName()).isEqualTo("Anne Weiler");
-        List<String> bussinessPhones = user.getBusinessPhones();
+        final List<String> bussinessPhones = user.getBusinessPhones();
         assertThat(bussinessPhones).hasSize(1);
         assertThat(bussinessPhones.get(0)).isEqualTo("123");
         assertThat(user.getGivenName()).isEqualTo("Anne");

@@ -22,10 +22,10 @@ public class MicrosoftAdapterTest {
 
     @Test
     public void fetchProfile() {
-        UserOperations userOperations = Mockito.mock(UserOperations.class);
+        final UserOperations userOperations = Mockito.mock(UserOperations.class);
         Mockito.when(microsoft.userOperations()).thenReturn(userOperations);
 
-        User user = new User();
+        final User user = new User();
         user.setId("12345678");
         user.setDisplayName("Craig Walls");
         user.setSurname("Walls");
@@ -33,7 +33,7 @@ public class MicrosoftAdapterTest {
         user.setMail("zz@a.com");
         Mockito.when(userOperations.getUserProfile()).thenReturn(user);
 
-        UserProfile profile = apiAdapter.fetchUserProfile(microsoft);
+        final UserProfile profile = apiAdapter.fetchUserProfile(microsoft);
         assertThat(profile.getId()).isEqualTo("12345678");
         assertThat(profile.getName()).isEqualTo("Craig Walls");
         assertThat(profile.getFirstName()).isEqualTo("Craig");
@@ -44,10 +44,10 @@ public class MicrosoftAdapterTest {
 
     @Test
     public void setConnectionValues() throws Exception {
-        UserOperations userOperations = Mockito.mock(UserOperations.class);
+        final UserOperations userOperations = Mockito.mock(UserOperations.class);
         Mockito.when(microsoft.userOperations()).thenReturn(userOperations);
 
-        User user = new User();
+        final User user = new User();
         user.setId("12345678");
         user.setDisplayName("Craig Walls");
         user.setSurname("Walls");
@@ -55,7 +55,7 @@ public class MicrosoftAdapterTest {
         user.setMail("zz@a.com");
         Mockito.when(userOperations.getUserProfile()).thenReturn(user);
 
-        TestConnectionValues connectionValues = new TestConnectionValues();
+        final TestConnectionValues connectionValues = new TestConnectionValues();
         apiAdapter.setConnectionValues(microsoft, connectionValues);
         assertThat(connectionValues.getDisplayName()).isEqualTo("Craig Walls");
         assertThat(connectionValues.getProviderUserId()).isEqualTo("12345678");

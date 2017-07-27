@@ -32,7 +32,7 @@ public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Micro
     }
 
     public <T> T fetchObject(String objectId, Class<T> type) {
-        URI uri = URIBuilder.fromUri(getGraphAPI(objectId)).build();
+        final URI uri = URIBuilder.fromUri(getGraphAPI(objectId)).build();
         return getRestTemplate().getForObject(uri, type);
     }
 
