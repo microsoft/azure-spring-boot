@@ -14,7 +14,6 @@ page at http://checkstyle.sourceforge.net/config.html -->
     </module>
 
     <module name="Header">
-        <property name="headerFile" value="config/java.header"/>
         <property name="fileExtensions" value="java"/>
     </module>
 
