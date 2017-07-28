@@ -101,6 +101,7 @@
                         <phase>validate</phase>
                         <configuration>
                             <configLocation>../config/checkstyle.xml</configLocation>
+                            <headerLocation>../config/java.header</headerLocation>
                             <encoding>UTF-8</encoding>
                             <consoleOutput>true</consoleOutput>
                             <failsOnError>true</failsOnError>
