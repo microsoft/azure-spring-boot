@@ -21,10 +21,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MicrosoftAdapterTest {
     private MicrosoftAdapter apiAdapter = new MicrosoftAdapter();
     private Microsoft microsoft = Mockito.mock(Microsoft.class);
-    private User user = new User();
+    private static User user = new User();
 
     @BeforeClass
-    public void init(){
+    public static void init(){
         user.setId("12345678");
         user.setDisplayName("Craig Walls");
         user.setSurname("Walls");
