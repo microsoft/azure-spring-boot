@@ -95,6 +95,7 @@ So far DocumentDbRepository provides basic save, delete and find operations. Mor
 
 ### Create an Application class
 Here create an application class with all the components
+
 ```
 @SpringBootApplication
 public class SampleApplication implements CommandLineRunner {
@@ -120,4 +121,4 @@ public class SampleApplication implements CommandLineRunner {
 Autowired UserRepository interface, then can do save, delete and find operations. Azure DocumentDB Spring Data uses the DocumentTemplate to execute the queries behind *find*, *save* methods. You can use the template yourself for more complex queries.
 
 ## Further info
-If you'd like to save effort of configuration, you could directly use Azure DocumentDB Spring boot starter at [here](../azure-documentdb-spring-boot-start).
+If you'd like to save effort of configuration, you could directly use Azure DocumentDB Spring boot starter at [here](../azure-documentdb-spring-boot-starter).

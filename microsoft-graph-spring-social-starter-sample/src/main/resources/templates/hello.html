@@ -3,6 +3,51 @@
     <title>Hello Microsoft Graph</title>
 </head>
 <body>
-<h3>Hello, <span th:text="${myProfile.displayName} + ', ' + ${myProfile.jobTitle}"/></h3>
+<table>
+    <tr>
+        <th>ID</th>
+        <td th:text="${user.id}"/>
+    </tr>
+    <tr>
+        <th>Surname</th>
+        <td th:text="${user.surname}"/>
+    </tr>
+    <tr>
+        <th>Given Name</th>
+        <td th:text="${user.givenName}"/>
+    </tr>
+    <tr>
+        <th>Display Name</th>
+        <td th:text="${user.displayName}"/>
+    </tr>
+    <tr>
+        <th>Business Phones</th>
+        <td th:text="${user.businessPhones}"/>
+    </tr>
+    <tr>
+        <th>Job Title</th>
+        <td th:text="${user.jobTitle}"/>
+    </tr>
+    <tr>
+        <th>Mobile Phone</th>
+        <td th:text="${user.mobilePhone}"/>
+    </tr>
+    <tr>
+        <th>Office Location</th>
+        <td th:text="${user.officeLocation}"/>
+    </tr>
+    <tr>
+        <th>Mail</th>
+        <td th:text="${user.mail}"/>
+    </tr>
+    <tr>
+        <th>Preferred Language</th>
+        <td th:text="${user.preferredLanguage}"/>
+    </tr>
+    <tr>
+        <th>User Principal Name</th>
+        <td th:text="${user.userPrincipalName}"/>
+    </tr>
+</table>
 </body>
 </html>

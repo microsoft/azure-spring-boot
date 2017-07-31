@@ -6,6 +6,6 @@
 
 package com.microsoft.azure.msgraph.api;
 
-public interface MeOperations {
-    MyProfile getMyProfile();
+public interface UserOperations {
+    User getUserProfile();
 }

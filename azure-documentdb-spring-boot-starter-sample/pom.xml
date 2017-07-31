@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>azure-documentdb-spring-boot-starter-sample</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Azure Document DB Spring Boot Starter Sample</name>
