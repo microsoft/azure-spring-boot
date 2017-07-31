@@ -13,6 +13,7 @@
             <arg value="./src/libs/setup.sh"/>
             <arg value="${azure.test.resourcegroup}"/>
             <arg value="${azure.test.dbname}"/>
+            <redirector outputproperty="documentdb.key"/>
         </exec>
         <propertyfile file="./src/test/resources/application.properties">
             <entry key="documentdb.key" value="${documentdb.key}"/>
