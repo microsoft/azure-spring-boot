@@ -32,7 +32,7 @@ public class DocumentDbTemplateIT {
     private static final String DOCUMENTDB_URL_PROPERTY_NAME = "documentdb.uri";
     private static final String DOCUMENTDB_KEY_PROPERTY_NAME = "documentdb.key";
     private static final String TEST_DB_NAME = "testdb";
-    private static final Person TEST_PERSON = new Person("testid", "testfirstname", "testlastname", "111");
+    private static final Person TEST_PERSON = new Person("testid", "testfirstname", "testlastname");
 
     @BeforeClass
     public static void setup() {
@@ -76,7 +76,7 @@ public class DocumentDbTemplateIT {
     @Test
     public void testUpdate() {
         final Person updated = new Person(TEST_PERSON.getId(), "updatedname",
-                TEST_PERSON.getLastName(), TEST_PERSON.getPhone());
+                TEST_PERSON.getLastName());
         dbTemplate.update(updated);
 
         final Person result = dbTemplate.findById(updated.getId(), Person.class);

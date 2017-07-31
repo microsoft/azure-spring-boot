@@ -2,7 +2,7 @@
 
 ### Add the dependency
 
-"azure-mediaservices-spring-boot-starter" is published on Maven Central Repository.  
+`azure-mediaservices-spring-boot-starter` is published on Maven Central Repository.  
 If you are using Maven, add the following dependency.  
 
 ```xml

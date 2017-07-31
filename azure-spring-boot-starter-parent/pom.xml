@@ -157,6 +157,8 @@
                     <instrumentation>
                         <excludes>
                             <exclude>com/microsoft/azure/spring/common/GetHashMac.class</exclude>
+                            <exclude>com/microsoft/azure/sample/**.class</exclude>
+                            <exclude>**/*Sample*.class</exclude>
                         </excludes>
                     </instrumentation>
                 </configuration>
