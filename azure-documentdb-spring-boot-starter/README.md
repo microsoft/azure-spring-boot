@@ -8,7 +8,7 @@ Pls refer to [sample project here](../azure-documentdb-spring-boot-starter-sampl
 
 ### Add the dependency
 
-"azure-documentdb-spring-boot-starter" is published on Maven Central Repository.  
+`azure-documentdb-spring-boot-starter` is published on Maven Central Repository.  
 If you are using Maven, add the following dependency.  
 
 ```xml

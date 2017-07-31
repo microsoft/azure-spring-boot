@@ -7,7 +7,7 @@ Pls refer to [sample project here](../spring-data-azure-documentdb-sample).
 ## Quick Start
 
 ### Add the dependency
-"spring-data-azure-documentdb" is published on Maven Central Repository.  
+`spring-data-azure-documentdb` is published on Maven Central Repository.  
 If you are using Maven, add the following dependency.  
 
 ```xml
