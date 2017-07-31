@@ -162,6 +162,14 @@
                         </excludes>
                     </instrumentation>
                 </configuration>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>cobertura</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -183,5 +191,9 @@
         <module>../azure-mediaservices-spring-boot-autoconfigure</module>
         <module>../azure-mediaservices-spring-boot-starter</module>
         <module>../azure-mediaservices-spring-boot-starter-sample</module>
+        <module>../spring-social-microsoft-graph</module>
+        <module>../microsoft-graph-spring-boot-autoconfigure</module>
+        <module>../microsoft-graph-spring-social-starter</module>
+        <module>../microsoft-graph-spring-social-starter-sample</module>
     </modules>
 </project>

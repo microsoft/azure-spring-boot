@@ -33,11 +33,12 @@
             <email>yungez@microsoft.com</email>
         </developer>
     </developers>
-	
+
     <organization>
-    	<name>Microsoft</name>
-    	<url>https://www.microsoft.com</url>
+        <name>Microsoft</name>
+        <url>https://www.microsoft.com</url>
     </organization>
+
     <scm>
         <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
         <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
@@ -49,21 +50,28 @@
         <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
         <java.version>1.8</java.version>
 
-        <azure.doucmentdb.starter.version>${project.version}</azure.doucmentdb.starter.version>
-        <azure.doucmentdb.autoconfigure.version>${project.version}</azure.doucmentdb.autoconfigure.version>
-        <spring.data.documentdb.version>${project.version}</spring.data.documentdb.version>
-        <azure.storage.starter.version>${project.version}</azure.storage.starter.version>
-        <azure.storage.autoconfigure.version>${project.version}</azure.storage.autoconfigure.version>
-        <azure.servicebus.autoconfigure.version>${project.version}</azure.servicebus.autoconfigure.version>
-        <azure.servicebus.starter.version>${project.version}</azure.servicebus.starter.version>
-        <azure.mediaservices.starter.version>${project.version}</azure.mediaservices.starter.version>
-        <azure.mediaservices.autoconfigure.version>${project.version}</azure.mediaservices.autoconfigure.version>
-        <azure.spring.common.version>${project.version}</azure.spring.common.version>
+        <bom.version>0.1.4</bom.version>
+
+        <azure.documentdb.starter.version>0.1.4</azure.documentdb.starter.version>
+        <azure.documentdb.autoconfigure.version>0.1.4</azure.documentdb.autoconfigure.version>
+        <spring.data.documentdb.version>${bom.version}</spring.data.documentdb.version>
+        <spring.social.microsoft.graph.version>${bom.version}</spring.social.microsoft.graph.version>
+        <microsoft.graph.autoconfigure.version>${bom.version}</microsoft.graph.autoconfigure.version>
+        <microsoft.graph.starter.version>${bom.version}</microsoft.graph.starter.version>
+        <azure.storage.starter.version>${bom.version}</azure.storage.starter.version>
+        <azure.storage.autoconfigure.version>${bom.version}</azure.storage.autoconfigure.version>
+        <azure.servicebus.autoconfigure.version>${bom.version}</azure.servicebus.autoconfigure.version>
+        <azure.servicebus.starter.version>${bom.version}</azure.servicebus.starter.version>
+        <azure.mediaservices.starter.version>${bom.version}</azure.mediaservices.starter.version>
+        <azure.mediaservices.autoconfigure.version>${bom.version}</azure.mediaservices.autoconfigure.version>
+        <azure.spring.common.version>${bom.version}</azure.spring.common.version>
 
         <azure.documentdb.version>1.11.0</azure.documentdb.version>
         <azure.servicebus.version>1.0.0-PREVIEW-3</azure.servicebus.version>
         <azure.storage.version>5.3.1</azure.storage.version>
         <azure.media.version>0.9.7</azure.media.version>
+
+        <jackson.version>2.8.7</jackson.version>
 
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
@@ -88,12 +96,12 @@
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
-                <version>${azure.doucmentdb.autoconfigure.version}</version>
+                <version>${azure.documentdb.autoconfigure.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-documentdb-spring-boot-starter</artifactId>
-                <version>${azure.doucmentdb.starter.version}</version>
+                <version>${azure.documentdb.starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
@@ -119,6 +127,21 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>spring-data-azure-documentdb</artifactId>
                 <version>${spring.data.documentdb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>spring-social-microsoft-graph</artifactId>
+                <version>${spring.social.microsoft.graph.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>microsoft-graph-spring-boot-autoconfigure</artifactId>
+                <version>${microsoft.graph.autoconfigure.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>microsoft-graph-spring-social-starter</artifactId>
+                <version>${microsoft.graph.starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
@@ -156,6 +179,17 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-media</artifactId>
                 <version>${azure.media.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -8,6 +8,10 @@
 
 This repo is for Spring Boot Starters of Azure services. It helps Spring Boot developers to adopt Azure services.
 
+### Prequisite
+- JDK 1.8 and above
+- [Maven](http://maven.apache.org/) 3.0 and above
+
 ### Usage
 
 Below starters are available. You can find them in [Maven Central Repository](https://search.maven.org/).
@@ -16,6 +20,15 @@ Below starters are available. You can find them in [Maven Central Repository](ht
 - [azure-mediaservices-spring-boot-starter](azure-mediaservices-spring-boot-starter/README.md)
 - [azure-servicebus-spring-boot-starter](azure-servicebus-spring-boot-starter/README.md)
 - [azure-storage-spring-boot-starter](azure-storage-spring-boot-starter/README.md)
+
+
+### How to Build and Contribute
+Please follow [instruction here](./HowToContribute.md) to build from source or contribute.
+
+### Other articles
+You could check below articles to learn more on usage of specific starters.
+
+[How to use the Spring Boot Starter with Azure Cosmos DB DocumentDB API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-java-spring-boot-starter-with-cosmos-db)
 
 ### Filing Issues
 
