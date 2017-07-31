@@ -12,6 +12,7 @@
     </parent>
 
     <artifactId>spring-data-azure-documentdb-sample</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Spring Data Azure Document DB Sample</name>
@@ -40,12 +41,14 @@
         <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
     </scm>
 
+    <!-- If user don't want to use azure-spring-boot-starter-parent package as parent, he needs to specify the versions
+    of below starters. Or user can use dependency management to import this parent package or the BOM package
+    azure-spring-boot-starter-bom-->
     <dependencies>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>spring-data-azure-documentdb</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>

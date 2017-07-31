@@ -1,7 +1,7 @@
 language: java
 jdk:
   - oraclejdk8
-script: "mvn cobertura:cobertura"
+script: "mvn clean verify"
 sudo: required
 cache:
   directories:
