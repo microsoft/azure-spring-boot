@@ -6,7 +6,7 @@ This instruction is guideline for building and code contribution.
 - [Maven](http://maven.apache.org/) 3.0 and above
 
 ## Build from source
-To build the project, run maven commands. Building from submodule folder is broken due to one known [issue](https://github.com/Microsoft/azure-spring-boot-starters/issues/46), will add instruction later once the issue is fixed.
+To build the project, run maven commands.
 
 ```bash
 git clone https://github.com/Microsoft/azure-spring-boot-starters.git 
