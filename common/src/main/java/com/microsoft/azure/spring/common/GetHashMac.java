@@ -3,8 +3,7 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-
-/**
+/*
  * Disclaimer:
  *      This class is copied from https://github.com/Microsoft/azure-tools-for-java/ with minor modification (fixing
  *      static analysis error).
@@ -13,11 +12,7 @@
 
 package com.microsoft.azure.spring.common;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
