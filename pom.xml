@@ -45,8 +45,8 @@
         <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
         <java.version>1.8</java.version>
 
-        <azure.doucmentdb.starter.version>0.1.4</azure.doucmentdb.starter.version>
-        <azure.doucmentdb.autoconfigure.version>0.1.4</azure.doucmentdb.autoconfigure.version>
+        <azure.documentdb.starter.version>0.1.4</azure.documentdb.starter.version>
+        <azure.documentdb.autoconfigure.version>0.1.4</azure.documentdb.autoconfigure.version>
         <spring.data.documentdb.version>0.1.4</spring.data.documentdb.version>
         <spring.social.microsoft.graph.version>0.1.4</spring.social.microsoft.graph.version>
         <microsoft.graph.autoconfigure.version>0.1.4</microsoft.graph.autoconfigure.version>
@@ -85,12 +85,12 @@
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
-                <version>${azure.doucmentdb.autoconfigure.version}</version>
+                <version>${azure.documentdb.autoconfigure.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-documentdb-spring-boot-starter</artifactId>
-                <version>${azure.doucmentdb.starter.version}</version>
+                <version>${azure.documentdb.starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
