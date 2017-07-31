@@ -10,6 +10,7 @@ import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.common.GetHashMac;
+import org.springframework.util.Assert;
 
 public class DocumentDbFactory {
 
@@ -22,6 +23,8 @@ public class DocumentDbFactory {
     }
 
     public DocumentDbFactory(String host, String key, boolean isBiEnabled) {
+        Assert.hasText(host, "host must not be empty!");
+        Assert.hasText(key, "key must not be empty!");
 
         final ConnectionPolicy policy = ConnectionPolicy.GetDefault();
 

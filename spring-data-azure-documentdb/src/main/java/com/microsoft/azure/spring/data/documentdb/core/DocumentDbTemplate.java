@@ -42,6 +42,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                               DocumentDbConverter documentDbConverter,
                               String dbName) {
         Assert.notNull(documentDbFactory, "DocumentDbFactory must not be null!");
+        Assert.notNull(documentDbConverter, "DocumentDbConverter must not be null!");
 
         this.documentDbFactory = documentDbFactory;
         this.dbConverter = documentDbConverter;
