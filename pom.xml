@@ -78,6 +78,8 @@
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
         <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
         <findbugs-maven-plugin.version>3.0.0</findbugs-maven-plugin.version>
+        <maven-failsafe-plugin.version>2.19</maven-failsafe-plugin.version>
+        <maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -224,6 +226,16 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring.boot.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${maven-failsafe-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>${maven-antrun-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

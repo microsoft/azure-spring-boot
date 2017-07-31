@@ -137,7 +137,7 @@
                 </dependencies>
                 <executions>
                     <execution>
-                        <phase>verify</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
