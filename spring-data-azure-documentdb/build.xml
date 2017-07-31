@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="test resource prepration and cleanup">
+    <target name="setup">
+        <echo message="setup test resource"/>
+        <exec osfamily="windows" executable="cmd.exe">
+            <arg value="/c"/>
+            <arg value=".\src\libs\setup.bat"/>
+            <arg value="${azure.test.resourcegroup}"/>
+            <arg value="${azure.test.dbname}"/>
+            <redirector outputproperty="documentdb.key"/>
+        </exec>
+        <exec osfamily="unix" executable="bash">
+            <arg value="./src/libs/setup.sh"/>
+            <arg value="${azure.test.resourcegroup}"/>
+            <arg value="${azure.test.dbname}"/>
+        </exec>
+        <propertyfile file="./src/test/resources/application.properties">
+            <entry key="documentdb.key" value="${documentdb.key}"/>
+            <entry key="documentdb.uri" value="https://${azure.test.dbname}.documents.azure.com:443"/>
+        </propertyfile>
+    </target>
+    <target name="cleanup">
+        <echo message="cleanup test resource"/>
+        <exec osfamily="windows" executable="cmd.exe">
+            <arg value="/c"/>
+            <arg value=".\src\libs\cleanup.bat"/>
+            <arg value="${azure.test.resourcegroup}"/>
+            <arg value="${azure.test.dbname}"/>
+        </exec>
+        <exec osfamily="unix" executable="bash">
+            <arg value="./src/libs/cleanup.sh"/>
+            <arg value="${azure.test.resourcegroup}"/>
+            <arg value="${azure.test.dbname}"/>
+        </exec>
+        <delete file="./src/test/resources/application.properties"/>
+    </target>
+</project>

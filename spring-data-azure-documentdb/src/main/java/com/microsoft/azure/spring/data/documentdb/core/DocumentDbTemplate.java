@@ -110,6 +110,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
 
         final String id;
         try {
+            ReflectionUtils.makeAccessible(idField);
             id = idField.get(object).toString();
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e.getMessage());
