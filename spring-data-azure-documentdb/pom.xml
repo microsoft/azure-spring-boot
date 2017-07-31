@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-starter-parent</artifactId>
-        <version>0.1.3</version>
+        <version>0.1.4</version>
         <relativePath>../azure-spring-boot-starter-parent/pom.xml</relativePath>
     </parent>
 
@@ -81,6 +81,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-spring-common</artifactId>
         </dependency>
 
         <dependency>

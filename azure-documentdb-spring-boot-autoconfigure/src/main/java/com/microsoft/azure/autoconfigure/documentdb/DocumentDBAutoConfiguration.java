@@ -9,6 +9,7 @@ package com.microsoft.azure.autoconfigure.documentdb;
 import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import com.microsoft.azure.documentdb.DocumentClient;
+import com.microsoft.azure.spring.common.GetHashMac;
 import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.documentdb.core.convert.DocumentDbConverter;
@@ -30,7 +31,7 @@ import org.springframework.context.annotation.Scope;
 @EnableConfigurationProperties(DocumentDBProperties.class)
 public class DocumentDBAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(DocumentDBAutoConfiguration.class);
-    private static final String USER_AGENT_SUFFIX = "azure-documentdb-spring-boot-starter/0.1.3";
+    private static final String USER_AGENT_SUFFIX = "azure-documentdb-spring-boot-starter/0.1.4";
 
     private final DocumentDBProperties properties;
     private final ConnectionPolicy connectionPolicy;
@@ -50,8 +51,17 @@ public class DocumentDBAutoConfiguration {
 
     private DocumentClient createDocumentClient() {
         LOG.debug("createDocumentClient");
-        return new DocumentClient(properties.getUri(), properties.getKey(),
-                connectionPolicy == null ? ConnectionPolicy.GetDefault() : connectionPolicy,
+        final ConnectionPolicy policy = connectionPolicy == null ? ConnectionPolicy.GetDefault() : connectionPolicy;
+
+        String userAgent = (policy.getUserAgentSuffix() == null ? "" : ";" + policy.getUserAgentSuffix()) +
+                ";" + USER_AGENT_SUFFIX;
+
+        if (properties.isAllowTelemetry() && GetHashMac.getHashMac() != null) {
+            userAgent += ";" + GetHashMac.getHashMac();
+        }
+        policy.setUserAgentSuffix(userAgent);
+
+        return new DocumentClient(properties.getUri(), properties.getKey(), policy,
                 properties.getConsistencyLevel() == null ?
                         ConsistencyLevel.Session : properties.getConsistencyLevel());
     }

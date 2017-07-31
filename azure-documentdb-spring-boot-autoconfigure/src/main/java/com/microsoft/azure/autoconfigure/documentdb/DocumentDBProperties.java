@@ -9,7 +9,9 @@ package com.microsoft.azure.autoconfigure.documentdb;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
+@Validated
 @ConfigurationProperties("azure.documentdb")
 public class DocumentDBProperties {
     @NotEmpty
@@ -19,6 +21,7 @@ public class DocumentDBProperties {
 
     private ConsistencyLevel consistencyLevel;
     private String database;
+    private boolean allowTelemetry = true;
 
     public String getUri() {
         return uri;
@@ -52,4 +55,11 @@ public class DocumentDBProperties {
         this.consistencyLevel = consistencyLevel;
     }
 
+    public boolean isAllowTelemetry() {
+        return allowTelemetry;
+    }
+
+    public void setAllowTelemetry(boolean allowTelemetry) {
+        this.allowTelemetry = allowTelemetry;
+    }
 }

@@ -34,7 +34,7 @@ public class SimpleDocumentDbRepositoryUnitTest {
 
     @Before
     public void setUp() {
-        testPerson1 = new Person("aaa", "firstname", "lastname", "425-111");
+        testPerson1 = new Person("aaa", "firstname", "lastname");
 
         when(entityInformation.getJavaType()).thenReturn(Person.class);
         when(entityInformation.getCollectionName()).thenReturn(Person.class.getSimpleName());

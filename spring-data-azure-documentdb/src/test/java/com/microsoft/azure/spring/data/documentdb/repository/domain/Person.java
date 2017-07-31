@@ -10,18 +10,16 @@ package com.microsoft.azure.spring.data.documentdb.repository.domain;
 public class Person {
     private String firstName;
     private String lastName;
-    private String phone;
 
     private String id;
 
     public Person() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
-    public Person(String id, String fname, String lname, String phone) {
+    public Person(String id, String fname, String lname) {
         this.firstName = fname;
         this.lastName = lname;
-        this.phone = phone;
         this.id = id;
     }
 
@@ -47,13 +45,5 @@ public class Person {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 }

@@ -78,6 +78,7 @@ public class KeyVaultOperation {
             rwLock.writeLock().lock();
             propertyNamesHashMap.clear();
             final PagedList<SecretItem> secrets = keyVaultClient.listSecrets(vaultUri);
+            secrets.loadAll();
             for (final SecretItem secret : secrets) {
                 propertyNamesHashMap.putIfAbsent(secret.id().replaceFirst(vaultUri + "/secrets/", ""), secret.id());
             }

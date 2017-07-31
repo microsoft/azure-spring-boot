@@ -67,11 +67,8 @@ public class MediaServicesSampleApplication implements CommandLineRunner {
         // Create the Blob Writer using the Locator
         uploader = mediaService.createBlobWriter(uploadLocator);
 
-        final File file = new ClassPathResource(fileName).getFile();
-
         // The local file that will be uploaded to your Media Services account
-        try (final InputStream input = new FileInputStream(file)) {
-
+        try (final InputStream input = new ClassPathResource(fileName).getInputStream()) {
             System.out.println("Uploading " + fileName);
 
             // Upload the local file to the asset

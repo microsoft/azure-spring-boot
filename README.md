@@ -1,10 +1,16 @@
+[![Travis CI](https://travis-ci.org/Microsoft/azure-spring-boot-starters.svg?branch=master)](https://travis-ci.org/Microsoft/azure-spring-boot-starters)
+[![codecov](https://codecov.io/gh/microsoft/azure-spring-boot-starters/branch/master/graph/badge.svg)](https://codecov.io/gh/microsoft/azure-spring-boot-starters)
+[![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://github.com/Microsoft/azure-spring-boot-starters/blob/master/LICENSE)
+
+# Azure Spring Boot Starters
+
 ### Introduction
 
 This repo is for Spring Boot Starters of Azure services. It helps Spring Boot developers to adopt Azure services.
 
 ### Usage
 
-Below starters are available. You can find them in [Spring Initializr](http://start.spring.io/) or [Maven Central Repository](https://search.maven.org/).
+Below starters are available. You can find them in [Maven Central Repository](https://search.maven.org/).
 
 - [azure-documentdb-spring-boot-starter](azure-documentdb-spring-boot-starter/README.md)
 - [azure-mediaservices-spring-boot-starter](azure-mediaservices-spring-boot-starter/README.md)
