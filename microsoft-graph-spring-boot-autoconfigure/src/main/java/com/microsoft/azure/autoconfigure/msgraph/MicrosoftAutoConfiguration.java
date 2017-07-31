@@ -49,7 +49,7 @@ public class MicrosoftAutoConfiguration {
         @Bean
         @ConditionalOnMissingBean(Microsoft.class)
         @Scope(value = "request", proxyMode = ScopedProxyMode.INTERFACES)
-        public Microsoft linkedin(ConnectionRepository repository) {
+        public Microsoft microsoft(ConnectionRepository repository) {
             final Connection<Microsoft> connection = repository
                     .findPrimaryConnection(Microsoft.class);
             return connection != null ? connection.getApi() : null;
