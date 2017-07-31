@@ -33,7 +33,7 @@ public class DocumentDbTemplateIT {
     private static final String DOCUMENTDB_KEY_PROPERTY_NAME = "documentdb.key";
     private static final String TEST_DB_NAME = "testdb";
     private static final Person TEST_PERSON = new Person("testid", "testfirstname", "testlastname", "111");
-    
+
     @BeforeClass
     public static void setup() {
         documentDbUri = System.getProperty(DOCUMENTDB_URL_PROPERTY_NAME);
