@@ -52,5 +52,6 @@ public class MicrosoftAdapter implements ApiAdapter<Microsoft> {
     public void updateStatus(Microsoft microsoft, String message) {
         // not implemented yet.
         // microsoft.userOperations().updateStatus(message);
+        throw new UnsupportedOperationException("MicrosoftAdapter:updateStatus not implemented yet.");
     }
 }

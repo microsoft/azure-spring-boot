@@ -9,6 +9,8 @@ package com.microsoft.azure.msgraph.connect;
 import com.microsoft.azure.msgraph.api.Microsoft;
 import com.microsoft.azure.msgraph.api.User;
 import com.microsoft.azure.msgraph.api.UserOperations;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.social.connect.ConnectionValues;
@@ -19,18 +21,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MicrosoftAdapterTest {
     private MicrosoftAdapter apiAdapter = new MicrosoftAdapter();
     private Microsoft microsoft = Mockito.mock(Microsoft.class);
+    private User user = new User();
 
-    @Test
-    public void fetchProfile() {
-        final UserOperations userOperations = Mockito.mock(UserOperations.class);
-        Mockito.when(microsoft.userOperations()).thenReturn(userOperations);
-
-        final User user = new User();
+    @BeforeClass
+    public void init(){
         user.setId("12345678");
         user.setDisplayName("Craig Walls");
         user.setSurname("Walls");
         user.setGivenName("Craig");
         user.setMail("zz@a.com");
+    }
+    @Test
+    public void fetchProfile() {
+        final UserOperations userOperations = Mockito.mock(UserOperations.class);
+        Mockito.when(microsoft.userOperations()).thenReturn(userOperations);
         Mockito.when(userOperations.getUserProfile()).thenReturn(user);
 
         final UserProfile profile = apiAdapter.fetchUserProfile(microsoft);
@@ -46,13 +50,6 @@ public class MicrosoftAdapterTest {
     public void setConnectionValues() throws Exception {
         final UserOperations userOperations = Mockito.mock(UserOperations.class);
         Mockito.when(microsoft.userOperations()).thenReturn(userOperations);
-
-        final User user = new User();
-        user.setId("12345678");
-        user.setDisplayName("Craig Walls");
-        user.setSurname("Walls");
-        user.setGivenName("Craig");
-        user.setMail("zz@a.com");
         Mockito.when(userOperations.getUserProfile()).thenReturn(user);
 
         final TestConnectionValues connectionValues = new TestConnectionValues();
