@@ -79,9 +79,9 @@ Please check the following table for reference links of detailed Storage usage.
 Storage Type | Reference Link
 --- | ---
 `Blob Storage` | [https://docs.microsoft.com/en-us/azure/storage/storage-java-how-to-use-blob-storage](https://docs.microsoft.com/en-us/azure/storage/storage-java-how-to-use-blob-storage)
-`Queue Storage` | [https://docs.microsoft.com/en-us/azure/storage/storage-java-how-to-use-queue-storage](https://docs.microsoft.com/en-us/azure/storage/storage-java-how-to-use-blob-storage)
-`Table Storage` | [https://docs.microsoft.com/en-us/azure/storage/storage-java-how-to-use-table-storage](https://docs.microsoft.com/en-us/azure/storage/storage-java-how-to-use-blob-storage)
-`File Storage` | [https://docs.microsoft.com/en-us/azure/storage/storage-java-how-to-use-file-storage](https://docs.microsoft.com/en-us/azure/storage/storage-java-how-to-use-blob-storage)
+`Queue Storage` | [https://docs.microsoft.com/en-us/azure/storage/storage-java-how-to-use-queue-storage](https://docs.microsoft.com/en-us/azure/storage/storage-java-how-to-use-queue-storage)
+`Table Storage` | [https://docs.microsoft.com/en-us/azure/storage/storage-java-how-to-use-table-storage](https://docs.microsoft.com/en-us/azure/storage/storage-java-how-to-use-table-storage)
+`File Storage` | [https://docs.microsoft.com/en-us/azure/storage/storage-java-how-to-use-file-storage](https://docs.microsoft.com/en-us/azure/storage/storage-java-how-to-use-file-storage)
 
 
 
