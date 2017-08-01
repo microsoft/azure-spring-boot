@@ -2,8 +2,7 @@
 This instruction is guideline for building and code contribution.
 
 ## Prequisites
-- JDK 1.8 and above
-- [Maven](http://maven.apache.org/) 3.0 and above
+- JDK 1.8
 
 ## Build from source
 To build the project, run maven commands.
@@ -11,7 +10,7 @@ To build the project, run maven commands.
 ```bash
 git clone https://github.com/Microsoft/azure-spring-boot-starters.git 
 cd azure-spring-boot-starters
-mvn clean install
+mvnw clean install
 ```
 
 ## Test
@@ -19,7 +18,7 @@ There're 2 profiles: `dev` and `integration-test`. Default profile is `dev`. Pro
 
 - Run unit tests
 ```bash
-mvn clean install
+mvnw clean install
 ```
 
 - Run unit tests and integration tests
@@ -36,12 +35,12 @@ mvn clean install
 set CLIENT_ID=your-azure-service-principal-id
 set CLIENT_KEY=your-azure-service-principal-key
 set TENANT_ID=your-azure-subscription-tenant-id
-mvn -P integration-test clean install
+mvnw -P integration-test clean install
 ```
 
 - Skip tests execution
 ```bash
-mvn clean install -DskipTests
+mvnw clean install -DskipTests
 ```
 
 ## Contribute to code
