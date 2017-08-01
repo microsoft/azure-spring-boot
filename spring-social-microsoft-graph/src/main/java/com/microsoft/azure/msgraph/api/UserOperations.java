@@ -3,3 +3,9 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
+
+package com.microsoft.azure.msgraph.api;
+
+public interface UserOperations {
+    User getUserProfile();
+}

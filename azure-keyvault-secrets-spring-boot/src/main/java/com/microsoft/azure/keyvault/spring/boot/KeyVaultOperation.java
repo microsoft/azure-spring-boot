@@ -77,6 +77,9 @@ public class KeyVaultOperation {
         try {
             rwLock.writeLock().lock();
             propertyNamesHashMap.clear();
+
+
+
             final PagedList<SecretItem> secrets = keyVaultClient.listSecrets(vaultUri);
             secrets.loadAll();
             for (final SecretItem secret : secrets) {

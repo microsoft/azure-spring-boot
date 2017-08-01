@@ -11,10 +11,8 @@ import com.microsoft.aad.adal4j.AuthenticationResult;
 import com.microsoft.aad.adal4j.ClientCredential;
 import com.microsoft.azure.keyvault.authentication.KeyVaultCredentials;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.net.MalformedURLException;
+import java.util.concurrent.*;
 
 
 public class AzureKeyVaultCredential extends KeyVaultCredentials {
@@ -47,9 +45,8 @@ public class AzureKeyVaultCredential extends KeyVaultCredentials {
             final Future<AuthenticationResult> future = context.acquireToken(resource, credential, null);
             result = future.get(timeoutInSeconds, TimeUnit.SECONDS);
             token = result.getAccessToken();
-
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (MalformedURLException | TimeoutException | InterruptedException | ExecutionException ex) {
+            throw new RuntimeException(ex.getMessage());
         } finally {
             executorService.shutdown();
         }

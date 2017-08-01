@@ -33,11 +33,12 @@
             <email>yungez@microsoft.com</email>
         </developer>
     </developers>
-	
+
     <organization>
-    	<name>Microsoft</name>
-    	<url>https://www.microsoft.com</url>
+        <name>Microsoft</name>
+        <url>https://www.microsoft.com</url>
     </organization>
+
     <scm>
         <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
         <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
@@ -49,18 +50,23 @@
         <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
         <java.version>1.8</java.version>
 
-        <azure.doucmentdb.starter.version>0.1.4</azure.doucmentdb.starter.version>
-        <azure.doucmentdb.autoconfigure.version>0.1.4</azure.doucmentdb.autoconfigure.version>
-        <spring.data.documentdb.version>0.1.4</spring.data.documentdb.version>
-        <azure.storage.starter.version>0.1.4</azure.storage.starter.version>
-        <azure.storage.autoconfigure.version>0.1.4</azure.storage.autoconfigure.version>
-        <azure.servicebus.autoconfigure.version>0.1.4</azure.servicebus.autoconfigure.version>
-        <azure.servicebus.starter.version>0.1.4</azure.servicebus.starter.version>
-        <azure.keyvault.secrets.spring.boot.version>0.1.4</azure.keyvault.secrets.spring.boot.version>
-        <azure.keyvault.secrets.starter.version>0.1.4</azure.keyvault.secrets.starter.version>
-        <azure.mediaservices.starter.version>0.1.4</azure.mediaservices.starter.version>
-        <azure.mediaservices.autoconfigure.version>0.1.4</azure.mediaservices.autoconfigure.version>
-        <azure.spring.common.version>${project.version}</azure.spring.common.version>
+        <bom.version>0.1.4</bom.version>
+
+        <azure.documentdb.starter.version>${bom.version}</azure.documentdb.starter.version>
+        <azure.documentdb.autoconfigure.version>${bom.version}</azure.documentdb.autoconfigure.version>
+        <spring.data.documentdb.version>${bom.version}</spring.data.documentdb.version>
+        <spring.social.microsoft.graph.version>${bom.version}</spring.social.microsoft.graph.version>
+        <microsoft.graph.autoconfigure.version>${bom.version}</microsoft.graph.autoconfigure.version>
+        <microsoft.graph.starter.version>${bom.version}</microsoft.graph.starter.version>
+        <azure.storage.starter.version>${bom.version}</azure.storage.starter.version>
+        <azure.storage.autoconfigure.version>${bom.version}</azure.storage.autoconfigure.version>
+        <azure.servicebus.autoconfigure.version>${bom.version}</azure.servicebus.autoconfigure.version>
+        <azure.servicebus.starter.version>${bom.version}</azure.servicebus.starter.version>
+        <azure.mediaservices.starter.version>${bom.version}</azure.mediaservices.starter.version>
+        <azure.mediaservices.autoconfigure.version>${bom.version}</azure.mediaservices.autoconfigure.version>
+        <azure.keyvault.secrets.spring.boot.version>${bom.version}</azure.keyvault.secrets.spring.boot.version>
+        <azure.keyvault.secrets.starter.version>${bom.version}</azure.keyvault.secrets.starter.version>
+        <azure.spring.common.version>${bom.version}</azure.spring.common.version>
 
         <azure.documentdb.version>1.11.0</azure.documentdb.version>
         <azure.servicebus.version>1.0.0-PREVIEW-3</azure.servicebus.version>
@@ -69,11 +75,8 @@
         <aad.adal4j.version>0.0.2</aad.adal4j.version>
         <azure.media.version>0.9.7</azure.media.version>
 
-        <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
-        <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
-        <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
-        <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
-        <findbugs-maven-plugin.version>3.0.0</findbugs-maven-plugin.version>
+        <jackson.version>2.8.7</jackson.version>
+        <mockito.version>2.8.9</mockito.version>
     </properties>
 
     <dependencyManagement>
@@ -90,12 +93,12 @@
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
-                <version>${azure.doucmentdb.autoconfigure.version}</version>
+                <version>${azure.documentdb.autoconfigure.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-documentdb-spring-boot-starter</artifactId>
-                <version>${azure.doucmentdb.starter.version}</version>
+                <version>${azure.documentdb.starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
@@ -134,6 +137,26 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
+                <artifactId>spring-social-microsoft-graph</artifactId>
+                <version>${spring.social.microsoft.graph.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>microsoft-graph-spring-boot-autoconfigure</artifactId>
+                <version>${microsoft.graph.autoconfigure.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>microsoft-graph-spring-social-starter</artifactId>
+                <version>${microsoft.graph.starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>spring-social-microsoft-graph</artifactId>
+                <version>${spring.social.microsoft.graph.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-mediaservices-spring-boot-autoconfigure</artifactId>
                 <version>${azure.mediaservices.autoconfigure.version}</version>
             </dependency>
@@ -148,7 +171,7 @@
                 <version>${azure.spring.common.version}</version>
             </dependency>
 
-            <!-- Azure related -->
+            <!-- Azure libraries -->
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-documentdb</artifactId>
@@ -179,45 +202,26 @@
                 <artifactId>azure-media</artifactId>
                 <version>${azure.media.version}</version>
             </dependency>
+
+            <!-- third parties -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compiler-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>${maven-javadoc-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>${maven-source-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>${maven-checkstyle-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>findbugs-maven-plugin</artifactId>
-                    <version>${findbugs-maven-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring.boot.version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 
     <modules>
         <module>azure-spring-boot-starter-parent</module>
