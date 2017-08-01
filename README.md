@@ -16,10 +16,10 @@ This repo is for Spring Boot Starters of Azure services. It helps Spring Boot de
 
 Below starters are available. You can find them in [Maven Central Repository](https://search.maven.org/).
 
-- [azure-documentdb-spring-boot-starter](azure-documentdb-spring-boot-starter/README.md)
-- [azure-mediaservices-spring-boot-starter](azure-mediaservices-spring-boot-starter/README.md)
-- [azure-servicebus-spring-boot-starter](azure-servicebus-spring-boot-starter/README.md)
-- [azure-storage-spring-boot-starter](azure-storage-spring-boot-starter/README.md)
+- [azure-documentdb-spring-boot-starter](documentdb/azure-documentdb-spring-boot-starter/README.md)
+- [azure-mediaservices-spring-boot-starter](mediaservices/azure-mediaservices-spring-boot-starter/README.md)
+- [azure-servicebus-spring-boot-starter](servicebus/azure-servicebus-spring-boot-starter/README.md)
+- [azure-storage-spring-boot-starter](storage/azure-storage-spring-boot-starter/README.md)
 
 
 ### How to Build and Contribute
