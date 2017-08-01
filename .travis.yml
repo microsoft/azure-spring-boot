@@ -4,7 +4,6 @@ jdk:
 
 script: "mvn cobertura:cobertura"
 
-sudo: required
 cache:
   directories:
     - $HOME/.m2
