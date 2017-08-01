@@ -39,3 +39,6 @@ hs_err_pid*
 # Maven
 target
 /bin/
+
+#Allowing travis to read jar
+!maven-wrapper.jar
