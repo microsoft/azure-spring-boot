@@ -3,7 +3,7 @@ jdk:
   - oraclejdk8
 
 script:
-  - ./mvn clean cobertura:cobertura
+  - ./mvnw clean cobertura:cobertura
 sudo: required
 
 env:
