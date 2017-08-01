@@ -9,7 +9,6 @@ package com.microsoft.azure.msgraph.connect;
 import com.microsoft.azure.msgraph.api.Microsoft;
 import com.microsoft.azure.msgraph.api.User;
 import com.microsoft.azure.msgraph.api.UserOperations;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -19,18 +18,19 @@ import org.springframework.social.connect.UserProfile;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MicrosoftAdapterTest {
+    private static User user = new User();
     private MicrosoftAdapter apiAdapter = new MicrosoftAdapter();
     private Microsoft microsoft = Mockito.mock(Microsoft.class);
-    private static User user = new User();
 
     @BeforeClass
-    public static void init(){
+    public static void init() {
         user.setId("12345678");
         user.setDisplayName("Craig Walls");
         user.setSurname("Walls");
         user.setGivenName("Craig");
         user.setMail("zz@a.com");
     }
+
     @Test
     public void fetchProfile() {
         final UserOperations userOperations = Mockito.mock(UserOperations.class);

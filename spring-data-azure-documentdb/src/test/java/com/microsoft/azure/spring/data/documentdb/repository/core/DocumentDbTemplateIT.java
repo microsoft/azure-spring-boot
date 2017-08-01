@@ -23,16 +23,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @PropertySource(value = {"classpath:application.properties"})
 public class DocumentDbTemplateIT {
 
-    private static String documentDbUri;
-    private static String documentDbKey;
-
-    private static DocumentClient documentClient;
-    private static DocumentDbTemplate dbTemplate;
-
     private static final String DOCUMENTDB_URL_PROPERTY_NAME = "documentdb.uri";
     private static final String DOCUMENTDB_KEY_PROPERTY_NAME = "documentdb.key";
     private static final String TEST_DB_NAME = "testdb";
     private static final Person TEST_PERSON = new Person("testid", "testfirstname", "testlastname");
+    private static String documentDbUri;
+    private static String documentDbKey;
+    private static DocumentClient documentClient;
+    private static DocumentDbTemplate dbTemplate;
 
     @BeforeClass
     public static void setup() {

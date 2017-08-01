@@ -144,7 +144,7 @@
                         </goals>
                         <configuration>
                             <target>
-                                <echo message="skip test is ${skip.integration.tests}" />
+                                <echo message="skip test is ${skip.integration.tests}"/>
                             </target>
                             <target unless="${skip.integration.tests}">
                                 <ant antfile="build.xml" target="setup">
