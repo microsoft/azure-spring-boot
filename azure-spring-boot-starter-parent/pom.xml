@@ -41,6 +41,7 @@
     </developers>
 
     <properties>
+        <project.rootdir>${project.basedir}/..</project.rootdir>
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
@@ -156,7 +157,7 @@
                         <id>validate</id>
                         <phase>validate</phase>
                         <configuration>
-                            <configLocation>../config/checkstyle.xml</configLocation>
+                            <configLocation>${project.rootdir}/config/checkstyle.xml</configLocation>
                             <encoding>UTF-8</encoding>
                             <consoleOutput>true</consoleOutput>
                             <failsOnError>true</failsOnError>
@@ -182,7 +183,7 @@
                     <xmlOutput>true</xmlOutput>
                     <findbugsXmlOutputDirectory>${project.build.directory}/findbugs
                     </findbugsXmlOutputDirectory>
-                    <excludeFilterFile>../config/findbugs-exclude.xml</excludeFilterFile>
+                    <excludeFilterFile>${project.rootdir}/config/findbugs-exclude.xml</excludeFilterFile>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -225,25 +226,25 @@
     </build>
 
     <modules>
-        <module>../common</module>
-        <module>../spring-data-azure-documentdb</module>
-        <module>../spring-data-azure-documentdb-sample</module>
-        <module>../azure-documentdb-spring-boot-autoconfigure</module>
-        <module>../azure-documentdb-spring-boot-autoconfigure-sample</module>
-        <module>../azure-documentdb-spring-boot-starter</module>
-        <module>../azure-documentdb-spring-boot-starter-sample</module>
-        <module>../azure-storage-spring-boot-autoconfigure</module>
-        <module>../azure-storage-spring-boot-starter</module>
-        <module>../azure-storage-spring-boot-starter-sample</module>
-        <module>../azure-servicebus-spring-boot-autoconfigure</module>
-        <module>../azure-servicebus-spring-boot-starter</module>
-        <module>../azure-servicebus-spring-boot-starter-sample</module>
-        <module>../azure-mediaservices-spring-boot-autoconfigure</module>
-        <module>../azure-mediaservices-spring-boot-starter</module>
-        <module>../azure-mediaservices-spring-boot-starter-sample</module>
-        <module>../spring-social-microsoft-graph</module>
-        <module>../microsoft-graph-spring-boot-autoconfigure</module>
-        <module>../microsoft-graph-spring-social-starter</module>
-        <module>../microsoft-graph-spring-social-starter-sample</module>
+        <module>../azure-spring-common</module>
+        <module>../azure-documentdb/spring-data-azure-documentdb</module>
+        <module>../azure-documentdb/spring-data-azure-documentdb-sample</module>
+        <module>../azure-documentdb/azure-documentdb-spring-boot-autoconfigure</module>
+        <module>../azure-documentdb/azure-documentdb-spring-boot-autoconfigure-sample</module>
+        <module>../azure-documentdb/azure-documentdb-spring-boot-starter</module>
+        <module>../azure-documentdb/azure-documentdb-spring-boot-starter-sample</module>
+        <module>../azure-storage/azure-storage-spring-boot-autoconfigure</module>
+        <module>../azure-storage/azure-storage-spring-boot-starter</module>
+        <module>../azure-storage/azure-storage-spring-boot-starter-sample</module>
+        <module>../azure-servicebus/azure-servicebus-spring-boot-autoconfigure</module>
+        <module>../azure-servicebus/azure-servicebus-spring-boot-starter</module>
+        <module>../azure-servicebus/azure-servicebus-spring-boot-starter-sample</module>
+        <module>../azure-mediaservices/azure-mediaservices-spring-boot-autoconfigure</module>
+        <module>../azure-mediaservices/azure-mediaservices-spring-boot-starter</module>
+        <module>../azure-mediaservices/azure-mediaservices-spring-boot-starter-sample</module>
+        <module>../microsoft-graph/spring-social-microsoft-graph</module>
+        <module>../microsoft-graph/microsoft-graph-spring-boot-autoconfigure</module>
+        <module>../microsoft-graph/microsoft-graph-spring-social-starter</module>
+        <module>../microsoft-graph/microsoft-graph-spring-social-starter-sample</module>
     </modules>
 </project>
