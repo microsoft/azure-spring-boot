@@ -41,7 +41,7 @@
     </developers>
 
     <properties>
-        <!-- For module that has different relative path to the root dir, project.rootdir should be redefined in the
+        <!-- For module that has different relative path to the root dir, project.rootdir should be redefined in its
         module pom file -->
         <project.rootdir>${project.basedir}/../..</project.rootdir>
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
