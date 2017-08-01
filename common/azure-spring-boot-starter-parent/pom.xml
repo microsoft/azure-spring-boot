@@ -41,7 +41,7 @@
     </developers>
 
     <properties>
-        <project.rootdir>${project.basedir}/..</project.rootdir>
+        <project.rootdir>${project.basedir}/../..</project.rootdir>
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
@@ -157,7 +157,7 @@
                         <id>validate</id>
                         <phase>validate</phase>
                         <configuration>
-                            <configLocation>${project.rootdir}/config/checkstyle.xml</configLocation>
+                            <configLocation>${project.rootdir}/common/config/checkstyle.xml</configLocation>
                             <encoding>UTF-8</encoding>
                             <consoleOutput>true</consoleOutput>
                             <failsOnError>true</failsOnError>
@@ -183,7 +183,7 @@
                     <xmlOutput>true</xmlOutput>
                     <findbugsXmlOutputDirectory>${project.build.directory}/findbugs
                     </findbugsXmlOutputDirectory>
-                    <excludeFilterFile>${project.rootdir}/config/findbugs-exclude.xml</excludeFilterFile>
+                    <excludeFilterFile>${project.rootdir}/common/config/findbugs-exclude.xml</excludeFilterFile>
                 </configuration>
                 <dependencies>
                     <dependency>
