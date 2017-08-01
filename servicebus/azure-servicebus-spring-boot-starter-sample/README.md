@@ -32,3 +32,13 @@ This sample project demonstrates how to use Service Bus via Spring Boot Starter 
 mvn package
 java -jar target/azure-servicebus-spring-boot-starter-sample-0.0.1-SNAPSHOT.jar
 ```
+
+### More usage
+
+Please check the following table for reference links of detailed Service Bus usage. 
+
+Type | Reference Link
+--- | ---
+`Queues` | [https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-java-how-to-use-queues](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-java-how-to-use-queues)
+`Topics` | [https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-java-how-to-use-topics-subscriptions](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-java-how-to-use-topics-subscriptions)
+`Subscriptions` | [https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-java-how-to-use-topics-subscriptions](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-java-how-to-use-topics-subscriptions)
