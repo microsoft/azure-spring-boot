@@ -2,7 +2,7 @@
 This instruction is guideline for building and code contribution.
 
 ## Prequisites
-- JDK 1.8
+- JDK 1.8 and above
 
 ## Build from source
 To build the project, run maven commands.
