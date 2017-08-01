@@ -41,7 +41,6 @@
     </scm>
 
     <properties>
-        <project.rootdir>${project.basedir}/../..</project.rootdir>
         <azure.test.resourcegroup>documentdbtest</azure.test.resourcegroup>
         <azure.test.dbname>springdocdbtestdb</azure.test.dbname>
         <skip.integration.tests>true</skip.integration.tests>

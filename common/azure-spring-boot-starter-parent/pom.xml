@@ -41,6 +41,8 @@
     </developers>
 
     <properties>
+        <!-- For module that has different relative path to the root dir, project.rootdir should be redefined in the
+        module pom file -->
         <project.rootdir>${project.basedir}/../..</project.rootdir>
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
@@ -227,24 +229,24 @@
 
     <modules>
         <module>../azure-spring-common</module>
-        <module>../azure-documentdb/spring-data-azure-documentdb</module>
-        <module>../azure-documentdb/spring-data-azure-documentdb-sample</module>
-        <module>../azure-documentdb/azure-documentdb-spring-boot-autoconfigure</module>
-        <module>../azure-documentdb/azure-documentdb-spring-boot-autoconfigure-sample</module>
-        <module>../azure-documentdb/azure-documentdb-spring-boot-starter</module>
-        <module>../azure-documentdb/azure-documentdb-spring-boot-starter-sample</module>
-        <module>../azure-storage/azure-storage-spring-boot-autoconfigure</module>
-        <module>../azure-storage/azure-storage-spring-boot-starter</module>
-        <module>../azure-storage/azure-storage-spring-boot-starter-sample</module>
-        <module>../azure-servicebus/azure-servicebus-spring-boot-autoconfigure</module>
-        <module>../azure-servicebus/azure-servicebus-spring-boot-starter</module>
-        <module>../azure-servicebus/azure-servicebus-spring-boot-starter-sample</module>
-        <module>../azure-mediaservices/azure-mediaservices-spring-boot-autoconfigure</module>
-        <module>../azure-mediaservices/azure-mediaservices-spring-boot-starter</module>
-        <module>../azure-mediaservices/azure-mediaservices-spring-boot-starter-sample</module>
-        <module>../microsoft-graph/spring-social-microsoft-graph</module>
-        <module>../microsoft-graph/microsoft-graph-spring-boot-autoconfigure</module>
-        <module>../microsoft-graph/microsoft-graph-spring-social-starter</module>
-        <module>../microsoft-graph/microsoft-graph-spring-social-starter-sample</module>
+        <module>../../azure-documentdb/spring-data-azure-documentdb</module>
+        <module>../../azure-documentdb/spring-data-azure-documentdb-sample</module>
+        <module>../../azure-documentdb/azure-documentdb-spring-boot-autoconfigure</module>
+        <module>../../azure-documentdb/azure-documentdb-spring-boot-autoconfigure-sample</module>
+        <module>../../azure-documentdb/azure-documentdb-spring-boot-starter</module>
+        <module>../../azure-documentdb/azure-documentdb-spring-boot-starter-sample</module>
+        <module>../../azure-storage/azure-storage-spring-boot-autoconfigure</module>
+        <module>../../azure-storage/azure-storage-spring-boot-starter</module>
+        <module>../../azure-storage/azure-storage-spring-boot-starter-sample</module>
+        <module>../../azure-servicebus/azure-servicebus-spring-boot-autoconfigure</module>
+        <module>../../azure-servicebus/azure-servicebus-spring-boot-starter</module>
+        <module>../../azure-servicebus/azure-servicebus-spring-boot-starter-sample</module>
+        <module>../../azure-mediaservices/azure-mediaservices-spring-boot-autoconfigure</module>
+        <module>../../azure-mediaservices/azure-mediaservices-spring-boot-starter</module>
+        <module>../../azure-mediaservices/azure-mediaservices-spring-boot-starter-sample</module>
+        <module>../../microsoft-graph/spring-social-microsoft-graph</module>
+        <module>../../microsoft-graph/microsoft-graph-spring-boot-autoconfigure</module>
+        <module>../../microsoft-graph/microsoft-graph-spring-social-starter</module>
+        <module>../../microsoft-graph/microsoft-graph-spring-social-starter-sample</module>
     </modules>
 </project>

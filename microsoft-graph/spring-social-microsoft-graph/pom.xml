@@ -42,10 +42,6 @@
         <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
     </scm>
 
-    <properties>
-        <project.rootdir>${project.basedir}/../..</project.rootdir>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

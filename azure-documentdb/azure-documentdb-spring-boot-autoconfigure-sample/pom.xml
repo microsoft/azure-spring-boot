@@ -40,10 +40,6 @@
         <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
     </scm>
 
-    <properties>
-        <project.rootdir>${project.basedir}/../..</project.rootdir>
-    </properties>
-
     <!-- If user don't want to use azure-spring-boot-starter-parent package as parent, he needs to specify the versions
     of below starters. Or user can use dependency management to import this parent package or the BOM package
     azure-spring-boot-starter-bom-->
