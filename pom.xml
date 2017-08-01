@@ -188,7 +188,7 @@
     </dependencyManagement>
 
     <modules>
-        <module>azure-spring-boot-starter-parent</module>
+        <module>common/azure-spring-boot-starter-parent</module>
     </modules>
 
 </project>
