@@ -14,6 +14,7 @@ import com.microsoft.azure.servicebus.primitives.ServiceBusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,63 +34,29 @@ public class ServiceBusAutoConfiguration {
     @Bean
     @Scope("prototype")
     @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = "azure.servicebus", value = {"queue-name", "queue-receive-mode"})
     public QueueClient queueClient() throws InterruptedException, ServiceBusException {
-        if (properties.getQueueName() != null && properties.getQueueReceiveMode() != null) {
-            return new QueueClient(new ConnectionStringBuilder(properties.getConnectionString(),
-                    properties.getQueueName()), properties.getQueueReceiveMode());
-        }
-
-        if (properties.getQueueName() == null) {
-            LOG.error("Property azure.servicebus.queue-name is not set.");
-        }
-
-        if (properties.getQueueReceiveMode() == null) {
-            LOG.error("Property azure.servicebus.queue-receive-mode is not set.");
-        }
-
-        return null;
+        return new QueueClient(new ConnectionStringBuilder(properties.getConnectionString(),
+                properties.getQueueName()), properties.getQueueReceiveMode());
     }
 
     @Bean
     @Scope("prototype")
     @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = "azure.servicebus", value = "topic-name")
     public TopicClient topicClient() throws InterruptedException, ServiceBusException {
-        if (properties.getTopicName() != null) {
-            return new TopicClient(new ConnectionStringBuilder(properties.getConnectionString(),
-                    properties.getTopicName()));
-        }
-
-        if (properties.getTopicName() == null) {
-            LOG.error("Property azure.servicebus.topic-name is not set.");
-        }
-
-        return null;
+        return new TopicClient(new ConnectionStringBuilder(properties.getConnectionString(),
+                properties.getTopicName()));
     }
 
     @Bean
     @Scope("prototype")
     @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = "azure.servicebus",
+            value = {"topic-name", "subscription-name", "subscription-receive-mode"})
     public SubscriptionClient subscriptionClient() throws ServiceBusException, InterruptedException {
-        if (properties.getTopicName() != null && properties.getSubscriptionName() != null
-                && properties.getSubscriptionReceiveMode() != null) {
-            return new SubscriptionClient(new ConnectionStringBuilder(
-                    properties.getConnectionString(),
-                    properties.getTopicName() + "/subscriptions/" + properties.getSubscriptionName()),
-                    properties.getSubscriptionReceiveMode());
-        }
-
-        if (properties.getTopicName() == null) {
-            LOG.error("Property azure.servicebus.topic-name is not set.");
-        }
-
-        if (properties.getSubscriptionName() == null) {
-            LOG.error("Property azure.servicebus.subscription-name is not set.");
-        }
-
-        if (properties.getSubscriptionReceiveMode() == null) {
-            LOG.error("Property azure.servicebus.subscription-receive-mode is not set.");
-        }
-
-        return null;
+        return new SubscriptionClient(new ConnectionStringBuilder(properties.getConnectionString(),
+                properties.getTopicName() + "/subscriptions/" + properties.getSubscriptionName()),
+                properties.getSubscriptionReceiveMode());
     }
 }

@@ -10,43 +10,54 @@ import com.microsoft.azure.servicebus.SubscriptionClient;
 import com.microsoft.azure.servicebus.TopicClient;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public class ServiceBusAutoConfigurationTest {
     @Test
-    public void returnNullIfNoPropertiesSet() {
+    public void returnNullIfSetConnectionStringOnly() {
         System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.CONNECTION_STRING);
-
-        final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(ServiceBusAutoConfiguration.class);
             context.refresh();
 
-            final QueueClient queueClient = context.getBean(QueueClient.class);
-            assertThat(queueClient).isNull();
+            Exception queueException = null;
+            try {
+                context.getBean(QueueClient.class);
+            } catch (Exception e) {
+                queueException = e;
+            }
+            assertThat(queueException).isNotNull();
+            assertThat(queueException.getMessage()).contains(
+                    "No qualifying bean of type 'com.microsoft.azure.servicebus.QueueClient' available");
+            assertThat(queueException).isExactlyInstanceOf(NoSuchBeanDefinitionException.class);
 
-            final TopicClient topicClient = context.getBean(TopicClient.class);
-            assertThat(topicClient).isNull();
+            Exception topicException = null;
+            try {
+                context.getBean(TopicClient.class);
+            } catch (Exception e) {
+                topicException = e;
+            }
+            assertThat(topicException).isNotNull();
+            assertThat(topicException.getMessage()).contains(
+                    "No qualifying bean of type 'com.microsoft.azure.servicebus.TopicClient' available");
+            assertThat(topicException).isExactlyInstanceOf(NoSuchBeanDefinitionException.class);
 
-            final SubscriptionClient subscriptionClient = context.getBean(SubscriptionClient.class);
-            assertThat(subscriptionClient).isNull();
-
-            final String outContentString = outContent.toString();
-            assertThat(outContentString).contains("Property azure.servicebus.subscription-name is not set.");
-            assertThat(outContentString).contains("Property azure.servicebus.subscription-receive-mode is not set.");
-            assertThat(outContentString).contains("Property azure.servicebus.topic-name is not set.");
-            assertThat(outContentString).contains("Property azure.servicebus.queue-name is not set.");
-            assertThat(outContentString).contains("Property azure.servicebus.queue-receive-mode is not set.");
+            Exception subException = null;
+            try {
+                context.getBean(SubscriptionClient.class);
+            } catch (Exception e) {
+                subException = e;
+            }
+            assertThat(subException).isNotNull();
+            assertThat(subException.getMessage()).contains(
+                    "No qualifying bean of type 'com.microsoft.azure.servicebus.SubscriptionClient' available");
+            assertThat(subException).isExactlyInstanceOf(NoSuchBeanDefinitionException.class);
         }
 
-        System.setErr(null);
         System.clearProperty(Constants.CONNECTION_STRING_PROPERTY);
     }
 
