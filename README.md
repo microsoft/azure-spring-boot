@@ -20,7 +20,7 @@ Below starters are available. You can find them in [Maven Central Repository](ht
 - [azure-mediaservices-spring-boot-starter](mediaservices/azure-mediaservices-spring-boot-starter/README.md)
 - [azure-servicebus-spring-boot-starter](servicebus/azure-servicebus-spring-boot-starter/README.md)
 - [azure-storage-spring-boot-starter](storage/azure-storage-spring-boot-starter/README.md)
-
+- [microsoft-graph-spring-social-starter](microsoft-graph/microsoft-graph-spring-social-starter-sample/README.md)
 
 ### How to Build and Contribute
 Please follow [instruction here](./HowToContribute.md) to build from source or contribute.
