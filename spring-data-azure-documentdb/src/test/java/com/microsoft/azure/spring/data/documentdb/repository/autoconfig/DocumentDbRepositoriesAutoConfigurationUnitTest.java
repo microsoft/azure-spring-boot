@@ -58,6 +58,14 @@ public class DocumentDbRepositoriesAutoConfigurationUnitTest {
         this.context.getBean(PersonRepository.class);
     }
 
+    private void prepareApplicationContext(Class<?>... configurationClasses) {
+        this.context = new AnnotationConfigApplicationContext();
+        this.context.register(configurationClasses);
+        this.context.register(DocumentDbRepositoriesAutoConfiguration.class);
+        this.context.getBeanFactory().registerSingleton(DocumentDbTemplate.class.getName(), dbOperations);
+        this.context.refresh();
+    }
+
     @Configuration
     @TestAutoConfigurationPackage(Person.class)
     protected static class TestConfiguration {
@@ -69,15 +77,6 @@ public class DocumentDbRepositoriesAutoConfigurationUnitTest {
     @TestAutoConfigurationPackage(DocumentDbRepositoriesAutoConfigurationUnitTest.class)
     protected static class InvalidCustomConfiguration {
 
-    }
-
-
-    private void prepareApplicationContext(Class<?>... configurationClasses) {
-        this.context = new AnnotationConfigApplicationContext();
-        this.context.register(configurationClasses);
-        this.context.register(DocumentDbRepositoriesAutoConfiguration.class);
-        this.context.getBeanFactory().registerSingleton(DocumentDbTemplate.class.getName(), dbOperations);
-        this.context.refresh();
     }
 
 }

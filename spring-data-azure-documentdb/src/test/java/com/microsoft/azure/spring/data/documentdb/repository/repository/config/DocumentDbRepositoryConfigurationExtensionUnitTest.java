@@ -31,12 +31,6 @@ public class DocumentDbRepositoryConfigurationExtensionUnitTest {
     RepositoryConfigurationSource configurationSource = new AnnotationRepositoryConfigurationSource(metadata,
             EnableDocumentDbRepositories.class, loader, environment);
 
-    @Test
-    public void isStrictMatchIfRepositoryExtendsStoreSpecificBase() {
-        final DocumentDbRepositoryConfigurationExtension extension = new DocumentDbRepositoryConfigurationExtension();
-        assertHashRepo(TestRepository.class, extension.getRepositoryConfigurations(configurationSource, loader, true));
-    }
-
     private static void assertHashRepo(Class<?> repositoryInterface,
                                        Collection<RepositoryConfiguration<RepositoryConfigurationSource>> configs) {
         for (final RepositoryConfiguration<?> config : configs) {
@@ -49,11 +43,17 @@ public class DocumentDbRepositoryConfigurationExtensionUnitTest {
                 + repositoryInterface.getName() + ", but got: " + configs.toString());
     }
 
-    @EnableDocumentDbRepositories(considerNestedRepositories = true)
-    static class Config {
-
+    @Test
+    public void isStrictMatchIfRepositoryExtendsStoreSpecificBase() {
+        final DocumentDbRepositoryConfigurationExtension extension = new DocumentDbRepositoryConfigurationExtension();
+        assertHashRepo(TestRepository.class, extension.getRepositoryConfigurations(configurationSource, loader, true));
     }
 
     interface TestRepository extends DocumentDbRepository<Object, String> {
+    }
+
+    @EnableDocumentDbRepositories(considerNestedRepositories = true)
+    static class Config {
+
     }
 }

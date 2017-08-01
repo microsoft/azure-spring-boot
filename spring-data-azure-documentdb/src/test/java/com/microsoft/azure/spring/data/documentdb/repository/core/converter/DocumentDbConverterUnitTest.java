@@ -18,16 +18,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DocumentDbConverterUnitTest {
 
-    private DocumentDbConverter dbConverter;
-
     private static final String id = "testId";
     private static final String firstName = "testFirstName";
     private static final String lastName = "testLastName";
-
     private static final String idPropertyName = "id";
     private static final String firstNamePropertyName = "firstName";
     private static final String lastNamePropertyName = "lastName";
-
+    private DocumentDbConverter dbConverter;
 
     @Before
     public void setup() {
