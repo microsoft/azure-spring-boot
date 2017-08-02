@@ -21,7 +21,7 @@ public class ServiceBusProperties {
     private String connectionString;
 
     /**
-     * Queue name.Entity path of the queue.
+     * Queue name. Entity path of the queue.
      */
     private String queueName;
 
