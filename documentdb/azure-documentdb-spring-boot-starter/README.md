@@ -102,7 +102,7 @@ Microsoft would like to collect data about how users use this Spring boot starte
 ```
 azure.documentdb.allow-telemetry=false
 ```
-Find more information about Azure Service Privacy Satement, please check [Microsoft Online Services Privacy Statement](https://www.microsoft.com/en-us/privacystatement/OnlineServices/Default.aspx). 
+Find more information about Azure Service Privacy Statement, please check [Microsoft Online Services Privacy Statement](https://www.microsoft.com/en-us/privacystatement/OnlineServices/Default.aspx). 
 
 ### Further info
 
