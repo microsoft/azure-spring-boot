@@ -54,7 +54,7 @@ public class GetHashMac {
     }
 
     private static String getRawMac() {
-        StringBuilder ret = new StringBuilder();
+        final StringBuilder ret = new StringBuilder();
 
         final String os = System.getProperty("os.name");
         String[] command = { "ifconfig", "-a" };
