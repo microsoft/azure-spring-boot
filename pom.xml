@@ -47,7 +47,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
+        <spring.boot.version>1.5.6.RELEASE</spring.boot.version>
         <java.version>1.8</java.version>
 
         <bom.version>0.1.4</bom.version>
