@@ -17,14 +17,14 @@ public class BasicDocumentDbPersistentEntityUnitTest {
 
     @Test
     public void testGetCollection() {
-        final BasicDocumentDbPersistentEntity entity = new BasicDocumentDbPersistentEntity<Person>(
+        final BasicDocumentDbPersistentEntity<Person> entity = new BasicDocumentDbPersistentEntity<Person>(
                 ClassTypeInformation.from(Person.class));
         assertThat(entity.getCollection()).isEqualTo("");
     }
 
     @Test
     public void testGetLanguage() {
-        final BasicDocumentDbPersistentEntity entity = new BasicDocumentDbPersistentEntity<Person>(
+        final BasicDocumentDbPersistentEntity<Person> entity = new BasicDocumentDbPersistentEntity<Person>(
                 ClassTypeInformation.from(Person.class));
         assertThat(entity.getLanguage()).isEqualTo("");
     }
