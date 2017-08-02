@@ -14,13 +14,31 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @ConfigurationProperties("azure.documentdb")
 public class DocumentDBProperties {
+    /**
+     * Document DB URI.
+     */
     @NotEmpty
     private String uri;
+
+    /**
+     * Document DB key.
+     */
     @NotEmpty
     private String key;
 
+    /**
+     * Document DB consistency level.
+     */
     private ConsistencyLevel consistencyLevel;
+
+    /**
+     * Document DB database name.
+     */
     private String database;
+
+    /**
+     * Whether allow Microsoft to collect telemetry data.
+     */
     private boolean allowTelemetry = true;
 
     public String getUri() {

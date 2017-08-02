@@ -13,8 +13,15 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @ConfigurationProperties(prefix = "spring.social.microsoft")
 public class MicrosoftProperties {
+    /**
+     * Application id of the registered app.
+     */
     @NotEmpty
     private String appId;
+
+    /**
+     * Application secret of the registered app.
+     */
     @NotEmpty
     private String appSecret;
 
