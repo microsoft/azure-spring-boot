@@ -6,6 +6,7 @@
 
 package com.microsoft.azure.spring.data.documentdb.repository.support;
 
+import com.microsoft.azure.spring.data.documentdb.core.DocumentDbOperations;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -22,12 +23,17 @@ public class DocumentDbRepositoryFactoryBean<T extends Repository<S, ID>, S, ID 
         implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
+    private DocumentDbOperations operations;
 
     public DocumentDbRepositoryFactoryBean(Class<? extends T> repositoryInterface) {
 
         super(repositoryInterface);
     }
 
+    public void setDocumentDbOperations(DocumentDbOperations operations) {
+        this.operations = operations;		
+    }
+ 
     @Override
     protected final RepositoryFactorySupport createRepositoryFactory() {
         return getFactoryInstance(applicationContext);
