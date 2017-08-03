@@ -31,9 +31,9 @@ public class DocumentDbRepositoryFactoryBean<T extends Repository<S, ID>, S, ID 
     }
 
     public void setDocumentDbOperations(DocumentDbOperations operations) {
-        this.operations = operations;		
+        this.operations = operations;
     }
- 
+
     @Override
     protected final RepositoryFactorySupport createRepositoryFactory() {
         return getFactoryInstance(applicationContext);
