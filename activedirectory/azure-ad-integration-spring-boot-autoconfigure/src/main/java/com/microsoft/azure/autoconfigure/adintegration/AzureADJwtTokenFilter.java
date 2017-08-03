@@ -91,7 +91,6 @@ public class AzureADJwtTokenFilter extends OncePerRequestFilter {
                             tokenEncoded,
                             tid);
                     userProfile = new AzureADUserProfile(result.getAccessToken());
-                    //todo: judge based on user roles & groups
 
                     if (CustomPermissionEvaluator.hasPermission(
                             userProfile.getUserMemberships(), aadJwtFilterProp.getAllowedRolesGroups())) {
