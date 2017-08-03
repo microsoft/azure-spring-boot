@@ -52,6 +52,8 @@
 
         <bom.version>0.1.4</bom.version>
 
+        <azure.adintegration.starter.version>${bom.version}</azure.adintegration.starter.version>
+        <azure.adintegration.autoconfigure.version>${bom.version}</azure.adintegration.autoconfigure.version>
         <azure.documentdb.starter.version>${bom.version}</azure.documentdb.starter.version>
         <azure.documentdb.autoconfigure.version>${bom.version}</azure.documentdb.autoconfigure.version>
         <spring.data.documentdb.version>${bom.version}</spring.data.documentdb.version>
@@ -84,7 +86,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-ad-integration-spring-boot-autoconfigure</artifactId>
+                <version>${azure.adintegration.autoconfigure.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
@@ -189,6 +195,7 @@
 
     <modules>
         <module>common/azure-spring-boot-starter-parent</module>
+        <module>activedirectory/azure-ad-integration-spring-boot-autoconfigure</module>
     </modules>
 
 </project>
