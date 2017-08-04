@@ -19,10 +19,12 @@ public class DocumentDbConverter {
 
     public <T> Document convertToDocument(T entity) {
         final String json = this.gson.toJson(entity);
+
         return new Document(json);
     }
 
     public <T> T convertFromDocument(Document document, Class<T> entityClass) {
         return this.gson.fromJson(document.toJson(), entityClass);
     }
+
 }

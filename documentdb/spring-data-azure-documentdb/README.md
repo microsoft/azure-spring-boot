@@ -1,9 +1,20 @@
-## Spring Data for Azure CosmosDb DocumentDB API
+## Spring Data for Azure Cosmos DB DocumentDB API
 [Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction) is a globally-distributed database service that allows developers to work with data using a variety of standard APIs, such as DocumentDB, MongoDB, Graph, and Table APIs. Azure DocumentDB Spring Data provides initial Spring Data support for [Azure Cosmos DB Document API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) based on Spring Data framework, the other 3 APIs are not supported in this package. Key functionalities supported so far include save, delete and find. More features will coming soon.
 
 ## Sample Code
 Pls refer to [sample project here](../spring-data-azure-documentdb-sample).
 
+## Feature List
+- Spring Data CRUDRepository basic CRUD functionality
+    - save
+    - findAll
+    - findOne by Id
+    - deleteAll
+- Spring Data [@Id](https://github.com/spring-projects/spring-data-commons/blob/db62390de90c93a78743c97cc2cc9ccd964994a5/src/main/java/org/springframework/data/annotation/Id.java) annotation
+  There're 2 ways to map a field in domain class to `id` of Azure Cosmos DB document.
+  - annotate a field in domain class with `@Id`, this field will be mapped to document `id` in Cosmos DB. 
+  - set name of this field to `id`, this field will be mapped to document `id` in Cosmos DB.
+  
 ## Quick Start
 
 ### Add the dependency
@@ -43,7 +54,7 @@ public class AppConfiguration extends AbstractDocumentDbConfiguration {
     }
 }
 ```
-By default, @EnableDocumentDbRepositories will scan the current package for any interfaces that extend one of Spring Data's repository interfaces. Using it to annotate your Configuration class to scan a different root package by type if your project layout has multiple projects and it's not finding your repositories.
+By default, `@EnableDocumentDbRepositories` will scan the current package for any interfaces that extend one of Spring Data's repository interfaces. Using it to annotate your Configuration class to scan a different root package by type if your project layout has multiple projects and it's not finding your repositories.
 ```
 @Configuration
 @EnableDocumentDbRepositories(basePackageClass=UserRepository.class)
@@ -76,8 +87,16 @@ public class User {
     }
 }
 ```
-`id` field will be used as document id in Azure DocumentDB. `id` field is must.
+`id` field will be used as document id in Azure DocumentDB. If you want use another field like `emailAddress` as document id, just annotate that field with @Id annotation.
 
+```
+public class User {
+    @Id
+    private String emailAddress;
+
+    ...
+}
+```
 
 ### Create repositories
 Extends DocumentDbRepository interface, which provides Spring Data repository support.
@@ -115,10 +134,12 @@ public class SampleApplication implements CommandLineRunner {
         repository.save(testUser);
 
         final User result = repository.findOne(testUser.getId());
+        // if emailAddress is mapped to id, then 
+        // final User result = respository.findOne(testUser.getEmailAddress());
     }
 }
 ```
-Autowired UserRepository interface, then can do save, delete and find operations. Azure DocumentDB Spring Data uses the DocumentTemplate to execute the queries behind *find*, *save* methods. You can use the template yourself for more complex queries.
+Autowired UserRepository interface, then can do save, delete and find operations. Azure Cosmos DB DocumentDB Spring Data uses the DocumentTemplate to execute the queries behind *find*, *save* methods. You can use the template yourself for more complex queries.
 
 ## Further info
-If you'd like to save effort of configuration, you could directly use Azure CosmosDB DocumentDB API Spring boot starter at [here](../azure-documentdb-spring-boot-starter).
+If you'd like to save effort of configuration, you could directly use Azure Cosmos DB DocumentDB API Spring boot starter at [here](../azure-documentdb-spring-boot-starter).

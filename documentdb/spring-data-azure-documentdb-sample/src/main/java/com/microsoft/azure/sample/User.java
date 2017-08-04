@@ -6,26 +6,28 @@
 
 package com.microsoft.azure.sample;
 
+import org.springframework.data.annotation.Id;
+
 public class User {
-    private String id;
+    @Id
+    private String emailAddress;
     private String firstName;
     private String lastName;
-    private String address;
 
-    public User(String id, String firstName, String lastName, String address) {
-        this.id = id;
+    public User(String emailAddress, String firstName, String lastName) {
+        this.emailAddress = emailAddress;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.address = address;
     }
 
-    public String getId() {
-        return this.id;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
+
 
     public String getFirstName() {
         return firstName;
@@ -43,17 +45,10 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     @Override
     public String toString() {
-        return String.format("%s %s, %s", firstName, lastName, address);
+        return String.format("%s: %s %s", emailAddress, firstName, lastName);
     }
 }
 

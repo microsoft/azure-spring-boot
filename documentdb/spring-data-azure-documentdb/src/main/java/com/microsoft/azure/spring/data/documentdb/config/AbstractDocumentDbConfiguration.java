@@ -10,6 +10,7 @@ import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.documentdb.core.convert.DocumentDbConverter;
+import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -26,13 +27,14 @@ public abstract class AbstractDocumentDbConfiguration extends DocumentDbConfigur
     }
 
     @Bean
-    public DocumentDbConverter documentDbConverter() {
-        return new DocumentDbConverter();
+    public DocumentDbTemplate documentDbTemplate() throws Exception {
+        return new DocumentDbTemplate(this.documentDbFactory(), this.mappingDocumentDbConverter(), this.getDatabase());
     }
 
     @Bean
-    public DocumentDbTemplate documentDbTemplate() throws Exception {
-        return new DocumentDbTemplate(this.documentDbFactory(), this.documentDbConverter(), this.getDatabase());
+    public MappingDocumentDbConverter mappingDocumentDbConverter() throws Exception {
+        final MappingDocumentDbConverter converter = new MappingDocumentDbConverter(this.documentDbMappingContext());
+        return converter;
     }
 
     protected String getMappingBasePackage() {
