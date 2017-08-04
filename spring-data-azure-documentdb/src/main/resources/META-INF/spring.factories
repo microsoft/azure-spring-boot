@@ -1,2 +1,0 @@
-org.springframework.data.repository.core.support.RepositoryFactorySupport=com.microsoft.azure.spring.data.documentdb.repository.support.DocumentDbRepositoryFactory
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.microsoft.azure.spring.data.documentdb.autoconfig.DocumentDbRepositoriesAutoConfiguration
