@@ -4,7 +4,7 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.data.documentdb.autoconfig;
+package com.microsoft.azure.autoconfigure.documentdb;
 
 import com.microsoft.azure.spring.data.documentdb.repository.DocumentDbRepository;
 import com.microsoft.azure.spring.data.documentdb.repository.config.DocumentDbRepositoryConfigurationExtension;
