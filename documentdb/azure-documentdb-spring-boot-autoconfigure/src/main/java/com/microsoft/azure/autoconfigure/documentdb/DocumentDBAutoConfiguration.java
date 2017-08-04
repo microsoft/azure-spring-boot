@@ -12,19 +12,23 @@ import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.common.GetHashMac;
 import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
-import com.microsoft.azure.spring.data.documentdb.core.convert.DocumentDbConverter;
+import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
+import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbMappingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.domain.EntityScanner;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.annotation.Persistent;
 
 @Configuration
-@ConditionalOnClass(DocumentClient.class)
+@ConditionalOnClass({DocumentClient.class, DocumentDbTemplate.class})
 @ConditionalOnMissingBean(type =
         {"com.microsoft.azure.spring.data.documentdb.DocumentDbFactory",
                 "com.microsoft.azure.documentdb.DocumentClient"})
@@ -35,11 +39,14 @@ public class DocumentDBAutoConfiguration {
 
     private final DocumentDBProperties properties;
     private final ConnectionPolicy connectionPolicy;
+    private final ApplicationContext applicationContext;
 
     public DocumentDBAutoConfiguration(DocumentDBProperties properties,
-                                       ObjectProvider<ConnectionPolicy> connectionPolicyObjectProvider) {
+                                       ObjectProvider<ConnectionPolicy> connectionPolicyObjectProvider,
+                                       ApplicationContext applicationContext) {
         this.properties = properties;
-        connectionPolicy = connectionPolicyObjectProvider.getIfAvailable();
+        this.connectionPolicy = connectionPolicyObjectProvider.getIfAvailable();
+        this.applicationContext = applicationContext;
     }
 
     @Bean
@@ -76,7 +83,27 @@ public class DocumentDBAutoConfiguration {
     @ConditionalOnMissingBean
     public DocumentDbTemplate documentDbTemplate() {
         return new DocumentDbTemplate(this.documentDbFactory(),
-                new DocumentDbConverter(),
+                mappingDocumentDbConverter(),
                 properties.getDatabase());
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public DocumentDbMappingContext documentDbMappingContext() {
+        try {
+            final DocumentDbMappingContext documentDbMappingContext = new DocumentDbMappingContext();
+            documentDbMappingContext.setInitialEntitySet(new EntityScanner(this.applicationContext)
+                    .scan(Persistent.class));
+
+            return documentDbMappingContext;
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public MappingDocumentDbConverter mappingDocumentDbConverter() {
+        return new MappingDocumentDbConverter(documentDbMappingContext());
     }
 }

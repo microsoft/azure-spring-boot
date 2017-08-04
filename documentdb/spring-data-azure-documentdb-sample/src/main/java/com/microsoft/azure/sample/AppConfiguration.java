@@ -11,7 +11,6 @@ import com.microsoft.azure.documentdb.ConsistencyLevel;
 import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.data.documentdb.config.AbstractDocumentDbConfiguration;
 import com.microsoft.azure.spring.data.documentdb.repository.config.EnableDocumentDbRepositories;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 

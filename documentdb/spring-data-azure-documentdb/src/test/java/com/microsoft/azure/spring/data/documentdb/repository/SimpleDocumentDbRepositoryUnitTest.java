@@ -19,6 +19,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -30,25 +32,37 @@ public class SimpleDocumentDbRepositoryUnitTest {
     DocumentDbOperations dbOperations;
     @Mock
     DocumentDbEntityInformation<Person, String> entityInformation;
-    private Person testPerson1;
+
+    private static final Person TEST_PERSON = new Person("aaa", "firstname", "lastname");
 
     @Before
     public void setUp() {
-        testPerson1 = new Person("aaa", "firstname", "lastname");
-
         when(entityInformation.getJavaType()).thenReturn(Person.class);
         when(entityInformation.getCollectionName()).thenReturn(Person.class.getSimpleName());
-        when(dbOperations.findAll(Person.class.getSimpleName(), Person.class)).thenReturn(Arrays.asList(testPerson1));
+        when(dbOperations.findAll(Person.class.getSimpleName(), Person.class)).thenReturn(Arrays.asList(TEST_PERSON));
 
         repository = new SimpleDocumentDbRepository<Person, String>(entityInformation, dbOperations);
     }
 
     @Test
     public void testSave() {
-        repository.save(testPerson1);
+        repository.save(TEST_PERSON);
 
         assertEquals(1, repository.findAll().size());
-        assertEquals(testPerson1.getFirstName(), repository.findAll().get(0).getFirstName());
+        assertEquals(TEST_PERSON.getFirstName(), repository.findAll().get(0).getFirstName());
     }
 
+    @Test
+    public void testFindOne() {
+        when(dbOperations.findById(anyObject(), any())).thenReturn(TEST_PERSON);
+
+        repository.save(TEST_PERSON);
+
+        final Person result = repository.findOne(TEST_PERSON.getId());
+
+        assertEquals(result.getId(), TEST_PERSON.getId());
+        assertEquals(result.getFirstName(), TEST_PERSON.getFirstName());
+        assertEquals(result.getLastName(), TEST_PERSON.getLastName());
+
+    }
 }
