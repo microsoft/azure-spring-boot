@@ -195,7 +195,5 @@
 
     <modules>
         <module>common/azure-spring-boot-starter-parent</module>
-        <module>activedirectory/azure-ad-integration-spring-boot-autoconfigure</module>
     </modules>
-
 </project>
