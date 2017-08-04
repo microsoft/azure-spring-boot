@@ -4,14 +4,13 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.data.documentdb.repository.autoconfig;
+package com.microsoft.azure.autoconfigure.documentdb;
 
+import com.microsoft.azure.autoconfigure.documentdb.domain.Person;
+import com.microsoft.azure.autoconfigure.documentdb.domain.PersonRepository;
 import com.microsoft.azure.documentdb.DocumentClient;
-import com.microsoft.azure.spring.data.documentdb.autoconfig.DocumentDbRepositoriesAutoConfiguration;
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.documentdb.repository.config.EnableDocumentDbRepositories;
-import com.microsoft.azure.spring.data.documentdb.repository.domain.Person;
-import com.microsoft.azure.spring.data.documentdb.repository.domain.PersonRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

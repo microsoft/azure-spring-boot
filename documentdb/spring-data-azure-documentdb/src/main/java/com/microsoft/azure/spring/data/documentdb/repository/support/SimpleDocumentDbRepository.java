@@ -19,7 +19,6 @@ import org.springframework.util.Assert;
 import java.io.Serializable;
 import java.util.List;
 
-@Repository
 public class SimpleDocumentDbRepository<T, ID extends Serializable> implements DocumentDbRepository<T, ID> {
 
     private final DocumentDbOperations documentDbOperations;

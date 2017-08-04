@@ -1,5 +1,5 @@
-## Overview
-Azure DocumentDB Spring Data provides initial Spring Data support for [Azure Cosmos DB Document API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) based on Spring Data framework. Key functionalities supported so far include save, delete and find. More features will coming soon.
+## Spring Data for Azure CosmosDb DocumentDB API
+[Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction) is a globally-distributed database service that allows developers to work with data using a variety of standard APIs, such as DocumentDB, MongoDB, Graph, and Table APIs. Azure DocumentDB Spring Data provides initial Spring Data support for [Azure Cosmos DB Document API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) based on Spring Data framework, the other 3 APIs are not supported in this package. Key functionalities supported so far include save, delete and find. More features will coming soon.
 
 ## Sample Code
 Pls refer to [sample project here](../spring-data-azure-documentdb-sample).
@@ -19,7 +19,7 @@ If you are using Maven, add the following dependency.
 ```
 
 ### Setup Configuration
-Setup Azure DocumentDB configuration class. Enabling Spring Data Azure DocumentDB repository support is auto-configured.
+Setup Azure Cosmos DB DocumentDB configuration class. Enabling Spring Data Azure DocumentDB repository support is auto-configured.
 
 ```
 @Configuration
@@ -121,4 +121,4 @@ public class SampleApplication implements CommandLineRunner {
 Autowired UserRepository interface, then can do save, delete and find operations. Azure DocumentDB Spring Data uses the DocumentTemplate to execute the queries behind *find*, *save* methods. You can use the template yourself for more complex queries.
 
 ## Further info
-If you'd like to save effort of configuration, you could directly use Azure DocumentDB Spring boot starter at [here](../azure-documentdb-spring-boot-starter).
+If you'd like to save effort of configuration, you could directly use Azure CosmosDB DocumentDB API Spring boot starter at [here](../azure-documentdb-spring-boot-starter).

@@ -1,4 +1,4 @@
-## Usage
+## Azure Cosmos DB DocumentDB API Spring autoconfiguration
 
 ### Add the dependency
 
