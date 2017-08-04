@@ -87,7 +87,7 @@ public class User {
     }
 }
 ```
-`id` field will be used as document id in Azure DocumentDB. If you want use another field like `emailAddress` as document id, just annotate that field with @Id annotation.
+`id` field will be used as document id in Azure DocumentDB. If you want use another field like `emailAddress` as document `id`, just annotate that field with `@Id` annotation.
 
 ```
 public class User {
