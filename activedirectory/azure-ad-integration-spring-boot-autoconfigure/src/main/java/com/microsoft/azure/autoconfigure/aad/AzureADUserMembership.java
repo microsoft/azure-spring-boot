@@ -3,10 +3,11 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.autoconfigure.adintegration;
+package com.microsoft.azure.autoconfigure.aad;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.oauth2.sdk.http.HTTPResponse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,29 +17,25 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AzureADUserProfile {
+public class AzureADUserMembership {
 
     private List<DirectoryServiceObject> UserMemberships;
     private static String userMembershipRestAPI = "https://graph.windows.net/me/memberOf?api-version=1.6";
 
-    public AzureADUserProfile(String accessToken) {
-        try {
-            String responseInJson = getUserMembershipsV1(accessToken);
-            UserMemberships = new ArrayList<DirectoryServiceObject>();
-            ObjectMapper objectMapper = JacksonObjectMapperFactory.getInstance();
-            JsonNode rootNode = objectMapper.readValue(responseInJson, JsonNode.class);
-            JsonNode valuesNode = rootNode.get("value");
-            int i = 0;
-            while(valuesNode != null && valuesNode.get(i) != null) {
-                UserMemberships.add(new DirectoryServiceObject(
-                        valuesNode.get(i).get("odata.type").asText(),
-                        valuesNode.get(i).get("objectType").asText(),
-                        valuesNode.get(i).get("description").asText(),
-                        valuesNode.get(i).get("displayName").asText()));
-                i++;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    public AzureADUserMembership(String accessToken) throws Exception {
+        String responseInJson = getUserMembershipsV1(accessToken);
+        UserMemberships = new ArrayList<DirectoryServiceObject>();
+        ObjectMapper objectMapper = JacksonObjectMapperFactory.getInstance();
+        JsonNode rootNode = objectMapper.readValue(responseInJson, JsonNode.class);
+        JsonNode valuesNode = rootNode.get("value");
+        int i = 0;
+        while(valuesNode != null && valuesNode.get(i) != null) {
+            UserMemberships.add(new DirectoryServiceObject(
+                    valuesNode.get(i).get("odata.type").asText(),
+                    valuesNode.get(i).get("objectType").asText(),
+                    valuesNode.get(i).get("description").asText(),
+                    valuesNode.get(i).get("displayName").asText()));
+            i++;
         }
     }
 
@@ -56,7 +53,7 @@ public class AzureADUserProfile {
         conn.setRequestProperty("Accept", "application/json;odata=minimalmetadata");
         String responseInJson = getResponseStringFromConn(conn);
         int responseCode = conn.getResponseCode();
-        if (responseCode == 200) {
+        if (responseCode == HTTPResponse.SC_OK) {
             return responseInJson;
         } else {
             throw new Exception(responseInJson);

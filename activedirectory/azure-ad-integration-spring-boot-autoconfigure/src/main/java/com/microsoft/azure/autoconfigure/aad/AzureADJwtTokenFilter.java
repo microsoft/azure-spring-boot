@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.autoconfigure.adintegration;
+package com.microsoft.azure.autoconfigure.aad;
 
 import com.microsoft.aad.adal4j.AuthenticationContext;
 import com.microsoft.aad.adal4j.AuthenticationResult;
@@ -67,13 +67,16 @@ public class AzureADJwtTokenFilter extends OncePerRequestFilter {
         }
 
         if (result == null) {
-            throw new ServiceUnavailableException("authentication result was null");
+            throw new ServiceUnavailableException("unable to acquire on-behalf-of token for client " + aadJwtFilterProp.getClientId());
         }
         return result;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
 
         String authHeader = request.getHeader(TOKEN_HEADER);
 
@@ -82,7 +85,7 @@ public class AzureADJwtTokenFilter extends OncePerRequestFilter {
                 String tokenEncoded = authHeader.replace(TOKEN_TYPE, "");
                 AzureADJwtToken jwtToken = new AzureADJwtToken(tokenEncoded);
 
-                AzureADUserProfile userProfile;
+                AzureADUserMembership userProfile;
                 List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
                 try {
                     String tid = jwtToken.getClaim("tid").toString();
@@ -90,7 +93,7 @@ public class AzureADJwtTokenFilter extends OncePerRequestFilter {
                     AuthenticationResult result = acquireTokenForGraphApi(
                             tokenEncoded,
                             tid);
-                    userProfile = new AzureADUserProfile(result.getAccessToken());
+                    userProfile = new AzureADUserMembership(result.getAccessToken());
 
                     if (CustomPermissionEvaluator.hasPermission(
                             userProfile.getUserMemberships(), aadJwtFilterProp.getAllowedRolesGroups())) {
@@ -105,7 +108,7 @@ public class AzureADJwtTokenFilter extends OncePerRequestFilter {
                 }
                 Authentication authentication = new PreAuthenticatedAuthenticationToken(jwtToken, null, authorities);
                 authentication.setAuthenticated(true);
-                log.info("Request token verification success. {}", authentication);
+                log.info("Request token verification success. {0}", authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {
                 throw new RuntimeException(e);

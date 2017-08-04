@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.autoconfigure.adintegration;
+package com.microsoft.azure.autoconfigure.aad;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -62,14 +62,14 @@ public final class AzureADJwtToken {
     }
 
     private JWKSet loadAadPublicKeys() throws IOException, ParseException {
-        final int connectTimeout = 1000;
-        final int readTimeout = 1000;
-        final int sizeLimit = 10000;
+        final int connectTimeoutinMS = 1000;
+        final int readTimeoutinMS = 1000;
+        final int sizeLimitinBytes = 10000;
         return JWKSet.load(
                 new URL("https://login.microsoftonline.com/common/discovery/keys"),
-                connectTimeout,
-                readTimeout,
-                sizeLimit);
+                connectTimeoutinMS,
+                readTimeoutinMS,
+                sizeLimitinBytes);
     }
 
     // claimset
