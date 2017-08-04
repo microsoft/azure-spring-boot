@@ -230,7 +230,6 @@
     <modules>
         <module>../azure-spring-common</module>
         <module>../../activedirectory/azure-ad-integration-spring-boot-autoconfigure</module>
-        <module>../../activedirectory/azure-ad-integration-spring-boot-autoconfigure-sample</module>
         <module>../../documentdb/spring-data-azure-documentdb</module>
         <module>../../documentdb/spring-data-azure-documentdb-sample</module>
         <module>../../documentdb/azure-documentdb-spring-boot-autoconfigure</module>
