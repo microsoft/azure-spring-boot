@@ -1,5 +1,5 @@
-## Overview
-Azure DocumentDB Spring boot starter is Spring starter for [Azure Cosmos DB Document API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) based on Spring Data framework. Key functionality supports so far including save, delete and find.
+## Azure Cosmos DB DocumentDB API Spring boot starter
+[Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction) is a globally-distributed database service that allows developers to work with data using a variety of standard APIs, such as DocumentDB, MongoDB, Graph, and Table APIs. Azure Cosmos DB DocumentDB API Spring boot starter is Spring starter for [Azure Cosmos DB Document API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) based on Spring Data framework. The other 3 APIs are not supported in this starter. Key functionality supports so far including save, delete and find.
 
 ## Sample Code
 Pls refer to [sample project here](../azure-documentdb-spring-boot-starter-sample).
@@ -21,7 +21,7 @@ If you are using Maven, add the following dependency.
 
 ### Add the property setting
 
-Open `application.properties` file and add below properties with your Document DB credentials.
+Open `application.properties` file and add below properties with your Cosmos DB Document DB credentials.
 
 ```
 azure.documentdb.uri=your-documentdb-uri
@@ -106,6 +106,6 @@ Find more information about Azure Service Privacy Statement, please check [Micro
 
 ### Further info
 
-Besides using Azure DocumentDB Spring boot starter, you can directly use Azure DocumentDB Spring Data package to more complex scenario, detail pls refer to [Azure DocumentDB Spring Data](../spring-data-azure-documentdb/README.md).
+Besides using Azure Cosmos DB DocumentDB API Spring boot starter, you can directly use Azure Cosmos DB DocumentDB API Spring Data package to more complex scenario, detail pls refer to [Azure Cosmos DB DocumentDB API Spring Data](../spring-data-azure-documentdb/README.md).
 
 
