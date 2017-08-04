@@ -19,7 +19,8 @@ public class AzureADJwtFilterPropertiesTest {
     public void canSetProperties() {
         System.setProperty(Constants.CLIENT_ID_PROPERTY, Constants.CLIENT_ID);
         System.setProperty(Constants.CLIENT_SECRET_PROPERTY, Constants.CLIENT_SECRET);
-        System.setProperty(Constants.ALLOWED_ROLES_GROUPS_PROPERTY, Constants.ALLOWED_ROLES_GROUPS.toString().replace("[", "").replace("]", ""));
+        System.setProperty(Constants.ALLOWED_ROLES_GROUPS_PROPERTY,
+                Constants.ALLOWED_ROLES_GROUPS.toString().replace("[", "").replace("]", ""));
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(Config.class);
@@ -29,7 +30,8 @@ public class AzureADJwtFilterPropertiesTest {
 
             assertThat(properties.getClientId()).isEqualTo(Constants.CLIENT_ID);
             assertThat(properties.getClientSecret()).isEqualTo(Constants.CLIENT_SECRET);
-            assertThat(properties.getAllowedRolesGroups().toString()).isEqualTo(Constants.ALLOWED_ROLES_GROUPS.toString());
+            assertThat(properties.getAllowedRolesGroups()
+                    .toString()).isEqualTo(Constants.ALLOWED_ROLES_GROUPS.toString());
         }
 
         System.clearProperty(Constants.CLIENT_ID_PROPERTY);
@@ -55,11 +57,14 @@ public class AzureADJwtFilterPropertiesTest {
             assertThat(exception).isNotNull();
             assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
             assertThat(exception.getCause().getMessage()).contains(
-                    "Field error in object 'azure.activedirectory' on field 'clientId': rejected value []");
+                    "Field error in object " +
+                            "'azure.activedirectory' on field 'clientId': rejected value []");
             assertThat(exception.getCause().getMessage()).contains(
-                    "Field error in object 'azure.activedirectory' on field 'clientSecret': rejected value []");
+                    "Field error in object " +
+                            "'azure.activedirectory' on field 'clientSecret': rejected value []");
             assertThat(exception.getCause().getMessage()).contains(
-                    "Field error in object 'azure.activedirectory' on field 'allowedRolesGroups': rejected value [null]");
+                    "Field error in object " +
+                            "'azure.activedirectory' on field 'allowedRolesGroups': rejected value [null]");
         }
 
         System.clearProperty(Constants.CLIENT_ID_PROPERTY);
@@ -70,5 +75,4 @@ public class AzureADJwtFilterPropertiesTest {
     @EnableConfigurationProperties(AzureADJwtFilterProperties.class)
     static class Config {
     }
-
 }

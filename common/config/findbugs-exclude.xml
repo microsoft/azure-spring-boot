@@ -3,4 +3,6 @@
 <FindBugsFilter>
     <Class name="com.microsoft.azure.spring.common.GetHashMac"/>
     <Bug pattern="NP_NONNULL_PARAM_VIOLATION"/>
+    <Bug pattern="Unwritten field"/>
+    <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON"/>
 </FindBugsFilter>

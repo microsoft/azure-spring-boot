@@ -14,23 +14,24 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AzureADUserMembership {
 
-    private List<DirectoryServiceObject> UserMemberships;
+    private List<DirectoryServiceObject> userMemberships;
     private static String userMembershipRestAPI = "https://graph.windows.net/me/memberOf?api-version=1.6";
 
     public AzureADUserMembership(String accessToken) throws Exception {
-        String responseInJson = getUserMembershipsV1(accessToken);
-        UserMemberships = new ArrayList<DirectoryServiceObject>();
-        ObjectMapper objectMapper = JacksonObjectMapperFactory.getInstance();
-        JsonNode rootNode = objectMapper.readValue(responseInJson, JsonNode.class);
-        JsonNode valuesNode = rootNode.get("value");
+        final String responseInJson = getUserMembershipsV1(accessToken);
+        userMemberships = new ArrayList<DirectoryServiceObject>();
+        final ObjectMapper objectMapper = JacksonObjectMapperFactory.getInstance();
+        final JsonNode rootNode = objectMapper.readValue(responseInJson, JsonNode.class);
+        final JsonNode valuesNode = rootNode.get("value");
         int i = 0;
-        while(valuesNode != null && valuesNode.get(i) != null) {
-            UserMemberships.add(new DirectoryServiceObject(
+        while (valuesNode != null && valuesNode.get(i) != null) {
+            userMemberships.add(new DirectoryServiceObject(
                     valuesNode.get(i).get("odata.type").asText(),
                     valuesNode.get(i).get("objectType").asText(),
                     valuesNode.get(i).get("description").asText(),
@@ -40,19 +41,19 @@ public class AzureADUserMembership {
     }
 
     public List<DirectoryServiceObject> getUserMemberships() {
-        return UserMemberships;
+        return userMemberships;
     }
 
     private String getUserMembershipsV1(String accessToken) throws Exception {
-        URL url = new URL(String.format(userMembershipRestAPI, accessToken));
+        final URL url = new URL(userMembershipRestAPI);
 
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         // Set the appropriate header fields in the request header.
         conn.setRequestProperty("api-version", "1.6");
         conn.setRequestProperty("Authorization", accessToken);
         conn.setRequestProperty("Accept", "application/json;odata=minimalmetadata");
-        String responseInJson = getResponseStringFromConn(conn);
-        int responseCode = conn.getResponseCode();
+        final String responseInJson = getResponseStringFromConn(conn);
+        final int responseCode = conn.getResponseCode();
         if (responseCode == HTTPResponse.SC_OK) {
             return responseInJson;
         } else {
@@ -62,12 +63,18 @@ public class AzureADUserMembership {
     private String getResponseStringFromConn(HttpURLConnection conn) throws IOException {
 
         BufferedReader reader = null;
-        reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        StringBuffer stringBuffer = new StringBuffer();
-        String line = "";
-        while ((line = reader.readLine()) != null) {
-            stringBuffer.append(line);
+        try {
+            reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+            final StringBuffer stringBuffer = new StringBuffer();
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                stringBuffer.append(line);
+            }
+            return stringBuffer.toString();
+        } finally {
+            if (reader != null) {
+                reader.close();
+            }
         }
-        return stringBuffer.toString();
     }
 }

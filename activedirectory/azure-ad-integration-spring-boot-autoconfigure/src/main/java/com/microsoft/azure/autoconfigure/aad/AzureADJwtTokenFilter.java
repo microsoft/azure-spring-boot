@@ -46,28 +46,32 @@ public class AzureADJwtTokenFilter extends OncePerRequestFilter {
     private AuthenticationResult acquireTokenForGraphApi(
             String tokenEncoded,
             String tenantId) throws Throwable {
-        ClientCredential credential = new ClientCredential(aadJwtFilterProp.getClientId(), aadJwtFilterProp.getClientSecret());
-        ClientAssertion assertion = new ClientAssertion(tokenEncoded);
+        final ClientCredential credential = new ClientCredential(
+                aadJwtFilterProp.getClientId(), aadJwtFilterProp.getClientSecret());
+        final ClientAssertion assertion = new ClientAssertion(tokenEncoded);
 
         AuthenticationResult result = null;
         ExecutorService service = null;
         try {
             service = Executors.newFixedThreadPool(1);
-            AuthenticationContext context = new AuthenticationContext(
-                    aadJwtFilterProp.getAadSignInUri()+ tenantId + "/",
+            final AuthenticationContext context = new AuthenticationContext(
+                    aadJwtFilterProp.getAadSignInUri() + tenantId + "/",
                     true,
                     service);
-            Future<AuthenticationResult> future = context
+            final Future<AuthenticationResult> future = context
                     .acquireToken(aadJwtFilterProp.getAadGraphAPIUri(), assertion, credential, null);
             result = future.get();
         } catch (ExecutionException e) {
             throw e.getCause();
         } finally {
-            service.shutdown();
+            if (service != null) {
+                service.shutdown();
+            }
         }
 
         if (result == null) {
-            throw new ServiceUnavailableException("unable to acquire on-behalf-of token for client " + aadJwtFilterProp.getClientId());
+            throw new ServiceUnavailableException(
+                    "unable to acquire on-behalf-of token for client " + aadJwtFilterProp.getClientId());
         }
         return result;
     }
@@ -78,19 +82,19 @@ public class AzureADJwtTokenFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
-        String authHeader = request.getHeader(TOKEN_HEADER);
+        final String authHeader = request.getHeader(TOKEN_HEADER);
 
         if (authHeader != null && authHeader.startsWith(TOKEN_TYPE)) {
             try {
-                String tokenEncoded = authHeader.replace(TOKEN_TYPE, "");
-                AzureADJwtToken jwtToken = new AzureADJwtToken(tokenEncoded);
+                final String tokenEncoded = authHeader.replace(TOKEN_TYPE, "");
+                final AzureADJwtToken jwtToken = new AzureADJwtToken(tokenEncoded);
 
                 AzureADUserMembership userProfile;
-                List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+                final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
                 try {
-                    String tid = jwtToken.getClaim("tid").toString();
+                    final String tid = jwtToken.getClaim("tid").toString();
 
-                    AuthenticationResult result = acquireTokenForGraphApi(
+                    final AuthenticationResult result = acquireTokenForGraphApi(
                             tokenEncoded,
                             tid);
                     userProfile = new AzureADUserMembership(result.getAccessToken());
@@ -100,13 +104,14 @@ public class AzureADJwtTokenFilter extends OncePerRequestFilter {
                         authorities.add(new SimpleGrantedAuthority("ROLE_ALLOWED"));
                     } else {
                         authorities.add(new SimpleGrantedAuthority("ROLE_DISALLOWED"));
-                    };
+                    }
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 } catch (Throwable throwable) {
                     throw new RuntimeException(throwable);
                 }
-                Authentication authentication = new PreAuthenticatedAuthenticationToken(jwtToken, null, authorities);
+                final Authentication authentication = new
+                        PreAuthenticatedAuthenticationToken(jwtToken, null, authorities);
                 authentication.setAuthenticated(true);
                 log.info("Request token verification success. {0}", authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);

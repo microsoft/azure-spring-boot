@@ -9,9 +9,10 @@ import java.util.List;
 
 public class CustomPermissionEvaluator {
 
-    public static boolean hasPermission(List<DirectoryServiceObject> customerRolesGroups, List<String> targetRolesGroups) {
+    public static boolean hasPermission(
+            List<DirectoryServiceObject> customerRolesGroups, List<String> targetRolesGroups) {
         boolean permitted = false;
-        for (DirectoryServiceObject rg : customerRolesGroups) {
+        for (final DirectoryServiceObject rg : customerRolesGroups) {
             if (targetRolesGroups.contains(rg.getDisplayName())) {
                 permitted = true;
                 break;

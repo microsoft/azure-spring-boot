@@ -34,13 +34,14 @@ public class AzureADJwtTokenFilterTest {
     public void doFilterInternal() throws Exception {
         System.setProperty(Constants.CLIENT_ID_PROPERTY, Constants.CLIENT_ID);
         System.setProperty(Constants.CLIENT_SECRET_PROPERTY, Constants.CLIENT_SECRET);
-        System.setProperty(Constants.ALLOWED_ROLES_GROUPS_PROPERTY, Constants.ALLOWED_ROLES_GROUPS.toString().replace("[", "").replace("]", ""));
+        System.setProperty(Constants.ALLOWED_ROLES_GROUPS_PROPERTY,
+                Constants.ALLOWED_ROLES_GROUPS.toString().replace("[", "").replace("]", ""));
 
-        HttpServletRequest request = mock(HttpServletRequest.class);
+        final HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getHeader(Constants.TOKEN_HEADER)).thenReturn(Constants.BEARER_TOKEN);
 
-        HttpServletResponse response = mock(HttpServletResponse.class);
-        FilterChain filterChain = mock(FilterChain.class);
+        final HttpServletResponse response = mock(HttpServletResponse.class);
+        final FilterChain filterChain = mock(FilterChain.class);
 
         Authentication authentication = mock(Authentication.class);
 
@@ -62,13 +63,13 @@ public class AzureADJwtTokenFilterTest {
             assertThat(authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ALLOWED"))
                     || authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_DISALLOWED")));
 
-            AzureADJwtToken aadJwtToken = (AzureADJwtToken) authentication.getPrincipal();
+            final AzureADJwtToken aadJwtToken = (AzureADJwtToken) authentication.getPrincipal();
             assertThat(aadJwtToken.getIssuer()).isNotNull().isNotEmpty();
             assertThat(aadJwtToken.getKid()).isNotNull().isNotEmpty();
             assertThat(aadJwtToken.getSubject()).isNotNull().isNotEmpty();
 
             assertThat(aadJwtToken.getClaims()).isNotNull().isNotEmpty();
-            Map<String, Object> claims = aadJwtToken.getClaims();
+            final Map<String, Object> claims = aadJwtToken.getClaims();
             assertThat(claims.get("iss")).isEqualTo(aadJwtToken.getIssuer());
             assertThat(claims.get("sub")).isEqualTo(aadJwtToken.getSubject());
         }

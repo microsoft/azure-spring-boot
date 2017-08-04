@@ -6,27 +6,27 @@
 package com.microsoft.azure.autoconfigure.aad;
 
 public class DirectoryServiceObject {
-    private final String OdataType;
-    private final String ObjectType;
-    private final String Description;
-    private final String DisplayName;
+    private String odataType;
+    private String objectType;
+    private String description;
+    private String displayName;
 
     public DirectoryServiceObject(String odataType, String objectType, String description, String displayName) {
-        OdataType = odataType;
-        ObjectType = objectType;
-        Description = description;
-        DisplayName = displayName;
+        this.odataType = odataType;
+        this.objectType = objectType;
+        this.description = description;
+        this.displayName = displayName;
     }
     public String getOdataType() {
-        return OdataType;
+        return odataType;
     }
     public String getObjectType() {
-        return ObjectType;
+        return objectType;
     }
     public String getDisplayName() {
-        return DisplayName;
+        return displayName;
     }
     public String getDescription() {
-        return Description;
+        return description;
     }
 }
