@@ -22,7 +22,7 @@ If you are using Maven, add the following dependency.
 
 ### Add application properties
 
-Open `application.properties` file and add below properties with your Document DB credentials.
+Open `application.properties` file and add below properties.
 
 ```
 azure.activedirectory.clientId=Application-ID-in-AAD-App-registrations
