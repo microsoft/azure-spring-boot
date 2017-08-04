@@ -11,6 +11,7 @@
   There're 2 ways to map a field in domain class to `id` of Azure Cosmos DB document.
   - annotate a field in domain class with @Id, this field will be mapped to document `id` in Cosmos DB. 
   - set name of this field to `id`, this field will be mapped to document `id` in Cosmos DB.
+    [Note] if both way appplied,    
   
 
 ## Sample Code
