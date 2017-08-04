@@ -2,7 +2,7 @@
 [Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction) is a globally-distributed database service that allows developers to work with data using a variety of standard APIs, such as DocumentDB, MongoDB, Graph, and Table APIs. Azure DocumentDB Spring Data provides initial Spring Data support for [Azure Cosmos DB Document API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) based on Spring Data framework, the other 3 APIs are not supported in this package. Key functionalities supported so far include save, delete and find. More features will coming soon.
 
 ## Sample Code
-Pls refer to [sample project here](../spring-data-azure-documentdb-sample).
+Please refer to [sample project here](../spring-data-azure-documentdb-sample).
 
 ## Feature List
 - Spring Data CRUDRepository basic CRUD functionality
@@ -10,7 +10,7 @@ Pls refer to [sample project here](../spring-data-azure-documentdb-sample).
     - findAll
     - findOne by Id
     - deleteAll
-- Spring Data [@Id](https://github.com/spring-projects/spring-data-commons/blob/db62390de90c93a78743c97cc2cc9ccd964994a5/src/main/java/org/springframework/data/annotation/Id.java) annotation
+- Spring Data [@Id](https://github.com/spring-projects/spring-data-commons/blob/db62390de90c93a78743c97cc2cc9ccd964994a5/src/main/java/org/springframework/data/annotation/Id.java) annotation.
   There're 2 ways to map a field in domain class to `id` of Azure Cosmos DB document.
   - annotate a field in domain class with `@Id`, this field will be mapped to document `id` in Cosmos DB. 
   - set name of this field to `id`, this field will be mapped to document `id` in Cosmos DB.

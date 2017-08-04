@@ -33,8 +33,7 @@ public abstract class AbstractDocumentDbConfiguration extends DocumentDbConfigur
 
     @Bean
     public MappingDocumentDbConverter mappingDocumentDbConverter() throws Exception {
-        final MappingDocumentDbConverter converter = new MappingDocumentDbConverter(this.documentDbMappingContext());
-        return converter;
+        return new MappingDocumentDbConverter(this.documentDbMappingContext());
     }
 
     protected String getMappingBasePackage() {
