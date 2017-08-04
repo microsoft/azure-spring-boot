@@ -18,6 +18,8 @@ import java.lang.reflect.Field;
 public class BasicDocumentDbPersistentProperty extends AnnotationBasedPersistentProperty<DocumentDbPersistentProperty>
         implements DocumentDbPersistentProperty {
 
+    private static final String ID_PROPERTY_NAME = "id";
+
     public BasicDocumentDbPersistentProperty(Field field, PropertyDescriptor propertyDescriptor,
                                              DocumentDbPersistentEntity<?> owner,
                                              SimpleTypeHolder simpleTypeHolder,
@@ -29,4 +31,15 @@ public class BasicDocumentDbPersistentProperty extends AnnotationBasedPersistent
     protected Association<DocumentDbPersistentProperty> createAssociation() {
         return new Association<DocumentDbPersistentProperty>(this, null);
     }
+
+    @Override
+    public boolean isIdProperty() {
+
+        if (super.isIdProperty()) {
+            return true;
+        }
+
+        return getName().equals(ID_PROPERTY_NAME);
+    }
+
 }

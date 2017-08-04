@@ -28,16 +28,17 @@ public class SampleApplication implements CommandLineRunner {
 
     public void run(String... var1) throws Exception {
 
-        final User testUser = new User("testId", "testFirstName", "testLastName", "test address line one");
+        final User testUser = new User("test@test.com", "testFirstName", "testLastName");
 
         repository.deleteAll();
         repository.save(testUser);
 
-        final User result = repository.findOne(testUser.getId());
+        final User result = repository.findOne(testUser.getEmailAddress());
 
         Assert.state(result.getFirstName().equals(testUser.getFirstName()), "query result firstName doesn't match!");
         Assert.state(result.getLastName().equals(testUser.getLastName()), "query result lastName doesn't match!");
 
         LOGGER.info("findOne in User collection get result: {}", result.toString());
+        System.out.println("findOne in User collection get result:" + result.toString());
     }
 }

@@ -12,30 +12,26 @@ import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.documentdb.repository.config.EnableDocumentDbRepositories;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RunWith(MockitoJUnitRunner.class)
 public class DocumentDbRepositoriesAutoConfigurationUnitTest {
 
     private AnnotationConfigApplicationContext context;
 
-    @MockBean
+    @Mock
     private DocumentDbTemplate dbOperations;
 
-
-    @MockBean
+    @Mock
     private DocumentClient documentClient;
-
-    @Before
-    public void setup() {
-        dbOperations = new DocumentDbTemplate(documentClient, "testdb");
-    }
 
     @After
     public void close() {
@@ -68,7 +64,6 @@ public class DocumentDbRepositoriesAutoConfigurationUnitTest {
     @Configuration
     @TestAutoConfigurationPackage(Person.class)
     protected static class TestConfiguration {
-
     }
 
     @Configuration

@@ -64,14 +64,19 @@
         <azure.servicebus.starter.version>${bom.version}</azure.servicebus.starter.version>
         <azure.mediaservices.starter.version>${bom.version}</azure.mediaservices.starter.version>
         <azure.mediaservices.autoconfigure.version>${bom.version}</azure.mediaservices.autoconfigure.version>
+        <azure.keyvault.secrets.spring.boot.version>${bom.version}</azure.keyvault.secrets.spring.boot.version>
+        <azure.keyvault.secrets.starter.version>${bom.version}</azure.keyvault.secrets.starter.version>
         <azure.spring.common.version>${bom.version}</azure.spring.common.version>
 
         <azure.documentdb.version>1.11.0</azure.documentdb.version>
         <azure.servicebus.version>1.0.0-PREVIEW-3</azure.servicebus.version>
         <azure.storage.version>5.3.1</azure.storage.version>
+        <azure.keyvault.version>1.0.0</azure.keyvault.version>
+        <aad.adal4j.version>0.0.2</aad.adal4j.version>
         <azure.media.version>0.9.7</azure.media.version>
 
         <jackson.version>2.8.7</jackson.version>
+        <mockito.version>2.8.9</mockito.version>
     </properties>
 
     <dependencyManagement>
@@ -122,6 +127,16 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-keyvault-secrets-spring-boot</artifactId>
+                <version>${azure.keyvault.secrets.spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
+                <version>${azure.keyvault.secrets.starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
                 <artifactId>spring-social-microsoft-graph</artifactId>
                 <version>${spring.social.microsoft.graph.version}</version>
             </dependency>
@@ -134,6 +149,11 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>microsoft-graph-spring-social-starter</artifactId>
                 <version>${microsoft.graph.starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>spring-social-microsoft-graph</artifactId>
+                <version>${spring.social.microsoft.graph.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
@@ -169,6 +189,16 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-keyvault</artifactId>
+                <version>${azure.keyvault.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.aad</groupId>
+                <artifactId>adal4j</artifactId>
+                <version>${aad.adal4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-media</artifactId>
                 <version>${azure.media.version}</version>
             </dependency>
@@ -183,6 +213,12 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
