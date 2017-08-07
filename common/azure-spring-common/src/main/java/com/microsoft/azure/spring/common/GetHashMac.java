@@ -54,35 +54,31 @@ public class GetHashMac {
     }
 
     private static String getRawMac() {
-        String ret = null;
-        try {
-            final String os = System.getProperty("os.name").toLowerCase();
-            String[] command = {"ifconfig", "-a"};
-            if (os != null && !os.isEmpty() && os.startsWith("win")) {
-                command = new String[]{"getmac"};
-            }
+        final StringBuilder ret = new StringBuilder();
 
+        final String os = System.getProperty("os.name");
+        String[] command = { "ifconfig", "-a" };
+        if (os != null && !os.isEmpty() && os.toLowerCase().startsWith("win")) {
+            command = new String[]{ "getmac" };
+        }
+
+        try {
             final ProcessBuilder builder = new ProcessBuilder(command);
             final Process process = builder.start();
-            final InputStream inputStream = process.getInputStream();
-            final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-            final BufferedReader br = new BufferedReader(inputStreamReader);
-            String tmp;
-            while ((tmp = br.readLine()) != null) {
-                ret += tmp;
-            }
+            try (final InputStream inputStream = process.getInputStream();
+                 final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                 final BufferedReader br = new BufferedReader(inputStreamReader)) {
+                String tmp;
+                while ((tmp = br.readLine()) != null) {
+                    ret.append(tmp);
+                }
 
-            if (inputStream != null) {
-                inputStream.close();
             }
-            if (br != null) {
-                br.close();
-            }
-        } catch (IOException ex) {
+        } catch (IOException e) {
             return null;
         }
 
-        return ret;
+        return ret.toString();
     }
 
     private static String hash(String mac) {
@@ -96,7 +92,7 @@ public class GetHashMac {
             final byte[] bytes = mac.getBytes("UTF-8");
             md.update(bytes);
             final byte[] bytesAfterDigest = md.digest();
-            final StringBuffer sb = new StringBuffer();
+            final StringBuilder sb = new StringBuilder();
             for (int i = 0; i < bytesAfterDigest.length; i++) {
                 sb.append(Integer.toString((bytesAfterDigest[i] & 0xff) + 0x100, 16).substring(1));
             }

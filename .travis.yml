@@ -4,8 +4,6 @@ jdk:
 
 script: "mvn cobertura:cobertura"
 
-sudo: required
-
 env:
   global:
     # CLIENT_ID
