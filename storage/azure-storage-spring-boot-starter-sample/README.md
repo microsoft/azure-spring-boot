@@ -53,7 +53,14 @@ private void listBlobInContainer(String containerName) throws StorageException, 
         }
     }
 ```
-3. Update `run` method and save
+
+3. Import `ListBlobItem`
+
+```
+import com.microsoft.azure.storage.blob.ListBlobItem;
+```
+
+4. Update `run` method and save
 
 ```java
 public void run(String... var1) throws URISyntaxException, StorageException, IOException {
@@ -64,7 +71,6 @@ public void run(String... var1) throws URISyntaxException, StorageException, IOE
     }
 ```
 
-4. Change directory to folder `azure-storage-spring-boot-starter-sample`.
 5. Run below commands. 
 
 ```
