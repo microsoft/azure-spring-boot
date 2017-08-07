@@ -10,11 +10,17 @@ import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
+import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
+import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbMappingContext;
 import com.microsoft.azure.spring.data.documentdb.repository.domain.Person;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScanner;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.annotation.Persistent;
 
 import java.util.List;
 
@@ -27,25 +33,41 @@ public class DocumentDbTemplateIT {
     private static final String DOCUMENTDB_KEY_PROPERTY_NAME = "documentdb.key";
     private static final String TEST_DB_NAME = "testdb";
     private static final Person TEST_PERSON = new Person("testid", "testfirstname", "testlastname");
-    private static String documentDbUri;
-    private static String documentDbKey;
-    private static DocumentClient documentClient;
-    private static DocumentDbTemplate dbTemplate;
+    private String documentDbUri;
+    private String documentDbKey;
+    private DocumentClient documentClient;
+    private DocumentDbTemplate dbTemplate;
 
-    @BeforeClass
-    public static void setup() {
+    private MappingDocumentDbConverter dbConverter;
+    private DocumentDbMappingContext mappingContext;
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Before
+    public void setup() {
         documentDbUri = System.getProperty(DOCUMENTDB_URL_PROPERTY_NAME);
         documentDbKey = System.getProperty(DOCUMENTDB_KEY_PROPERTY_NAME);
 
+        mappingContext = new DocumentDbMappingContext();
+        try {
+            mappingContext.setInitialEntitySet(new EntityScanner(this.applicationContext)
+                    .scan(Persistent.class));
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e.getMessage());
+
+        }
+        dbConverter = new MappingDocumentDbConverter(mappingContext);
         documentClient = new DocumentClient(documentDbUri, documentDbKey,
                 ConnectionPolicy.GetDefault(), ConsistencyLevel.Session);
-        dbTemplate = new DocumentDbTemplate(documentClient, TEST_DB_NAME);
+
+        dbTemplate = new DocumentDbTemplate(documentClient, dbConverter, TEST_DB_NAME);
 
         dbTemplate.insert(TEST_PERSON);
     }
 
-    @AfterClass
-    public static void cleanup() {
+    @After
+    public void cleanup() {
         dbTemplate.deleteAll(Person.class.getSimpleName());
     }
 

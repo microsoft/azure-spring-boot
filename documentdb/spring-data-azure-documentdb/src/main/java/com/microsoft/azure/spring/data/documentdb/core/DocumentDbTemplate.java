@@ -8,12 +8,15 @@ package com.microsoft.azure.spring.data.documentdb.core;
 
 import com.microsoft.azure.documentdb.*;
 import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
-import com.microsoft.azure.spring.data.documentdb.core.convert.DocumentDbConverter;
+import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
+import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbPersistentEntity;
+import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbPersistentProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
@@ -25,33 +28,31 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentDbTemplate.class);
 
     private final DocumentDbFactory documentDbFactory;
-    private final DocumentDbConverter dbConverter;
+    private final MappingDocumentDbConverter mappingDocumentDbConverter;
     private final String databaseName;
+    private final MappingContext<? extends DocumentDbPersistentEntity<?>, DocumentDbPersistentProperty> mappingContext;
 
     private Database databaseCache;
     private List<String> collectionCache;
 
-    public DocumentDbTemplate(String host,
-                              String key,
-                              String dbName,
-                              DocumentDbConverter converter) {
-        this(new DocumentDbFactory(host, key), converter, dbName);
-    }
-
     public DocumentDbTemplate(DocumentDbFactory documentDbFactory,
-                              DocumentDbConverter documentDbConverter,
+                              MappingDocumentDbConverter mappingDocumentDbConverter,
                               String dbName) {
         Assert.notNull(documentDbFactory, "DocumentDbFactory must not be null!");
-        Assert.notNull(documentDbConverter, "DocumentDbConverter must not be null!");
+        Assert.notNull(mappingDocumentDbConverter, "MappingDocumentDbConverter must not be null!");
 
-        this.documentDbFactory = documentDbFactory;
-        this.dbConverter = documentDbConverter;
         this.databaseName = dbName;
+        this.documentDbFactory = documentDbFactory;
+        this.mappingDocumentDbConverter = mappingDocumentDbConverter;
+        this.mappingContext = mappingDocumentDbConverter.getMappingContext();
         this.collectionCache = new ArrayList<String>();
     }
 
-    public DocumentDbTemplate(DocumentClient client, String dbName) {
-        this(new DocumentDbFactory(client), new DocumentDbConverter(), dbName);
+    public DocumentDbTemplate(DocumentClient client,
+                              MappingDocumentDbConverter mappingDocumentDbConverter,
+                              String dbName) {
+
+        this(new DocumentDbFactory(client), mappingDocumentDbConverter, dbName);
     }
 
 
@@ -60,7 +61,8 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
 
     public <T> T insert(T objectToSave) {
         final Class<? extends Object> entityClass = objectToSave.getClass();
-        final Document document = dbConverter.convertToDocument(objectToSave);
+        final Document document = new Document();
+        mappingDocumentDbConverter.write(objectToSave, document);
         final String collectionName = getCollectionName(entityClass);
 
         if (LOGGER.isDebugEnabled()) {
@@ -92,7 +94,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
 
             if (resource instanceof Document) {
                 final Document document = (Document) resource;
-                return dbConverter.convertFromDocument(document, entityClass);
+                return mappingDocumentDbConverter.read(entityClass, document);
             } else {
                 return null;
             }
@@ -132,7 +134,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
 
                 documentDbFactory.getDocumentClient().replaceDocument(
                         originalDoc.getSelfLink(),
-                        dbConverter.convertToDocument(object),
+                        mappingDocumentDbConverter.read(object.getClass(), originalDoc),
                         null);
             } else {
                 LOGGER.error("invalid Document to update {}", resource.getSelfLink());
@@ -176,7 +178,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         final List<T> entities = new ArrayList<T>();
 
         for (int i = 0; i < results.size(); i++) {
-            final T entity = dbConverter.convertFromDocument(results.get(i), entityClass);
+            final T entity = mappingDocumentDbConverter.read(entityClass, results.get(i));
             entities.add(entity);
         }
 

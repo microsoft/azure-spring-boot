@@ -6,11 +6,14 @@
 
 package com.microsoft.azure.spring.data.documentdb.repository.support;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.repository.core.support.AbstractEntityInformation;
 import org.springframework.util.ReflectionUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.util.List;
 
 
 public class DocumentDbEntityInformation<T, ID extends Serializable>
@@ -22,14 +25,14 @@ public class DocumentDbEntityInformation<T, ID extends Serializable>
     public DocumentDbEntityInformation(Class<T> domainClass) {
         super(domainClass);
 
-        this.id = ReflectionUtils.findField(getJavaType(), "id");
-        if (this.id == null) {
-            throw new IllegalArgumentException("entity must contains id field");
+        this.id = getIdField(domainClass);
+        if (this.id != null) {
+            ReflectionUtils.makeAccessible(this.id);
         }
-        ReflectionUtils.makeAccessible(this.id);
 
         this.collectionName = domainClass.getSimpleName();
     }
+
 
     public ID getId(T entity) {
         return (ID) ReflectionUtils.getField(id, entity);
@@ -41,5 +44,24 @@ public class DocumentDbEntityInformation<T, ID extends Serializable>
 
     public String getCollectionName() {
         return this.collectionName;
+    }
+
+    private Field getIdField(Class<?> domainClass) {
+        Field idField = null;
+
+        final List<Field> fields = FieldUtils.getFieldsListWithAnnotation(domainClass, Id.class);
+
+        if (fields.size() == 0) {
+            idField = ReflectionUtils.findField(getJavaType(), "id");
+        } else if (fields.size() == 1) {
+            idField = fields.get(0);
+        } else {
+            throw new IllegalArgumentException("only one field with @Id annotation!");
+        }
+
+        if (idField != null && idField.getType() != String.class) {
+            throw new IllegalArgumentException("type of id field must be String");
+        }
+        return idField;
     }
 }

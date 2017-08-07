@@ -13,17 +13,46 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @ConfigurationProperties("azure.mediaservices")
 public class MediaServicesProperties {
+    /**
+     * Media service account name.
+     */
     @NotEmpty
     private String accountName;
+
+    /**
+     * Media service account key.
+     */
     @NotEmpty
     private String accountKey;
 
+    /**
+     * Proxy host if to use proxy.
+     */
     private String proxyHost;
+
+    /**
+     * Proxy port if to use proxy.
+     */
     private String proxyPort;
+
+    /**
+     * Proxy scheme if to use proxy. Default is http.
+     */
     private String proxyScheme = "http";
 
+    /**
+     * Media service configuration URI.
+     */
     private String mediaServiceUri = "https://media.windows.net/API/";
+
+    /**
+     * Media service OAuth configuration URI.
+     */
     private String oAuthUri = "https://wamsprodglobal001acs.accesscontrol.windows.net/v2/OAuth2-13";
+
+    /**
+     * Media service scope sent to OAuth.
+     */
     private String scope = "urn:WindowsAzureMediaServices";
 
     /**

@@ -11,7 +11,7 @@ This sample project demonstrates how to use Azure DocumentDB via Spring Boot Sta
 
 ## Quick Start
 
-### Create an Azure CosmosDB on Azure
+### Create an Azure Cosmos DB on Azure
 
 1. Go to [Azure portal](https://portal.azure.com/) and click +New .
 2. Click Databases, and then click Azure Cosmos DB to create your database. 

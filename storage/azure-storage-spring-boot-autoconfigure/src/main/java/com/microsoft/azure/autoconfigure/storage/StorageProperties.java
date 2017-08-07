@@ -14,6 +14,9 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties("azure.storage")
 public class StorageProperties {
 
+    /**
+     * Azure Storage connection string.
+     */
     @NotEmpty
     private String connectionString;
 

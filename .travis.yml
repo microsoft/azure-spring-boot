@@ -4,10 +4,6 @@ jdk:
 
 script: "mvn cobertura:cobertura"
 
-cache:
-  directories:
-    - $HOME/.m2
-
 env:
   global:
     # CLIENT_ID

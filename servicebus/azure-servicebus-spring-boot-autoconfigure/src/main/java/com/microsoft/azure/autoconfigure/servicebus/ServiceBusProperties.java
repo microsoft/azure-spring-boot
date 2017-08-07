@@ -14,12 +14,35 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 @ConfigurationProperties("azure.servicebus")
 public class ServiceBusProperties {
+    /**
+     * Service Bus connection string.
+     */
     @NotEmpty
     private String connectionString;
+
+    /**
+     * Queue name. Entity path of the queue.
+     */
     private String queueName;
+
+    /**
+     * Queue receive mode.
+     */
     private ReceiveMode queueReceiveMode;
+
+    /**
+     * Topic name. Entity path of the topic.
+     */
     private String topicName;
+
+    /**
+     * Subscription name.
+     */
     private String subscriptionName;
+
+    /**
+     * Subscription receive mode.
+     */
     private ReceiveMode subscriptionReceiveMode;
 
     public String getConnectionString() {
