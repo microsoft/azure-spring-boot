@@ -15,7 +15,7 @@ If you are using Maven, add the following dependency.
 
 ### Add the property setting
 
-Open `application.properties` file and add below properties with your Document DB credentials.
+Open `application.properties` file and add below properties with your DocumentDB credentials.
 
 ```
 azure.documentdb.uri=your-documentdb-uri

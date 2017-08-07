@@ -38,6 +38,12 @@
             <name>Zhijun Zhao</name>
             <email>zhijzhao@microsoft.com</email>
         </developer>
+
+        <developer>
+            <id>yungez</id>
+            <name>Yunge Zhu</name>
+            <email>yungez@microsoft.com</email>
+        </developer>
     </developers>
 
     <properties>
@@ -155,6 +161,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <executions>
+
                     <execution>
                         <id>validate</id>
                         <phase>validate</phase>
@@ -229,6 +236,7 @@
 
     <modules>
         <module>../azure-spring-common</module>
+        <module>../../activedirectory/azure-ad-integration-spring-boot-autoconfigure</module>
         <module>../../documentdb/spring-data-azure-documentdb</module>
         <module>../../documentdb/spring-data-azure-documentdb-sample</module>
         <module>../../documentdb/azure-documentdb-spring-boot-autoconfigure</module>
@@ -248,5 +256,8 @@
         <module>../../microsoft-graph/microsoft-graph-spring-boot-autoconfigure</module>
         <module>../../microsoft-graph/microsoft-graph-spring-social-starter</module>
         <module>../../microsoft-graph/microsoft-graph-spring-social-starter-sample</module>
+        <module>../../keyvault/azure-keyvault-secrets-spring-boot</module>
+        <module>../../keyvault/azure-keyvault-secrets-spring-boot-starter</module>
+        <module>../../keyvault/azure-keyvault-secrets-spring-boot-starter-sample</module>
     </modules>
 </project>

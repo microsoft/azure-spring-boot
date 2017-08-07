@@ -1,8 +1,21 @@
 ## Azure Cosmos DB DocumentDB API Spring boot starter
 [Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction) is a globally-distributed database service that allows developers to work with data using a variety of standard APIs, such as DocumentDB, MongoDB, Graph, and Table APIs. Azure Cosmos DB DocumentDB API Spring boot starter is Spring starter for [Azure Cosmos DB Document API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) based on Spring Data framework. The other 3 APIs are not supported in this starter. Key functionality supports so far including save, delete and find.
 
+## Feature List
+- Spring Data CRUDRepository basic CRUD functionality
+    - save
+    - findAll
+    - findOne by Id
+    - deleteAll
+- Spring Data [@Id](https://github.com/spring-projects/spring-data-commons/blob/db62390de90c93a78743c97cc2cc9ccd964994a5/src/main/java/org/springframework/data/annotation/Id.java) annotation.
+  There're 2 ways to map a field in domain class to `id` of Azure Cosmos DB document.
+  - annotate a field in domain class with @Id, this field will be mapped to document `id` in Cosmos DB. 
+  - set name of this field to `id`, this field will be mapped to document `id` in Cosmos DB.
+    [Note] if both way appplied,    
+  
+
 ## Sample Code
-Pls refer to [sample project here](../azure-documentdb-spring-boot-starter-sample).
+Please refer to [sample project here](../azure-documentdb-spring-boot-starter-sample).
 
 ## Quick Start
 
@@ -21,7 +34,7 @@ If you are using Maven, add the following dependency.
 
 ### Add the property setting
 
-Open `application.properties` file and add below properties with your Cosmos DB Document DB credentials.
+Open `application.properties` file and add below properties with your Cosmos DB credentials.
 
 ```
 azure.documentdb.uri=your-documentdb-uri
@@ -39,6 +52,9 @@ public class User {
     private String id;
     private String firstName;
     private String lastName;
+    // if emailAddress is mapped to id, then
+    // @Id
+    // private String emailAddress
  
     ... // setters and getters
 
@@ -54,7 +70,7 @@ public class User {
     }
 }
 ```
-`id` field will be used as document id in Azure DocumentDB. `id` field is must.
+`id` field will be used as document `id` in Azure Cosmos DB. Or you can annotate any field with `@Id` to map it to document `id`.
 
 
 ### Create repositories
@@ -92,6 +108,8 @@ public class SampleApplication implements CommandLineRunner {
         repository.save(testUser);
 
         final User result = repository.findOne(testUser.getId());
+        // if emailAddress is mapped to id, then 
+        // final User result = respository.findOne(testUser.getEmailAddress());        
     }
 }
 ```
