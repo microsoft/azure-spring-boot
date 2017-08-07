@@ -52,6 +52,8 @@
 
         <bom.version>0.1.4</bom.version>
 
+        <azure.adintegration.starter.version>${bom.version}</azure.adintegration.starter.version>
+        <azure.adintegration.autoconfigure.version>${bom.version}</azure.adintegration.autoconfigure.version>
         <azure.documentdb.starter.version>${bom.version}</azure.documentdb.starter.version>
         <azure.documentdb.autoconfigure.version>${bom.version}</azure.documentdb.autoconfigure.version>
         <spring.data.documentdb.version>${bom.version}</spring.data.documentdb.version>
@@ -74,8 +76,10 @@
         <azure.keyvault.version>1.0.0</azure.keyvault.version>
         <aad.adal4j.version>0.0.2</aad.adal4j.version>
         <azure.media.version>0.9.7</azure.media.version>
-
+        <azure.adal4j.version>1.2.0</azure.adal4j.version>
         <jackson.version>2.8.7</jackson.version>
+        <nimbusds.version>4.39.2</nimbusds.version>
+        <javax.servlet.version>3.1.0</javax.servlet.version>
         <mockito.version>2.8.9</mockito.version>
     </properties>
 
@@ -89,7 +93,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-ad-integration-spring-boot-autoconfigure</artifactId>
+                <version>${azure.adintegration.autoconfigure.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
@@ -197,6 +205,11 @@
                 <artifactId>azure-media</artifactId>
                 <version>${azure.media.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>adal4j</artifactId>
+                <version>${azure.adal4j.version}</version>
+            </dependency>
 
             <!-- third parties -->
             <dependency>
@@ -210,6 +223,16 @@
                 <version>${jackson.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${nimbusds.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${javax.servlet.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
@@ -229,5 +252,4 @@
         <module>servicebus/azure-servicebus-spring-boot-starter-sample</module>
         <module>storage/azure-storage-spring-boot-starter-sample</module>
     </modules>
-
 </project>

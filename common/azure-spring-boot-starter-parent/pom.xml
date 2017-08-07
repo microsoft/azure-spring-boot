@@ -234,6 +234,7 @@
 
     <modules>
         <module>../azure-spring-common</module>
+        <module>../../activedirectory/azure-ad-integration-spring-boot-autoconfigure</module>
         <module>../../documentdb/spring-data-azure-documentdb</module>
         <module>../../documentdb/azure-documentdb-spring-boot-autoconfigure</module>
         <module>../../documentdb/azure-documentdb-spring-boot-starter</module>
