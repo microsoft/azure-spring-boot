@@ -14,15 +14,24 @@ import java.util.List;
 @Validated
 @ConfigurationProperties("azure.activedirectory")
 public class AzureADJwtFilterProperties {
+    /**
+     * Registered application ID in Azure AD.
+     */
     @NotEmpty
     private String clientId;
+    /**
+     * API Access Key of the registered application.
+     */
     @NotEmpty
     private String clientSecret;
+    /**
+     * Allowed roles and groups in Azure AD.
+     */
     @NotEmpty
     private List<String> allowedRolesGroups;
 
-    private final String aadSignInUri = "https://login.microsoftonline.com/";
-    private final String aadGraphAPIUri = "https://graph.windows.net/";
+    private static final String aadSignInUri = "https://login.microsoftonline.com/";
+    private static final String aadGraphAPIUri = "https://graph.windows.net/";
 
     public String getClientId() {
         return clientId;
