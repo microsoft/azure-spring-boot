@@ -4,7 +4,7 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.data.documentdb.repository.autoconfig;
+package com.microsoft.azure.autoconfigure.documentdb;
 
 import org.springframework.context.annotation.Import;
 
