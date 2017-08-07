@@ -180,6 +180,11 @@
                 <artifactId>azure-media</artifactId>
                 <version>${azure.media.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>adal4j</artifactId>
+                <version>${azure.adal4j.version}</version>
+            </dependency>
 
             <!-- third parties -->
             <dependency>
@@ -197,11 +202,6 @@
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
                 <version>${nimbusds.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>adal4j</artifactId>
-                <version>${azure.adal4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
