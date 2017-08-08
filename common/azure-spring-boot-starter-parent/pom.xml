@@ -225,8 +225,6 @@
                     <instrumentation>
                         <excludes>
                             <exclude>com/microsoft/azure/spring/common/GetHashMac.class</exclude>
-                            <exclude>com/microsoft/azure/sample/**.class</exclude>
-                            <exclude>**/*Sample*.class</exclude>
                         </excludes>
                     </instrumentation>
                 </configuration>
@@ -238,26 +236,18 @@
         <module>../azure-spring-common</module>
         <module>../../activedirectory/azure-ad-integration-spring-boot-autoconfigure</module>
         <module>../../documentdb/spring-data-azure-documentdb</module>
-        <module>../../documentdb/spring-data-azure-documentdb-sample</module>
         <module>../../documentdb/azure-documentdb-spring-boot-autoconfigure</module>
-        <module>../../documentdb/azure-documentdb-spring-boot-autoconfigure-sample</module>
         <module>../../documentdb/azure-documentdb-spring-boot-starter</module>
-        <module>../../documentdb/azure-documentdb-spring-boot-starter-sample</module>
         <module>../../storage/azure-storage-spring-boot-autoconfigure</module>
         <module>../../storage/azure-storage-spring-boot-starter</module>
-        <module>../../storage/azure-storage-spring-boot-starter-sample</module>
         <module>../../servicebus/azure-servicebus-spring-boot-autoconfigure</module>
         <module>../../servicebus/azure-servicebus-spring-boot-starter</module>
-        <module>../../servicebus/azure-servicebus-spring-boot-starter-sample</module>
         <module>../../mediaservices/azure-mediaservices-spring-boot-autoconfigure</module>
         <module>../../mediaservices/azure-mediaservices-spring-boot-starter</module>
-        <module>../../mediaservices/azure-mediaservices-spring-boot-starter-sample</module>
         <module>../../microsoft-graph/spring-social-microsoft-graph</module>
         <module>../../microsoft-graph/microsoft-graph-spring-boot-autoconfigure</module>
         <module>../../microsoft-graph/microsoft-graph-spring-social-starter</module>
-        <module>../../microsoft-graph/microsoft-graph-spring-social-starter-sample</module>
         <module>../../keyvault/azure-keyvault-secrets-spring-boot</module>
         <module>../../keyvault/azure-keyvault-secrets-spring-boot-starter</module>
-        <module>../../keyvault/azure-keyvault-secrets-spring-boot-starter-sample</module>
     </modules>
 </project>
