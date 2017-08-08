@@ -17,15 +17,19 @@ public class DirectoryServiceObject {
         this.description = description;
         this.displayName = displayName;
     }
+
     public String getOdataType() {
         return odataType;
     }
+
     public String getObjectType() {
         return objectType;
     }
+
     public String getDisplayName() {
         return displayName;
     }
+
     public String getDescription() {
         return description;
     }

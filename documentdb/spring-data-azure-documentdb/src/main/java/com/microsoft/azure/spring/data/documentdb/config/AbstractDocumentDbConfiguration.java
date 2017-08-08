@@ -9,7 +9,6 @@ package com.microsoft.azure.spring.data.documentdb.config;
 import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
-import com.microsoft.azure.spring.data.documentdb.core.convert.DocumentDbConverter;
 import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

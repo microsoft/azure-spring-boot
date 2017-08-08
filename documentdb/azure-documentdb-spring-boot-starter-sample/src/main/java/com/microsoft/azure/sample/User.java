@@ -6,8 +6,6 @@
 
 package com.microsoft.azure.sample;
 
-import org.springframework.data.annotation.Id;
-
 public class User {
     private String id;
     private String firstName;

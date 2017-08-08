@@ -48,9 +48,9 @@ public final class AzureADJwtToken {
         final JWSKeySelector keySelector = new JWSVerificationKeySelector(expectedJWSAlg, keySource);
         jwtProcessor.setJWSKeySelector(keySelector);
 
-        jwtProcessor.setJWTClaimsSetVerifier(new DefaultJWTClaimsVerifier(){
+        jwtProcessor.setJWTClaimsSetVerifier(new DefaultJWTClaimsVerifier() {
             @Override
-            public void verify(JWTClaimsSet  claimsSet, SecurityContext ctx) throws BadJWTException {
+            public void verify(JWTClaimsSet claimsSet, SecurityContext ctx) throws BadJWTException {
                 super.verify(claimsSet, ctx);
                 final String issuer = claimsSet.getIssuer();
                 if (issuer == null || !issuer.contains("https://sts.windows.net/")) {
@@ -76,13 +76,16 @@ public final class AzureADJwtToken {
     public String getIssuer() {
         return jwsClaimsSet == null ? null : jwsClaimsSet.getIssuer();
     }
+
     public String getSubject() {
         return jwsClaimsSet == null ? null : jwsClaimsSet.getSubject();
     }
-    public Map<String, Object> getClaims()  {
+
+    public Map<String, Object> getClaims() {
         return jwsClaimsSet == null ? null : jwsClaimsSet.getClaims();
     }
-    public Object getClaim(String name)  {
+
+    public Object getClaim(String name) {
         return jwsClaimsSet == null ? null : jwsClaimsSet.getClaim(name);
     }
 
