@@ -27,18 +27,18 @@ public class UserTemplateTest extends AbstractMicrosoftApiTest {
                 .andRespond(withSuccess(jsonResource("user"), MediaType.APPLICATION_JSON));
 
         final User user = microsoft.userOperations().getUserProfile();
-        assertThat(user.getDisplayName()).isEqualTo("Anne Weiler");
-        final List<String> bussinessPhones = user.getBusinessPhones();
+        assertThat(user.displayName).isEqualTo("Anne Weiler");
+        final List<String> bussinessPhones = user.businessPhones;
         assertThat(bussinessPhones).hasSize(1);
         assertThat(bussinessPhones.get(0)).isEqualTo("123");
-        assertThat(user.getGivenName()).isEqualTo("Anne");
-        assertThat(user.getId()).isEqualTo("16f5a7b6-5a15-4568-aa5a-31bb117e9967");
-        assertThat(user.getJobTitle()).isEqualTo("Manufacturing Lead");
-        assertThat(user.getMail()).isEqualTo("annew@CIE493742.onmicrosoft.com");
-        assertThat(user.getMobilePhone()).isEqualTo("+1 3528700812");
-        assertThat(user.getOfficeLocation()).isEqualTo("some location");
-        assertThat(user.getPreferredLanguage()).isEqualTo("en-US");
-        assertThat(user.getSurname()).isEqualTo("Weiler");
-        assertThat(user.getUserPrincipalName()).isEqualTo("annew@CIE493742.onmicrosoft.com");
+        assertThat(user.givenName).isEqualTo("Anne");
+        assertThat(user.id).isEqualTo("16f5a7b6-5a15-4568-aa5a-31bb117e9967");
+        assertThat(user.jobTitle).isEqualTo("Manufacturing Lead");
+        assertThat(user.mail).isEqualTo("annew@CIE493742.onmicrosoft.com");
+        assertThat(user.mobilePhone).isEqualTo("+1 3528700812");
+        assertThat(user.officeLocation).isEqualTo("some location");
+        assertThat(user.preferredLanguage).isEqualTo("en-US");
+        assertThat(user.surname).isEqualTo("Weiler");
+        assertThat(user.userPrincipalName).isEqualTo("annew@CIE493742.onmicrosoft.com");
     }
 }

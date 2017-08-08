@@ -24,11 +24,11 @@ public class MicrosoftAdapterTest {
 
     @BeforeClass
     public static void init() {
-        user.setId("12345678");
-        user.setDisplayName("Craig Walls");
-        user.setSurname("Walls");
-        user.setGivenName("Craig");
-        user.setMail("zz@a.com");
+        user.id = "12345678";
+        user.displayName = "Craig Walls";
+        user.surname = "Walls";
+        user.givenName = "Craig";
+        user.mail = "zz@a.com";
     }
 
     @Test
