@@ -160,11 +160,6 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
-                <artifactId>spring-social-microsoft-graph</artifactId>
-                <version>${spring.social.microsoft.graph.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-mediaservices-spring-boot-autoconfigure</artifactId>
                 <version>${azure.mediaservices.autoconfigure.version}</version>
             </dependency>
@@ -248,5 +243,13 @@
 
     <modules>
         <module>common/azure-spring-boot-starter-parent</module>
+        <module>documentdb/azure-documentdb-spring-boot-starter-sample</module>
+        <module>documentdb/azure-documentdb-spring-boot-autoconfigure-sample</module>
+        <module>documentdb/spring-data-azure-documentdb-sample</module>
+        <module>keyvault/azure-keyvault-secrets-spring-boot-starter-sample</module>
+        <module>mediaservices/azure-mediaservices-spring-boot-starter-sample</module>
+        <module>microsoft-graph/microsoft-graph-spring-social-starter-sample</module>
+        <module>servicebus/azure-servicebus-spring-boot-starter-sample</module>
+        <module>storage/azure-storage-spring-boot-starter-sample</module>
     </modules>
 </project>
