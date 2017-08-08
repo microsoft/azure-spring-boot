@@ -1,0 +1,85 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See LICENSE in the project root for
+ * license information.
+ */
+package com.microsoft.azure.cloudfoundry.service.sample.storage;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.storage.StorageException;
+import com.microsoft.azure.storage.blob.CloudBlobClient;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.microsoft.azure.storage.blob.CloudBlockBlob;
+
+@RestController
+public class StorageRestController {
+
+    private static final Logger LOG = LoggerFactory
+            .getLogger(StorageRestController.class);
+
+    public static final String IMAGE_PATH =
+            "https://raw.githubusercontent.com/mjeffries-pivotal/pcf-samples/master/images/azure-pcf.jpg";
+
+    @Autowired
+    private CloudStorageAccount account;
+
+    @RequestMapping(value = "/blob", method = RequestMethod.GET)
+    @ResponseBody
+    public void showBlob(HttpServletResponse response) {
+        try {
+            LOG.info("showBlob start");
+            if (account == null) {
+                LOG.error("Storage Account is null!");
+                return;
+            }
+
+            final URL u = new URL(IMAGE_PATH);
+            final InputStream is = u.openStream();
+            response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+            final int imageSize = IOUtils.copy(is, response.getOutputStream());
+
+            LOG.debug("Connecting to storage account...");
+            final CloudBlobClient serviceClient = account
+                    .createCloudBlobClient();
+
+            // Container name must be lower case.
+            final CloudBlobContainer container = serviceClient
+                    .getContainerReference("myimages");
+            container.createIfNotExists();
+
+            // Upload an image file.
+            LOG.debug("Uploading image...");
+            final CloudBlockBlob blob = container
+                    .getBlockBlobReference("image1.jpg");
+            blob.upload(new URL(IMAGE_PATH).openStream(), imageSize);
+            LOG.debug("Uploading image complete");
+
+        } catch (MalformedURLException e)        {
+            LOG.error("Error retrieving image", e);
+        } catch (IOException e)        {
+            LOG.error("Error retrieving image", e);
+        } catch (URISyntaxException e)        {
+            LOG.error("Error accessing azure storage container", e);
+        } catch (StorageException e)        {
+            LOG.error("Error accessing azure storage container", e);
+        }
+    }
+}
