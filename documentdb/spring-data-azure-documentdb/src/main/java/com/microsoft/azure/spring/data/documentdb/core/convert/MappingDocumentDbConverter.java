@@ -31,10 +31,10 @@ public class MappingDocumentDbConverter
         implements EntityConverter<DocumentDbPersistentEntity<?>, DocumentDbPersistentProperty, Object, Document>,
         ApplicationContextAware {
 
-    private ApplicationContext applicationContext;
     protected final MappingContext<? extends DocumentDbPersistentEntity<?>,
             DocumentDbPersistentProperty> mappingContext;
     protected GenericConversionService conversionService;
+    private ApplicationContext applicationContext;
 
     public MappingDocumentDbConverter(
             MappingContext<? extends DocumentDbPersistentEntity<?>, DocumentDbPersistentProperty> mappingContext) {
@@ -113,13 +113,13 @@ public class MappingDocumentDbConverter
         }
     }
 
+    public ApplicationContext getApplicationContext() {
+        return this.applicationContext;
+    }
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-    }
-
-    public ApplicationContext getApplicationContext() {
-        return this.applicationContext;
     }
 
     @Override

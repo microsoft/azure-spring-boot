@@ -28,13 +28,11 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class KeyVaultOperationUnitTest {
 
-    @Mock
-    KeyVaultClient keyVaultClient;
-
-    KeyVaultOperation keyVaultOperation;
-
     private static final String testPropertyName1 = "testPropertyName1";
     private static final String fakeVaultUri = "https://fake.vault.com";
+    @Mock
+    KeyVaultClient keyVaultClient;
+    KeyVaultOperation keyVaultOperation;
 
     @Before
     public void setup() {

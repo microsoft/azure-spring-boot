@@ -13,6 +13,12 @@ public class Address {
     String street;
     String city;
 
+    public Address(String postalCode, String city, String street) {
+        this.postalCode = postalCode;
+        this.city = city;
+        this.street = street;
+    }
+
     public String getCity() {
         return city;
     }
@@ -35,11 +41,5 @@ public class Address {
 
     public void setPostalCode(String code) {
         this.postalCode = code;
-    }
-
-    public Address(String postalCode, String city, String street) {
-        this.postalCode = postalCode;
-        this.city = city;
-        this.street = street;
     }
 }

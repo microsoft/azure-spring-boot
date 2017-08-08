@@ -18,15 +18,13 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class KeyVaultOperation {
+    private static final long CACHE_REFRESH_INTERVAL_IN_MS = 1800000L; // 30 minutes
+    private final Object refreshLock = new Object();
     private KeyVaultClient keyVaultClient;
     private String vaultUri;
-
     private ConcurrentHashMap<String, Object> propertyNamesHashMap;
     private AtomicLong lastUpdateTime = new AtomicLong();
-    private final Object refreshLock = new Object();
     private ReadWriteLock rwLock = new ReentrantReadWriteLock();
-
-    private static final long CACHE_REFRESH_INTERVAL_IN_MS = 1800000L; // 30 minutes
 
     public KeyVaultOperation(KeyVaultClient keyVaultClient, String vaultUri) {
         this.keyVaultClient = keyVaultClient;
@@ -77,7 +75,6 @@ public class KeyVaultOperation {
         try {
             rwLock.writeLock().lock();
             propertyNamesHashMap.clear();
-
 
 
             final PagedList<SecretItem> secrets = keyVaultClient.listSecrets(vaultUri);

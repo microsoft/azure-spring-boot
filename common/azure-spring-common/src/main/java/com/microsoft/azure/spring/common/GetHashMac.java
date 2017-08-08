@@ -57,9 +57,9 @@ public class GetHashMac {
         final StringBuilder ret = new StringBuilder();
 
         final String os = System.getProperty("os.name");
-        String[] command = { "ifconfig", "-a" };
+        String[] command = {"ifconfig", "-a"};
         if (os != null && !os.isEmpty() && os.toLowerCase().startsWith("win")) {
-            command = new String[]{ "getmac" };
+            command = new String[]{"getmac"};
         }
 
         try {
