@@ -9,8 +9,7 @@ package com.microsoft.azure.msgraph.api;
 /**
  * The Enum Importance.
  */
-public enum Importance
-{
+public enum Importance {
     /**
      * low
      */

@@ -9,8 +9,7 @@ package com.microsoft.azure.msgraph.api;
 /**
  * The Enum Body Type.
  */
-public enum BodyType
-{
+public enum BodyType {
     /**
      * text
      */

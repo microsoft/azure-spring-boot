@@ -9,7 +9,6 @@ package com.microsoft.azure.msgraph.api;
 public class Recipient {
     /**
      * The Email Address.
-     *
      */
     public EmailAddress emailAddress;
 }

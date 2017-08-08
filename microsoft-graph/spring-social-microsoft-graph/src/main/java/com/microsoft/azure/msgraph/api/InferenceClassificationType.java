@@ -9,8 +9,7 @@ package com.microsoft.azure.msgraph.api;
 /**
  * The Enum Inference Classification Type.
  */
-public enum InferenceClassificationType
-{
+public enum InferenceClassificationType {
     /**
      * focused
      */

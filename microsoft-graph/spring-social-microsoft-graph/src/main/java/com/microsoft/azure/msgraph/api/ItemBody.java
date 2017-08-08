@@ -9,13 +9,11 @@ package com.microsoft.azure.msgraph.api;
 public class ItemBody {
     /**
      * The Content Type.
-     *
      */
     public BodyType contentType;
 
     /**
      * The Content.
-     *
      */
     public String content;
 }

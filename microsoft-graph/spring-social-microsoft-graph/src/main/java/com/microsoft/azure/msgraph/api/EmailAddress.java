@@ -9,13 +9,11 @@ package com.microsoft.azure.msgraph.api;
 public class EmailAddress {
     /**
      * The Name.
-     *
      */
     public String name;
 
     /**
      * The Address.
-     *
      */
     public String address;
 }
