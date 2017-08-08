@@ -20,8 +20,8 @@ import java.util.List;
 
 public class AzureADUserMembership {
 
-    private List<DirectoryServiceObject> userMemberships;
     private static String userMembershipRestAPI = "https://graph.windows.net/me/memberOf?api-version=1.6";
+    private List<DirectoryServiceObject> userMemberships;
 
     public AzureADUserMembership(String accessToken) throws Exception {
         final String responseInJson = getUserMembershipsV1(accessToken);
@@ -60,6 +60,7 @@ public class AzureADUserMembership {
             throw new Exception(responseInJson);
         }
     }
+
     private String getResponseStringFromConn(HttpURLConnection conn) throws IOException {
 
         BufferedReader reader = null;

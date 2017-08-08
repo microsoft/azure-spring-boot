@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.keyvault.spring.boot;
 
-import com.microsoft.azure.keyvault.KeyVaultClient;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,12 +17,10 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class KeyVaultPropertySourceUnitTest {
+    private static final String testPropertyName1 = "testPropertyName1";
     @Mock
     KeyVaultOperation keyVaultOperation;
-
     KeyVaultPropertySource keyVaultPropertySource;
-
-    private static final String testPropertyName1 = "testPropertyName1";
 
     @Before
     public void setup() {

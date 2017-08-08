@@ -30,6 +30,7 @@ public class AzureADJwtTokenFilterTest {
         Assume.assumeTrue(!Constants.CLIENT_SECRET.contains("real_client_secret"));
         Assume.assumeTrue(!Constants.BEARER_TOKEN.contains("real_jtw_bearer_token"));
     }
+
     @Test
     public void doFilterInternal() throws Exception {
         System.setProperty(Constants.CLIENT_ID_PROPERTY, Constants.CLIENT_ID);
