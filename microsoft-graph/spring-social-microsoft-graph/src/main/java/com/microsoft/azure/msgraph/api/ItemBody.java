@@ -7,13 +7,29 @@
 package com.microsoft.azure.msgraph.api;
 
 public class ItemBody {
+    private BodyType contentType;
+
+    private String content;
+
     /**
      * The Content Type.
      */
-    public BodyType contentType;
+    public BodyType getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(BodyType contentType) {
+        this.contentType = contentType;
+    }
 
     /**
      * The Content.
      */
-    public String content;
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

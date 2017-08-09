@@ -7,5 +7,13 @@
 package com.microsoft.azure.msgraph.api;
 
 public class Messages {
-    public java.util.List<Message> value;
+    private java.util.List<Message> value;
+
+    public java.util.List<Message> getValue() {
+        return value;
+    }
+
+    public void setValue(java.util.List<Message> value) {
+        this.value = value;
+    }
 }

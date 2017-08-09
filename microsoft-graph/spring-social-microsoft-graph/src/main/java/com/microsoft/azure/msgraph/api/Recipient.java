@@ -7,8 +7,16 @@
 package com.microsoft.azure.msgraph.api;
 
 public class Recipient {
+    private EmailAddress emailAddress;
+
     /**
      * The Email Address.
      */
-    public EmailAddress emailAddress;
+    public EmailAddress getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(EmailAddress emailAddress) {
+        this.emailAddress = emailAddress;
+    }
 }
