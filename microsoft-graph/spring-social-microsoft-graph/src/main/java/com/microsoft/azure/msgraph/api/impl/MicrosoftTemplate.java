@@ -12,8 +12,11 @@ import com.microsoft.azure.msgraph.api.UserOperations;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
 import org.springframework.social.support.URIBuilder;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.net.URI;
+import java.util.Map;
 
 public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Microsoft {
     private static final String MS_GRAPH_BASE_API = "https://graph.microsoft.com/v1.0/";
@@ -36,6 +39,11 @@ public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Micro
     public <T> T fetchObject(String objectId, Class<T> type) {
         final URI uri = URIBuilder.fromUri(getGraphAPI(objectId)).build();
         return getRestTemplate().getForObject(uri, type);
+    }
+
+    public String postForObject(String objectId, Map<String, Object> data) {
+        final URI uri = URIBuilder.fromUri(getGraphAPI(objectId)).build();
+        return getRestTemplate().postForObject(uri, data, String.class);
     }
 
     @Override

@@ -6,6 +6,9 @@
 
 package com.microsoft.azure.msgraph.api;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Message {
     /**
      * The date and time the message was last changed.
