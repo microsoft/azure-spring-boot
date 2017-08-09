@@ -28,8 +28,8 @@ public class MicrosoftAdapter implements ApiAdapter<Microsoft> {
     @Override
     public void setConnectionValues(Microsoft microsoft, ConnectionValues values) {
         final User profile = microsoft.userOperations().getUserProfile();
-        values.setProviderUserId(profile.id);
-        values.setDisplayName(profile.displayName);
+        values.setProviderUserId(profile.getId());
+        values.setDisplayName(profile.getDisplayName());
 
         // Not implemented yet.
         values.setImageUrl(null);
@@ -40,11 +40,11 @@ public class MicrosoftAdapter implements ApiAdapter<Microsoft> {
     public UserProfile fetchUserProfile(Microsoft microsoft) {
         final User profile = microsoft.userOperations().getUserProfile();
         return new UserProfileBuilder()
-                .setId(profile.id)
-                .setFirstName(profile.givenName)
-                .setLastName(profile.surname)
-                .setName(profile.displayName)
-                .setEmail(profile.mail)
+                .setId(profile.getId())
+                .setFirstName(profile.getGivenName())
+                .setLastName(profile.getSurname())
+                .setName(profile.getDisplayName())
+                .setEmail(profile.getMail())
                 .build();
     }
 
