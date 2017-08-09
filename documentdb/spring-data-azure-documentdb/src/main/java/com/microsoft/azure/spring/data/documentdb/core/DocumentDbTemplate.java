@@ -132,9 +132,11 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                             this.databaseName, getCollectionName(object.getClass()), id);
                 }
 
+                mappingDocumentDbConverter.write(object, originalDoc); 
+
                 documentDbFactory.getDocumentClient().replaceDocument(
                         originalDoc.getSelfLink(),
-                        mappingDocumentDbConverter.read(object.getClass(), originalDoc),
+                        originalDoc,
                         null);
             } else {
                 LOGGER.error("invalid Document to update {}", resource.getSelfLink());
