@@ -26,7 +26,7 @@ public class HelloController {
     }
 
     @GetMapping
-    public String helloFacebook(Model model) {
+    public String helloMicrosoft(Model model) {
         if (connectionRepository.findPrimaryConnection(Microsoft.class) == null) {
             return "redirect:/connect/microsoft";
         }
