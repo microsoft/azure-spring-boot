@@ -6,6 +6,6 @@
 
 package com.microsoft.azure.msgraph.api;
 
-public interface MailOperations {
-    Messages listMessages(String mailFolder);
+public class Messages {
+    public java.util.List<Message> value;
 }

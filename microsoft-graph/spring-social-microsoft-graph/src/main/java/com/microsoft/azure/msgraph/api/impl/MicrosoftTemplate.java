@@ -6,6 +6,7 @@
 
 package com.microsoft.azure.msgraph.api.impl;
 
+import com.microsoft.azure.msgraph.api.MailOperations;
 import com.microsoft.azure.msgraph.api.Microsoft;
 import com.microsoft.azure.msgraph.api.UserOperations;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
@@ -17,6 +18,7 @@ import java.net.URI;
 public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Microsoft {
     private static final String MS_GRAPH_BASE_API = "https://graph.microsoft.com/v1.0/";
     private UserOperations userOperations;
+    private MailOperations mailOperations;
 
     public MicrosoftTemplate() {
         initialize();
@@ -41,6 +43,11 @@ public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Micro
         return userOperations;
     }
 
+    @Override
+    public MailOperations mailOperations() {
+        return mailOperations;
+    }
+
     private void initialize() {
         super.setRequestFactory(ClientHttpRequestFactorySelector.bufferRequests(getRestTemplate().getRequestFactory()));
         initSubApis();
@@ -48,5 +55,6 @@ public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Micro
 
     private void initSubApis() {
         userOperations = new UserTemplate(this, isAuthorized());
+        mailOperations = new MailTemplate(this, isAuthorized());
     }
 }
