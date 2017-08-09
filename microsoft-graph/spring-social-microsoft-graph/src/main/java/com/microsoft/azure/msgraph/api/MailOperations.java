@@ -8,5 +8,6 @@ package com.microsoft.azure.msgraph.api;
 
 public interface MailOperations {
     Messages listMessages(String mailFolder);
-    String sendMail(Message message, Boolean saveToSentItems);
+
+    void sendMail(Message message, Boolean saveToSentItems);
 }

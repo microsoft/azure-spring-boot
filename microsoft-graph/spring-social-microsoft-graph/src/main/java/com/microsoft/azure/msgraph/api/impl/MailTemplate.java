@@ -30,11 +30,11 @@ public class MailTemplate extends AbstractMicrosoftOperations implements MailOpe
     }
 
     @Override
-    public String sendMail(Message message, Boolean saveToSentItems){
+    public void sendMail(Message message, Boolean saveToSentItems) {
         final Map<String, Object> data = new HashMap<>();
         data.put("message", message);
         data.put("saveToSentItems", saveToSentItems);
 
-        return microsoft.postForObject("me/sendMail", data);
+        microsoft.postForObject("me/sendMail", data);
     }
 }
