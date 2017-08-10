@@ -253,8 +253,6 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     }
 
     private DocumentCollection createOrGetCollection(String dbName, String collectionName) {
-        final String query = "SELECT * FROM root r WHERE r.id='" + collectionName + "'";
-
         if (this.databaseCache == null) {
             this.databaseCache = createOrGetDatabase(dbName);
         }

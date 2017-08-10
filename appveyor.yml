@@ -46,7 +46,7 @@ build_script:
 
 after_build:
   - mvn -P integration-test-emulator cobertura:cobertura-integration-test
-  - "for /f %f in ('dir /s /b coverage.xml') do echo %f"
-  - "for /f %f in ('dir /s /b coverage.xml') do codecov -f %f -t %CODECOV_UPLOAD_TOKEN%"
+  - cmd: for /f %f in ('dir /s /b coverage.xml') do echo %f
+  - cmd: for /f %f in ('dir /s /b coverage.xml') do codecov -f %f -t %CODECOV_UPLOAD_TOKEN%'
 
 
