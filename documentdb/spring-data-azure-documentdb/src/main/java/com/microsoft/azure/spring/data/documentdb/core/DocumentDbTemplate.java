@@ -192,11 +192,11 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     }
 
     private Database createOrGetDatabase(String dbName) {
-        final String query = "SELECT * FROM root r WHERE r.id='" + dbName + "'";
-
         try {
             final List<Database> dbList = documentDbFactory.getDocumentClient()
-                    .queryDatabases(query, null).getQueryIterable().toList();
+                    .queryDatabases(new SqlQuerySpec("SELECT * FROM root r WHERE r.id=@id",
+                            new SqlParameterCollection(new SqlParameter("@id", dbName))), null)
+                    .getQueryIterable().toList();
 
             if (dbList.size() > 0) {
                 return dbList.get(0);
@@ -260,7 +260,10 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         }
 
         final List<DocumentCollection> collectionList = documentDbFactory.getDocumentClient()
-                .queryCollections(getDatabaseLink(dbName), query, null).getQueryIterable().toList();
+                .queryCollections(getDatabaseLink(dbName),
+                        new SqlQuerySpec("SELECT * FROM root r WHERE r.id=@id",
+                                new SqlParameterCollection(new SqlParameter("@id", collectionName))), null)
+                .getQueryIterable().toList();
 
         if (collectionList.size() > 0) {
             return collectionList.get(0);
