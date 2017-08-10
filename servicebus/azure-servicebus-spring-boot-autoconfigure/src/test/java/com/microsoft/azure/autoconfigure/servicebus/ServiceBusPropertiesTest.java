@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ServiceBusPropertiesTest {
     @Test
     public void canSetQueueProperties() {
-        System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.CONNECTION_STRING);
+        System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.INVALID_CONNECTION_STRING);
         System.setProperty(Constants.QUEUE_NAME_PROPERTY, Constants.QUEUE_NAME);
         System.setProperty(Constants.QUEUE_RECEIVE_MODE_PROPERTY, Constants.QUEUE_RECEIVE_MODE.name());
         System.setProperty(Constants.TOPIC_NAME_PROPERTY, Constants.TOPIC_NAME);
@@ -28,7 +28,7 @@ public class ServiceBusPropertiesTest {
             context.refresh();
             final ServiceBusProperties properties = context.getBean(ServiceBusProperties.class);
 
-            assertThat(properties.getConnectionString()).isEqualTo(Constants.CONNECTION_STRING);
+            assertThat(properties.getConnectionString()).isEqualTo(Constants.INVALID_CONNECTION_STRING);
             assertThat(properties.getQueueName()).isEqualTo(Constants.QUEUE_NAME);
             assertThat(properties.getQueueReceiveMode()).isEqualTo(Constants.QUEUE_RECEIVE_MODE);
             assertThat(properties.getTopicName()).isEqualTo(Constants.TOPIC_NAME);
