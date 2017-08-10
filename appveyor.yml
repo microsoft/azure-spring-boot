@@ -4,6 +4,12 @@ branches:
   only:
     - appveyor
 
+init:
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 environment:
   JAVA_HOME: "C:\\Program Files\\Java\\jdk1.8.0"
   PYTHON: "C:\\Python35"
@@ -27,9 +33,14 @@ install:
   # 4. export cert to java cert store
   - ps: $cert = Get-ChildItem  cert:\LocalMachine\my | Where-Object { $_.FriendlyName -eq "DocumentDbEmulatorCertificate"}; export-Certificate -filepath c:\documentdb.cer -cert ${cert} -type CERT -NoClobber
   - cmd: cd "C:\Program Files\Java\jdk1.8.0\jre\lib\security"
-  - cmd: certutil -encode c:\documentdb.cer documentemulatordb.cer
-  - cmd: keytool -keystore cacerts -importcert -alias documentdbeumlatorcert -file .\documentemulatordb.cer -storepass changeit -trustcacerts -noprompt
+  - cmd: certutil -encode c:\documentdb.cer documentdbemulatordb.cer
+  - cmd: keytool -keystore cacerts -importcert -alias documentdbemulatorcert -file .\documentdbemulatordb.cer -storepass changeit -trustcacerts -noprompt
   - cmd: cd "C:\projects\azure-spring-boot-starters"
 
+
 build_script:
-  - mvn -P integration-test-emulator cobertura:cobertura-integration-test -B -V
+  - mvn clean install -B -V
+
+after_build:
+  - mvn -P integration-test-emulator cobertura:cobertura-integration-test-emulator
+
