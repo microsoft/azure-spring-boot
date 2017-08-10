@@ -15,7 +15,9 @@ public class Constants {
     public static final String SUBSCRIPTION_NAME_PROPERTY = "azure.servicebus.subscription-name";
     public static final String SUBSCRIPTION_RECEIVE_MODE_PROPERTY = "azure.servicebus.subscription-receive-mode";
 
-    public static final String CONNECTION_STRING = "connection string";
+    public static final String INVALID_CONNECTION_STRING = "connection string";
+    public static final String CONNECTION_STRING = "Endpoint=sb://test.servicebus.windows.net/;" +
+            "SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=dummy-key";
     public static final String QUEUE_NAME = "queue name";
     public static final ReceiveMode QUEUE_RECEIVE_MODE = ReceiveMode.PeekLock;
     public static final String TOPIC_NAME = "topic name";

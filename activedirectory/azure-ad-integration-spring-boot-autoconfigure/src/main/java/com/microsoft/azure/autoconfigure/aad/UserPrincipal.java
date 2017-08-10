@@ -137,6 +137,7 @@ public class UserPrincipal {
         }
         return authorities;
     }
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities();
     }
