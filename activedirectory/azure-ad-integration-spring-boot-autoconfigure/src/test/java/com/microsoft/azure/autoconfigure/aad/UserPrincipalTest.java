@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See LICENSE in the project root for
+ * license information.
+ */
 package com.microsoft.azure.autoconfigure.aad;
 
 import org.hamcrest.collection.IsIterableContainingInAnyOrder;
@@ -21,10 +26,11 @@ public class UserPrincipalTest {
     @Test
     public void getAuthoritiesByUserGroups() throws Exception {
         final UserPrincipal principal = new UserPrincipal();
-        List<UserGroup> userGroups = new ArrayList<UserGroup>();
+        final List<UserGroup> userGroups = new ArrayList<UserGroup>();
         userGroups.add(new UserGroup("Microsoft.DirectoryServices.Group", "Group", "this is group1", "group1"));
 
-        Collection<? extends GrantedAuthority> authorities = principal.getAuthoritiesByUserGroups(userGroups, Constants.TARGETED_GROUPS);
+        final Collection<? extends GrantedAuthority> authorities =
+                principal.getAuthoritiesByUserGroups(userGroups, Constants.TARGETED_GROUPS);
         Assert.assertTrue(authorities.contains(new SimpleGrantedAuthority("ROLE_group1")));
         Assert.assertFalse(authorities.contains(new SimpleGrantedAuthority("ROLE_group2")));
         Assert.assertFalse(authorities.contains(new SimpleGrantedAuthority("ROLE_group3")));
@@ -33,12 +39,13 @@ public class UserPrincipalTest {
     @Test
     public void getGroups() throws Exception {
         PowerMockito.mockStatic(AzureADGraphClient.class);
-        Mockito.when(AzureADGraphClient.getUserMembershipsV1(Constants.BEARER_TOKEN)).thenReturn(Constants.UserGroups_JSON);
+        Mockito.when(AzureADGraphClient.getUserMembershipsV1(Constants.BEARER_TOKEN))
+                .thenReturn(Constants.USERGROUPS_JSON);
 
         final UserPrincipal principal = new UserPrincipal();
 
-        List<UserGroup> groups = principal.getGroups(Constants.BEARER_TOKEN);
-        List<UserGroup> targetedGroups = new ArrayList<UserGroup>();
+        final List<UserGroup> groups = principal.getGroups(Constants.BEARER_TOKEN);
+        final List<UserGroup> targetedGroups = new ArrayList<UserGroup>();
         targetedGroups.add(new UserGroup("Microsoft.DirectoryServices.Group", "Group", "this is group1", "group1"));
         targetedGroups.add(new UserGroup("Microsoft.DirectoryServices.Group", "Group", null, "group2"));
         targetedGroups.add(new UserGroup("Microsoft.DirectoryServices.Group", "Group", "this is group3", "group3"));

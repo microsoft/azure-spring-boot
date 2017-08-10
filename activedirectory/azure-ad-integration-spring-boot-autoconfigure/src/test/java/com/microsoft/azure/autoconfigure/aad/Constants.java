@@ -8,9 +8,6 @@ package com.microsoft.azure.autoconfigure.aad;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by yaweiw on 8/1/2017.
- */
 public class Constants {
     public static final String CLIENT_ID_PROPERTY = "azure.activedirectory.clientId";
     public static final String CLIENT_SECRET_PROPERTY = "azure.activedirectory.clientSecret";
@@ -26,7 +23,7 @@ public class Constants {
     public static final String TOKEN_HEADER = "Authorization";
     public static final String BEARER_TOKEN = "Bearer real_jtw_bearer_token";
 
-    public static final String UserGroups_JSON = "{\n" +
+    public static final String USERGROUPS_JSON = "{\n" +
             "    \"odata.metadata\": \"https://graph.windows.net/myorganization/$metadata#directoryObjects\",\n" +
             "    \"value\": [\n" +
             "        {\n" +
@@ -90,6 +87,9 @@ public class Constants {
             "            \"securityEnabled\": true\n" +
             "        }" +
             "],\n" +
-            "    \"odata.nextLink\": \"directoryObjects/$/Microsoft.DirectoryServices.User/12345678-2898-434a-a370-8ec974c2fb57/memberOf?$skiptoken=X'445370740700010000000000000000100000009D29CBA7B45D854A84FF7F9B636BD9DC000000000000000000000017312E322E3834302E3131333535362E312E342E3233333100000000'\"\n" +
+            "    \"odata.nextLink\": \"directoryObjects/$/Microsoft.DirectoryServices.User/" +
+            "12345678-2898-434a-a370-8ec974c2fb57/memberOf?$skiptoken=X'4453707407000100000000" +
+            "00000000100000009D29CBA7B45D854A84FF7F9B636BD9DC000000000000000000000017312E322E3" +
+            "834302E3131333535362E312E342E3233333100000000'\"\n" +
             "}";
 }
