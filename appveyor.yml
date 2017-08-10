@@ -10,6 +10,12 @@ environment:
   CODECOV_UPLOAD_TOKEN:
     secure: 80IcEvO4OmyIeu2O4Yq7fKr4BV9p3M6zczwEAy2bL/H1CzypXF4PEpDGyACNTdX1
 
+init:
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 install:
   - cmd: python -m pip install codecov
   - cmd: copy "C:\Program Files (x86)\Apache\Maven\bin\mvn.cmd" "C:\Program Files (x86)\Apache\Maven\bin\mvn.bat"
@@ -40,5 +46,5 @@ build_script:
 
 after_build:
   - mvn -P integration-test-emulator cobertura:cobertura-integration-test
-  - for /f %f in ('dir /b /s coverage.xml') do codecov -f %f -t %CODECOV_UPLOAD_TOKEN%
+  - "for /f %f in ('dir /b /s coverage.xml') do codecov -f %f -t %CODECOV_UPLOAD_TOKEN%"
 
