@@ -35,8 +35,8 @@ public class AzureADJwtTokenFilterTest {
     public void doFilterInternal() throws Exception {
         System.setProperty(Constants.CLIENT_ID_PROPERTY, Constants.CLIENT_ID);
         System.setProperty(Constants.CLIENT_SECRET_PROPERTY, Constants.CLIENT_SECRET);
-        System.setProperty(Constants.ALLOWED_ROLES_GROUPS_PROPERTY,
-                Constants.ALLOWED_ROLES_GROUPS.toString().replace("[", "").replace("]", ""));
+        System.setProperty(Constants.TARGETED_GROUPS_PROPERTY,
+                Constants.TARGETED_GROUPS.toString().replace("[", "").replace("]", ""));
 
         final HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getHeader(Constants.TOKEN_HEADER)).thenReturn(Constants.BEARER_TOKEN);
@@ -45,7 +45,6 @@ public class AzureADJwtTokenFilterTest {
         final FilterChain filterChain = mock(FilterChain.class);
 
         Authentication authentication = mock(Authentication.class);
-
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(AzureADJwtFilterAutoConfiguration.class);
             context.refresh();
@@ -58,26 +57,27 @@ public class AzureADJwtTokenFilterTest {
 
             authentication = SecurityContextHolder.getContext().getAuthentication();
             assertThat(authentication.getPrincipal()).isNotNull();
-            assertThat(authentication.getPrincipal()).isExactlyInstanceOf(AzureADJwtToken.class);
+            assertThat(authentication.getPrincipal()).isExactlyInstanceOf(UserPrincipal.class);
             assertThat(authentication.getAuthorities()).isNotNull();
-            assertThat(authentication.getAuthorities().size()).isEqualTo(1);
-            assertThat(authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ALLOWED"))
-                    || authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_DISALLOWED")));
+            assertThat(authentication.getAuthorities().size()).isEqualTo(2);
+            assertThat(authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_group1"))
+                    && authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_group2"))
+            );
 
-            final AzureADJwtToken aadJwtToken = (AzureADJwtToken) authentication.getPrincipal();
-            assertThat(aadJwtToken.getIssuer()).isNotNull().isNotEmpty();
-            assertThat(aadJwtToken.getKid()).isNotNull().isNotEmpty();
-            assertThat(aadJwtToken.getSubject()).isNotNull().isNotEmpty();
+            final UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+            assertThat(principal.getIssuer()).isNotNull().isNotEmpty();
+            assertThat(principal.getKid()).isNotNull().isNotEmpty();
+            assertThat(principal.getSubject()).isNotNull().isNotEmpty();
 
-            assertThat(aadJwtToken.getClaims()).isNotNull().isNotEmpty();
-            final Map<String, Object> claims = aadJwtToken.getClaims();
-            assertThat(claims.get("iss")).isEqualTo(aadJwtToken.getIssuer());
-            assertThat(claims.get("sub")).isEqualTo(aadJwtToken.getSubject());
+            assertThat(principal.getClaims()).isNotNull().isNotEmpty();
+            final Map<String, Object> claims = principal.getClaims();
+            assertThat(claims.get("iss")).isEqualTo(principal.getIssuer());
+            assertThat(claims.get("sub")).isEqualTo(principal.getSubject());
         }
 
         System.clearProperty(Constants.CLIENT_ID_PROPERTY);
         System.clearProperty(Constants.CLIENT_SECRET_PROPERTY);
-        System.clearProperty(Constants.ALLOWED_ROLES_GROUPS_PROPERTY);
+        System.clearProperty(Constants.TARGETED_GROUPS_PROPERTY);
     }
 
 }
