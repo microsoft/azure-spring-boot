@@ -27,7 +27,7 @@ install:
   - cmd: md %LOCALAPPDATA%\CosmosDBEmulatorCert 2>nul
   - cmd: docker run -d -v %LOCALAPPDATA%\CosmosDBEmulatorCert:c:\CosmosDBEmulator\CosmosDBEmulatorCert -p 8081:8081 -t -i microsoft/azure-cosmosdb-emulator >> dockerid.txt
   - cmd: set /P dockerid=<dockerid.txt
-  - cmd: timeout 120
+  - cmd: timeout 100
   - cmd: docker logs %dockerid% >> dockerlog.txt
   - ps: $substtring = type dockerlog.txt | where { $_ -match "\bhttps://[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:8081/$" } | foreach { $matches[0] }; $substtring | Out-File -filepath documentdburi.txt -encoding ASCII
   - cmd: set /P DOCUMENTDB_URI=< documentdburi.txt
@@ -46,7 +46,7 @@ build_script:
 
 after_build:
   - mvn -P integration-test-emulator cobertura:cobertura-integration-test
-  - "SET PATH=C:\\Python35;C:\\Python35\\Scripts;%PATH%"
-  - dir /b /s coverage.xml
-  - codecov -t %CODECOV_UPLOAD_TOKEN%
+  - for /f %f in ('dir /s /b coverage.xml') do echo %f
+  - for /f %f in ('dir /s /b coverage.xml') do codecov -f %f -t %CODECOV_UPLOAD_TOKEN%
+
 
