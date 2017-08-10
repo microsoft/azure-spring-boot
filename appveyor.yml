@@ -4,12 +4,6 @@ branches:
   only:
     - appveyor
 
-init:
-  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-
-on_finish:
-  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-
 environment:
   JAVA_HOME: "C:\\Program Files\\Java\\jdk1.8.0"
   PYTHON: "C:\\Python35"
@@ -43,4 +37,5 @@ build_script:
 
 after_build:
   - mvn -P integration-test-emulator cobertura:cobertura-integration-test
+  - curl -s https://codecov.io/bash | bash -
 
