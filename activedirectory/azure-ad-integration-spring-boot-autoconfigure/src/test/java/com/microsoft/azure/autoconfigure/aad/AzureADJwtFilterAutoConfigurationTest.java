@@ -15,8 +15,8 @@ public class AzureADJwtFilterAutoConfigurationTest {
     public void createAzureADJwtFilter() throws Exception {
         System.setProperty(Constants.CLIENT_ID_PROPERTY, Constants.CLIENT_ID);
         System.setProperty(Constants.CLIENT_SECRET_PROPERTY, Constants.CLIENT_SECRET);
-        System.setProperty(Constants.ALLOWED_ROLES_GROUPS_PROPERTY,
-                Constants.ALLOWED_ROLES_GROUPS.toString().replace("[", "").replace("]", ""));
+        System.setProperty(Constants.TARGETED_GROUPS_PROPERTY,
+                Constants.TARGETED_GROUPS.toString().replace("[", "").replace("]", ""));
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(AzureADJwtFilterAutoConfiguration.class);
@@ -29,6 +29,6 @@ public class AzureADJwtFilterAutoConfigurationTest {
 
         System.clearProperty(Constants.CLIENT_ID_PROPERTY);
         System.clearProperty(Constants.CLIENT_SECRET_PROPERTY);
-        System.clearProperty(Constants.ALLOWED_ROLES_GROUPS_PROPERTY);
+        System.clearProperty(Constants.TARGETED_GROUPS_PROPERTY);
     }
 }
