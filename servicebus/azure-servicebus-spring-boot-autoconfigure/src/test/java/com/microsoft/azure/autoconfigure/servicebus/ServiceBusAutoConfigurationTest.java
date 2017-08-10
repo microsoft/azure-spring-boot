@@ -18,7 +18,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 public class ServiceBusAutoConfigurationTest {
     @Test
     public void returnNullIfSetConnectionStringOnly() {
-        System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.CONNECTION_STRING);
+        System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.INVALID_CONNECTION_STRING);
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(ServiceBusAutoConfiguration.class);
@@ -63,7 +63,7 @@ public class ServiceBusAutoConfigurationTest {
 
     @Test
     public void cannotAutowireQueueClientWithInvalidConnectionString() {
-        System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.CONNECTION_STRING);
+        System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.INVALID_CONNECTION_STRING);
         System.setProperty(Constants.QUEUE_NAME_PROPERTY, Constants.QUEUE_NAME);
         System.setProperty(Constants.QUEUE_RECEIVE_MODE_PROPERTY, Constants.QUEUE_RECEIVE_MODE.name());
 
@@ -95,7 +95,7 @@ public class ServiceBusAutoConfigurationTest {
 
     @Test
     public void cannotAutowireTopicClientWithInvalidConnectionString() {
-        System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.CONNECTION_STRING);
+        System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.INVALID_CONNECTION_STRING);
         System.setProperty(Constants.TOPIC_NAME_PROPERTY, Constants.TOPIC_NAME);
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
@@ -125,7 +125,7 @@ public class ServiceBusAutoConfigurationTest {
 
     @Test
     public void cannotAutowireSubscriptionClientWithInvalidConnectionString() {
-        System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.CONNECTION_STRING);
+        System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.INVALID_CONNECTION_STRING);
         System.setProperty(Constants.TOPIC_NAME_PROPERTY, Constants.TOPIC_NAME);
         System.setProperty(Constants.SUBSCRIPTION_NAME_PROPERTY, Constants.SUBSCRIPTION_NAME);
         System.setProperty(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY, Constants.SUBSCRIPTION_RECEIVE_MODE.name());
@@ -146,6 +146,41 @@ public class ServiceBusAutoConfigurationTest {
             assertThat(exception).isNotNull();
             assertThat(exception.getMessage()).contains(
                     "IllegalConnectionStringFormatException: Connection String cannot be parsed");
+            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
+
+            assertThat(subscriptionClient).isNull();
+        }
+
+        System.clearProperty(Constants.CONNECTION_STRING_PROPERTY);
+        System.clearProperty(Constants.TOPIC_NAME_PROPERTY);
+        System.clearProperty(Constants.SUBSCRIPTION_NAME_PROPERTY);
+        System.clearProperty(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY);
+    }
+
+    @Test
+    public void cannotAutowireSubscriptionClientWithInvalidCredential() {
+        System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.CONNECTION_STRING);
+        System.setProperty(Constants.TOPIC_NAME_PROPERTY, Constants.TOPIC_NAME);
+        System.setProperty(Constants.SUBSCRIPTION_NAME_PROPERTY, Constants.SUBSCRIPTION_NAME);
+        System.setProperty(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY, Constants.SUBSCRIPTION_RECEIVE_MODE.name());
+
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(ServiceBusAutoConfiguration.class);
+            context.refresh();
+
+            SubscriptionClient subscriptionClient = null;
+
+            Exception exception = null;
+            try {
+                subscriptionClient = context.getBean(SubscriptionClient.class);
+            } catch (Exception e) {
+                exception = e;
+            }
+
+            assertThat(exception).isNotNull();
+            assertThat(exception.getMessage()).contains(
+                    "BeanInstantiationException: Failed to instantiate [com.microsoft.azure.servicebus." +
+                            "SubscriptionClient]: Factory method 'subscriptionClient' threw exception;");
             assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
 
             assertThat(subscriptionClient).isNull();

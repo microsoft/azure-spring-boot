@@ -16,11 +16,10 @@ import java.util.concurrent.*;
 
 
 public class AzureKeyVaultCredential extends KeyVaultCredentials {
+    private static final long DEFAULT_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS = 60L;
     private String clientId;
     private String clientKey;
     private long timeoutInSeconds;
-
-    private static final long DEFAULT_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS = 60L;
 
     public AzureKeyVaultCredential(String clientId, String clientKey, long timeoutInSeconds) {
         this.clientId = clientId;

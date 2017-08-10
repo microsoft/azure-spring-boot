@@ -26,14 +26,12 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class SimpleDocumentDbRepositoryUnitTest {
 
+    private static final Person TEST_PERSON = new Person("aaa", "firstname", "lastname");
     SimpleDocumentDbRepository<Person, String> repository;
-
     @Mock
     DocumentDbOperations dbOperations;
     @Mock
     DocumentDbEntityInformation<Person, String> entityInformation;
-
-    private static final Person TEST_PERSON = new Person("aaa", "firstname", "lastname");
 
     @Before
     public void setUp() {
