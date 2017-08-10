@@ -5,8 +5,6 @@
  */
 package com.microsoft.azure.autoconfigure.aad;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.oauth2.sdk.http.HTTPResponse;
 
 import java.io.BufferedReader;
@@ -15,37 +13,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 
-public class AzureADUserMembership {
+public class AzureADGraphClient {
+    private static String userMembershipRestAPIv1 = "https://graph.windows.net/me/memberOf?api-version=1.6";
 
-    private static String userMembershipRestAPI = "https://graph.windows.net/me/memberOf?api-version=1.6";
-    private List<DirectoryServiceObject> userMemberships;
-
-    public AzureADUserMembership(String accessToken) throws Exception {
-        final String responseInJson = getUserMembershipsV1(accessToken);
-        userMemberships = new ArrayList<DirectoryServiceObject>();
-        final ObjectMapper objectMapper = JacksonObjectMapperFactory.getInstance();
-        final JsonNode rootNode = objectMapper.readValue(responseInJson, JsonNode.class);
-        final JsonNode valuesNode = rootNode.get("value");
-        int i = 0;
-        while (valuesNode != null && valuesNode.get(i) != null) {
-            userMemberships.add(new DirectoryServiceObject(
-                    valuesNode.get(i).get("odata.type").asText(),
-                    valuesNode.get(i).get("objectType").asText(),
-                    valuesNode.get(i).get("description").asText(),
-                    valuesNode.get(i).get("displayName").asText()));
-            i++;
-        }
-    }
-
-    public List<DirectoryServiceObject> getUserMemberships() {
-        return userMemberships;
-    }
-
-    private String getUserMembershipsV1(String accessToken) throws Exception {
-        final URL url = new URL(userMembershipRestAPI);
+    public static String getUserMembershipsV1(String accessToken) throws Exception {
+        final URL url = new URL(userMembershipRestAPIv1);
 
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         // Set the appropriate header fields in the request header.
@@ -61,7 +34,7 @@ public class AzureADUserMembership {
         }
     }
 
-    private String getResponseStringFromConn(HttpURLConnection conn) throws IOException {
+    private static String getResponseStringFromConn(HttpURLConnection conn) throws IOException {
 
         BufferedReader reader = null;
         try {

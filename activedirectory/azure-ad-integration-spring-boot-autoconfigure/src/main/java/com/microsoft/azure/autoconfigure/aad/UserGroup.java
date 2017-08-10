@@ -5,13 +5,13 @@
  */
 package com.microsoft.azure.autoconfigure.aad;
 
-public class DirectoryServiceObject {
+public class UserGroup {
     private String odataType;
     private String objectType;
     private String description;
     private String displayName;
 
-    public DirectoryServiceObject(String odataType, String objectType, String description, String displayName) {
+    public UserGroup(String odataType, String objectType, String description, String displayName) {
         this.odataType = odataType;
         this.objectType = objectType;
         this.description = description;
