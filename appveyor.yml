@@ -46,8 +46,7 @@ build_script:
 
 after_build:
   - mvn -P integration-test-emulator cobertura:cobertura-integration-test
-  - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+  - "SET PATH=C:\\Python35;C:\\Python35\\Scripts;%PATH%"
   - dir /b /s coverage.xml
-  - set CODECOV_UPLOAD_TOKEN
-  - for /f %f in ('dir /b /s coverage.xml') do codecov -f %f -t %CODECOV_UPLOAD_TOKEN%
+  - codecov -t %CODECOV_UPLOAD_TOKEN%
 
