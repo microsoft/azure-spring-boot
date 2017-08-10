@@ -16,15 +16,15 @@ public class MediaServicesProperties {
     /**
      * Media service configuration URI.
      */
-    public final static String MEDIA_SERVICE_URI = "https://media.windows.net/API/";
+    public static final String MEDIA_SERVICE_URI = "https://media.windows.net/API/";
     /**
      * Media service OAuth configuration URI.
      */
-    public final static String OAUTH_URI = "https://wamsprodglobal001acs.accesscontrol.windows.net/v2/OAuth2-13";
+    public static final String OAUTH_URI = "https://wamsprodglobal001acs.accesscontrol.windows.net/v2/OAuth2-13";
     /**
      * Media service scope sent to OAuth.
      */
-    public final static String SCOPE = "urn:WindowsAzureMediaServices";
+    public static final String SCOPE = "urn:WindowsAzureMediaServices";
     /**
      * Media service account name.
      */

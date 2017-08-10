@@ -32,7 +32,7 @@ public class MediaServicesPropertiesTest {
             assertThat(properties.getAccountName()).isEqualTo(Constants.ACCOUNT_NAME);
             assertThat(properties.getAccountKey()).isEqualTo(Constants.ACCOUNT_KEY);
             assertThat(properties.getProxyHost()).isEqualTo(Constants.PROXY_HOST);
-            assertThat(properties.getProxyPort()).isEqualTo(Constants.PROXY_PORT);
+            assertThat(properties.getProxyPort()).isEqualTo(Integer.valueOf(Constants.PROXY_PORT));
             assertThat(properties.getProxyScheme()).isEqualTo(Constants.PROXY_SCHEME);
         }
 
