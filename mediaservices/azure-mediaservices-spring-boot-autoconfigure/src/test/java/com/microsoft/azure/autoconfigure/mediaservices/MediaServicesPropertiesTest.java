@@ -20,6 +20,9 @@ public class MediaServicesPropertiesTest {
     public void canSetProperties() {
         System.setProperty(Constants.ACCOUNT_NAME_PROPERTY, Constants.ACCOUNT_NAME);
         System.setProperty(Constants.ACCOUNT_KEY_PROPERTY, Constants.ACCOUNT_KEY);
+        System.setProperty(Constants.PROXY_HOST_PROPERTY, Constants.PROXY_HOST);
+        System.setProperty(Constants.PROXY_PORT_PROPERTY, Constants.PROXY_PORT);
+        System.setProperty(Constants.PROXY_SCHEME_PROPERTY, Constants.PROXY_SCHEME);
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(Config.class);
@@ -28,10 +31,16 @@ public class MediaServicesPropertiesTest {
             final MediaServicesProperties properties = context.getBean(MediaServicesProperties.class);
             assertThat(properties.getAccountName()).isEqualTo(Constants.ACCOUNT_NAME);
             assertThat(properties.getAccountKey()).isEqualTo(Constants.ACCOUNT_KEY);
+            assertThat(properties.getProxyHost()).isEqualTo(Constants.PROXY_HOST);
+            assertThat(properties.getProxyPort()).isEqualTo(Constants.PROXY_PORT);
+            assertThat(properties.getProxyScheme()).isEqualTo(Constants.PROXY_SCHEME);
         }
 
         System.clearProperty(Constants.ACCOUNT_NAME_PROPERTY);
         System.clearProperty(Constants.ACCOUNT_KEY_PROPERTY);
+        System.clearProperty(Constants.PROXY_HOST_PROPERTY);
+        System.clearProperty(Constants.PROXY_PORT_PROPERTY);
+        System.clearProperty(Constants.PROXY_SCHEME_PROPERTY);
     }
 
     @Test

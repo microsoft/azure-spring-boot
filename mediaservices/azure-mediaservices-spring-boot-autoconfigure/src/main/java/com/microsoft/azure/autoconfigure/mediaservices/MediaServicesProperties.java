@@ -14,74 +14,39 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties("azure.mediaservices")
 public class MediaServicesProperties {
     /**
+     * Media service configuration URI.
+     */
+    public final static String MEDIA_SERVICE_URI = "https://media.windows.net/API/";
+    /**
+     * Media service OAuth configuration URI.
+     */
+    public final static String OAUTH_URI = "https://wamsprodglobal001acs.accesscontrol.windows.net/v2/OAuth2-13";
+    /**
+     * Media service scope sent to OAuth.
+     */
+    public final static String SCOPE = "urn:WindowsAzureMediaServices";
+    /**
      * Media service account name.
      */
     @NotEmpty
     private String accountName;
-
     /**
      * Media service account key.
      */
     @NotEmpty
     private String accountKey;
-
     /**
      * Proxy host if to use proxy.
      */
     private String proxyHost;
-
     /**
      * Proxy port if to use proxy.
      */
-    private String proxyPort;
-
+    private Integer proxyPort;
     /**
      * Proxy scheme if to use proxy. Default is http.
      */
     private String proxyScheme = "http";
-
-    /**
-     * Media service configuration URI.
-     */
-    private String mediaServiceUri = "https://media.windows.net/API/";
-
-    /**
-     * Media service OAuth configuration URI.
-     */
-    private String oAuthUri = "https://wamsprodglobal001acs.accesscontrol.windows.net/v2/OAuth2-13";
-
-    /**
-     * Media service scope sent to OAuth.
-     */
-    private String scope = "urn:WindowsAzureMediaServices";
-
-    /**
-     * @return the mediaServiceUri
-     */
-    public String getMediaServiceUri() {
-        return mediaServiceUri;
-    }
-
-    /**
-     * @param mediaServiceUri the mediaServiceUri to set
-     */
-    public void setMediaServiceUri(String mediaServiceUri) {
-        this.mediaServiceUri = mediaServiceUri;
-    }
-
-    /**
-     * @return the oAuthUri
-     */
-    public String getoAuthUri() {
-        return oAuthUri;
-    }
-
-    /**
-     * @param oAuthUri the oAuthUri to set
-     */
-    public void setoAuthUri(String oAuthUri) {
-        this.oAuthUri = oAuthUri;
-    }
 
     /**
      * @return the accountName
@@ -112,20 +77,6 @@ public class MediaServicesProperties {
     }
 
     /**
-     * @return the scope
-     */
-    public String getScope() {
-        return scope;
-    }
-
-    /**
-     * @param scope the scope to set
-     */
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
-
-    /**
      * @return the proxyHost
      */
     public String getProxyHost() {
@@ -142,14 +93,14 @@ public class MediaServicesProperties {
     /**
      * @return the proxyPort
      */
-    public String getProxyPort() {
+    public Integer getProxyPort() {
         return proxyPort;
     }
 
     /**
      * @param proxyPort the proxyPort to set
      */
-    public void setProxyPort(String proxyPort) {
+    public void setProxyPort(Integer proxyPort) {
         this.proxyPort = proxyPort;
     }
 
