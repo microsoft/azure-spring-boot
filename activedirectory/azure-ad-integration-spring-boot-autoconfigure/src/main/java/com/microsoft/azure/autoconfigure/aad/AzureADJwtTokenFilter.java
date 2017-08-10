@@ -12,8 +12,6 @@ import com.microsoft.aad.adal4j.ClientCredential;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -24,8 +22,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -44,11 +40,11 @@ public class AzureADJwtTokenFilter extends OncePerRequestFilter {
     }
 
     private AuthenticationResult acquireTokenForGraphApi(
-            String tokenEncoded,
+            String idToken,
             String tenantId) throws Throwable {
         final ClientCredential credential = new ClientCredential(
                 aadJwtFilterProp.getClientId(), aadJwtFilterProp.getClientSecret());
-        final ClientAssertion assertion = new ClientAssertion(tokenEncoded);
+        final ClientAssertion assertion = new ClientAssertion(idToken);
 
         AuthenticationResult result = null;
         ExecutorService service = null;
@@ -86,41 +82,30 @@ public class AzureADJwtTokenFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith(TOKEN_TYPE)) {
             try {
-                final String tokenEncoded = authHeader.replace(TOKEN_TYPE, "");
-                final AzureADJwtToken jwtToken = new AzureADJwtToken(tokenEncoded);
+                final String idToken = authHeader.replace(TOKEN_TYPE, "");
+                final UserPrincipal principal = new UserPrincipal(idToken);
+                final String tid = principal.getClaim("tid").toString();
 
-                AzureADUserMembership userProfile;
-                final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-                try {
-                    final String tid = jwtToken.getClaim("tid").toString();
+                final AuthenticationResult result = acquireTokenForGraphApi(
+                        idToken,
+                        tid);
 
-                    final AuthenticationResult result = acquireTokenForGraphApi(
-                            tokenEncoded,
-                            tid);
-                    userProfile = new AzureADUserMembership(result.getAccessToken());
-
-                    if (CustomPermissionEvaluator.hasPermission(
-                            userProfile.getUserMemberships(), aadJwtFilterProp.getAllowedRolesGroups())) {
-                        authorities.add(new SimpleGrantedAuthority("ROLE_ALLOWED"));
-                    } else {
-                        authorities.add(new SimpleGrantedAuthority("ROLE_DISALLOWED"));
-                    }
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                } catch (Throwable throwable) {
-                    throw new RuntimeException(throwable);
-                }
                 final Authentication authentication = new
-                        PreAuthenticatedAuthenticationToken(jwtToken, null, authorities);
+                        PreAuthenticatedAuthenticationToken(
+                        principal, null,
+                        principal.getAuthoritiesByUserGroups(
+                                principal.getGroups(result.getAccessToken()),
+                                aadJwtFilterProp.getAllowedRolesGroups()));
                 authentication.setAuthenticated(true);
                 log.info("Request token verification success. {0}", authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {
                 throw new RuntimeException(e);
+            } catch (Throwable throwable) {
+                throw new RuntimeException(throwable);
             }
         }
 
         filterChain.doFilter(request, response);
     }
-
 }
