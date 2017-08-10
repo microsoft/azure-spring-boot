@@ -7,8 +7,11 @@ branches:
 environment:
   JAVA_HOME: "C:\\Program Files\\Java\\jdk1.8.0"
   PYTHON: "C:\\Python35"
+  CODECOV_UPLOAD_TOKEN:
+    secure: 80IcEvO4OmyIeu2O4Yq7fKr4BV9p3M6zczwEAy2bL/H1CzypXF4PEpDGyACNTdX1
 
 install:
+  - cmd: python -m pip install codecov
   - cmd: copy "C:\Program Files (x86)\Apache\Maven\bin\mvn.cmd" "C:\Program Files (x86)\Apache\Maven\bin\mvn.bat"
   - cmd: net share "c=c:"
   # 1. starter docker
@@ -37,5 +40,5 @@ build_script:
 
 after_build:
   - mvn -P integration-test-emulator cobertura:cobertura-integration-test
-  - curl -s https://codecov.io/bash | bash -
+  - for /f %f in ('dir /b /s coverage.xml') do codecov -f %f -t %CODECOV_UPLOAD_TOKEN%
 
