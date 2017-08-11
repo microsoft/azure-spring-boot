@@ -112,9 +112,7 @@ public class UserPrincipal {
                     && valuesNode.get(i) != null) {
                 if (valuesNode.get(i).get("objectType").asText().equals("Group")) {
                     userGroups.add(new UserGroup(
-                            valuesNode.get(i).get("odata.type").asText(),
-                            valuesNode.get(i).get("objectType").asText(),
-                            valuesNode.get(i).get("description").asText(),
+                            valuesNode.get(i).get("objectId").asText(),
                             valuesNode.get(i).get("displayName").asText()));
                 }
                 i++;

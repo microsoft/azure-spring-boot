@@ -31,8 +31,8 @@ public class AzureADJwtFilterAutoConfiguration {
      * @return AzureADJwtFilter bean
      */
     @Bean
-    @Scope("prototype")
-    public AzureADJwtTokenFilter azureADJwtFilter() {
+    @Scope("singleton")
+    public AzureADJwtTokenFilter azureADJwtTokenFilter() {
         LOG.info("AzureADJwtTokenFilter Constructor.");
         return new AzureADJwtTokenFilter(aadJwtFilterProperties);
     }
