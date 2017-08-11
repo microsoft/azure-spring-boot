@@ -264,5 +264,6 @@
         <module>microsoft-graph/microsoft-graph-spring-social-starter-sample</module>
         <module>servicebus/azure-servicebus-spring-boot-starter-sample</module>
         <module>storage/azure-storage-spring-boot-starter-sample</module>
+        <module>cloudfoundry/azure-cloud-foundry-service-sample</module>
     </modules>
 </project>
