@@ -36,5 +36,4 @@ public class AzureADJwtFilterAutoConfiguration {
         LOG.info("AzureADJwtTokenFilter Constructor.");
         return new AzureADJwtTokenFilter(aadJwtFilterProperties);
     }
-
 }
