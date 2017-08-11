@@ -5,15 +5,14 @@
  */
 package com.microsoft.azure.cloudfoundry.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySource;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VcapResult {
     private static final String AZURE_SERVICE_BUS_DOMAIN = "servicebus.windows.net";
@@ -32,7 +31,7 @@ public class VcapResult {
 
     /**
      * Populates default properties during @EnvironmentPostProcessor processing.
-     * 
+     * <p>
      * Note that this class gets invoked before Spring creates the logging
      * subsystem, so we just use System.out.println instead.
      */
@@ -59,7 +58,7 @@ public class VcapResult {
                 final VcapPojo pojo = pojos[i];
                 if (serviceType.toString().equals(pojo.getServiceBrokerName())
                         && serviceInstanceName.equals(pojo
-                                .getServiceInstanceName())) {
+                        .getServiceInstanceName())) {
                     result = pojo;
                     break;
                 }
@@ -97,23 +96,23 @@ public class VcapResult {
         VcapPojo pojo = null;
 
         switch (findCountByServiceType(serviceType)) {
-        case 0:
-            log("VcapResult.findPojoForServiceType: No services of type "
-                    + serviceType.toString() + " found.");
-            break;
-        case 1:
-            log("VcapResult.findPojoForServiceType: One services of type "
-                    + serviceType.toString() + " found.");
-            pojo = findByServiceType(serviceType);
-            if (pojo != null) {
-                log("VcapResult.findPojoForServiceType: Found the matching pojo");
-            }
-            break;
-        default:
-            log("VcapResult.findPojoForServiceType: More than one service of type "
-                    + serviceType.toString()
-                    + " found, cannot autoconfigure service, must use factory instead.");
-            break;
+            case 0:
+                log("VcapResult.findPojoForServiceType: No services of type "
+                        + serviceType.toString() + " found.");
+                break;
+            case 1:
+                log("VcapResult.findPojoForServiceType: One services of type "
+                        + serviceType.toString() + " found.");
+                pojo = findByServiceType(serviceType);
+                if (pojo != null) {
+                    log("VcapResult.findPojoForServiceType: Found the matching pojo");
+                }
+                break;
+            default:
+                log("VcapResult.findPojoForServiceType: More than one service of type "
+                        + serviceType.toString()
+                        + " found, cannot autoconfigure service, must use factory instead.");
+                break;
         }
         return pojo;
     }
@@ -134,7 +133,7 @@ public class VcapResult {
     }
 
     private void populateDefaultStorageProperties(Map<String, Object> map,
-            VcapPojo pojo) {
+                                                  VcapPojo pojo) {
         log("VcapResult.populateDefaultStorageProperties " + pojo);
         map.put(Constants.NAMESPACE_STORAGE + "." + RESULT, this);
         if (pojo != null) {
@@ -150,18 +149,18 @@ public class VcapResult {
                         +
                         "AccountName="
                         + pojo.getCredentials().get(
-                                Constants.STORAGE_ACCOUNT_NAME)
+                        Constants.STORAGE_ACCOUNT_NAME)
                         + ";"
                         +
                         "AccountKey="
                         + pojo.getCredentials().get(
-                                Constants.PRIMARY_ACCESS_KEY);
+                        Constants.PRIMARY_ACCESS_KEY);
         log("storageConnectionString = " + storageConnectionString);
         return storageConnectionString;
     }
 
     private void populateDefaultServiceBusProperties(Map<String, Object> map,
-            VcapPojo pojo) {
+                                                     VcapPojo pojo) {
         log("VcapResult.populateDefaultServiceBusProperties " + pojo);
         map.put(Constants.NAMESPACE_SERVICE_BUS + "." + RESULT, this);
         if (pojo != null) {
@@ -171,7 +170,7 @@ public class VcapResult {
         }
     }
 
-    private String buildServiceBusConnectString(VcapPojo pojo)    {
+    private String buildServiceBusConnectString(VcapPojo pojo) {
         final String connectionString =
                 "Endpoint=sb://"
                         + pojo.getCredentials().get(Constants.NAMESPACE_NAME)
@@ -180,17 +179,17 @@ public class VcapResult {
                         + "/;"
                         + "SharedAccessKeyName="
                         + pojo.getCredentials().get(
-                                Constants.SHARED_ACCESS_NAME)
+                        Constants.SHARED_ACCESS_NAME)
                         + ";"
                         + "SharedAccessKey="
                         + pojo.getCredentials().get(
-                                Constants.SHARED_ACCESS_KEY_VALUE);
+                        Constants.SHARED_ACCESS_KEY_VALUE);
         log("connectionString name = " + connectionString);
         return connectionString;
     }
 
     private void populateDefaultDocumentDBProperties(Map<String, Object> map,
-            VcapPojo pojo) {
+                                                     VcapPojo pojo) {
         log("VcapResult.populateDefaultDocumentDBProperties " + pojo);
         map.put(Constants.NAMESPACE_DOCUMENTDB + "." + RESULT, this);
         if (pojo != null) {
@@ -222,7 +221,7 @@ public class VcapResult {
 
     @SuppressFBWarnings("WMI_WRONG_MAP_ITERATOR")
     private void addOrReplace(MutablePropertySources propertySources,
-            Map<String, Object> map) {
+                              Map<String, Object> map) {
         MapPropertySource target = null;
         if (propertySources.contains(PROPERTY_SOURCE_NAME)) {
             final PropertySource<?> source = propertySources
