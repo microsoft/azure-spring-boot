@@ -29,10 +29,10 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = { VcapProcessor.class })
-public class AzureCloudFoundryServiceApplicationTests {
+public class AzureCloudFoundryServiceApplicationTest {
 
     private static final Logger LOG = LoggerFactory
-            .getLogger(AzureCloudFoundryServiceApplicationTests.class);
+            .getLogger(AzureCloudFoundryServiceApplicationTest.class);
 
     @Autowired
     private VcapProcessor parser;
