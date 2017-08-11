@@ -69,6 +69,7 @@
         <azure.keyvault.secrets.spring.boot.version>${bom.version}</azure.keyvault.secrets.spring.boot.version>
         <azure.keyvault.secrets.starter.version>${bom.version}</azure.keyvault.secrets.starter.version>
         <azure.spring.common.version>${bom.version}</azure.spring.common.version>
+        <azure.cloudfoundry.service.version>${bom.version}</azure.cloudfoundry.service.version>
 
         <azure.documentdb.version>1.11.0</azure.documentdb.version>
         <azure.servicebus.version>1.0.0-PREVIEW-3</azure.servicebus.version>
@@ -173,6 +174,11 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-spring-common</artifactId>
                 <version>${azure.spring.common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-cloud-foundry-service</artifactId>
+                <version>${azure.cloudfoundry.service.version}</version>
             </dependency>
 
             <!-- Azure libraries -->
