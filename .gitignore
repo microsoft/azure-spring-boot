@@ -39,3 +39,4 @@ hs_err_pid*
 # Maven
 target
 /bin/
+!.mvn/wrapper/maven-wrapper.jar
