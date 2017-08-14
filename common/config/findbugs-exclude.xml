@@ -5,4 +5,5 @@
     <Bug pattern="NP_NONNULL_PARAM_VIOLATION"/>
     <Bug pattern="Unwritten field"/>
     <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON"/>
+    <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_NEEDS_THIS"/>
 </FindBugsFilter>

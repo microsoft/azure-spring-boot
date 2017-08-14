@@ -38,13 +38,12 @@ public class UserPrincipal {
 
     private JWSObject jwsObject;
     private JWTClaimsSet jwtClaimsSet;
-    private JWKSet jwsKeySet;
+    private static final JWKSet jwsKeySet = loadAadPublicKeys();
     private List<UserGroup> userGroups;
 
     public UserPrincipal() {
         jwsObject = null;
         jwtClaimsSet = null;
-        jwsKeySet = null;
         userGroups = null;
     }
 
@@ -54,7 +53,6 @@ public class UserPrincipal {
         final JWTClaimsSetVerifier verifier = validator.getJWTClaimsSetVerifier();
         verifier.verify(jwtClaimsSet, null);
         jwsObject = JWSObject.parse(bearerToken);
-        jwsKeySet = loadAadPublicKeys();
     }
 
     public void setJwsObject(JWSObject jwsObject) {
@@ -63,10 +61,6 @@ public class UserPrincipal {
 
     public void setjwtClaimsSet(JWTClaimsSet jwtClaimsSet) {
         this.jwtClaimsSet = jwtClaimsSet;
-    }
-
-    public void setJwsKeySet(JWKSet jwsKeySet) {
-        this.jwsKeySet = jwsKeySet;
     }
 
     public void setUserGroups(List<UserGroup> userGroups) {
@@ -166,16 +160,18 @@ public class UserPrincipal {
         return jwtProcessor;
     }
 
-    private JWKSet loadAadPublicKeys() throws IOException, ParseException {
-        final int connectTimeoutinMS = 1000;
-        final int readTimeoutinMS = 1000;
-        final int sizeLimitinBytes = 10000;
-        return JWKSet.load(
-                new URL("https://login.microsoftonline.com/common/discovery/keys"),
-                connectTimeoutinMS,
-                readTimeoutinMS,
-                sizeLimitinBytes);
+    private static JWKSet loadAadPublicKeys() {
+        try {
+            return JWKSet.load(
+                    new URL("https://login.microsoftonline.com/common/discovery/keys"));
+        } catch (IOException e) {
+            System.err.println("Error loading AAD public keys: " + e.getMessage());
+            e.printStackTrace();
+        } catch (ParseException e) {
+            System.err.println("Error loading AAD public keys: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
     }
-
 }
 

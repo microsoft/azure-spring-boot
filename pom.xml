@@ -256,6 +256,7 @@
 
     <modules>
         <module>common/azure-spring-boot-starter-parent</module>
+        <module>activedirectory/azure-ad-integration-spring-boot-autoconfigure-sample</module>
         <module>documentdb/azure-documentdb-spring-boot-starter-sample</module>
         <module>documentdb/azure-documentdb-spring-boot-autoconfigure-sample</module>
         <module>documentdb/spring-data-azure-documentdb-sample</module>
