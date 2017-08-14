@@ -5,7 +5,7 @@
 
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-spring-boot-starter-bom</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5-beta</version>
     <packaging>pom</packaging>
 
     <name>Azure Spring Boot Starter BOM</name>
@@ -50,7 +50,7 @@
         <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
         <java.version>1.8</java.version>
 
-        <bom.version>0.1.4</bom.version>
+        <bom.version>0.1.5-beta</bom.version>
 
         <azure.adintegration.starter.version>${bom.version}</azure.adintegration.starter.version>
         <azure.adintegration.autoconfigure.version>${bom.version}</azure.adintegration.autoconfigure.version>
@@ -69,6 +69,7 @@
         <azure.keyvault.secrets.spring.boot.version>${bom.version}</azure.keyvault.secrets.spring.boot.version>
         <azure.keyvault.secrets.starter.version>${bom.version}</azure.keyvault.secrets.starter.version>
         <azure.spring.common.version>${bom.version}</azure.spring.common.version>
+        <azure.cloudfoundry.service.version>${bom.version}</azure.cloudfoundry.service.version>
 
         <azure.documentdb.version>1.11.0</azure.documentdb.version>
         <azure.servicebus.version>1.0.0-PREVIEW-3</azure.servicebus.version>
@@ -174,6 +175,11 @@
                 <artifactId>azure-spring-common</artifactId>
                 <version>${azure.spring.common.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-cloud-foundry-service</artifactId>
+                <version>${azure.cloudfoundry.service.version}</version>
+            </dependency>
 
             <!-- Azure libraries -->
             <dependency>
@@ -264,5 +270,6 @@
         <module>microsoft-graph/microsoft-graph-spring-social-starter-sample</module>
         <module>servicebus/azure-servicebus-spring-boot-starter-sample</module>
         <module>storage/azure-storage-spring-boot-starter-sample</module>
+        <module>cloudfoundry/azure-cloud-foundry-service-sample</module>
     </modules>
 </project>

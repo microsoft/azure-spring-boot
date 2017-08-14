@@ -1,4 +1,5 @@
 [![Travis CI](https://travis-ci.org/Microsoft/azure-spring-boot-starters.svg?branch=master)](https://travis-ci.org/Microsoft/azure-spring-boot-starters)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/eashoj50qw399l8a/branch/master?svg=true)](https://ci.appveyor.com/project/yungez/azure-spring-boot-starters)
 [![codecov](https://codecov.io/gh/microsoft/azure-spring-boot-starters/branch/master/graph/badge.svg)](https://codecov.io/gh/microsoft/azure-spring-boot-starters)
 [![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://github.com/Microsoft/azure-spring-boot-starters/blob/master/LICENSE)
 

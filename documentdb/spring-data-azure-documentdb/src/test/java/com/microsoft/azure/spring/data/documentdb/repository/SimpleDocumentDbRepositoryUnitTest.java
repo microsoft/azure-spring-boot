@@ -7,7 +7,7 @@
 package com.microsoft.azure.spring.data.documentdb.repository;
 
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbOperations;
-import com.microsoft.azure.spring.data.documentdb.repository.domain.Person;
+import com.microsoft.azure.spring.data.documentdb.domain.Person;
 import com.microsoft.azure.spring.data.documentdb.repository.support.DocumentDbEntityInformation;
 import com.microsoft.azure.spring.data.documentdb.repository.support.SimpleDocumentDbRepository;
 import org.junit.Before;
@@ -61,6 +61,5 @@ public class SimpleDocumentDbRepositoryUnitTest {
         assertEquals(result.getId(), TEST_PERSON.getId());
         assertEquals(result.getFirstName(), TEST_PERSON.getFirstName());
         assertEquals(result.getLastName(), TEST_PERSON.getLastName());
-
     }
 }
