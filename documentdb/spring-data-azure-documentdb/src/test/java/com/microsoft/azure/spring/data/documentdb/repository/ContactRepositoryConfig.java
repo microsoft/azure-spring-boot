@@ -9,6 +9,7 @@ import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.data.documentdb.config.AbstractDocumentDbConfiguration;
+import com.microsoft.azure.spring.data.documentdb.repository.config.EnableDocumentDbRepositories;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @PropertySource(value = {"classpath:application.properties"})
+@EnableDocumentDbRepositories
 public class ContactRepositoryConfig extends AbstractDocumentDbConfiguration {
     @Value("${documentdb.uri}")
     String dbUri;
