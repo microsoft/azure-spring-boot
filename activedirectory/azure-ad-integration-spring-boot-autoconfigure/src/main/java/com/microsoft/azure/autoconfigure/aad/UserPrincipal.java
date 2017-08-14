@@ -36,9 +36,9 @@ import java.util.Map;
 
 public class UserPrincipal {
 
+    private static final JWKSet jwsKeySet = loadAadPublicKeys();
     private JWSObject jwsObject;
     private JWTClaimsSet jwtClaimsSet;
-    private static final JWKSet jwsKeySet = loadAadPublicKeys();
     private List<UserGroup> userGroups;
 
     public UserPrincipal() {
@@ -53,6 +53,20 @@ public class UserPrincipal {
         final JWTClaimsSetVerifier verifier = validator.getJWTClaimsSetVerifier();
         verifier.verify(jwtClaimsSet, null);
         jwsObject = JWSObject.parse(bearerToken);
+    }
+
+    private static JWKSet loadAadPublicKeys() {
+        try {
+            return JWKSet.load(
+                    new URL("https://login.microsoftonline.com/common/discovery/keys"));
+        } catch (IOException e) {
+            System.err.println("Error loading AAD public keys: " + e.getMessage());
+            e.printStackTrace();
+        } catch (ParseException e) {
+            System.err.println("Error loading AAD public keys: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void setJwsObject(JWSObject jwsObject) {
@@ -158,20 +172,6 @@ public class UserPrincipal {
             }
         });
         return jwtProcessor;
-    }
-
-    private static JWKSet loadAadPublicKeys() {
-        try {
-            return JWKSet.load(
-                    new URL("https://login.microsoftonline.com/common/discovery/keys"));
-        } catch (IOException e) {
-            System.err.println("Error loading AAD public keys: " + e.getMessage());
-            e.printStackTrace();
-        } catch (ParseException e) {
-            System.err.println("Error loading AAD public keys: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return null;
     }
 }
 

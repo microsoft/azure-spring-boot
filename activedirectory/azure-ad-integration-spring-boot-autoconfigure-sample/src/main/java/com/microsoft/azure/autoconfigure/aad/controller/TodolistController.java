@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 public class TodolistController {
     private final List<TodoItem> todoList = new ArrayList<TodoItem>();
+
     public TodolistController() {
         todoList.add(0, new TodoItem(2398, "anything", "whoever"));
     }
@@ -35,7 +36,7 @@ public class TodolistController {
 
     /**
      * HTTP GET
-     * */
+     */
     @RequestMapping(value = "/api/todolist/{index}",
             method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getTodoItem(@PathVariable("index") int index) {
@@ -47,14 +48,14 @@ public class TodolistController {
 
     /**
      * HTTP GET ALL
-     * */
+     */
     @RequestMapping(value = "/api/todolist", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<TodoItem>> getAllTodoItems() {
         return new ResponseEntity<List<TodoItem>>(todoList, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_group1')")
-    @RequestMapping(value = "/api/todolist", method = RequestMethod.POST,  consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/api/todolist", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> addNewTodoItem(@RequestBody TodoItem item) {
         item.setID(todoList.size() + 1);
         todoList.add(todoList.size(), item);
@@ -63,9 +64,9 @@ public class TodolistController {
 
     /**
      * HTTP PUT
-     * */
+     */
     @PreAuthorize("hasRole('ROLE_group1')")
-    @RequestMapping(value = "/api/todolist", method = RequestMethod.PUT,  consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/api/todolist", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateTodoItem(@RequestBody TodoItem item) {
         final List<TodoItem> find =
                 todoList.stream().filter(i -> i.getID() == item.getID()).collect(Collectors.toList());
@@ -78,7 +79,7 @@ public class TodolistController {
 
     /**
      * HTTP DELETE
-     * */
+     */
     //@PreAuthorize("hasRole('ROLE_group1')")
     @RequestMapping(value = "/api/todolist/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteTodoItem(@PathVariable("id") int id) {

@@ -28,6 +28,9 @@ import org.springframework.util.MultiValueMap;
         prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private AzureADJwtTokenFilter aadJwtFilter;
+
     @Bean
     public UserInfoRestTemplateCustomizer getUserInfoRestTemplateCustomizer() {
         return new UserInfoRestTemplateCustomizer() {
@@ -36,6 +39,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 template.setAccessTokenProvider(new MyAuthorizationCodeAccessTokenProvider());
             }
         };
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http.authorizeRequests().antMatchers("/home").permitAll();
+        http.authorizeRequests().antMatchers("/api/**").authenticated();
+
+        http.logout().logoutSuccessUrl("/").permitAll();
+
+        http.authorizeRequests().anyRequest().permitAll();
+
+        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+
+        http.addFilterBefore(aadJwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     protected class MyAuthorizationCodeAccessTokenProvider extends AuthorizationCodeAccessTokenProvider {
@@ -51,23 +69,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 }
             });
         }
-    }
-
-    @Autowired
-    private AzureADJwtTokenFilter aadJwtFilter;
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-
-        http.authorizeRequests().antMatchers("/home").permitAll();
-        http.authorizeRequests().antMatchers("/api/**").authenticated();
-
-        http.logout().logoutSuccessUrl("/").permitAll();
-
-        http.authorizeRequests().anyRequest().permitAll();
-
-        http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-
-        http.addFilterBefore(aadJwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

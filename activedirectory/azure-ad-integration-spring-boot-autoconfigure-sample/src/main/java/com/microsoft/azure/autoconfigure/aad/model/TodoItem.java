@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.*;
 
 import java.util.Objects;
 
-@JsonPropertyOrder({ "ID", "Description", "Owner" })
+@JsonPropertyOrder({"ID", "Description", "Owner"})
 public class TodoItem {
     private String description;
     private int id;

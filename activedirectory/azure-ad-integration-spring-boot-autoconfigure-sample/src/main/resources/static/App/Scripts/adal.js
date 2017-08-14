@@ -45,11 +45,11 @@ if (typeof module !== 'undefined' && module.exports) {
  */
 
 /**
-* User information from idtoken.
-*  @class User
-*  @property {string} userName - username assigned from upn or email.
-*  @property {object} profile - properties parsed from idtoken.
-*/
+ * User information from idtoken.
+ *  @class User
+ *  @property {string} userName - username assigned from upn or email.
+ *  @property {object} profile - properties parsed from idtoken.
+ */
 
 /**
  * Creates a new AuthenticationContext object.
@@ -59,9 +59,9 @@ if (typeof module !== 'undefined' && module.exports) {
  **/
 AuthenticationContext = function (config) {
     /**
-    * Enum for request type
-    * @enum {string}
-    */
+     * Enum for request type
+     * @enum {string}
+     */
     this.REQUEST_TYPE = {
         LOGIN: 'LOGIN',
         RENEW_TOKEN: 'RENEW_TOKEN',
@@ -70,9 +70,9 @@ AuthenticationContext = function (config) {
     };
 
     /**
-    * Enum for storage constants
-    * @enum {string}
-    */
+     * Enum for storage constants
+     * @enum {string}
+     */
     this.CONSTANTS = {
         ACCESS_TOKEN: 'access_token',
         EXPIRES_IN: 'expires_in',
@@ -185,10 +185,10 @@ AuthenticationContext.prototype._hasResource = function (key) {
 };
 
 /**
-* Gets token for the specified resource from local storage cache
-* @param {string}   resource A URI that identifies the resource for which the token is valid.
-* @returns {string} token if exists and not expired or null
-*/
+ * Gets token for the specified resource from local storage cache
+ * @param {string}   resource A URI that identifies the resource for which the token is valid.
+ * @returns {string} token if exists and not expired or null
+ */
 AuthenticationContext.prototype.getCachedToken = function (resource) {
     if (!this._hasResource(resource)) {
         return null;
@@ -210,9 +210,9 @@ AuthenticationContext.prototype.getCachedToken = function (resource) {
 };
 
 /**
-* Retrieves and parse idToken from localstorage
-* @returns {User} user object
-*/
+ * Retrieves and parse idToken from localstorage
+ * @returns {User} user object
+ */
 AuthenticationContext.prototype.getCachedUser = function () {
     if (this._user) {
         return this._user;
@@ -228,10 +228,10 @@ AuthenticationContext.prototype.getCachedUser = function () {
 // callback(errorResponse, token)
 // with callback
 /**
-* Acquires access token with hidden iframe
-* @param {string}   resource  ResourceUri identifying the target resource
-* @returns {string} access token if request is successfull
-*/
+ * Acquires access token with hidden iframe
+ * @param {string}   resource  ResourceUri identifying the target resource
+ * @returns {string} access token if request is successfull
+ */
 AuthenticationContext.prototype._renewToken = function (resource, callback) {
     // use iframe to try refresh token
     // use given resource to create new authz url
@@ -309,10 +309,10 @@ AuthenticationContext.prototype._loadFrame = function (urlNavigate, frameName) {
 };
 
 /**
-* Acquire token from cache if not expired and available. Acquires token from iframe if expired.
-* @param {string}   resource  ResourceUri identifying the target resource
-* @param {requestCallback} callback 
-*/
+ * Acquire token from cache if not expired and available. Acquires token from iframe if expired.
+ * @param {string}   resource  ResourceUri identifying the target resource
+ * @param {requestCallback} callback
+ */
 AuthenticationContext.prototype.acquireToken = function (resource, callback) {
     if (this._isEmpty(resource)) {
         callback('resource is required', null);
@@ -350,9 +350,9 @@ AuthenticationContext.prototype.acquireToken = function (resource, callback) {
 };
 
 /**
-* Redirect the Browser to Azure AD Authorization endpoint
-* @param {string}   urlNavigate The authorization request url
-*/
+ * Redirect the Browser to Azure AD Authorization endpoint
+ * @param {string}   urlNavigate The authorization request url
+ */
 AuthenticationContext.prototype.promptUser = function (urlNavigate) {
     if (urlNavigate) {
         this._logstatus('Navigate to:' + urlNavigate);
@@ -363,8 +363,8 @@ AuthenticationContext.prototype.promptUser = function (urlNavigate) {
 };
 
 /**
-* Clear cache items.
-*/
+ * Clear cache items.
+ */
 AuthenticationContext.prototype.clearCache = function () {
     this._saveItem(this.CONSTANTS.STORAGE.ACCESS_TOKEN_KEY, '');
     this._saveItem(this.CONSTANTS.STORAGE.EXPIRATION_KEY, 0);
@@ -391,8 +391,8 @@ AuthenticationContext.prototype.clearCache = function () {
 };
 
 /**
-* Clear cache items for a resource.
-*/
+ * Clear cache items for a resource.
+ */
 AuthenticationContext.prototype.clearCacheForResource = function (resource) {
     this._saveItem(this.CONSTANTS.STORAGE.FAILED_RENEW, '');
     this._saveItem(this.CONSTANTS.STORAGE.STATE_RENEW, '');
@@ -406,9 +406,9 @@ AuthenticationContext.prototype.clearCacheForResource = function (resource) {
 };
 
 /**
-* Logout user will redirect page to logout endpoint. 
-* After logout, it will redirect to post_logout page if provided.
-*/
+ * Logout user will redirect page to logout endpoint.
+ * After logout, it will redirect to post_logout page if provided.
+ */
 AuthenticationContext.prototype.logOut = function () {
     this.clearCache();
     var tenant = 'common';
@@ -526,10 +526,10 @@ AuthenticationContext.prototype.isCallback = function (hash) {
     hash = this._getHash(hash);
     var parameters = this._deserialize(hash);
     return (
-            parameters.hasOwnProperty(this.CONSTANTS.ERROR_DESCRIPTION) ||
-            parameters.hasOwnProperty(this.CONSTANTS.ACCESS_TOKEN) ||
-            parameters.hasOwnProperty(this.CONSTANTS.ID_TOKEN)
-            );
+        parameters.hasOwnProperty(this.CONSTANTS.ERROR_DESCRIPTION) ||
+        parameters.hasOwnProperty(this.CONSTANTS.ACCESS_TOKEN) ||
+        parameters.hasOwnProperty(this.CONSTANTS.ID_TOKEN)
+    );
 };
 
 /**
@@ -547,7 +547,13 @@ AuthenticationContext.prototype.getLoginError = function () {
 AuthenticationContext.prototype.getRequestInfo = function (hash) {
     hash = this._getHash(hash);
     var parameters = this._deserialize(hash);
-    var requestInfo = { valid: false, parameters: {}, stateMatch: false, stateResponse: '', requestType: this.REQUEST_TYPE.UNKNOWN };
+    var requestInfo = {
+        valid: false,
+        parameters: {},
+        stateMatch: false,
+        stateResponse: '',
+        requestType: this.REQUEST_TYPE.UNKNOWN
+    };
     if (parameters) {
         requestInfo.parameters = parameters;
         if (parameters.hasOwnProperty(this.CONSTANTS.ERROR_DESCRIPTION) ||
@@ -872,7 +878,9 @@ AuthenticationContext.prototype._deserialize = function (query) {
     var match,
         pl = /\+/g,  // Regex for replacing addition symbol with a space
         search = /([^&=]+)=?([^&]*)/g,
-        decode = function (s) { return decodeURIComponent(s.replace(pl, ' ')); },
+        decode = function (s) {
+            return decodeURIComponent(s.replace(pl, ' '));
+        },
         obj = {};
     match = search.exec(query);
     while (match) {
@@ -1055,7 +1063,7 @@ AuthenticationContext.prototype._libVersion = function () {
     return '1.0.0';
 };
 
-AuthenticationContext.prototype._addClientId = function() {
+AuthenticationContext.prototype._addClientId = function () {
     // x-client-SKU 
     // x-client-Ver 
     return '&x-client-SKU=Js&x-client-Ver=' + this._libVersion();
