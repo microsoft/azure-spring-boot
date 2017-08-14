@@ -33,6 +33,5 @@
             <arg value="${azure.test.resourcegroup}"/>
             <arg value="${azure.test.dbname}"/>
         </exec>
-        <delete file="./src/test/resources/application.properties"/>
     </target>
 </project>

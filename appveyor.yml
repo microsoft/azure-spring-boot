@@ -1,0 +1,41 @@
+image: Visual Studio 2017
+
+environment:
+  JAVA_HOME: "C:\\Program Files\\Java\\jdk1.8.0"
+  PYTHON: "C:\\Python35"
+  CODECOV_UPLOAD_TOKEN:
+    secure: 80IcEvO4OmyIeu2O4Yq7fKr4BV9p3M6zczwEAy2bL/H1CzypXF4PEpDGyACNTdX1
+
+install:
+  - cmd: python -m pip install codecov
+  - cmd: copy "C:\Program Files (x86)\Apache\Maven\bin\mvn.cmd" "C:\Program Files (x86)\Apache\Maven\bin\mvn.bat"
+  - cmd: net share "c=c:"
+  # 1. starter docker
+  - ps: Start-Process "C:\Program Files\Docker\dockerd.exe"
+  # 2. starter emulator
+  - cmd: docker pull microsoft/azure-cosmosdb-emulator
+  - cmd: md %LOCALAPPDATA%\CosmosDBEmulatorCert 2>nul
+  - cmd: docker run -d -v %LOCALAPPDATA%\CosmosDBEmulatorCert:c:\CosmosDBEmulator\CosmosDBEmulatorCert -p 8081:8081 -t -i microsoft/azure-cosmosdb-emulator >> dockerid.txt
+  - cmd: set /P dockerid=<dockerid.txt
+  - cmd: timeout 100
+  - cmd: docker logs %dockerid% >> dockerlog.txt
+  - ps: $substtring = type dockerlog.txt | where { $_ -match "\bhttps://[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:8081/$" } | foreach { $matches[0] }; $substtring | Out-File -filepath documentdburi.txt -encoding ASCII
+  - cmd: set /P DOCUMENTDB_URI=< documentdburi.txt
+  # 3. import cert
+  - ps: cd C:\Users\appveyor\AppData\Local\CosmosDBEmulatorCert; .\importcert.ps1
+  # 4. export cert to java cert store
+  - ps: $cert = Get-ChildItem  cert:\LocalMachine\my | Where-Object { $_.FriendlyName -eq "DocumentDbEmulatorCertificate"}; export-Certificate -filepath c:\documentdb.cer -cert ${cert} -type CERT -NoClobber
+  - cmd: cd "C:\Program Files\Java\jdk1.8.0\jre\lib\security"
+  - cmd: certutil -encode c:\documentdb.cer documentdbemulatordb.cer
+  - cmd: keytool -keystore cacerts -importcert -alias documentdbemulatorcert -file .\documentdbemulatordb.cer -storepass changeit -trustcacerts -noprompt
+  - cmd: cd "C:\projects\azure-spring-boot-starters"
+
+
+build_script:
+  - mvn clean install -B -V
+
+after_build:
+  - mvn -P integration-test-emulator cobertura:cobertura-integration-test
+  - ps: Get-ChildItem -Path . -Recurse -File -Filter coverage.xml | Foreach-Object { codecov -f $_.FullName -t $Env:CODECOV_UPLOAD_TOKEN }
+
+
