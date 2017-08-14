@@ -5,12 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>azure-spring-boot-starter-bom</artifactId>
-        <groupId>com.microsoft.azure</groupId>
-        <version>0.1.4</version>
-        <relativePath>../../pom.xml</relativePath>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <groupId>com.microsoft.azure</groupId>
     <artifactId>microsoft-graph-spring-social-starter-sample</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -41,8 +42,18 @@
         <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
     </scm>
 
-    <!-- If user don't want to use azure-spring-boot-starter-bom package as parent, he needs to specify the versions
-    of below starter. Or user can use dependency management to import the BOM package -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-spring-boot-starter-bom</artifactId>
+                <version>0.1.5-beta</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
@@ -55,6 +66,8 @@
     </dependencies>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
         <project.rootdir>${project.basedir}/../..</project.rootdir>
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
@@ -78,11 +91,6 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>findbugs-maven-plugin</artifactId>
                     <version>${findbugs-maven-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring.boot.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

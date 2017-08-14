@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-starter-bom</artifactId>
-        <version>0.1.4</version>
+        <version>0.1.5-beta</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -98,11 +98,6 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>findbugs-maven-plugin</artifactId>
                     <version>${findbugs-maven-plugin.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring.boot.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -221,6 +216,8 @@
                     </formats>
                     <check>
                         <haltOnFailure>true</haltOnFailure>
+                        <branchRate>60</branchRate>
+                        <totalBranchRate>60</totalBranchRate>
                     </check>
                     <instrumentation>
                         <excludes>
@@ -249,5 +246,6 @@
         <module>../../microsoft-graph/microsoft-graph-spring-social-starter</module>
         <module>../../keyvault/azure-keyvault-secrets-spring-boot</module>
         <module>../../keyvault/azure-keyvault-secrets-spring-boot-starter</module>
+        <module>../../cloudfoundry/azure-cloud-foundry-service</module>
     </modules>
 </project>
