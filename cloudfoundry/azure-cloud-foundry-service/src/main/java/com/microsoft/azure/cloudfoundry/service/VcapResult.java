@@ -47,29 +47,6 @@ public class VcapResult {
         addOrReplace(confEnv.getPropertySources(), map);
     }
 
-    public VcapPojo findPojoForServiceTypeAndServiceInstanceName(
-            VcapServiceType serviceType, String serviceInstanceName) {
-        log("VcapResult.findPojoForServiceTypeAndServiceInstanceName "
-                + serviceType + ", " + serviceInstanceName);
-        VcapPojo result = null;
-
-        if (serviceType != null && serviceInstanceName != null) {
-            for (int i = 0; i < pojos.length; i++) {
-                final VcapPojo pojo = pojos[i];
-                if (serviceType.toString().equals(pojo.getServiceBrokerName())
-                        && serviceInstanceName.equals(pojo
-                        .getServiceInstanceName())) {
-                    result = pojo;
-                    break;
-                }
-            }
-        }
-        log("VcapResult.findPojoForServiceTypeAndServiceInstanceName result = "
-                + result);
-
-        return result;
-    }
-
     @SuppressFBWarnings("EI_EXPOSE_REP")
     public VcapPojo[] getPojos() {
         return pojos;
