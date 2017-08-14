@@ -4,10 +4,9 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.data.documentdb.repository.core.mapping;
+package com.microsoft.azure.spring.data.documentdb.core.mapping;
 
-import com.microsoft.azure.spring.data.documentdb.core.mapping.BasicDocumentDbPersistentEntity;
-import com.microsoft.azure.spring.data.documentdb.repository.domain.Person;
+import com.microsoft.azure.spring.data.documentdb.domain.Person;
 import org.junit.Test;
 import org.springframework.data.util.ClassTypeInformation;
 

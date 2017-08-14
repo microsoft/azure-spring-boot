@@ -4,11 +4,10 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.data.documentdb.repository.config;
+package com.microsoft.azure.spring.data.documentdb.config;
 
 import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
-import com.microsoft.azure.spring.data.documentdb.config.AbstractDocumentDbConfiguration;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.spring.data.documentdb.repository.domain;
+package com.microsoft.azure.spring.data.documentdb.domain;
 
 import org.springframework.data.annotation.Id;
 

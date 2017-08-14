@@ -3,12 +3,12 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.spring.data.documentdb.repository.core.converter;
+package com.microsoft.azure.spring.data.documentdb.core.converter;
 
 import com.microsoft.azure.documentdb.Document;
 import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
 import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbMappingContext;
-import com.microsoft.azure.spring.data.documentdb.repository.domain.Address;
+import com.microsoft.azure.spring.data.documentdb.domain.Address;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

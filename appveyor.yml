@@ -36,6 +36,6 @@ build_script:
 
 after_build:
   - mvn -P integration-test-emulator cobertura:cobertura-integration-test
-  - ps: Get-ChildItem -Path . -Recurse -File -Filter coverage.xml | Foreach-Object { codecov -f $_.FullName -t $Env:CODECOV_UPLOAD_TOKEN }
+  - ps: Get-ChildItem -Path . -Recurse -File -Filter coverage.xml | Foreach-Object { codecov -f $_.FullName -t $Env:CODECOV_UPLOAD_TOKEN -X gcov }
 
 
