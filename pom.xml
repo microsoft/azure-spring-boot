@@ -5,7 +5,7 @@
 
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-spring-boot-starter-bom</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
     <packaging>pom</packaging>
 
     <name>Azure Spring Boot Starter BOM</name>
@@ -50,7 +50,7 @@
         <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
         <java.version>1.8</java.version>
 
-        <bom.version>0.1.4</bom.version>
+        <bom.version>0.1.5</bom.version>
 
         <azure.adintegration.starter.version>${bom.version}</azure.adintegration.starter.version>
         <azure.adintegration.autoconfigure.version>${bom.version}</azure.adintegration.autoconfigure.version>

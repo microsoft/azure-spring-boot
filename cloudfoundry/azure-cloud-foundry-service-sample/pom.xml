@@ -51,22 +51,22 @@
 		<dependency>
 			<groupId>com.microsoft.azure</groupId>
 			<artifactId>azure-storage-spring-boot-starter</artifactId>
-			<version>0.1.4</version>
+			<version>0.1.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.microsoft.azure</groupId>
 			<artifactId>azure-documentdb-spring-boot-starter</artifactId>
-			<version>0.1.4</version>
+			<version>0.1.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.microsoft.azure</groupId>
 			<artifactId>azure-servicebus-spring-boot-starter</artifactId>
-			<version>0.1.4</version>
+			<version>0.1.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.microsoft.azure</groupId>
 			<artifactId>azure-cloud-foundry-service</artifactId>
-			<version>0.1.4</version>
+			<version>0.1.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
