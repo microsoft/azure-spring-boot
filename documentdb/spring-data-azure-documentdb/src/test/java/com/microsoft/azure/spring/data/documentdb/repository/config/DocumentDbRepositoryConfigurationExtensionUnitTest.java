@@ -4,11 +4,9 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.data.documentdb.repository.repository.config;
+package com.microsoft.azure.spring.data.documentdb.repository.config;
 
 import com.microsoft.azure.spring.data.documentdb.repository.DocumentDbRepository;
-import com.microsoft.azure.spring.data.documentdb.repository.config.DocumentDbRepositoryConfigurationExtension;
-import com.microsoft.azure.spring.data.documentdb.repository.config.EnableDocumentDbRepositories;
 import org.junit.Test;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.StandardEnvironment;

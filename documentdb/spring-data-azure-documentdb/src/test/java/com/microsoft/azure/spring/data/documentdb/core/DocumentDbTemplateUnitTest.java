@@ -4,11 +4,10 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.data.documentdb.repository.core;
+package com.microsoft.azure.spring.data.documentdb.core;
 
 import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
-import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
 import org.junit.Before;
 import org.junit.Test;
