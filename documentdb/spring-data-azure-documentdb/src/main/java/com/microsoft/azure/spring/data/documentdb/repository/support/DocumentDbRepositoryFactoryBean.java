@@ -25,7 +25,6 @@ public class DocumentDbRepositoryFactoryBean<T extends Repository<S, ID>, S, ID 
     private ApplicationContext applicationContext;
     private DocumentDbOperations operations;
 
-
     public DocumentDbRepositoryFactoryBean(Class<? extends T> repositoryInterface) {
 
         super(repositoryInterface);

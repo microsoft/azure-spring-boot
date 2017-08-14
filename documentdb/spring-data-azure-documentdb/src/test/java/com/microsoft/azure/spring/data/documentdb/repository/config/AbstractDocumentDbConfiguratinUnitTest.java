@@ -27,10 +27,10 @@ public class AbstractDocumentDbConfiguratinUnitTest {
 
     @Test
     public void containsDocumentDbFactory() throws ClassNotFoundException {
-        final AbstractApplicationContext context = new AnnotationConfigApplicationContext(
-                TestDocumentDbConfiguration.class);
-
-        assertThat(context.getBean(DocumentDbFactory.class)).isNotNull();
+        try (AbstractApplicationContext context = new AnnotationConfigApplicationContext(
+                TestDocumentDbConfiguration.class)) {
+            assertThat(context.getBean(DocumentDbFactory.class)).isNotNull();
+        }
     }
 
     @Configuration
