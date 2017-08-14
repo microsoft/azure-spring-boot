@@ -7,8 +7,6 @@ package com.microsoft.azure.spring.data.documentdb.repository.support;
 
 import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbPersistentEntity;
 import com.microsoft.azure.spring.data.documentdb.domain.Person;
-import com.microsoft.azure.spring.data.documentdb.support.DocumentDbEntityInformation;
-import com.microsoft.azure.spring.data.documentdb.support.DocumentDbRepositoryFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
