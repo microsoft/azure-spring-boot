@@ -5,11 +5,11 @@
  */
 package com.microsoft.azure.cloudfoundry.service;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 public class VcapPojo {
     private String serviceBrokerName;

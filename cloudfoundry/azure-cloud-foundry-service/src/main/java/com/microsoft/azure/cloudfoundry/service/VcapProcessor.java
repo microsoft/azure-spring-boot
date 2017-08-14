@@ -5,10 +5,6 @@
  */
 package com.microsoft.azure.cloudfoundry.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,20 +14,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 @Service
 @Configuration
 /**
  * Parses VCAP_SERVICES environment variable and sets corresponding property values.
- * 
+ *
  * Note that this class gets invoked before Spring creates the logging subsystem, so 
  * we just use System.out.println instead.  
  */
 public class VcapProcessor implements EnvironmentPostProcessor {
     public static final String VCAP_SERVICES = "VCAP_SERVICES";
     public static final String LOG_VARIABLE = "COM_MICROSOFT_AZURE_CLOUDFOUNDRY_SERVICE_LOG";
-
-    private boolean logFlag = false;
-
     private static final String AZURE = "azure-";
     private static final String CREDENTIALS = "credentials";
     private static final String LABEL = "label";
@@ -41,19 +38,19 @@ public class VcapProcessor implements EnvironmentPostProcessor {
     private static final String SYSLOG_DRAIN_URL = "syslog_drain_url";
     private static final String TAGS = "tags";
     private static final String VOLUME_MOUNTS = "volume_mounts";
-
+    private boolean logFlag = false;
     private VcapResult result;
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment confEnv,
-            SpringApplication app) {
+                                       SpringApplication app) {
         final Map<String, Object> environment = confEnv.getSystemEnvironment();
-        
+
         final String logValue = (String) environment.get(VcapProcessor.LOG_VARIABLE);
         if ("true".equals(logValue)) {
             logFlag = true;
         }
-        
+
         log("VcapParser.postProcessEnvironment: Start");
         final String vcapServices = (String) environment
                 .get(VcapProcessor.VCAP_SERVICES);
@@ -97,7 +94,7 @@ public class VcapProcessor implements EnvironmentPostProcessor {
     }
 
     private VcapPojo parseService(String serviceBrokerName,
-            JSONArray azureService, String vCapServices, int index) {
+                                  JSONArray azureService, String vCapServices, int index) {
         final VcapPojo result = new VcapPojo();
         result.setServiceBrokerName(serviceBrokerName);
 
