@@ -75,11 +75,12 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                 createOrGetCollection(this.databaseName, collectionName);
                 this.collectionCache.add(collectionName);
             }
+
             documentDbFactory.getDocumentClient()
                     .createDocument(getCollectionLink(this.databaseName, collectionName), document, null, false);
             return objectToSave;
         } catch (DocumentClientException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("insert exception: " + e.getMessage());
         }
     }
 
@@ -99,7 +100,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                 return null;
             }
         } catch (DocumentClientException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("findById exception: " + e.getMessage());
         }
     }
 
@@ -132,7 +133,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                             this.databaseName, getCollectionName(object.getClass()), id);
                 }
 
-                mappingDocumentDbConverter.write(object, originalDoc); 
+                mappingDocumentDbConverter.write(object, originalDoc);
 
                 documentDbFactory.getDocumentClient().replaceDocument(
                         originalDoc.getSelfLink(),
@@ -143,7 +144,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                 throw new RuntimeException("invalid Document to update " + resource.getSelfLink());
             }
         } catch (DocumentClientException ex) {
-            throw new RuntimeException(ex.getMessage());
+            throw new RuntimeException("update exception: " + ex.getMessage());
         }
     }
 
@@ -165,7 +166,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                 LOGGER.warn("deleteAll in database {} collection {} met NOTFOUND error {}",
                         this.databaseName, collectionName, ex.getMessage());
             } else {
-                throw new RuntimeException(ex.getMessage());
+                throw new RuntimeException("deleteAll exception: " + ex.getMessage());
             }
         }
 
@@ -220,7 +221,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                 }
             }
         } catch (DocumentClientException ex) {
-            throw new RuntimeException(ex.getMessage());
+            throw new RuntimeException("createOrGetDatabase exception: " + ex.getMessage());
         }
     }
 
@@ -247,7 +248,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
             }
             return collection;
         } catch (DocumentClientException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("createCollection exception: " + e.getMessage());
         }
 
     }
@@ -282,7 +283,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
             documentDbFactory.getDocumentClient()
                     .deleteCollection(getCollectionLink(this.databaseName, collectionName), null);
         } catch (DocumentClientException ex) {
-            throw new RuntimeException(ex.getMessage());
+            throw new RuntimeException("dropCollection exception: " + ex.getMessage());
         }
 
     }
