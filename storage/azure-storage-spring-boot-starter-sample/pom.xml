@@ -55,6 +55,8 @@
     </dependencies>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
         <project.rootdir>${project.basedir}/../..</project.rootdir>
         <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
         <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>

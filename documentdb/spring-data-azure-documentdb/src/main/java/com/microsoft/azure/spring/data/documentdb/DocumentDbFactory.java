@@ -14,7 +14,7 @@ import org.springframework.util.Assert;
 
 public class DocumentDbFactory {
 
-    private static final String USER_AGENT_SUFFIX = "spring-data-azure-documentdb/0.1.5";
+    private static final String USER_AGENT_SUFFIX = "spring-data-azure-documentdb/0.1.4";
 
     private DocumentClient documentClient;
 
