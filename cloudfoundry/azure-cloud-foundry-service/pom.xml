@@ -3,12 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.microsoft.azure</groupId>
-		<artifactId>azure-spring-boot-starter-parent</artifactId>
-		<version>0.1.5-beta</version>
-		<relativePath>../../common/azure-spring-boot-starter-parent/pom.xml</relativePath>
-	</parent>
+    <parent>
+        <groupId>com.microsoft.azure</groupId>
+        <artifactId>azure-spring-boot-starter-parent</artifactId>
+        <version>0.1.5-beta</version>
+        <relativePath>../../common/azure-spring-boot-starter-parent/pom.xml</relativePath>
+    </parent>
 
     <artifactId>azure-cloud-foundry-service</artifactId>
     <packaging>jar</packaging>

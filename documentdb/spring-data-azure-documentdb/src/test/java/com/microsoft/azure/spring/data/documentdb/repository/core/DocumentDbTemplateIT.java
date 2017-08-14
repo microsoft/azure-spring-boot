@@ -35,7 +35,7 @@ public class DocumentDbTemplateIT {
 
     private static final String TEST_DB_NAME = "testdb";
     private static final Person TEST_PERSON = new Person("testid", "testfirstname", "testlastname");
-    
+
     @Value("${documentdb.uri}")
     private String documentDbUri;
     @Value("${documentdb.key}")
