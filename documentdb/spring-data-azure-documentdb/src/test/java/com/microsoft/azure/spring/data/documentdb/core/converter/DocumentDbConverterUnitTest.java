@@ -4,12 +4,12 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.data.documentdb.repository.core.converter;
+package com.microsoft.azure.spring.data.documentdb.core.converter;
 
 
 import com.microsoft.azure.documentdb.Document;
 import com.microsoft.azure.spring.data.documentdb.core.convert.DocumentDbConverter;
-import com.microsoft.azure.spring.data.documentdb.repository.domain.Person;
+import com.microsoft.azure.spring.data.documentdb.domain.Person;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;

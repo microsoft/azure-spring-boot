@@ -4,10 +4,8 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.data.documentdb.repository.core.mapping;
+package com.microsoft.azure.spring.data.documentdb.core.mapping;
 
-import com.microsoft.azure.spring.data.documentdb.core.mapping.BasicDocumentDbPersistentEntity;
-import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbMappingContext;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

@@ -4,7 +4,7 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.data.documentdb.repository.domain;
+package com.microsoft.azure.spring.data.documentdb.domain;
 
 import com.microsoft.azure.spring.data.documentdb.repository.DocumentDbRepository;
 import org.springframework.stereotype.Repository;

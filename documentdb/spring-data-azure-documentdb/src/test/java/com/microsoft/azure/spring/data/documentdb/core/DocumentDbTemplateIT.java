@@ -4,15 +4,14 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.data.documentdb.repository.core;
+package com.microsoft.azure.spring.data.documentdb.core;
 
 import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import com.microsoft.azure.documentdb.DocumentClient;
-import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
 import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbMappingContext;
-import com.microsoft.azure.spring.data.documentdb.repository.domain.Person;
+import com.microsoft.azure.spring.data.documentdb.domain.Person;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -109,4 +108,3 @@ public class DocumentDbTemplateIT {
         assertThat(result.getLastName()).isEqualTo(updated.getLastName());
     }
 }
-
