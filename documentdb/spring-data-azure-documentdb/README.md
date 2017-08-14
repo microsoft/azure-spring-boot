@@ -102,7 +102,7 @@ public class User {
 Extends DocumentDbRepository interface, which provides Spring Data repository support.
 
 ```
-import com.microsoft.azure.spring.data.documentdb.repository.DocumentDbRepository;
+import DocumentDbRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
