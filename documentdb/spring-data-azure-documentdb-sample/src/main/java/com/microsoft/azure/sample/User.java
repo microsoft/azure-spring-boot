@@ -6,8 +6,10 @@
 
 package com.microsoft.azure.sample;
 
+import com.microsoft.azure.spring.data.documentdb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 
+@Document(collection = "mycollection")
 public class User {
     @Id
     private String emailAddress;

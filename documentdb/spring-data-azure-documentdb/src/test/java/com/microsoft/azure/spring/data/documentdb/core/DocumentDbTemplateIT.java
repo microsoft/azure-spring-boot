@@ -65,7 +65,7 @@ public class DocumentDbTemplateIT {
 
         dbTemplate = new DocumentDbTemplate(documentClient, dbConverter, TEST_DB_NAME);
 
-        dbTemplate.insert(TEST_PERSON);
+        dbTemplate.insert(Person.class.getSimpleName(), TEST_PERSON);
     }
 
     @After
@@ -75,7 +75,7 @@ public class DocumentDbTemplateIT {
 
     @Test(expected = RuntimeException.class)
     public void testInsertDuplicateId() throws Exception {
-        dbTemplate.insert(TEST_PERSON);
+        dbTemplate.insert(Person.class.getSimpleName(), TEST_PERSON);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class DocumentDbTemplateIT {
 
     @Test
     public void testFindById() {
-        final Person result = dbTemplate.findById(TEST_PERSON.getId(), Person.class);
+        final Person result = dbTemplate.findById(Person.class.getSimpleName(), TEST_PERSON.getId(), Person.class);
         assertThat(result.getId()).isEqualTo(TEST_PERSON.getId());
         assertThat(result.getFirstName()).isEqualTo(TEST_PERSON.getFirstName());
         assertThat(result.getLastName()).isEqualTo(TEST_PERSON.getLastName());
@@ -99,9 +99,9 @@ public class DocumentDbTemplateIT {
     public void testUpdate() {
         final Person updated = new Person(TEST_PERSON.getId(), "updatedname",
                 TEST_PERSON.getLastName());
-        dbTemplate.update(updated);
+        dbTemplate.update(Person.class.getSimpleName(), updated);
 
-        final Person result = dbTemplate.findById(updated.getId(), Person.class);
+        final Person result = dbTemplate.findById(Person.class.getSimpleName(), updated.getId(), Person.class);
 
         assertThat(result.getId()).isEqualTo(updated.getId());
         assertThat(result.getFirstName()).isEqualTo(updated.getFirstName());
