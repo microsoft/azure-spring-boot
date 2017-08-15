@@ -9,7 +9,6 @@ package com.microsoft.azure.msgraph.api.impl;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.microsoft.azure.msgraph.api.*;
 import org.junit.Test;
-import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 
 import java.text.ParseException;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
@@ -70,8 +68,8 @@ public class MailTemplateTest extends AbstractMicrosoftApiTest {
                 "DE4LWQ4YWItNDlkYS1iZTY4LWVhZWEzYjRlODgzOQBGAAAAAAALmV7Xl1RCS6mHDvhC5ayOBwBuW0RzxJhUT4ez" +
                 "5BWQCxI9AAAAAAEMAABuW0RzxJhUT4ez5BWQCxI9AABdGgEMAAA%3D&exvsurl=1&viewmodel=ReadMessageItem");
         assertThat(message.getInferenceClassification()).isEqualTo(InferenceClassificationType.focused);
-        
-        ItemBody itemBody = message.getBody();
+
+        final ItemBody itemBody = message.getBody();
         assertThat(itemBody.getContentType()).isEqualTo(BodyType.html);
         assertThat(itemBody.getContent()).isEqualTo("<html>\r\n<head>\r\n<meta http-equiv=\"Content-Type\" " +
                 "content=\"text/html; charset=utf-8\">\r\n</html>\r\n");
@@ -100,26 +98,27 @@ public class MailTemplateTest extends AbstractMicrosoftApiTest {
 
     @Test
     public void sendMailSuccessfully() throws ParseException {
-        String content = "{\"saveToSentItems\":true,\"message\":{\"subject\":\"Meet for lunch?\",\"body\"" +
-                ":{\"contentType\":\"text\",\"content\":\"The new cafeteria is open.\"},\"toRecipients\"" +
-                ":[{\"emailAddress\":{\"name\":null,\"address\":\"fannyd@contoso.onmicrosoft.com\"}}]}}";
+        final String content = "{\"saveToSentItems\":true,\"message\":{\"subject\":\"Meet for lunch?\"," +
+                "\"body\":{\"contentType\":\"text\",\"content\":\"The new cafeteria is open.\"},\"" +
+                "toRecipients\":[{\"emailAddress\":{\"name\":null,\"address\":\"" +
+                "fannyd@contoso.onmicrosoft.com\"}}]}}";
         mockServer.expect(requestTo(microsoft.getGraphAPI("me/sendMail")))
                 .andExpect(method(POST))
                 .andExpect(header("Authorization", "Bearer access token"))
                 .andExpect(content().string(content))
                 .andRespond(withSuccess("", MediaType.APPLICATION_JSON));
 
-        Message message = new Message();
+        final Message message = new Message();
         message.setSubject("Meet for lunch?");
 
-        ItemBody body = new ItemBody();
+        final ItemBody body = new ItemBody();
         body.setContentType(BodyType.text);
         body.setContent("The new cafeteria is open.");
         message.setBody(body);
 
-        List<Recipient> recipients = new ArrayList<>();
-        Recipient recipient = new Recipient();
-        EmailAddress emailAddress = new EmailAddress();
+        final List<Recipient> recipients = new ArrayList<>();
+        final Recipient recipient = new Recipient();
+        final EmailAddress emailAddress = new EmailAddress();
         emailAddress.setAddress("fannyd@contoso.onmicrosoft.com");
         recipient.setEmailAddress(emailAddress);
         recipients.add(recipient);
