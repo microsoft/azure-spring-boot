@@ -12,7 +12,9 @@
   - annotate a field in domain class with @Id, this field will be mapped to document `id` in Cosmos DB. 
   - set name of this field to `id`, this field will be mapped to document `id` in Cosmos DB.
     [Note] if both way appplied,    
-  
+- Custom collection Name.
+   By default, collection name will be class name of user domain class. To customize it, add annoataion `@Document(collection="myCustomCollectionName")` to your domain class, that's all.
+   
 
 ## Sample Code
 Please refer to [sample project here](../azure-documentdb-spring-boot-starter-sample).
@@ -48,6 +50,7 @@ Property `azure.documentdb.consistency-level` is also supported.
 Define a simple entity as Document in DocumentDB.
 
 ```
+@Document(collection = "mycollection")
 public class User {
     private String id;
     private String firstName;
@@ -72,6 +75,7 @@ public class User {
 ```
 `id` field will be used as document `id` in Azure Cosmos DB. Or you can annotate any field with `@Id` to map it to document `id`.
 
+Annotation `@Document(collection="mycollection")` is used to specify collection name of your document in Azure Cosmos DB.
 
 ### Create repositories
 Extends DocumentDbRepository interface, which provides Spring Data repository support.

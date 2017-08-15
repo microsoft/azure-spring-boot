@@ -25,11 +25,19 @@ public interface DocumentDbOperations {
 
     <T> T findById(Object id, Class<T> entityClass);
 
+    <T> T findById(String collectionName, Object id, Class<T> entityClass);
+
     <T> T insert(T objectToSave);
+
+    <T> T insert(String collectionName, T objectToSave);
 
     <T> void update(T object);
 
+    <T> void update(String collectionName, T object);
+
     <T> void delete(T objectToRemove);
+
+    <T> void delete(String collectionName, T objectToRemove);
 
     void deleteAll(String collectionName);
 }

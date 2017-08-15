@@ -5,12 +5,9 @@
  */
 package com.microsoft.azure.cloudfoundry.service.sample.servicebus;
 
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.CompletableFuture;
-
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletResponse;
-
+import com.microsoft.azure.servicebus.*;
+import com.microsoft.azure.servicebus.primitives.ServiceBusException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.microsoft.azure.servicebus.ExceptionPhase;
-import com.microsoft.azure.servicebus.IMessage;
-import com.microsoft.azure.servicebus.IMessageHandler;
-import com.microsoft.azure.servicebus.Message;
-import com.microsoft.azure.servicebus.MessageHandlerOptions;
-import com.microsoft.azure.servicebus.QueueClient;
-import com.microsoft.azure.servicebus.primitives.ServiceBusException;
-
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 public class ServiceBusRestController {
@@ -36,16 +28,14 @@ public class ServiceBusRestController {
             .getLogger(ServiceBusRestController.class);
 
     private static final String CR = "</BR>";
-
+    private static StringBuffer currentResult = null;
     @Autowired
     private QueueClient queueClientForSending;
     @Autowired
     private QueueClient queueClientForReceiving;
-    
-    private static StringBuffer currentResult = null;
 
     @PostConstruct
-    private void postConstruct()    {
+    private void postConstruct() {
         LOG.debug("postConstruct start...");
         try {
             LOG.debug("registering queue handler...");
@@ -59,7 +49,7 @@ public class ServiceBusRestController {
         }
         LOG.debug("postConstruct end.");
     }
-    
+
     @RequestMapping(value = "/sb", method = RequestMethod.GET)
     @ResponseBody
     @SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
@@ -72,9 +62,9 @@ public class ServiceBusRestController {
             sendQueueMessage();
             result.append("receiving queue message" + CR);
             Thread.sleep(2000);
-            
+
             result.append("done!" + CR);
-            
+
         } catch (ServiceBusException e) {
             LOG.error("Error processing messages", e);
         } catch (InterruptedException e) {
