@@ -5,14 +5,7 @@
  */
 package com.microsoft.azure.cloudfoundry.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -24,11 +17,15 @@ import org.springframework.core.io.Resource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ContextConfiguration(classes = { VcapProcessor.class })
+@ContextConfiguration(classes = {VcapProcessor.class})
 public class AzureCloudFoundryServiceApplicationTest {
 
     private static final Logger LOG = LoggerFactory
@@ -39,10 +36,10 @@ public class AzureCloudFoundryServiceApplicationTest {
 
     @Test
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
-    public void testVcapSingleService()    {
+    public void testVcapSingleService() {
         final Resource resource = new ClassPathResource("/vcap1.json");
         final String content;
-        try        {
+        try {
             content = new String(
                     Files.readAllBytes(Paths.get(resource.getURI())));
             final VcapResult result = parser.parse(content);
@@ -70,17 +67,17 @@ public class AzureCloudFoundryServiceApplicationTest {
                     pojo.getCredentials().get("secondary_access_key"));
             assertEquals("sam",
                     pojo.getCredentials().get("storage_account_name"));
-        } catch (IOException e)        {
+        } catch (IOException e) {
             LOG.error("Error reading json file", e);
         }
     }
 
     @Test
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
-    public void testVcapSingleServiceWithNulls()    {
+    public void testVcapSingleServiceWithNulls() {
         final Resource resource = new ClassPathResource("/vcap2.json");
         final String content;
-        try        {
+        try {
             content = new String(
                     Files.readAllBytes(Paths.get(resource.getURI())));
             final VcapResult result = parser.parse(content);
@@ -109,7 +106,7 @@ public class AzureCloudFoundryServiceApplicationTest {
             assertEquals(
                     "3becR7JFnWamMvGwWYWWTV4WpeNhN8tOzJ74yjAxPKDpx65q2lYz60jt8WXU6HrIKrAIwhs0Hglf0123456789==",
                     pojo.getCredentials().get("documentdb_master_key"));
-        } catch (IOException e)        {
+        } catch (IOException e) {
             LOG.error("Error reading json file", e);
         }
     }

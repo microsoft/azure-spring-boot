@@ -5,14 +5,11 @@
  */
 package com.microsoft.azure.cloudfoundry.service.sample.storage;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.storage.StorageException;
+import com.microsoft.azure.storage.blob.CloudBlobClient;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,21 +20,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.microsoft.azure.storage.CloudStorageAccount;
-import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.CloudBlobClient;
-import com.microsoft.azure.storage.blob.CloudBlobContainer;
-import com.microsoft.azure.storage.blob.CloudBlockBlob;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 @RestController
 public class StorageRestController {
 
-    private static final Logger LOG = LoggerFactory
-            .getLogger(StorageRestController.class);
-
     public static final String IMAGE_PATH =
             "https://raw.githubusercontent.com/mjeffries-pivotal/pcf-samples/master/images/azure-pcf.jpg";
-
+    private static final Logger LOG = LoggerFactory
+            .getLogger(StorageRestController.class);
     @Autowired
     private CloudStorageAccount account;
 
@@ -72,13 +68,13 @@ public class StorageRestController {
             blob.upload(new URL(IMAGE_PATH).openStream(), imageSize);
             LOG.debug("Uploading image complete");
 
-        } catch (MalformedURLException e)        {
+        } catch (MalformedURLException e) {
             LOG.error("Error retrieving image", e);
-        } catch (IOException e)        {
+        } catch (IOException e) {
             LOG.error("Error retrieving image", e);
-        } catch (URISyntaxException e)        {
+        } catch (URISyntaxException e) {
             LOG.error("Error accessing azure storage container", e);
-        } catch (StorageException e)        {
+        } catch (StorageException e) {
             LOG.error("Error accessing azure storage container", e);
         }
     }

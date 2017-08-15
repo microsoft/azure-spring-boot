@@ -5,8 +5,6 @@
  */
 package com.microsoft.azure.cloudfoundry.service.sample.documentdb;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 public class DocumentDbRestController {
@@ -36,7 +36,7 @@ public class DocumentDbRestController {
 
         LOG.debug("Deleting all records in repo..." + CR);
         repository.deleteAll();
-        
+
         LOG.debug("Saving new User object...");
         repository.save(testUser);
 
@@ -48,7 +48,7 @@ public class DocumentDbRestController {
 
         LOG.debug("UserRepository.findOne() result: " + user.toString());
         result.append("UserRepository.findOne() result: " + user.toString() + CR);
-        
+
         return result.toString();
     }
 }

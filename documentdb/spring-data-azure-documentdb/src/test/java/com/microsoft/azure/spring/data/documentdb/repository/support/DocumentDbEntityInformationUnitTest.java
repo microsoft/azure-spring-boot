@@ -5,6 +5,7 @@
  */
 package com.microsoft.azure.spring.data.documentdb.repository.support;
 
+import com.microsoft.azure.spring.data.documentdb.core.mapping.Document;
 import com.microsoft.azure.spring.data.documentdb.domain.Person;
 import org.junit.Test;
 
@@ -39,5 +40,20 @@ public class DocumentDbEntityInformationUnitTest {
 
         final String collectionName = entityInformation.getCollectionName();
         assertThat(collectionName).isEqualTo(Person.class.getSimpleName());
+    }
+
+    @Test
+    public void testCustomCollectionName() {
+        final DocumentDbEntityInformation<Volunteer, String> entityInformation =
+                new DocumentDbEntityInformation<Volunteer, String>(Volunteer.class);
+
+        final String collectionName = entityInformation.getCollectionName();
+        assertThat(collectionName).isEqualTo("testCollection");
+    }
+
+    @Document(collection = "testCollection")
+    class Volunteer {
+        String id;
+        String name;
     }
 }
