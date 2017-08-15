@@ -60,10 +60,13 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     }
 
     public <T> T insert(T objectToSave) {
-        final Class<? extends Object> entityClass = objectToSave.getClass();
+        return insert(getCollectionName(objectToSave.getClass()), objectToSave);
+    }
+
+
+    public <T> T insert(String collectionName, T objectToSave) {
         final Document document = new Document();
         mappingDocumentDbConverter.write(objectToSave, document);
-        final String collectionName = getCollectionName(entityClass);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("execute createDocument in database {} collection {}",
@@ -85,8 +88,10 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     }
 
     public <T> T findById(Object id, Class<T> entityClass) {
-        final String collectionName = getCollectionName(entityClass);
+        return findById(getCollectionName(entityClass), id, entityClass);
+    }
 
+    public <T> T findById(String collectionName, Object id, Class<T> entityClass) {
         try {
             final Resource resource = documentDbFactory.getDocumentClient()
                     .readDocument(
@@ -105,11 +110,20 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     }
 
     public <T> void delete(T objectToRemove) {
+        delete(getCollectionName(objectToRemove.getClass()), objectToRemove);
+    }
+
+    public <T> void delete(String collectionName, T objectToRemove) {
         throw new UnsupportedOperationException("not supported");
     }
 
 
     public <T> void update(T object) {
+        update(getCollectionName(object.getClass()), object);
+    }
+
+
+    public <T> void update(String collectionName, T object) {
         final Field idField = ReflectionUtils.findField(object.getClass(), "id");
 
         final String id;
@@ -122,7 +136,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
 
         try {
             final Resource resource = documentDbFactory.getDocumentClient()
-                    .readDocument(getDocumentLink(this.databaseName, getCollectionName(object.getClass()), id), null)
+                    .readDocument(getDocumentLink(this.databaseName, collectionName, id), null)
                     .getResource();
 
             if (resource instanceof Document) {
@@ -130,7 +144,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
 
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("execute replaceDocument in database {} collection {} with id {}",
-                            this.databaseName, getCollectionName(object.getClass()), id);
+                            this.databaseName, collectionName, id);
                 }
 
                 mappingDocumentDbConverter.write(object, originalDoc);
@@ -149,7 +163,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     }
 
     public <T> List<T> findAll(Class<T> entityClass) {
-        throw new UnsupportedOperationException("not supported");
+        return findAll(getCollectionName(entityClass), entityClass);
     }
 
     public void deleteAll(String collectionName) {

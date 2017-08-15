@@ -6,12 +6,14 @@
 
 package com.microsoft.azure.spring.data.documentdb.repository.support;
 
+import com.microsoft.azure.spring.data.documentdb.core.mapping.Document;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.repository.core.support.AbstractEntityInformation;
 import org.springframework.util.ReflectionUtils;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class DocumentDbEntityInformation<T, ID extends Serializable>
             ReflectionUtils.makeAccessible(this.id);
         }
 
-        this.collectionName = domainClass.getSimpleName();
+        this.collectionName = getCustomCollection(domainClass);
     }
 
 
@@ -63,5 +65,17 @@ public class DocumentDbEntityInformation<T, ID extends Serializable>
             throw new IllegalArgumentException("type of id field must be String");
         }
         return idField;
+    }
+
+    private String getCustomCollection(Class<?> domainClass) {
+        String collectionName = domainClass.getSimpleName();
+
+        final Document annotation = domainClass.getAnnotation(Document.class);
+
+        if (annotation != null && annotation.collection() != null && !annotation.collection().isEmpty()) {
+            collectionName = annotation.collection();
+        }
+
+        return collectionName;
     }
 }
