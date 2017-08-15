@@ -1,13 +1,15 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See LICENSE in the project root for
+ * license information.
+ */
 package com.microsoft.azure.autoconfigure.aad;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * Created by yaweiw on 8/15/2017.
- */
 public class UserGroupTest {
-    private final static UserGroup group1 = new UserGroup("12345", "test");
+    private static final UserGroup group1 = new UserGroup("12345", "test");
     @Test
     public void getDisplayName() throws Exception {
         Assert.assertTrue(group1.getDisplayName().equals("test"));
@@ -20,13 +22,13 @@ public class UserGroupTest {
 
     @Test
     public void equals() throws Exception {
-        UserGroup group2 = new UserGroup("12345", "test");
+        final UserGroup group2 = new UserGroup("12345", "test");
         Assert.assertTrue(group1.equals(group2));
     }
 
     @Test
     public void hashCodeTest() {
-        UserGroup group2 = new UserGroup("12345", "test");
+        final UserGroup group2 = new UserGroup("12345", "test");
         Assert.assertTrue(group1.hashCode() == group2.hashCode());
     }
 }
