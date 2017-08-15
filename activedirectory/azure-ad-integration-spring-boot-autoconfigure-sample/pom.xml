@@ -15,8 +15,8 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>azure-ad-integration-spring-boot-autoconfigure-sample</name>
-    <description>Demo project for Spring Boot</description>
+    <name>Azure AD Spring Security Integration Spring Boot Autoconfigure Sample</name>
+    <description>Azure AD Spring Security Integration Spring Boot Autoconfigure Sample</description>
     <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
 
     <licenses>

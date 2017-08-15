@@ -30,8 +30,13 @@ import java.util.concurrent.Future;
 public class AzureADJwtTokenFilter extends OncePerRequestFilter {
     private static final Logger log = LoggerFactory.getLogger(AzureADJwtTokenFilter.class);
 
+    private static final String CURRENT_USER_PRINCIPAL = "CURRENT_USER_PRINCIPAL";
+    private static final String CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN = "CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN";
+
     private static final String TOKEN_HEADER = "Authorization";
     private static final String TOKEN_TYPE = "Bearer ";
+
+
 
     private AzureADJwtFilterProperties aadJwtFilterProp;
 
@@ -83,19 +88,24 @@ public class AzureADJwtTokenFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith(TOKEN_TYPE)) {
             try {
                 final String idToken = authHeader.replace(TOKEN_TYPE, "");
-                final UserPrincipal principal = new UserPrincipal(idToken);
-                final String tid = principal.getClaim("tid").toString();
-
-                final AuthenticationResult result = acquireTokenForGraphApi(
-                        idToken,
-                        tid);
+                UserPrincipal principal = (UserPrincipal) request
+                        .getSession().getAttribute(CURRENT_USER_PRINCIPAL);
+                String graphApiToken = (String) request
+                        .getSession().getAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN);
+                if (principal == null || graphApiToken == null || graphApiToken.isEmpty()) {
+                    principal = new UserPrincipal(idToken);
+                    graphApiToken = acquireTokenForGraphApi(
+                            idToken, principal.getClaim("tid").toString()).getAccessToken();
+                    request.getSession().setAttribute(CURRENT_USER_PRINCIPAL, principal);
+                    request.getSession().setAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN, graphApiToken);
+                }
 
                 final Authentication authentication = new
                         PreAuthenticatedAuthenticationToken(
                         principal, null,
                         principal.getAuthoritiesByUserGroups(
-                                principal.getGroups(result.getAccessToken()),
-                                aadJwtFilterProp.getAllowedRolesGroups()));
+                                principal.getGroups(graphApiToken),
+                                aadJwtFilterProp.getAadGroups()));
                 authentication.setAuthenticated(true);
                 log.info("Request token verification success. {0}", authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);

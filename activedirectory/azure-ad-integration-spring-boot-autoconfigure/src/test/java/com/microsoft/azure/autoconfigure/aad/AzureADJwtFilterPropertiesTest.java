@@ -30,7 +30,7 @@ public class AzureADJwtFilterPropertiesTest {
 
             assertThat(properties.getClientId()).isEqualTo(Constants.CLIENT_ID);
             assertThat(properties.getClientSecret()).isEqualTo(Constants.CLIENT_SECRET);
-            assertThat(properties.getAllowedRolesGroups()
+            assertThat(properties.getAadGroups()
                     .toString()).isEqualTo(Constants.TARGETED_GROUPS.toString());
         }
 
@@ -64,7 +64,7 @@ public class AzureADJwtFilterPropertiesTest {
                             "'azure.activedirectory' on field 'clientSecret': rejected value []");
             assertThat(exception.getCause().getMessage()).contains(
                     "Field error in object " +
-                            "'azure.activedirectory' on field 'allowedRolesGroups': rejected value [null]");
+                            "'azure.activedirectory' on field 'aadGroups': rejected value [null]");
         }
 
         System.clearProperty(Constants.CLIENT_ID_PROPERTY);

@@ -59,7 +59,7 @@ public class TodolistController {
     public ResponseEntity<String> addNewTodoItem(@RequestBody TodoItem item) {
         item.setID(todoList.size() + 1);
         todoList.add(todoList.size(), item);
-        return new ResponseEntity<String>("OK", HttpStatus.CREATED);
+        return new ResponseEntity<String>("Entity created", HttpStatus.CREATED);
     }
 
     /**
@@ -72,15 +72,14 @@ public class TodolistController {
                 todoList.stream().filter(i -> i.getID() == item.getID()).collect(Collectors.toList());
         if (!find.isEmpty()) {
             todoList.set(todoList.indexOf(find.get(0)), item);
-            return new ResponseEntity<String>("OK", HttpStatus.OK);
+            return new ResponseEntity<String>("Entity is updated", HttpStatus.OK);
         }
-        return new ResponseEntity<String>("NOT_FOUND", HttpStatus.OK);
+        return new ResponseEntity<String>("Entity not found", HttpStatus.OK);
     }
 
     /**
      * HTTP DELETE
      */
-    //@PreAuthorize("hasRole('ROLE_group1')")
     @RequestMapping(value = "/api/todolist/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteTodoItem(@PathVariable("id") int id) {
         final UserPrincipal current = (UserPrincipal) SecurityContextHolder
@@ -88,15 +87,15 @@ public class TodolistController {
                 .getAuthentication()
                 .getPrincipal();
         if (current.isMemberOf(
-                new UserGroup("fa7ad436-d32b-464a-928d-43e642711c6c", "group1"))) {
+                new UserGroup("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", "group1"))) {
             final List<TodoItem> find = todoList.stream().filter(i -> i.getID() == id).collect(Collectors.toList());
             if (!find.isEmpty()) {
                 todoList.remove(todoList.indexOf(find.get(0)));
                 return new ResponseEntity<String>("OK", HttpStatus.OK);
             }
-            return new ResponseEntity<String>("NOT_FOUND", HttpStatus.OK);
+            return new ResponseEntity<String>("Entity not found", HttpStatus.OK);
         } else {
-            return new ResponseEntity<String>("FORBIDDEN", HttpStatus.OK);
+            return new ResponseEntity<String>("Access is denied", HttpStatus.OK);
         }
 
     }

@@ -30,7 +30,7 @@ Open `application.properties` file and add below properties.
 ```
 azure.activedirectory.clientId=Application-ID-in-AAD-App-registrations
 azure.activedirectory.clientSecret=Key-in-AAD-API-ACCESS
-azure.activedirectory.allowedRolesGroups=roles-groups-allowed-to-access-API-resource e.g. group1,group2,group3
+azure.activedirectory.aadGroups=Aad-groups e.g. group1,group2,group3
 ```
 
 ### Configure WebSecurityConfigurerAdapter class to use `AzureADJwtTokenFilter`

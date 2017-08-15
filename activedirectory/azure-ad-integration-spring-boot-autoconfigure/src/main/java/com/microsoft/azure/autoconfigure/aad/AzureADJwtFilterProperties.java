@@ -14,8 +14,8 @@ import java.util.List;
 @Validated
 @ConfigurationProperties("azure.activedirectory")
 public class AzureADJwtFilterProperties {
-    private static final String aadSignInUri = "https://login.microsoftonline.com/";
-    private static final String aadGraphAPIUri = "https://graph.windows.net/";
+    private static final String AAD_SIGNIN_URI = "https://login.microsoftonline.com/";
+    private static final String AAD_GRAPHAPI_URI = "https://graph.windows.net/";
     /**
      * Registered application ID in Azure AD.
      */
@@ -27,10 +27,10 @@ public class AzureADJwtFilterProperties {
     @NotEmpty
     private String clientSecret;
     /**
-     * Allowed roles and groups in Azure AD.
+     * Azure AD groups.
      */
     @NotEmpty
-    private List<String> allowedRolesGroups;
+    private List<String> aadGroups;
 
     public String getClientId() {
         return clientId;
@@ -49,19 +49,19 @@ public class AzureADJwtFilterProperties {
     }
 
     public String getAadSignInUri() {
-        return aadSignInUri;
+        return AAD_SIGNIN_URI;
     }
 
     public String getAadGraphAPIUri() {
-        return aadGraphAPIUri;
+        return AAD_GRAPHAPI_URI;
     }
 
-    public List<String> getAllowedRolesGroups() {
-        return allowedRolesGroups;
+    public List<String> getAadGroups() {
+        return aadGroups;
     }
 
-    public void setAllowedRolesGroups(List<String> allowedRolesGroups) {
-        this.allowedRolesGroups = allowedRolesGroups;
+    public void setAadGroups(List<String> aadGroups) {
+        this.aadGroups = aadGroups;
     }
 
 }
