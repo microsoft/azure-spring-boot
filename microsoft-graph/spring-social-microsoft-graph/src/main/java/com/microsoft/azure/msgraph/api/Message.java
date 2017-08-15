@@ -300,44 +300,44 @@ public class Message {
     /**
      * The Is Delivery Receipt Requested.
      */
-    public Boolean getDeliveryReceiptRequested() {
+    public Boolean getIsDeliveryReceiptRequested() {
         return isDeliveryReceiptRequested;
     }
 
-    public void setDeliveryReceiptRequested(Boolean deliveryReceiptRequested) {
+    public void setIsDeliveryReceiptRequested(Boolean deliveryReceiptRequested) {
         isDeliveryReceiptRequested = deliveryReceiptRequested;
     }
 
     /**
      * The Is Read Receipt Requested.
      */
-    public Boolean getReadReceiptRequested() {
+    public Boolean getIsReadReceiptRequested() {
         return isReadReceiptRequested;
     }
 
-    public void setReadReceiptRequested(Boolean readReceiptRequested) {
+    public void setIsReadReceiptRequested(Boolean readReceiptRequested) {
         isReadReceiptRequested = readReceiptRequested;
     }
 
     /**
      * The Is Read.
      */
-    public Boolean getRead() {
+    public Boolean getIsRead() {
         return isRead;
     }
 
-    public void setRead(Boolean read) {
+    public void setIsRead(Boolean read) {
         isRead = read;
     }
 
     /**
      * The Is Draft.
      */
-    public Boolean getDraft() {
+    public Boolean getIsDraft() {
         return isDraft;
     }
 
-    public void setDraft(Boolean draft) {
+    public void setIsDraft(Boolean draft) {
         isDraft = draft;
     }
 
