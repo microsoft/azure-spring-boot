@@ -225,7 +225,7 @@
                     <instrumentation>
                         <excludes>
                             <exclude>com/microsoft/azure/spring/common/GetHashMac.class</exclude>
-                            <exclude>*/Constants.class</exclude>
+                            <exclude>com/microsoft/azure/**/Constants.class</exclude>
                         </excludes>
                     </instrumentation>
                 </configuration>
