@@ -13,7 +13,6 @@ import org.springframework.data.repository.core.support.AbstractEntityInformatio
 import org.springframework.util.ReflectionUtils;
 
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.List;
 
