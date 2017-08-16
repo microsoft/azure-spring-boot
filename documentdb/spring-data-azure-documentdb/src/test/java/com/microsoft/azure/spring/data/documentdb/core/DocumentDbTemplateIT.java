@@ -107,4 +107,20 @@ public class DocumentDbTemplateIT {
         assertThat(result.getFirstName()).isEqualTo(updated.getFirstName());
         assertThat(result.getLastName()).isEqualTo(updated.getLastName());
     }
+
+    @Test
+    public void testDeleteById() {
+        final Person person2 = new Person("newid", "newfn", "newln");
+        dbTemplate.insert(person2);
+        assertThat(dbTemplate.findAll(Person.class).size()).isEqualTo(2);
+
+        dbTemplate.deleteById(Person.class.getSimpleName(), TEST_PERSON.getId());
+
+        final List<Person> result = dbTemplate.findAll(Person.class);
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).getId()).isEqualTo(person2.getId());
+        assertThat(result.get(0).getFirstName()).isEqualTo(person2.getFirstName());
+        assertThat(result.get(0).getLastName()).isEqualTo(person2.getLastName());
+
+    }
 }

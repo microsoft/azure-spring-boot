@@ -35,9 +35,7 @@ public interface DocumentDbOperations {
 
     <T> void update(String collectionName, T object);
 
-    <T> void delete(T objectToRemove);
-
-    <T> void delete(String collectionName, T objectToRemove);
+    <T> void deleteById(String collectionName, Object id);
 
     void deleteAll(String collectionName);
 }

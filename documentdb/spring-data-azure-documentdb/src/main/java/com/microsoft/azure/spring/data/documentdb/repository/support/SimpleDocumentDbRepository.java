@@ -67,7 +67,7 @@ public class SimpleDocumentDbRepository<T, ID extends Serializable> implements D
 
     @Override
     public Page<T> findAll(Pageable pageable) {
-        throw new UnsupportedOperationException("findAll(Pageable pageable) not supported yet.");
+        throw new UnsupportedOperationException("findAll(Pageable pageable) Sort not supported yet.");
     }
 
     @Override
@@ -77,22 +77,22 @@ public class SimpleDocumentDbRepository<T, ID extends Serializable> implements D
 
     @Override
     public long count() {
-        throw new UnsupportedOperationException("count not supported yet.");
+        return findAll().size();
     }
 
     @Override
     public void delete(ID id) {
-        throw new UnsupportedOperationException("delete(ID id) not supported yet.");
+        documentDbOperations.deleteById(entityInformation.getCollectionName(), id);
     }
 
+    @Override
     public void delete(T entity) {
-        throw new UnsupportedOperationException("delete(T entity) not supported yet.");
+        documentDbOperations.deleteById(entityInformation.getCollectionName(), entityInformation.getId(entity));
     }
 
     @Override
     public void deleteAll() {
         documentDbOperations.deleteAll(entityInformation.getCollectionName());
-
     }
 
     @Override

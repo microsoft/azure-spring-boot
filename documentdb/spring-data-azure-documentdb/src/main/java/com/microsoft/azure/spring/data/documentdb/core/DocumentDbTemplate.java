@@ -75,7 +75,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
 
         try {
             if (!this.collectionCache.contains(collectionName)) {
-                createOrGetCollection(this.databaseName, collectionName);
+                createCollectionIfNotExists(this.databaseName, collectionName);
                 this.collectionCache.add(collectionName);
             }
 
@@ -105,18 +105,9 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                 return null;
             }
         } catch (DocumentClientException e) {
-            throw new RuntimeException("findById exception", e);
+            throw new RuntimeException("findById exception========================", e);
         }
     }
-
-    public <T> void delete(T objectToRemove) {
-        delete(getCollectionName(objectToRemove.getClass()), objectToRemove);
-    }
-
-    public <T> void delete(String collectionName, T objectToRemove) {
-        throw new UnsupportedOperationException("not supported");
-    }
-
 
     public <T> void update(T object) {
         update(getCollectionName(object.getClass()), object);
@@ -175,6 +166,9 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         try {
             documentDbFactory.getDocumentClient()
                     .deleteCollection(getCollectionLink(this.databaseName, collectionName), null);
+            if (this.collectionCache.contains(collectionName)) {
+                this.collectionCache.remove(collectionName);
+            }
         } catch (DocumentClientException ex) {
             if (ex.getStatusCode() == 404) {
                 LOGGER.warn("deleteAll in database {} collection {} met NOTFOUND error {}",
@@ -183,30 +177,47 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                 throw new RuntimeException("deleteAll exception", ex);
             }
         }
-
     }
 
     public <T> List<T> findAll(String collectionName, final Class<T> entityClass) {
-        final List<Document> results = documentDbFactory.getDocumentClient()
-                .queryDocuments(getCollectionLink(this.databaseName, collectionName),
-                        "SELECT * FROM c", null)
-                .getQueryIterable().toList();
+        try {
+            final List<DocumentCollection> collections = documentDbFactory.getDocumentClient().
+                    queryCollections(
+                            getDatabaseLink(this.databaseName),
+                            new SqlQuerySpec("SELECT * FROM ROOT r WHERE r.id=@id",
+                                    new SqlParameterCollection(new SqlParameter("@id", collectionName))), null)
+                    .getQueryIterable().toList();
 
-        final List<T> entities = new ArrayList<T>();
+            if (collections.size() != 1) {
+                throw new RuntimeException("expect only one collection: " + collectionName
+                        + " in database: " + this.databaseName + ", but found " + collections.size());
+            }
 
-        for (int i = 0; i < results.size(); i++) {
-            final T entity = mappingDocumentDbConverter.read(entityClass, results.get(i));
-            entities.add(entity);
+            final List<Document> results = documentDbFactory.getDocumentClient()
+                    .queryDocuments(collections.get(0).getSelfLink(),
+                            "SELECT * FROM c", null)
+                    .getQueryIterable().toList();
+
+            final List<T> entities = new ArrayList<T>();
+
+            for (int i = 0; i < results.size(); i++) {
+                final T entity = mappingDocumentDbConverter.read(entityClass, results.get(i));
+                entities.add(entity);
+            }
+
+            return entities;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
         }
 
-        return entities;
+
     }
 
     public String getCollectionName(Class<?> entityClass) {
         return entityClass.getSimpleName();
     }
 
-    private Database createOrGetDatabase(String dbName) {
+    private Database createDatabaseIfNotExists(String dbName) {
         try {
             final List<Database> dbList = documentDbFactory.getDocumentClient()
                     .queryDatabases(new SqlQuerySpec("SELECT * FROM root r WHERE r.id=@id",
@@ -267,9 +278,9 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
 
     }
 
-    private DocumentCollection createOrGetCollection(String dbName, String collectionName) {
+    private DocumentCollection createCollectionIfNotExists(String dbName, String collectionName) {
         if (this.databaseCache == null) {
-            this.databaseCache = createOrGetDatabase(dbName);
+            this.databaseCache = createDatabaseIfNotExists(dbName);
         }
 
         final List<DocumentCollection> collectionList = documentDbFactory.getDocumentClient()
@@ -299,7 +310,19 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         } catch (DocumentClientException ex) {
             throw new RuntimeException("dropCollection exception", ex);
         }
+    }
 
+    public void deleteById(String collectionName, Object id) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("execute deleteById in database {} collection {}", this.databaseName, collectionName);
+        }
+
+        try {
+            documentDbFactory.getDocumentClient().deleteDocument(
+                    getDocumentLink(this.databaseName, collectionName, id.toString()), null);
+        } catch (DocumentClientException ex) {
+            throw new RuntimeException("deleteById exception", ex);
+        }
     }
 
     private String getDatabaseLink(String databaseName) {
