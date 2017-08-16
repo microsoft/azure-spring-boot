@@ -55,7 +55,7 @@
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-spring-boot-starter-bom</artifactId>
-                <version>0.1.5-beta</version>
+                <version>0.1.5</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
