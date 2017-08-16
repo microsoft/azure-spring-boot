@@ -5,7 +5,9 @@
  */
 
 package com.microsoft.azure.sample;
+import com.microsoft.azure.spring.data.documentdb.core.mapping.Document;
 
+@Document(collection = "mycollection")
 public class User {
     private String id;
     private String firstName;

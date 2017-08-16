@@ -19,6 +19,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
@@ -52,7 +53,7 @@ public class SimpleDocumentDbRepositoryUnitTest {
 
     @Test
     public void testFindOne() {
-        when(dbOperations.findById(anyObject(), any())).thenReturn(TEST_PERSON);
+        when(dbOperations.findById(anyString(), anyObject(), any())).thenReturn(TEST_PERSON);
 
         repository.save(TEST_PERSON);
 
@@ -62,4 +63,5 @@ public class SimpleDocumentDbRepositoryUnitTest {
         assertEquals(result.getFirstName(), TEST_PERSON.getFirstName());
         assertEquals(result.getLastName(), TEST_PERSON.getLastName());
     }
+
 }

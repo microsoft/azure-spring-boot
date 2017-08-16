@@ -49,4 +49,42 @@ public class ContactRepositoryIT {
         assertThat(contact.getLogicId()).isEqualTo(TEST_CONTACT.getLogicId());
         assertThat(contact.getTitle()).isEqualTo(TEST_CONTACT.getTitle());
     }
+
+    @Test
+    public void testCountAndDeleteByID() {
+        final Contact contact2 = new Contact("newid", "newtitle");
+        repository.save(contact2);
+        final List<Contact> all = repository.findAll();
+        assertThat(all.size()).isEqualTo(2);
+
+        long count = repository.count();
+        assertThat(count).isEqualTo(2);
+
+        repository.delete(contact2.getLogicId());
+
+        final List<Contact> result = repository.findAll();
+
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).getLogicId()).isEqualTo(TEST_CONTACT.getLogicId());
+        assertThat(result.get(0).getTitle()).isEqualTo(TEST_CONTACT.getTitle());
+
+        count = repository.count();
+        assertThat(count).isEqualTo(1);
+    }
+
+    @Test
+    public void testCountAndDeleteEntity() {
+        final Contact contact2 = new Contact("newid", "newtitle");
+        repository.save(contact2);
+        final List<Contact> all = repository.findAll();
+        assertThat(all.size()).isEqualTo(2);
+
+        repository.delete(contact2);
+
+        final List<Contact> result = repository.findAll();
+
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).getLogicId()).isEqualTo(TEST_CONTACT.getLogicId());
+        assertThat(result.get(0).getTitle()).isEqualTo(TEST_CONTACT.getTitle());
+    }
 }

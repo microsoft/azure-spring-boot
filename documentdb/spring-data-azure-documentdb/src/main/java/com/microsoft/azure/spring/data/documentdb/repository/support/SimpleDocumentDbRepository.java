@@ -38,8 +38,7 @@ public class SimpleDocumentDbRepository<T, ID extends Serializable> implements D
     @Override
     public <S extends T> S save(S entity) {
         Assert.notNull(entity, "entity must not be null");
-
-        documentDbOperations.insert(entity);
+        documentDbOperations.insert(entityInformation.getCollectionName(), entity);
 
         return entity;
     }
@@ -62,7 +61,8 @@ public class SimpleDocumentDbRepository<T, ID extends Serializable> implements D
     @Override
     public T findOne(ID id) {
         Assert.notNull(id, "id must not be null");
-        return documentDbOperations.findById(id, entityInformation.getJavaType());
+        return documentDbOperations.findById(
+                entityInformation.getCollectionName(), id, entityInformation.getJavaType());
     }
 
     @Override
@@ -77,22 +77,22 @@ public class SimpleDocumentDbRepository<T, ID extends Serializable> implements D
 
     @Override
     public long count() {
-        throw new UnsupportedOperationException("count not supported yet.");
+        return findAll().size();
     }
 
     @Override
     public void delete(ID id) {
-        throw new UnsupportedOperationException("delete(ID id) not supported yet.");
+        documentDbOperations.deleteById(entityInformation.getCollectionName(), id);
     }
 
+    @Override
     public void delete(T entity) {
-        throw new UnsupportedOperationException("delete(T entity) not supported yet.");
+        documentDbOperations.deleteById(entityInformation.getCollectionName(), entityInformation.getId(entity));
     }
 
     @Override
     public void deleteAll() {
         documentDbOperations.deleteAll(entityInformation.getCollectionName());
-
     }
 
     @Override
