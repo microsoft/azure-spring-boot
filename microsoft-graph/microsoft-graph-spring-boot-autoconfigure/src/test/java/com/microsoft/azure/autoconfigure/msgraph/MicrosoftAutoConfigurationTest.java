@@ -1,16 +1,18 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See LICENSE in the project root for
+ * license information.
+ */
+
 package com.microsoft.azure.autoconfigure.msgraph;
 
 import com.microsoft.azure.msgraph.api.Microsoft;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
-import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.social.SocialWebAutoConfiguration;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.junit.Assert.fail;
 
 public class MicrosoftAutoConfigurationTest {
     @Test
@@ -39,9 +41,9 @@ public class MicrosoftAutoConfigurationTest {
             Microsoft microsoft = null;
             try {
                 microsoft = context.getBean(Microsoft.class);
-            }
-            catch (Exception e) {
-                assertThat(e.getMessage()).contains("No qualifying bean of type 'com.microsoft.azure.msgraph.api.Microsoft' available");
+            } catch (Exception e) {
+                assertThat(e.getMessage()).contains("No qualifying bean of type 'com.microsoft.azure." +
+                        "msgraph.api.Microsoft' available");
             }
             assertThat(microsoft).isNull();
         }
