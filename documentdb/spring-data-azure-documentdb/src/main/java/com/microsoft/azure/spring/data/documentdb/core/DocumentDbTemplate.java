@@ -293,19 +293,6 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         }
     }
 
-    public void dropCollection(String collectionName) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("execute deleteCollection in database {} collection {}", this.databaseName, collectionName);
-        }
-
-        try {
-            documentDbFactory.getDocumentClient()
-                    .deleteCollection(getCollectionLink(this.databaseName, collectionName), null);
-        } catch (DocumentClientException ex) {
-            throw new RuntimeException("dropCollection exception", ex);
-        }
-    }
-
     public void deleteById(String collectionName, Object id) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("execute deleteById in database {} collection {}", this.databaseName, collectionName);

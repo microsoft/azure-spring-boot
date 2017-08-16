@@ -17,8 +17,6 @@ public interface DocumentDbOperations {
 
     <T> DocumentCollection createCollection(String collectionName, RequestOptions collectionOptions);
 
-    void dropCollection(String collectionName);
-
     <T> List<T> findAll(Class<T> entityClass);
 
     <T> List<T> findAll(String collectionName, Class<T> entityClass);

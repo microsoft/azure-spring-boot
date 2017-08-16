@@ -9,11 +9,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 public class DocumentDbFactoryUnitTest {
 
     @Test(expected = IllegalArgumentException.class)
-    public void testInvalidKey() throws Exception {
+    public void testNullKey() throws Exception {
         new DocumentDbFactory("https://fakeuri", null);
+    }
+
+    @Test
+    public void testInvalidEndpoint() {
+        final DocumentDbFactory factory = new DocumentDbFactory("https://fakeuri", "fakekey");
+        assertThat(factory).isNotNull();
     }
 }
