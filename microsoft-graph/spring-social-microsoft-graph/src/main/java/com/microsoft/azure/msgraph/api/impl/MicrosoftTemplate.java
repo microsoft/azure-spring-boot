@@ -6,6 +6,7 @@
 
 package com.microsoft.azure.msgraph.api.impl;
 
+import com.microsoft.azure.msgraph.api.CustomOperations;
 import com.microsoft.azure.msgraph.api.MailOperations;
 import com.microsoft.azure.msgraph.api.Microsoft;
 import com.microsoft.azure.msgraph.api.UserOperations;
@@ -20,6 +21,7 @@ public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Micro
     private static final String MS_GRAPH_BASE_API = "https://graph.microsoft.com/v1.0/";
     private UserOperations userOperations;
     private MailOperations mailOperations;
+    private CustomOperations customOperations;
 
     public MicrosoftTemplate() {
         initialize();
@@ -30,18 +32,20 @@ public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Micro
         initialize();
     }
 
-    public String getGraphAPI(String path) {
-        return MS_GRAPH_BASE_API + path;
+    public String getGraphAPI(String relativePath) {
+        return MS_GRAPH_BASE_API + relativePath;
+    }
+
+    public URI getGraphAPIURI(String relativePath) {
+        return URIBuilder.fromUri(getGraphAPI(relativePath)).build();
     }
 
     public <T> T fetchObject(String objectId, Class<T> type) {
-        final URI uri = URIBuilder.fromUri(getGraphAPI(objectId)).build();
-        return getRestTemplate().getForObject(uri, type);
+        return getRestTemplate().getForObject(getGraphAPIURI(objectId), type);
     }
 
     public String postForObject(String objectId, Map<String, Object> data) {
-        final URI uri = URIBuilder.fromUri(getGraphAPI(objectId)).build();
-        return getRestTemplate().postForObject(uri, data, String.class);
+        return getRestTemplate().postForObject(getGraphAPIURI(objectId), data, String.class);
     }
 
     @Override
@@ -54,6 +58,11 @@ public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Micro
         return mailOperations;
     }
 
+    @Override
+    public CustomOperations customOperations() {
+        return customOperations;
+    }
+
     private void initialize() {
         super.setRequestFactory(ClientHttpRequestFactorySelector.bufferRequests(getRestTemplate().getRequestFactory()));
         initSubApis();
@@ -62,5 +71,6 @@ public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Micro
     private void initSubApis() {
         userOperations = new UserTemplate(this, isAuthorized());
         mailOperations = new MailTemplate(this, isAuthorized());
+        customOperations = new CustomTemplate(this, isAuthorized());
     }
 }

@@ -6,10 +6,12 @@
 
 package com.microsoft.azure.msgraph.api;
 
-public interface Microsoft {
-    UserOperations userOperations();
+import org.springframework.web.client.RestTemplate;
 
-    MailOperations mailOperations();
+import java.net.URI;
 
-    CustomOperations customOperations();
+public interface CustomOperations {
+    public RestTemplate getRestTemplate();
+
+    public URI getGraphAPIURI(String relativePath);
 }
