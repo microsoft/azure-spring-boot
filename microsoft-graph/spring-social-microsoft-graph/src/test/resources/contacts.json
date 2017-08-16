@@ -1,4 +1,3 @@
-
 {
   "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('16f5a7b6-5a15-4568-aa5a-31bb117e9967')/contacts",
   "@odata.nextLink": "https://graph.microsoft.com/v1.0/me/contacts?$skip=10",

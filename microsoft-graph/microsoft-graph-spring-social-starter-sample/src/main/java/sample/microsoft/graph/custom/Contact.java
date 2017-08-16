@@ -4,8 +4,9 @@
  * license information.
  */
 
-package com.microsoft.azure.msgraph.api.impl.Custom;
+package sample.microsoft.graph.custom;
 
+// Please be noted this is not a complete representation of the JSON object returned by Microsoft Graph.
 public class Contact {
 
     private String displayName;
