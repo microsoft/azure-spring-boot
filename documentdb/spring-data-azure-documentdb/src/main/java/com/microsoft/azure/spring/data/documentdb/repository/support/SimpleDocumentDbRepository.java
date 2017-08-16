@@ -67,7 +67,7 @@ public class SimpleDocumentDbRepository<T, ID extends Serializable> implements D
 
     @Override
     public Page<T> findAll(Pageable pageable) {
-        throw new UnsupportedOperationException("findAll(Pageable pageable) Sort not supported yet.");
+        throw new UnsupportedOperationException("findAll(Pageable pageable) not supported yet.");
     }
 
     @Override

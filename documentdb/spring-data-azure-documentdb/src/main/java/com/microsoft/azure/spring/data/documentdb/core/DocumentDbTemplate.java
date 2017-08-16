@@ -105,7 +105,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                 return null;
             }
         } catch (DocumentClientException e) {
-            throw new RuntimeException("findById exception========================", e);
+            throw new RuntimeException("findById exception", e);
         }
     }
 
@@ -180,7 +180,6 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     }
 
     public <T> List<T> findAll(String collectionName, final Class<T> entityClass) {
-        try {
             final List<DocumentCollection> collections = documentDbFactory.getDocumentClient().
                     queryCollections(
                             getDatabaseLink(this.databaseName),
@@ -206,11 +205,6 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
             }
 
             return entities;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
-        }
-
-
     }
 
     public String getCollectionName(Class<?> entityClass) {
