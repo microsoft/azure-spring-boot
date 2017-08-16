@@ -226,6 +226,9 @@
                         <excludes>
                             <exclude>com/microsoft/azure/spring/common/GetHashMac.class</exclude>
                             <exclude>com/microsoft/azure/**/Constants.class</exclude>
+                            <exclude>com/microsoft/azure/**/AzureADJwtTokenFilter.class</exclude>
+                            <exclude>com/microsoft/azure/**/AzureADGraphClient.class</exclude>
+                            <exclude>com/microsoft/azure/**/Userprincipal.class</exclude>
                         </excludes>
                     </instrumentation>
                 </configuration>
