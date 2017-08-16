@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-starter-bom</artifactId>
-        <version>0.1.5-beta</version>
+        <version>0.1.5</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -226,6 +226,9 @@
                         <excludes>
                             <exclude>com/microsoft/azure/spring/common/GetHashMac.class</exclude>
                             <exclude>com/microsoft/azure/**/Constants.class</exclude>
+                            <exclude>com/microsoft/azure/**/AzureADJwtTokenFilter.class</exclude>
+                            <exclude>com/microsoft/azure/**/AzureADGraphClient.class</exclude>
+                            <exclude>com/microsoft/azure/**/Userprincipal.class</exclude>
                         </excludes>
                     </instrumentation>
                 </configuration>
