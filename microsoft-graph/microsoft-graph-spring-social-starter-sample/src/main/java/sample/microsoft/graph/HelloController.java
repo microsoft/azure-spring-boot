@@ -7,8 +7,6 @@
 package sample.microsoft.graph;
 
 import com.microsoft.azure.msgraph.api.Microsoft;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +18,6 @@ import java.net.URI;
 
 @Controller
 public class HelloController {
-    private static final Logger LOG = LoggerFactory.getLogger(HelloController.class);
-
     private Microsoft microsoft;
     private ConnectionRepository connectionRepository;
 
