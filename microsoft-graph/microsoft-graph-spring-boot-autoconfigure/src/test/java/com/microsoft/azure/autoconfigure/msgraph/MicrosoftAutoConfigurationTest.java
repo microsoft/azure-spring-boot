@@ -18,7 +18,7 @@ public class MicrosoftAutoConfigurationTest {
     @Test
     public void canAutowire() {
         System.setProperty(Constants.APP_ID_PROPERTY, Constants.APP_ID);
-        System.setProperty(Constants.APP_SCERET_PROPERTY, Constants.APP_SCERET);
+        System.setProperty(Constants.APP_SECRET_PROPERTY, Constants.APP_SECRET);
 
         try (AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext()) {
             context.register(MicrosoftAutoConfiguration.class);
@@ -28,7 +28,7 @@ public class MicrosoftAutoConfigurationTest {
         }
 
         System.clearProperty(Constants.APP_ID_PROPERTY);
-        System.clearProperty(Constants.APP_SCERET_PROPERTY);
+        System.clearProperty(Constants.APP_SECRET_PROPERTY);
     }
 
     @Test

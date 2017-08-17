@@ -17,7 +17,7 @@ public class MicrosoftPropertiesTest {
     @Test
     public void canSetProperties() {
         System.setProperty(Constants.APP_ID_PROPERTY, Constants.APP_ID);
-        System.setProperty(Constants.APP_SCERET_PROPERTY, Constants.APP_SCERET);
+        System.setProperty(Constants.APP_SECRET_PROPERTY, Constants.APP_SECRET);
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(Config.class);
@@ -25,11 +25,11 @@ public class MicrosoftPropertiesTest {
             final MicrosoftProperties properties = context.getBean(MicrosoftProperties.class);
 
             assertThat(properties.getAppId()).isEqualTo(Constants.APP_ID);
-            assertThat(properties.getAppSecret()).isEqualTo(Constants.APP_SCERET);
+            assertThat(properties.getAppSecret()).isEqualTo(Constants.APP_SECRET);
         }
 
         System.clearProperty(Constants.APP_ID_PROPERTY);
-        System.clearProperty(Constants.APP_SCERET_PROPERTY);
+        System.clearProperty(Constants.APP_SECRET_PROPERTY);
     }
 
     @Configuration

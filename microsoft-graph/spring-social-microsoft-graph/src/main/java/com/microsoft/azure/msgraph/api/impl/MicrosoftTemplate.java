@@ -18,7 +18,8 @@ import java.net.URI;
 import java.util.Map;
 
 public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Microsoft {
-    private static final String MS_GRAPH_BASE_API = "https://graph.microsoft.com/v1.0/";
+    private static final String MS_GRAPH_BASE_API = "https://graph.microsoft.com/";
+    private String apiVersion = "v1.0";
     private UserOperations userOperations;
     private MailOperations mailOperations;
     private CustomOperations customOperations;
@@ -32,8 +33,12 @@ public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Micro
         initialize();
     }
 
+    public void setApiVersion(String apiVersion) {
+        this.apiVersion = apiVersion;
+    }
+
     public String getGraphAPI(String relativePath) {
-        return MS_GRAPH_BASE_API + relativePath;
+        return MS_GRAPH_BASE_API + apiVersion + "/" + relativePath;
     }
 
     public URI getGraphAPIURI(String relativePath) {
