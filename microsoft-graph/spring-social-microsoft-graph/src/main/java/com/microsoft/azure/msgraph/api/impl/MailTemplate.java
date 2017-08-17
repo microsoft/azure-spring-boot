@@ -9,6 +9,7 @@ package com.microsoft.azure.msgraph.api.impl;
 import com.microsoft.azure.msgraph.api.MailOperations;
 import com.microsoft.azure.msgraph.api.Message;
 import com.microsoft.azure.msgraph.api.Messages;
+import org.springframework.util.MultiValueMap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,11 +23,39 @@ public class MailTemplate extends AbstractMicrosoftOperations implements MailOpe
     }
 
     @Override
+    public Messages listMessages() {
+        return listMessages(null, null);
+    }
+
+    @Override
     public Messages listMessages(String mailFolder) {
+        return listMessages(mailFolder, null);
+    }
+
+    @Override
+    public Messages listMessages(MultiValueMap<String, String> params) {
+        return listMessages(null, params);
+    }
+
+    @Override
+    public Messages listMessages(String mailFolder, MultiValueMap<String, String> params) {
+        String uri = null;
         if (mailFolder == null) {
-            mailFolder = "Inbox";
+            uri = "me/messages";
+        } else {
+            uri = "me/mailFolders/" + mailFolder + "/messages";
         }
-        return microsoft.fetchObject("me/mailFolders/" + mailFolder + "/messages/", Messages.class);
+
+        if (params != null) {
+            return microsoft.fetchObject(uri, params, Messages.class);
+        } else {
+            return microsoft.fetchObject(uri, Messages.class);
+        }
+    }
+
+    @Override
+    public Messages listMessagesWithNextLink(String nextLink) {
+        return microsoft.fetchObjectWithAbsolutePath(nextLink, Messages.class);
     }
 
     @Override

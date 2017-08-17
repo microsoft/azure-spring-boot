@@ -6,8 +6,18 @@
 
 package com.microsoft.azure.msgraph.api;
 
+import org.springframework.util.MultiValueMap;
+
 public interface MailOperations {
+    Messages listMessages();
+
     Messages listMessages(String mailFolder);
+
+    Messages listMessages(MultiValueMap<String, String> params);
+
+    Messages listMessages(String mailFolder, MultiValueMap<String, String> params);
+
+    Messages listMessagesWithNextLink(String nextLink);
 
     void sendMail(Message message, Boolean saveToSentItems);
 }

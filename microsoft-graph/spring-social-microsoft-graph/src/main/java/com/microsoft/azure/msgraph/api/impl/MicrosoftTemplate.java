@@ -13,6 +13,7 @@ import com.microsoft.azure.msgraph.api.UserOperations;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
 import org.springframework.social.support.URIBuilder;
+import org.springframework.util.MultiValueMap;
 
 import java.net.URI;
 import java.util.Map;
@@ -45,8 +46,20 @@ public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Micro
         return URIBuilder.fromUri(getGraphAPI(relativePath)).build();
     }
 
+    public URI getGraphAPIURI(String relativePath, MultiValueMap<String, String> params) {
+        return URIBuilder.fromUri(getGraphAPI(relativePath)).queryParams(params).build();
+    }
+
+    public <T> T fetchObjectWithAbsolutePath(String absolutePath, Class<T> type) {
+        return getRestTemplate().getForObject(URIBuilder.fromUri(absolutePath).build(), type);
+    }
+
     public <T> T fetchObject(String objectId, Class<T> type) {
         return getRestTemplate().getForObject(getGraphAPIURI(objectId), type);
+    }
+
+    public <T> T fetchObject(String objectId, MultiValueMap<String, String> params, Class<T> type) {
+        return getRestTemplate().getForObject(getGraphAPIURI(objectId, params), type);
     }
 
     public String postForObject(String objectId, Map<String, Object> data) {

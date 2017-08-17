@@ -6,7 +6,12 @@
 
 package com.microsoft.azure.msgraph.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Messages {
+    @JsonProperty("@odata.nextLink")
+    private String nextLink;
+
     private java.util.List<Message> value;
 
     public java.util.List<Message> getValue() {
@@ -15,5 +20,13 @@ public class Messages {
 
     public void setValue(java.util.List<Message> value) {
         this.value = value;
+    }
+
+    public String getNextLink() {
+        return nextLink;
+    }
+
+    public void setNextLink(String nextLink) {
+        this.nextLink = nextLink;
     }
 }

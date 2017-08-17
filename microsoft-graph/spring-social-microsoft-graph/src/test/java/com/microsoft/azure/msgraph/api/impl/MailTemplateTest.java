@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.microsoft.azure.msgraph.api.*;
 import org.junit.Test;
 import org.springframework.http.MediaType;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -26,12 +28,111 @@ public class MailTemplateTest extends AbstractMicrosoftApiTest {
     @Test
     public void listMessagesSuccessfully() throws ParseException {
         mockServer
-                .expect(requestTo(microsoft.getGraphAPI("me/mailFolders/Inbox/messages/")))
+                .expect(requestTo(microsoft.getGraphAPI("me/messages")))
                 .andExpect(method(GET))
                 .andExpect(header("Authorization", "Bearer access token"))
                 .andRespond(withSuccess(jsonResource("messages"), MediaType.APPLICATION_JSON));
 
-        final Messages messages = microsoft.mailOperations().listMessages(null);
+        final Messages messages = microsoft.mailOperations().listMessages();
+        verifyMessages(messages);
+    }
+
+    @Test
+    public void listMessagesWithMailBoxSuccessfully() throws ParseException {
+        final String folderID = "Inbox";
+
+        mockServer
+                .expect(requestTo(microsoft.getGraphAPI("me/mailFolders/" + folderID + "/messages")))
+                .andExpect(method(GET))
+                .andExpect(header("Authorization", "Bearer access token"))
+                .andRespond(withSuccess(jsonResource("messages"), MediaType.APPLICATION_JSON));
+
+        final Messages messages = microsoft.mailOperations().listMessages(folderID);
+        verifyMessages(messages);
+    }
+
+    @Test
+    public void listMessagesWithParamsSuccessfully() throws ParseException {
+        final MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+        final List<String> values = new ArrayList<>();
+        values.add("10");
+        params.put("$skip", values);
+
+        mockServer
+                .expect(requestTo(microsoft.getGraphAPI("me/messages?%24skip=10")))
+                .andExpect(method(GET))
+                .andExpect(header("Authorization", "Bearer access token"))
+                .andRespond(withSuccess(jsonResource("messages"), MediaType.APPLICATION_JSON));
+
+        final Messages messages = microsoft.mailOperations().listMessages(params);
+        verifyMessages(messages);
+    }
+
+    @Test
+    public void listMessagesWithMailBoxAndParamsSuccessfully() throws ParseException {
+        final String folderID = "Inbox";
+
+        final MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+        final List<String> values = new ArrayList<>();
+        values.add("10");
+        params.put("$skip", values);
+
+        mockServer
+                .expect(requestTo(microsoft.getGraphAPI("me/mailFolders/Inbox/messages?%24skip=10")))
+                .andExpect(method(GET))
+                .andExpect(header("Authorization", "Bearer access token"))
+                .andRespond(withSuccess(jsonResource("messages"), MediaType.APPLICATION_JSON));
+
+        final Messages messages = microsoft.mailOperations().listMessages(folderID, params);
+        verifyMessages(messages);
+    }
+
+    @Test
+    public void listMessagesWithNextLinkSuccessfully() throws ParseException {
+        final String nextLink = "https://dummy.com/test";
+
+        mockServer
+                .expect(requestTo(nextLink))
+                .andExpect(method(GET))
+                .andExpect(header("Authorization", "Bearer access token"))
+                .andRespond(withSuccess(jsonResource("messages"), MediaType.APPLICATION_JSON));
+
+        final Messages messages = microsoft.mailOperations().listMessagesWithNextLink(nextLink);
+        verifyMessages(messages);
+    }
+
+    @Test
+    public void sendMailSuccessfully() throws ParseException {
+        final String content = "{\"saveToSentItems\":true,\"message\":{\"subject\":\"Meet for lunch?\"," +
+                "\"body\":{\"contentType\":\"text\",\"content\":\"The new cafeteria is open.\"},\"" +
+                "toRecipients\":[{\"emailAddress\":{\"name\":null,\"address\":\"" +
+                "fannyd@contoso.onmicrosoft.com\"}}]}}";
+        mockServer.expect(requestTo(microsoft.getGraphAPI("me/sendMail")))
+                .andExpect(method(POST))
+                .andExpect(header("Authorization", "Bearer access token"))
+                .andExpect(content().string(content))
+                .andRespond(withSuccess("", MediaType.APPLICATION_JSON));
+
+        final Message message = new Message();
+        message.setSubject("Meet for lunch?");
+
+        final ItemBody body = new ItemBody();
+        body.setContentType(BodyType.text);
+        body.setContent("The new cafeteria is open.");
+        message.setBody(body);
+
+        final List<Recipient> recipients = new ArrayList<>();
+        final Recipient recipient = new Recipient();
+        final EmailAddress emailAddress = new EmailAddress();
+        emailAddress.setAddress("fannyd@contoso.onmicrosoft.com");
+        recipient.setEmailAddress(emailAddress);
+        recipients.add(recipient);
+        message.setToRecipients(recipients);
+
+        microsoft.mailOperations().sendMail(message, true);
+    }
+
+    private void verifyMessages(Messages messages) throws ParseException {
         assertThat(messages.getValue().size()).isEqualTo(2);
 
         final Message message = messages.getValue().get(0);
@@ -94,36 +195,5 @@ public class MailTemplateTest extends AbstractMicrosoftApiTest {
         assertThat(message.getId()).isEqualTo("AAMkADRmZWM1ODE4LWQ4YWItNDlkYS1iZTY4LWVhZWEzYjRlODgzOQBG" +
                 "AAAAAAALmV7Xl1RCS6mHDvhC5ayOBwBuW0RzxJhUT4ez5BWQCxI9AAAAAAEMAABuW0RzxJhUT4ez5BWQCxI" +
                 "9AABdGgEMAAA=");
-    }
-
-    @Test
-    public void sendMailSuccessfully() throws ParseException {
-        final String content = "{\"saveToSentItems\":true,\"message\":{\"subject\":\"Meet for lunch?\"," +
-                "\"body\":{\"contentType\":\"text\",\"content\":\"The new cafeteria is open.\"},\"" +
-                "toRecipients\":[{\"emailAddress\":{\"name\":null,\"address\":\"" +
-                "fannyd@contoso.onmicrosoft.com\"}}]}}";
-        mockServer.expect(requestTo(microsoft.getGraphAPI("me/sendMail")))
-                .andExpect(method(POST))
-                .andExpect(header("Authorization", "Bearer access token"))
-                .andExpect(content().string(content))
-                .andRespond(withSuccess("", MediaType.APPLICATION_JSON));
-
-        final Message message = new Message();
-        message.setSubject("Meet for lunch?");
-
-        final ItemBody body = new ItemBody();
-        body.setContentType(BodyType.text);
-        body.setContent("The new cafeteria is open.");
-        message.setBody(body);
-
-        final List<Recipient> recipients = new ArrayList<>();
-        final Recipient recipient = new Recipient();
-        final EmailAddress emailAddress = new EmailAddress();
-        emailAddress.setAddress("fannyd@contoso.onmicrosoft.com");
-        recipient.setEmailAddress(emailAddress);
-        recipients.add(recipient);
-        message.setToRecipients(recipients);
-
-        microsoft.mailOperations().sendMail(message, true);
     }
 }
