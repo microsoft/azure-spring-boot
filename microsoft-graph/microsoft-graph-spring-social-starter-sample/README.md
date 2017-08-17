@@ -38,10 +38,5 @@ java -jar target/microsoft-graph-spring-social-starter-sample-0.0.1-SNAPSHOT.jar
 
 ### Make your own REST API call
 
-Microsoft Graph API is enormous and there is no Java SDK for it yet. Right now, we only implemented a very limited 
-number of wrappers for REST API calls.
- 
-If you want to get some specific data, please check the detailed [document](https://developer.microsoft.com/en-us/graph/docs/concepts/overview).
+This starter implements a small subset of Objects/APIs available via Microsoft Graph (GET /me, POST /me/sendMail, GET /me/messages). In addition, it demonstrates how to make custom REST API calls (see function `getContacts` in `HelloController.java` as an example). Please check the detailed [document](https://developer.microsoft.com/en-us/graph/docs/concepts/overview) for more details about Microsoft Graph. 
 After reading the document, you should be aware of the exact REST API and what objects you should prepare or expect from the REST API call.
-
-Function `getContacts` in `HelloController.java` is example of how to make custom REST API call. 
