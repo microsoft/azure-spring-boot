@@ -7,7 +7,7 @@
     <parent>
         <artifactId>azure-spring-boot-starter-parent</artifactId>
         <groupId>com.microsoft.azure</groupId>
-        <version>0.1.5</version>
+        <version>0.1.6-beta</version>
         <relativePath>../../common/azure-spring-boot-starter-parent/pom.xml</relativePath>
     </parent>
 
