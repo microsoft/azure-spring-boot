@@ -6,17 +6,24 @@
 
 package com.microsoft.azure.msgraph.api.impl;
 
+import com.microsoft.azure.msgraph.api.CustomOperations;
+import com.microsoft.azure.msgraph.api.MailOperations;
 import com.microsoft.azure.msgraph.api.Microsoft;
 import com.microsoft.azure.msgraph.api.UserOperations;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
 import org.springframework.social.support.ClientHttpRequestFactorySelector;
 import org.springframework.social.support.URIBuilder;
+import org.springframework.util.MultiValueMap;
 
 import java.net.URI;
+import java.util.Map;
 
 public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Microsoft {
-    private static final String MS_GRAPH_BASE_API = "https://graph.microsoft.com/v1.0/";
+    private static final String MS_GRAPH_BASE_API = "https://graph.microsoft.com/";
+    private String apiVersion = "v1.0";
     private UserOperations userOperations;
+    private MailOperations mailOperations;
+    private CustomOperations customOperations;
 
     public MicrosoftTemplate() {
         initialize();
@@ -27,18 +34,51 @@ public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Micro
         initialize();
     }
 
-    public String getGraphAPI(String path) {
-        return MS_GRAPH_BASE_API + path;
+    public void setApiVersion(String apiVersion) {
+        this.apiVersion = apiVersion;
+    }
+
+    public String getGraphAPI(String relativePath) {
+        return MS_GRAPH_BASE_API + apiVersion + "/" + relativePath;
+    }
+
+    public URI getGraphAPIURI(String relativePath) {
+        return URIBuilder.fromUri(getGraphAPI(relativePath)).build();
+    }
+
+    public URI getGraphAPIURI(String relativePath, MultiValueMap<String, String> params) {
+        return URIBuilder.fromUri(getGraphAPI(relativePath)).queryParams(params).build();
+    }
+
+    public <T> T fetchObjectWithAbsolutePath(String absolutePath, Class<T> type) {
+        return getRestTemplate().getForObject(URIBuilder.fromUri(absolutePath).build(), type);
     }
 
     public <T> T fetchObject(String objectId, Class<T> type) {
-        final URI uri = URIBuilder.fromUri(getGraphAPI(objectId)).build();
-        return getRestTemplate().getForObject(uri, type);
+        return getRestTemplate().getForObject(getGraphAPIURI(objectId), type);
+    }
+
+    public <T> T fetchObject(String objectId, MultiValueMap<String, String> params, Class<T> type) {
+        return getRestTemplate().getForObject(getGraphAPIURI(objectId, params), type);
+    }
+
+    public String postForObject(String objectId, Map<String, Object> data) {
+        return getRestTemplate().postForObject(getGraphAPIURI(objectId), data, String.class);
     }
 
     @Override
     public UserOperations userOperations() {
         return userOperations;
+    }
+
+    @Override
+    public MailOperations mailOperations() {
+        return mailOperations;
+    }
+
+    @Override
+    public CustomOperations customOperations() {
+        return customOperations;
     }
 
     private void initialize() {
@@ -48,5 +88,7 @@ public class MicrosoftTemplate extends AbstractOAuth2ApiBinding implements Micro
 
     private void initSubApis() {
         userOperations = new UserTemplate(this, isAuthorized());
+        mailOperations = new MailTemplate(this, isAuthorized());
+        customOperations = new CustomTemplate(this, isAuthorized());
     }
 }

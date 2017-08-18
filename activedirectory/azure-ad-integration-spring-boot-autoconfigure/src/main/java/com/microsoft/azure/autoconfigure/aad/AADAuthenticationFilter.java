@@ -27,23 +27,26 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class AzureADJwtTokenFilter extends OncePerRequestFilter {
-    private static final Logger log = LoggerFactory.getLogger(AzureADJwtTokenFilter.class);
+public class AADAuthenticationFilter extends OncePerRequestFilter {
+    private static final Logger log = LoggerFactory.getLogger(AADAuthenticationFilter.class);
+
+    private static final String CURRENT_USER_PRINCIPAL = "CURRENT_USER_PRINCIPAL";
+    private static final String CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN = "CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN";
 
     private static final String TOKEN_HEADER = "Authorization";
     private static final String TOKEN_TYPE = "Bearer ";
 
-    private AzureADJwtFilterProperties aadJwtFilterProp;
+    private AADAuthenticationFilterProperties aadAuthFilterProp;
 
-    public AzureADJwtTokenFilter(AzureADJwtFilterProperties aadJwtFilterProp) {
-        this.aadJwtFilterProp = aadJwtFilterProp;
+    public AADAuthenticationFilter(AADAuthenticationFilterProperties aadAuthFilterProp) {
+        this.aadAuthFilterProp = aadAuthFilterProp;
     }
 
     private AuthenticationResult acquireTokenForGraphApi(
             String idToken,
             String tenantId) throws Throwable {
         final ClientCredential credential = new ClientCredential(
-                aadJwtFilterProp.getClientId(), aadJwtFilterProp.getClientSecret());
+                aadAuthFilterProp.getClientId(), aadAuthFilterProp.getClientSecret());
         final ClientAssertion assertion = new ClientAssertion(idToken);
 
         AuthenticationResult result = null;
@@ -51,11 +54,11 @@ public class AzureADJwtTokenFilter extends OncePerRequestFilter {
         try {
             service = Executors.newFixedThreadPool(1);
             final AuthenticationContext context = new AuthenticationContext(
-                    aadJwtFilterProp.getAadSignInUri() + tenantId + "/",
+                    aadAuthFilterProp.getAadSignInUri() + tenantId + "/",
                     true,
                     service);
             final Future<AuthenticationResult> future = context
-                    .acquireToken(aadJwtFilterProp.getAadGraphAPIUri(), assertion, credential, null);
+                    .acquireToken(aadAuthFilterProp.getAadGraphAPIUri(), assertion, credential, null);
             result = future.get();
         } catch (ExecutionException e) {
             throw e.getCause();
@@ -67,7 +70,7 @@ public class AzureADJwtTokenFilter extends OncePerRequestFilter {
 
         if (result == null) {
             throw new ServiceUnavailableException(
-                    "unable to acquire on-behalf-of token for client " + aadJwtFilterProp.getClientId());
+                    "unable to acquire on-behalf-of token for client " + aadAuthFilterProp.getClientId());
         }
         return result;
     }
@@ -83,24 +86,27 @@ public class AzureADJwtTokenFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith(TOKEN_TYPE)) {
             try {
                 final String idToken = authHeader.replace(TOKEN_TYPE, "");
-                final UserPrincipal principal = new UserPrincipal(idToken);
-                final String tid = principal.getClaim("tid").toString();
-
-                final AuthenticationResult result = acquireTokenForGraphApi(
-                        idToken,
-                        tid);
+                UserPrincipal principal = (UserPrincipal) request
+                        .getSession().getAttribute(CURRENT_USER_PRINCIPAL);
+                String graphApiToken = (String) request
+                        .getSession().getAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN);
+                if (principal == null || graphApiToken == null || graphApiToken.isEmpty()) {
+                    principal = new UserPrincipal(idToken);
+                    graphApiToken = acquireTokenForGraphApi(
+                            idToken, principal.getClaim().toString()).getAccessToken();
+                    request.getSession().setAttribute(CURRENT_USER_PRINCIPAL, principal);
+                    request.getSession().setAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN, graphApiToken);
+                }
 
                 final Authentication authentication = new
                         PreAuthenticatedAuthenticationToken(
                         principal, null,
                         principal.getAuthoritiesByUserGroups(
-                                principal.getGroups(result.getAccessToken()),
-                                aadJwtFilterProp.getAllowedRolesGroups()));
+                                principal.getGroups(graphApiToken),
+                                aadAuthFilterProp.getActiveDirectoryGroups()));
                 authentication.setAuthenticated(true);
                 log.info("Request token verification success. {0}", authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
             } catch (Throwable throwable) {
                 throw new RuntimeException(throwable);
             }
