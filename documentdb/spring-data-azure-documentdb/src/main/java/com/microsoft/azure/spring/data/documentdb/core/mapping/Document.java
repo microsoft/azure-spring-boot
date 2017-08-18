@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Persistent
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE })
+@Target({ElementType.TYPE})
 public @interface Document {
 
     String collection() default "";

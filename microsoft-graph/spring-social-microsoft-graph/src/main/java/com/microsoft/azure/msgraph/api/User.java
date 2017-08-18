@@ -29,30 +29,6 @@ public class User {
         this.id = id;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public String getJobTitle() {
-        return jobTitle;
-    }
-
-    public void setJobTitle(String jobTitle) {
-        this.jobTitle = jobTitle;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
     public List<String> getBusinessPhones() {
         return businessPhones;
     }
@@ -61,12 +37,20 @@ public class User {
         this.businessPhones = businessPhones;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     public String getSurname() {
         return surname;
     }
 
-    public void setSurname(String surName) {
-        this.surname = surName;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public String getGivenName() {
@@ -75,6 +59,14 @@ public class User {
 
     public void setGivenName(String givenName) {
         this.givenName = givenName;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
     }
 
     public String getMobilePhone() {
@@ -99,6 +91,14 @@ public class User {
 
     public void setPreferredLanguage(String preferredLanguage) {
         this.preferredLanguage = preferredLanguage;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 
     public String getUserPrincipalName() {

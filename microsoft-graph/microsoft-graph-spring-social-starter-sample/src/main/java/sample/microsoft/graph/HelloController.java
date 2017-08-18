@@ -10,13 +10,14 @@ import com.microsoft.azure.msgraph.api.Microsoft;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
+import sample.microsoft.graph.custom.Contacts;
+
+import java.net.URI;
 
 @Controller
-@RequestMapping("/")
 public class HelloController {
-
     private Microsoft microsoft;
     private ConnectionRepository connectionRepository;
 
@@ -25,8 +26,8 @@ public class HelloController {
         this.connectionRepository = connectionRepository;
     }
 
-    @GetMapping
-    public String helloFacebook(Model model) {
+    @RequestMapping("/")
+    public String helloMicrosoft(Model model) {
         if (connectionRepository.findPrimaryConnection(Microsoft.class) == null) {
             return "redirect:/connect/microsoft";
         }
@@ -36,4 +37,17 @@ public class HelloController {
         return "hello";
     }
 
+    @RequestMapping("/contacts")
+    public String getContacts(Model model) {
+        if (connectionRepository.findPrimaryConnection(Microsoft.class) == null) {
+            return "redirect:/connect/microsoft";
+        }
+
+        final RestTemplate restTemplate = microsoft.customOperations().getRestTemplate();
+        final URI uri = microsoft.customOperations().getGraphAPIURI("me/contacts");
+        final Contacts contacts = restTemplate.getForObject(uri, Contacts.class);
+        model.addAttribute("contacts", contacts.getContacts());
+
+        return "contacts";
+    }
 }

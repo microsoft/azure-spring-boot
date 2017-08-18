@@ -7,6 +7,9 @@
 package com.microsoft.azure.msgraph.api;
 
 public interface Microsoft {
-
     UserOperations userOperations();
+
+    MailOperations mailOperations();
+
+    CustomOperations customOperations();
 }
