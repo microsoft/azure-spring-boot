@@ -11,7 +11,6 @@ import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.data.documentdb.config.AbstractDocumentDbConfiguration;
 import com.microsoft.azure.spring.data.documentdb.repository.config.EnableDocumentDbRepositories;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
@@ -26,7 +25,6 @@ public class ContactRepositoryConfig extends AbstractDocumentDbConfiguration {
     String dbKey;
 
     @Override
-    @Bean
     public DocumentClient documentClient() {
         return new DocumentClient(dbUri, dbKey, ConnectionPolicy.GetDefault(), ConsistencyLevel.Session);
     }

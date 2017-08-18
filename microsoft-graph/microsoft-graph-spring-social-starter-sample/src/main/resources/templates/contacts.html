@@ -1,0 +1,17 @@
+<html>
+<head>
+    <title>Hello Microsoft Graph</title>
+</head>
+<body>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Phone</th>
+    </tr>
+    <tr th:each="contact : ${contacts}">
+        <td th:text="${contact.getDisplayName()}"/>
+        <td th:text="${contact.getMobilePhone()}"/>
+    </tr>
+</table>
+</body>
+</html>

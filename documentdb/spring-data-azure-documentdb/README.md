@@ -10,6 +10,8 @@ Please refer to [sample project here](../spring-data-azure-documentdb-sample).
     - findAll
     - findOne by Id
     - deleteAll
+    - delete by Id
+    - delete entity
 - Spring Data [@Id](https://github.com/spring-projects/spring-data-commons/blob/db62390de90c93a78743c97cc2cc9ccd964994a5/src/main/java/org/springframework/data/annotation/Id.java) annotation.
   There're 2 ways to map a field in domain class to `id` of Azure Cosmos DB document.
   - annotate a field in domain class with `@Id`, this field will be mapped to document `id` in Cosmos DB. 
@@ -27,7 +29,7 @@ If you are using Maven, add the following dependency.
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>spring-data-azure-documentdb</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
 </dependency>
 ```
 

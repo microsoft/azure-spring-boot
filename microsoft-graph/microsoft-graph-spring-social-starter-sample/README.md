@@ -35,3 +35,8 @@ Go to [Application Registration Portal](https://apps.dev.microsoft.com/#/appList
 mvn package
 java -jar target/microsoft-graph-spring-social-starter-sample-0.0.1-SNAPSHOT.jar
 ```
+
+### Make your own REST API call
+
+This starter implements a small subset of Objects/APIs available via Microsoft Graph (GET /me, POST /me/sendMail, GET /me/messages). In addition, it demonstrates how to make custom REST API calls (see function `getContacts` in `HelloController.java` as an example). Please check the detailed [document](https://developer.microsoft.com/en-us/graph/docs/concepts/overview) for more details about Microsoft Graph. 
+After reading the document, you should be aware of the exact REST API and what objects you should prepare or expect from the REST API call.

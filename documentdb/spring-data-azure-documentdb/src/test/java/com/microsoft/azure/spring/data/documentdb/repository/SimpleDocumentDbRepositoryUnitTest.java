@@ -63,4 +63,5 @@ public class SimpleDocumentDbRepositoryUnitTest {
         assertEquals(result.getFirstName(), TEST_PERSON.getFirstName());
         assertEquals(result.getLastName(), TEST_PERSON.getLastName());
     }
+
 }
