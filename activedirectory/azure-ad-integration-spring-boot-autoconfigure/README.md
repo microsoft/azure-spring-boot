@@ -1,5 +1,5 @@
 ## Overview
-This package enables Spring Security integration with Azure Active Directory for authentication and integration scenarios via OpenID Connect/OAuth 2.0 protocols. Currently it supports the implicit authorization grant, making it ideal for enabling authenticaton and authorization for Single Page Application (SPA) web apps.
+This is a pre-release package that enables Spring Security integration with Azure Active Directory for authentication and integration scenarios via OpenID Connect/OAuth 2.0 protocols. Currently it supports the implicit authorization grant, making it ideal for enabling authenticaton and authorization for Single Page Application (SPA) web apps.
 
 ### Implementation summary
 This package provides a Spring Security filter to validate the Jwt token from Azure AD. The Jwt token is also used to acquire a On-Behalf-Of token for Azure AD Graph API so that authenticated user's membership information is available for authorization of access of API resources. Below is a diagram that shows the layers and typical flow for Single Page Application with Spring Boot web API backend that uses the filter for Authentication and Authorization.
@@ -30,14 +30,14 @@ Open `application.properties` file and add below properties.
 ```
 azure.activedirectory.clientId=Application-ID-in-AAD-App-registrations
 azure.activedirectory.clientSecret=Key-in-AAD-API-ACCESS
-azure.activedirectory.allowedRolesGroups=roles-groups-allowed-to-access-API-resource e.g. group1,group2,group3
+azure.activedirectory.ActiveDirectoryGroups=Aad-groups e.g. group1,group2,group3
 ```
 
-### Configure WebSecurityConfigurerAdapter class to use `AzureADJwtTokenFilter`
+### Configure WebSecurityConfigurerAdapter class to use `AADAuthenticationFilter`
 
 ```
 @Autowired
-private AzureADJwtTokenFilter aadJwtFilter;
+private AADAuthenticationFilter aadAuthFilter;
 ```
 
 You can refer to [azure-ad-integration-spring-boot-autoconfigure-sample]() for how to integrate Spring Security and Azure AD for authentication and authorization in a Single Page Application (SPA) scenario.

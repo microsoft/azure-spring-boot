@@ -5,32 +5,40 @@
  */
 package com.microsoft.azure.autoconfigure.aad;
 
+import java.util.Objects;
+
 public class UserGroup {
-    private String odataType;
-    private String objectType;
-    private String description;
+    private String objectID;
     private String displayName;
 
-    public UserGroup(String odataType, String objectType, String description, String displayName) {
-        this.odataType = odataType;
-        this.objectType = objectType;
-        this.description = description;
+    public UserGroup(String objectID, String displayName) {
+        this.objectID = objectID;
         this.displayName = displayName;
-    }
-
-    public String getOdataType() {
-        return odataType;
-    }
-
-    public String getObjectType() {
-        return objectType;
     }
 
     public String getDisplayName() {
         return displayName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getObjectID() {
+        return objectID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (o == null || !(o instanceof UserGroup)) {
+            return false;
+        }
+        final UserGroup group = (UserGroup) o;
+        return this.getDisplayName().equals(group.getDisplayName())
+                && this.getObjectID().equals(group.getObjectID());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(objectID, displayName);
     }
 }

@@ -27,7 +27,7 @@ public class UserPrincipalTest {
     public void getAuthoritiesByUserGroups() throws Exception {
         final UserPrincipal principal = new UserPrincipal();
         final List<UserGroup> userGroups = new ArrayList<UserGroup>();
-        userGroups.add(new UserGroup("Microsoft.DirectoryServices.Group", "Group", "this is group1", "group1"));
+        userGroups.add(new UserGroup("this is group1", "group1"));
 
         final Collection<? extends GrantedAuthority> authorities =
                 principal.getAuthoritiesByUserGroups(userGroups, Constants.TARGETED_GROUPS);
@@ -46,9 +46,9 @@ public class UserPrincipalTest {
 
         final List<UserGroup> groups = principal.getGroups(Constants.BEARER_TOKEN);
         final List<UserGroup> targetedGroups = new ArrayList<UserGroup>();
-        targetedGroups.add(new UserGroup("Microsoft.DirectoryServices.Group", "Group", "this is group1", "group1"));
-        targetedGroups.add(new UserGroup("Microsoft.DirectoryServices.Group", "Group", null, "group2"));
-        targetedGroups.add(new UserGroup("Microsoft.DirectoryServices.Group", "Group", "this is group3", "group3"));
+        targetedGroups.add(new UserGroup("12345678-7baf-48ce-96f4-a2d60c26391e", "group1"));
+        targetedGroups.add(new UserGroup("12345678-e757-4474-b9c4-3f00a9ac17a0", "group2"));
+        targetedGroups.add(new UserGroup("12345678-86a4-4237-aeb0-60bad29c1de0", "group3"));
 
         Assert.assertThat(groups, IsIterableContainingInAnyOrder.containsInAnyOrder(groups.toArray()));
     }

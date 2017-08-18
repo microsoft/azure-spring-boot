@@ -36,41 +36,36 @@ import java.util.Map;
 
 public class UserPrincipal {
 
+    private static final String KEY_DISCOVERY_URI = "https://login.microsoftonline.com/common/discovery/keys";
+    private static final JWKSet jwsKeySet = loadAadPublicKeys();
     private JWSObject jwsObject;
     private JWTClaimsSet jwtClaimsSet;
-    private JWKSet jwsKeySet;
     private List<UserGroup> userGroups;
 
     public UserPrincipal() {
         jwsObject = null;
         jwtClaimsSet = null;
-        jwsKeySet = null;
         userGroups = null;
     }
 
-    public UserPrincipal(String bearerToken) throws Exception {
-        final ConfigurableJWTProcessor validator = getAadJwtTokenValidator(bearerToken);
-        jwtClaimsSet = validator.process(bearerToken, null);
+    public UserPrincipal(String idToken) throws Exception {
+        final ConfigurableJWTProcessor validator = getAadJwtTokenValidator();
+        jwtClaimsSet = validator.process(idToken, null);
         final JWTClaimsSetVerifier verifier = validator.getJWTClaimsSetVerifier();
         verifier.verify(jwtClaimsSet, null);
-        jwsObject = JWSObject.parse(bearerToken);
-        jwsKeySet = loadAadPublicKeys();
+        jwsObject = JWSObject.parse(idToken);
+        userGroups = null;
     }
 
-    public void setJwsObject(JWSObject jwsObject) {
-        this.jwsObject = jwsObject;
-    }
-
-    public void setjwtClaimsSet(JWTClaimsSet jwtClaimsSet) {
-        this.jwtClaimsSet = jwtClaimsSet;
-    }
-
-    public void setJwsKeySet(JWKSet jwsKeySet) {
-        this.jwsKeySet = jwsKeySet;
-    }
-
-    public void setUserGroups(List<UserGroup> userGroups) {
-        this.userGroups = userGroups;
+    private static JWKSet loadAadPublicKeys() {
+        try {
+            return JWKSet.load(
+                    new URL(KEY_DISCOVERY_URI));
+        } catch (IOException | ParseException e) {
+            System.err.println("Error loading AAD public keys: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // claimset
@@ -86,8 +81,8 @@ public class UserPrincipal {
         return jwtClaimsSet == null ? null : jwtClaimsSet.getClaims();
     }
 
-    public Object getClaim(String name) {
-        return jwtClaimsSet == null ? null : jwtClaimsSet.getClaim(name);
+    public Object getClaim() {
+        return jwtClaimsSet == null ? null : jwtClaimsSet.getClaim("tid");
     }
 
     // header
@@ -100,35 +95,25 @@ public class UserPrincipal {
         return jwsKeySet == null ? null : jwsKeySet.getKeyByKeyId(kid);
     }
 
-    public List<UserGroup> getGroups(String idToken) throws Exception {
-        if (userGroups == null || userGroups.isEmpty()) {
-            final String responseInJson = AzureADGraphClient.getUserMembershipsV1(idToken);
-            userGroups = new ArrayList<UserGroup>();
-            final ObjectMapper objectMapper = JacksonObjectMapperFactory.getInstance();
-            final JsonNode rootNode = objectMapper.readValue(responseInJson, JsonNode.class);
-            final JsonNode valuesNode = rootNode.get("value");
-            int i = 0;
-            while (valuesNode != null
-                    && valuesNode.get(i) != null) {
-                if (valuesNode.get(i).get("objectType").asText().equals("Group")) {
-                    userGroups.add(new UserGroup(
-                            valuesNode.get(i).get("odata.type").asText(),
-                            valuesNode.get(i).get("objectType").asText(),
-                            valuesNode.get(i).get("description").asText(),
-                            valuesNode.get(i).get("displayName").asText()));
-                }
-                i++;
-            }
+    public List<UserGroup> getGroups(String graphApiToken) throws Exception {
+        if (userGroups == null) {
+            userGroups = loadUserGroups(graphApiToken);
         }
         return userGroups;
     }
 
     public boolean isMemberOf(UserGroup group) {
-        return userGroups == null || userGroups.isEmpty() ? false : userGroups.contains(group);
+        return !(userGroups == null || userGroups.isEmpty()) && userGroups.contains(group);
     }
 
     public Collection<? extends GrantedAuthority> getAuthoritiesByUserGroups(List<UserGroup> userGroups,
                                                                              List<String> targetdGroupNames) {
+        if (userGroups == null
+                || targetdGroupNames == null
+                || userGroups.isEmpty()
+                || targetdGroupNames.isEmpty()) {
+            return null;
+        }
         final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         for (final UserGroup group : userGroups) {
             if (targetdGroupNames.contains(group.getDisplayName())) {
@@ -146,11 +131,11 @@ public class UserPrincipal {
         return SecurityContextHolder.getContext().getAuthentication();
     }
 
-    private ConfigurableJWTProcessor getAadJwtTokenValidator(
-            String bearerToken) throws ParseException, JOSEException, BadJOSEException, MalformedURLException {
+    private ConfigurableJWTProcessor getAadJwtTokenValidator()
+            throws ParseException, JOSEException, BadJOSEException, MalformedURLException {
         final ConfigurableJWTProcessor jwtProcessor = new DefaultJWTProcessor();
         final JWKSource keySource = new RemoteJWKSet(
-                new URL("https://login.microsoftonline.com/common/discovery/keys"));
+                new URL(KEY_DISCOVERY_URI));
         final JWSAlgorithm expectedJWSAlg = JWSAlgorithm.RS256;
         final JWSKeySelector keySelector = new JWSVerificationKeySelector(expectedJWSAlg, keySource);
         jwtProcessor.setJWSKeySelector(keySelector);
@@ -168,16 +153,23 @@ public class UserPrincipal {
         return jwtProcessor;
     }
 
-    private JWKSet loadAadPublicKeys() throws IOException, ParseException {
-        final int connectTimeoutinMS = 1000;
-        final int readTimeoutinMS = 1000;
-        final int sizeLimitinBytes = 10000;
-        return JWKSet.load(
-                new URL("https://login.microsoftonline.com/common/discovery/keys"),
-                connectTimeoutinMS,
-                readTimeoutinMS,
-                sizeLimitinBytes);
+    private List<UserGroup> loadUserGroups(String graphApiToken) throws Exception {
+        final String responseInJson = AzureADGraphClient.getUserMembershipsV1(graphApiToken);
+        final List<UserGroup> userGroups = new ArrayList<UserGroup>();
+        final ObjectMapper objectMapper = JacksonObjectMapperFactory.getInstance();
+        final JsonNode rootNode = objectMapper.readValue(responseInJson, JsonNode.class);
+        final JsonNode valuesNode = rootNode.get("value");
+        int i = 0;
+        while (valuesNode != null
+                && valuesNode.get(i) != null) {
+            if (valuesNode.get(i).get("objectType").asText().equals("Group")) {
+                userGroups.add(new UserGroup(
+                        valuesNode.get(i).get("objectId").asText(),
+                        valuesNode.get(i).get("displayName").asText()));
+            }
+            i++;
+        }
+        return userGroups;
     }
-
 }
 

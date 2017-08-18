@@ -10,21 +10,21 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AzureADJwtFilterAutoConfigurationTest {
+public class AADAuthenticationFilterAutoConfigurationTest {
     @Test
-    public void createAzureADJwtFilter() throws Exception {
+    public void createAADAuthenticationFilter() throws Exception {
         System.setProperty(Constants.CLIENT_ID_PROPERTY, Constants.CLIENT_ID);
         System.setProperty(Constants.CLIENT_SECRET_PROPERTY, Constants.CLIENT_SECRET);
         System.setProperty(Constants.TARGETED_GROUPS_PROPERTY,
                 Constants.TARGETED_GROUPS.toString().replace("[", "").replace("]", ""));
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(AzureADJwtFilterAutoConfiguration.class);
+            context.register(AADAuthenticationFilterAutoConfiguration.class);
             context.refresh();
 
-            final AzureADJwtTokenFilter azureADJwtTokenFilter = context.getBean(AzureADJwtTokenFilter.class);
+            final AADAuthenticationFilter azureADJwtTokenFilter = context.getBean(AADAuthenticationFilter.class);
             assertThat(azureADJwtTokenFilter).isNotNull();
-            assertThat(azureADJwtTokenFilter).isExactlyInstanceOf(AzureADJwtTokenFilter.class);
+            assertThat(azureADJwtTokenFilter).isExactlyInstanceOf(AADAuthenticationFilter.class);
         }
 
         System.clearProperty(Constants.CLIENT_ID_PROPERTY);
