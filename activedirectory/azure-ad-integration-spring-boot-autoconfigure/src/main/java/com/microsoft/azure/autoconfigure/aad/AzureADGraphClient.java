@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 public class AzureADGraphClient {
 
     public static String getUserMembershipsV1(String accessToken) throws Exception {
-        String userMembershipRestAPIv1 = "https://graph.windows.net/me/memberOf?api-version=1.6";
+        final String userMembershipRestAPIv1 = "https://graph.windows.net/me/memberOf?api-version=1.6";
         final URL url = new URL(userMembershipRestAPIv1);
 
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();

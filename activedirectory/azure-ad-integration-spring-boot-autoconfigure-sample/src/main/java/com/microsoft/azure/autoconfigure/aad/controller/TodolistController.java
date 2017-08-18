@@ -81,8 +81,9 @@ public class TodolistController {
      * HTTP DELETE
      */
     @RequestMapping(value = "/api/todolist/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteTodoItem(@PathVariable("id") int id, PreAuthenticatedAuthenticationToken authToken) {
-        UserPrincipal current = (UserPrincipal)authToken.getPrincipal();
+    public ResponseEntity<String> deleteTodoItem(@PathVariable("id") int id,
+                                                 PreAuthenticatedAuthenticationToken authToken) {
+        final UserPrincipal current = (UserPrincipal) authToken.getPrincipal();
 
         if (current.isMemberOf(
                 new UserGroup("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", "group1"))) {
