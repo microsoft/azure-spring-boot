@@ -61,10 +61,7 @@ public class UserPrincipal {
         try {
             return JWKSet.load(
                     new URL(KEY_DISCOVERY_URI));
-        } catch (IOException e) {
-            System.err.println("Error loading AAD public keys: " + e.getMessage());
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (IOException | ParseException e) {
             System.err.println("Error loading AAD public keys: " + e.getMessage());
             e.printStackTrace();
         }
@@ -84,8 +81,8 @@ public class UserPrincipal {
         return jwtClaimsSet == null ? null : jwtClaimsSet.getClaims();
     }
 
-    public Object getClaim(String name) {
-        return jwtClaimsSet == null ? null : jwtClaimsSet.getClaim(name);
+    public Object getClaim() {
+        return jwtClaimsSet == null ? null : jwtClaimsSet.getClaim("tid");
     }
 
     // header
@@ -106,7 +103,7 @@ public class UserPrincipal {
     }
 
     public boolean isMemberOf(UserGroup group) {
-        return userGroups == null || userGroups.isEmpty() ? false : userGroups.contains(group);
+        return !(userGroups == null || userGroups.isEmpty()) && userGroups.contains(group);
     }
 
     public Collection<? extends GrantedAuthority> getAuthoritiesByUserGroups(List<UserGroup> userGroups,

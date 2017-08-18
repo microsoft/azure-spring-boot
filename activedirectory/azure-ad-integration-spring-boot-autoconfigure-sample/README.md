@@ -1,5 +1,5 @@
 ## Overview
-This sample illustrates how to use `azure-ad-integration-spring-boot-autoconfigure package` to plugin JWT token filter into Spring Security filter chain. The filter injects `UserPrincipal` object that is associated with the thread of the current user request. User's AAD membership info, along with token claimsset, JWS object etc. are accessible from the object which can be used for role based authorization. Methods like `isMemberOf` is also supported.
+This sample illustrates how to use `azure-ad-integration-spring-boot-autoconfigure` pre-release package to plugin JWT token filter into Spring Security filter chain. The filter injects `UserPrincipal` object that is associated with the thread of the current user request. User's AAD membership info, along with token claimsset, JWS object etc. are accessible from the object which can be used for role based authorization. Methods like `isMemberOf` is also supported.
 
 ### Get started
 The sample is composed of two layers: Angular JS client and Spring Boot RESTful Web Service. You need to make some changes to get it working with your Azure AD tenant on both sides.
@@ -9,8 +9,8 @@ You need to have an registered app in your Azure AD tenant and create a security
 Put Application ID and Key in `clientId` and `clientSecret` respectively e.g.
 `azure.activedirectory.clientId=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
 `azure.activedirectory.clientSecret=ABCDEFGHIJKLMNOOPQRSTUVWXYZABCDEFGHIJKLMNOPQ`
-List all the AAD groups `aadGroups` that you want to have a Spring Security role object mapping to it. The role objects can then be used to manage access to resources that is behind Spring Security. e.g.
-`azure.activedirectory.aadGroups=group1,group2`
+List all the AAD groups `ActiveDirectoryGroups` that you want to have a Spring Security role object mapping to it. The role objects can then be used to manage access to resources that is behind Spring Security. e.g.
+`azure.activedirectory.ActiveDirectoryGroups=group1,group2`
 You can use `@PreAuthorize` annotation or `UserPrincipal` to manage access to web API based on user's group membership. You will need to change `ROLE_group1` to groups you want to allow to access the API or you will get "Access is denied".
 
 ##### Note: The sample retrieves user's group membership using Azure AD graph API which requires the registered app to have `Access the directory as the signed-in user` under `Delegated Permissions`. You need AAD admin privilege to be able to grant the permission in API ACCESS -> Required permission.

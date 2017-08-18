@@ -13,7 +13,7 @@ import java.util.List;
 
 @Validated
 @ConfigurationProperties("azure.activedirectory")
-public class AzureADJwtFilterProperties {
+public class AADAuthenticationFilterProperties {
     private static final String AAD_SIGNIN_URI = "https://login.microsoftonline.com/";
     private static final String AAD_GRAPHAPI_URI = "https://graph.windows.net/";
     /**
@@ -30,7 +30,7 @@ public class AzureADJwtFilterProperties {
      * Azure AD groups.
      */
     @NotEmpty
-    private List<String> aadGroups;
+    private List<String> activeDirectoryGroups;
 
     public String getClientId() {
         return clientId;
@@ -56,12 +56,12 @@ public class AzureADJwtFilterProperties {
         return AAD_GRAPHAPI_URI;
     }
 
-    public List<String> getAadGroups() {
-        return aadGroups;
+    public List<String> getActiveDirectoryGroups() {
+        return activeDirectoryGroups;
     }
 
-    public void setAadGroups(List<String> aadGroups) {
-        this.aadGroups = aadGroups;
+    public void setactiveDirectoryGroups(List<String> activeDirectoryGroups) {
+        this.activeDirectoryGroups = activeDirectoryGroups;
     }
 
 }

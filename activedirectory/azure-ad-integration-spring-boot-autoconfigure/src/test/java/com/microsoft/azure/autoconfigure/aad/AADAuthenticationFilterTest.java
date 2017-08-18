@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AzureADJwtTokenFilterTest {
+public class AADAuthenticationFilterTest {
 
     @Before
     public void beforeEveryMethod() {
@@ -46,12 +46,12 @@ public class AzureADJwtTokenFilterTest {
 
         Authentication authentication = mock(Authentication.class);
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(AzureADJwtFilterAutoConfiguration.class);
+            context.register(AADAuthenticationFilterAutoConfiguration.class);
             context.refresh();
 
-            final AzureADJwtTokenFilter azureADJwtTokenFilter = context.getBean(AzureADJwtTokenFilter.class);
+            final AADAuthenticationFilter azureADJwtTokenFilter = context.getBean(AADAuthenticationFilter.class);
             assertThat(azureADJwtTokenFilter).isNotNull();
-            assertThat(azureADJwtTokenFilter).isExactlyInstanceOf(AzureADJwtTokenFilter.class);
+            assertThat(azureADJwtTokenFilter).isExactlyInstanceOf(AADAuthenticationFilter.class);
 
             azureADJwtTokenFilter.doFilterInternal(request, response, filterChain);
 

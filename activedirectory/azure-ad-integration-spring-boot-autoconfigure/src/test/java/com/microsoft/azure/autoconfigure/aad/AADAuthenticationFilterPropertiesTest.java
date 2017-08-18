@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class AzureADJwtFilterPropertiesTest {
+public class AADAuthenticationFilterPropertiesTest {
     @Test
     public void canSetProperties() {
         System.setProperty(Constants.CLIENT_ID_PROPERTY, Constants.CLIENT_ID);
@@ -26,11 +26,12 @@ public class AzureADJwtFilterPropertiesTest {
             context.register(Config.class);
             context.refresh();
 
-            final AzureADJwtFilterProperties properties = context.getBean(AzureADJwtFilterProperties.class);
+            final AADAuthenticationFilterProperties properties =
+                    context.getBean(AADAuthenticationFilterProperties.class);
 
             assertThat(properties.getClientId()).isEqualTo(Constants.CLIENT_ID);
             assertThat(properties.getClientSecret()).isEqualTo(Constants.CLIENT_SECRET);
-            assertThat(properties.getAadGroups()
+            assertThat(properties.getActiveDirectoryGroups()
                     .toString()).isEqualTo(Constants.TARGETED_GROUPS.toString());
         }
 
@@ -64,7 +65,7 @@ public class AzureADJwtFilterPropertiesTest {
                             "'azure.activedirectory' on field 'clientSecret': rejected value []");
             assertThat(exception.getCause().getMessage()).contains(
                     "Field error in object " +
-                            "'azure.activedirectory' on field 'aadGroups': rejected value [null]");
+                            "'azure.activedirectory' on field 'activeDirectoryGroups': rejected value [null]");
         }
 
         System.clearProperty(Constants.CLIENT_ID_PROPERTY);
@@ -72,7 +73,7 @@ public class AzureADJwtFilterPropertiesTest {
     }
 
     @Configuration
-    @EnableConfigurationProperties(AzureADJwtFilterProperties.class)
+    @EnableConfigurationProperties(AADAuthenticationFilterProperties.class)
     static class Config {
     }
 }

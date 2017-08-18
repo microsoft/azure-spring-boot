@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -81,11 +81,9 @@ public class TodolistController {
      * HTTP DELETE
      */
     @RequestMapping(value = "/api/todolist/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteTodoItem(@PathVariable("id") int id) {
-        final UserPrincipal current = (UserPrincipal) SecurityContextHolder
-                .getContext()
-                .getAuthentication()
-                .getPrincipal();
+    public ResponseEntity<String> deleteTodoItem(@PathVariable("id") int id, PreAuthenticatedAuthenticationToken authToken) {
+        UserPrincipal current = (UserPrincipal)authToken.getPrincipal();
+
         if (current.isMemberOf(
                 new UserGroup("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", "group1"))) {
             final List<TodoItem> find = todoList.stream().filter(i -> i.getID() == id).collect(Collectors.toList());
