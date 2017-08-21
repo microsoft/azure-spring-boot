@@ -14,17 +14,24 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+import com.microsoft.azure.spring.common.GetHashMac;
+
 public class AzureADGraphClient {
+
+    private static String userMembershipRestAPIv1 = "https://graph.windows.net/me/memberOf?api-version=1.6";
+    private static String DEFAULT_USER_AGENT = "spring-autoconfigure/0.1.6-beta";
 
     public static String getUserMembershipsV1(String accessToken) throws Exception {
         final String userMembershipRestAPIv1 = "https://graph.windows.net/me/memberOf?api-version=1.6";
         final URL url = new URL(userMembershipRestAPIv1);
+        final String hashMac = GetHashMac.getHashMac();
 
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         // Set the appropriate header fields in the request header.
-        conn.setRequestProperty("api-version", "1.6");
+        conn.setRequestProperty("api-version", "0.1.6");
         conn.setRequestProperty("Authorization", accessToken);
         conn.setRequestProperty("Accept", "application/json;odata=minimalmetadata");
+        conn.setRequestProperty("User-Agent", DEFAULT_USER_AGENT + ";" + hashMac);
         final String responseInJson = getResponseStringFromConn(conn);
         final int responseCode = conn.getResponseCode();
         if (responseCode == HTTPResponse.SC_OK) {
