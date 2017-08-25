@@ -13,6 +13,7 @@ import org.springframework.core.env.PropertySource;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class VcapResult {
     private static final String AZURE_SERVICE_BUS_DOMAIN = "servicebus.windows.net";
@@ -37,7 +38,7 @@ public class VcapResult {
      */
     @SuppressFBWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR")
     public void populateProperties() {
-        final Map<String, Object> map = new HashMap<String, Object>();
+        final Map<String, Object> map = new HashMap<>();
         populateDefaultStorageProperties(map,
                 findPojoForServiceType(VcapServiceType.AZURE_STORAGE));
         populateDefaultServiceBusProperties(map,
@@ -205,9 +206,9 @@ public class VcapResult {
                     .get(PROPERTY_SOURCE_NAME);
             if (source instanceof MapPropertySource) {
                 target = (MapPropertySource) source;
-                for (final String key : map.keySet()) {
-                    if (!target.containsProperty(key)) {
-                        target.getSource().put(key, map.get(key));
+                for (final Entry<String, Object> entry : map.entrySet()) {
+                    if (!target.containsProperty(entry.getKey())) {
+                        target.getSource().put(entry.getKey(), map.get(entry.getKey()));
                     }
                 }
             }

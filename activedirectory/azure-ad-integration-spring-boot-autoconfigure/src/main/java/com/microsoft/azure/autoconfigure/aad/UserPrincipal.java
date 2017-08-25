@@ -7,19 +7,20 @@ package com.microsoft.azure.autoconfigure.aad;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.jwk.source.RemoteJWKSet;
-import com.nimbusds.jose.proc.BadJOSEException;
 import com.nimbusds.jose.proc.JWSKeySelector;
 import com.nimbusds.jose.proc.JWSVerificationKeySelector;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.proc.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,11 +32,13 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public class UserPrincipal {
 
+    private static final Logger LOG = LoggerFactory.getLogger(UserPrincipal.class);
     private static final String KEY_DISCOVERY_URI = "https://login.microsoftonline.com/common/discovery/keys";
     private static final JWKSet jwsKeySet = loadAadPublicKeys();
     private JWSObject jwsObject;
@@ -62,8 +65,7 @@ public class UserPrincipal {
             return JWKSet.load(
                     new URL(KEY_DISCOVERY_URI));
         } catch (IOException | ParseException e) {
-            System.err.println("Error loading AAD public keys: " + e.getMessage());
-            e.printStackTrace();
+            LOG.error("Error loading AAD public keys: {}" , e.getMessage());
         }
         return null;
     }
@@ -112,9 +114,9 @@ public class UserPrincipal {
                 || targetdGroupNames == null
                 || userGroups.isEmpty()
                 || targetdGroupNames.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
-        final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        final List<GrantedAuthority> authorities = new ArrayList<>();
         for (final UserGroup group : userGroups) {
             if (targetdGroupNames.contains(group.getDisplayName())) {
                 authorities.add(new SimpleGrantedAuthority("ROLE_" + group.getDisplayName()));
@@ -132,7 +134,7 @@ public class UserPrincipal {
     }
 
     private ConfigurableJWTProcessor getAadJwtTokenValidator()
-            throws ParseException, JOSEException, BadJOSEException, MalformedURLException {
+            throws MalformedURLException {
         final ConfigurableJWTProcessor jwtProcessor = new DefaultJWTProcessor();
         final JWKSource keySource = new RemoteJWKSet(
                 new URL(KEY_DISCOVERY_URI));
@@ -155,7 +157,7 @@ public class UserPrincipal {
 
     private List<UserGroup> loadUserGroups(String graphApiToken) throws Exception {
         final String responseInJson = AzureADGraphClient.getUserMembershipsV1(graphApiToken);
-        final List<UserGroup> userGroups = new ArrayList<UserGroup>();
+        final List<UserGroup> lUserGroups = new ArrayList<>();
         final ObjectMapper objectMapper = JacksonObjectMapperFactory.getInstance();
         final JsonNode rootNode = objectMapper.readValue(responseInJson, JsonNode.class);
         final JsonNode valuesNode = rootNode.get("value");
@@ -163,13 +165,13 @@ public class UserPrincipal {
         while (valuesNode != null
                 && valuesNode.get(i) != null) {
             if (valuesNode.get(i).get("objectType").asText().equals("Group")) {
-                userGroups.add(new UserGroup(
+                lUserGroups.add(new UserGroup(
                         valuesNode.get(i).get("objectId").asText(),
                         valuesNode.get(i).get("displayName").asText()));
             }
             i++;
         }
-        return userGroups;
+        return lUserGroups;
     }
 }
 

@@ -22,6 +22,10 @@ public class GetHashMac {
     public static final String MAC_REGEX = "([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}";
     public static final String MAC_REGEX_ZERO = "([0]{2}[:-]){5}[0]{2}";
     public static final String HASHED_MAC_REGEX = "[0-9a-f]{64}";
+    
+    private GetHashMac() {
+        super();
+    }
 
     public static boolean isValidHashMacFormat(String hashMac) {
         if (hashMac == null || hashMac.isEmpty()) {
