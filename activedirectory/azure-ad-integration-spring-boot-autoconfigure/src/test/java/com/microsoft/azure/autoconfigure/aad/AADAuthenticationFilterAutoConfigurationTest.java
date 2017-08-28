@@ -6,7 +6,7 @@
 package com.microsoft.azure.autoconfigure.aad;
 
 import org.junit.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,7 +18,7 @@ public class AADAuthenticationFilterAutoConfigurationTest {
         System.setProperty(Constants.TARGETED_GROUPS_PROPERTY,
                 Constants.TARGETED_GROUPS.toString().replace("[", "").replace("]", ""));
 
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+        try (AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext()) {
             context.register(AADAuthenticationFilterAutoConfiguration.class);
             context.refresh();
 
