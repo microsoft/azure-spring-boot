@@ -50,6 +50,9 @@
         <!-- For module that has different relative path to the root dir, project.rootdir should be redefined in its
         module pom file -->
         <project.rootdir>${project.basedir}/../..</project.rootdir>
+
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <profiles>
