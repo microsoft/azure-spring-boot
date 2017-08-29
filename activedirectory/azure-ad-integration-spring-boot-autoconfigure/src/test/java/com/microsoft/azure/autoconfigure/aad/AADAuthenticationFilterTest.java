@@ -61,7 +61,7 @@ public class AADAuthenticationFilterTest {
             assertThat(authentication.getAuthorities().size()).isEqualTo(2);
             assertThat(authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_group1"))
                     && authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_group2"))
-            );
+            ).isTrue();
 
             final UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
             assertThat(principal.getIssuer()).isNotNull().isNotEmpty();
