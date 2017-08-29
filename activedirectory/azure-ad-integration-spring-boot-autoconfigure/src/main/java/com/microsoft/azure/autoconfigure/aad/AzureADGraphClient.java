@@ -44,6 +44,6 @@ public class AzureADGraphClient {
                 stringBuffer.append(line);
             }
             return stringBuffer.toString();
-        } 
+        }
     }
 }

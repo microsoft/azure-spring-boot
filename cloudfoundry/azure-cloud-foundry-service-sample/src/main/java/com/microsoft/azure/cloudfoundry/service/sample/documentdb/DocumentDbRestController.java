@@ -34,7 +34,7 @@ public class DocumentDbRestController {
 
         final User testUser = new User("testId", "testFirstName", "testLastName", "test address line one");
 
-        LOG.debug("Deleting all records in repo... {}" , CR);
+        LOG.debug("Deleting all records in repo... {}", CR);
         repository.deleteAll();
 
         LOG.debug("Saving new User object...");
@@ -46,7 +46,7 @@ public class DocumentDbRestController {
         Assert.state(user.getFirstName().equals(testUser.getFirstName()), "query result firstName doesn't match!");
         Assert.state(user.getLastName().equals(testUser.getLastName()), "query result lastName doesn't match!");
 
-        LOG.debug("UserRepository.findOne() result: {}" , user.toString());
+        LOG.debug("UserRepository.findOne() result: {}", user.toString());
         result.append("UserRepository.findOne() result: " + user.toString() + CR);
 
         return result.toString();

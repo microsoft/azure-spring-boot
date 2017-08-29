@@ -5,8 +5,6 @@
  */
 package com.microsoft.azure.autoconfigure.aad;
 
-import static java.util.stream.Collectors.toList;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEException;
@@ -26,7 +24,6 @@ import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
 import com.nimbusds.jwt.proc.DefaultJWTClaimsVerifier;
 import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import com.nimbusds.jwt.proc.JWTClaimsSetVerifier;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -43,6 +40,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
 
 public class UserPrincipal {
 
@@ -75,7 +74,7 @@ public class UserPrincipal {
             return JWKSet.load(
                     new URL(KEY_DISCOVERY_URI));
         } catch (IOException | ParseException e) {
-            LOG.error("Error loading AAD public keys: {}" , e.getMessage());
+            LOG.error("Error loading AAD public keys: {}", e.getMessage());
         }
         return null;
     }
@@ -119,7 +118,7 @@ public class UserPrincipal {
     }
 
     public List<GrantedAuthority> getAuthoritiesByUserGroups(List<UserGroup> userGroups,
-            List<String> targetdGroupNames) {
+                                                             List<String> targetdGroupNames) {
         if (userGroups == null || targetdGroupNames == null || userGroups.isEmpty()
                 || targetdGroupNames.isEmpty()) {
             return Collections.<GrantedAuthority>emptyList();

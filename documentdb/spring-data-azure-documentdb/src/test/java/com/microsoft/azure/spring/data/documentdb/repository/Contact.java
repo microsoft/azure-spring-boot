@@ -13,6 +13,11 @@ public class Contact {
 
     private String title;
 
+    public Contact(String id, String title) {
+        this.logicId = id;
+        this.title = title;
+    }
+
     public String getLogicId() {
         return logicId;
     }
@@ -27,11 +32,5 @@ public class Contact {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public Contact(String id, String title) {
-        this.logicId = id;
-        this.title = title;
-
     }
 }
