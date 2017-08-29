@@ -21,10 +21,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ContextConfiguration(classes = ContactRepositoryConfig.class)
 public class ContactRepositoryIT {
 
+    private static final Contact TEST_CONTACT = new Contact("testId", "faketitle");
+
     @Autowired
     ContactRepository repository;
-
-    private static final Contact TEST_CONTACT = new Contact("testId", "faketitle");
 
     @Before
     public void setup() {

@@ -180,31 +180,31 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
     }
 
     public <T> List<T> findAll(String collectionName, final Class<T> entityClass) {
-            final List<DocumentCollection> collections = documentDbFactory.getDocumentClient().
-                    queryCollections(
-                            getDatabaseLink(this.databaseName),
-                            new SqlQuerySpec("SELECT * FROM ROOT r WHERE r.id=@id",
-                                    new SqlParameterCollection(new SqlParameter("@id", collectionName))), null)
-                    .getQueryIterable().toList();
+        final List<DocumentCollection> collections = documentDbFactory.getDocumentClient().
+                queryCollections(
+                        getDatabaseLink(this.databaseName),
+                        new SqlQuerySpec("SELECT * FROM ROOT r WHERE r.id=@id",
+                                new SqlParameterCollection(new SqlParameter("@id", collectionName))), null)
+                .getQueryIterable().toList();
 
-            if (collections.size() != 1) {
-                throw new RuntimeException("expect only one collection: " + collectionName
-                        + " in database: " + this.databaseName + ", but found " + collections.size());
-            }
+        if (collections.size() != 1) {
+            throw new RuntimeException("expect only one collection: " + collectionName
+                    + " in database: " + this.databaseName + ", but found " + collections.size());
+        }
 
-            final List<Document> results = documentDbFactory.getDocumentClient()
-                    .queryDocuments(collections.get(0).getSelfLink(),
-                            "SELECT * FROM c", null)
-                    .getQueryIterable().toList();
+        final List<Document> results = documentDbFactory.getDocumentClient()
+                .queryDocuments(collections.get(0).getSelfLink(),
+                        "SELECT * FROM c", null)
+                .getQueryIterable().toList();
 
-            final List<T> entities = new ArrayList<T>();
+        final List<T> entities = new ArrayList<T>();
 
-            for (int i = 0; i < results.size(); i++) {
-                final T entity = mappingDocumentDbConverter.read(entityClass, results.get(i));
-                entities.add(entity);
-            }
+        for (int i = 0; i < results.size(); i++) {
+            final T entity = mappingDocumentDbConverter.read(entityClass, results.get(i));
+            entities.add(entity);
+        }
 
-            return entities;
+        return entities;
     }
 
     public String getCollectionName(Class<?> entityClass) {

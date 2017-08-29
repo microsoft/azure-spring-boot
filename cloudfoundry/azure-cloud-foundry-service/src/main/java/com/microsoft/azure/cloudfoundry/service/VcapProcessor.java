@@ -20,9 +20,9 @@ import java.util.Map;
 
 /**
  * Parses VCAP_SERVICES environment variable and sets corresponding property values.
- *
- * Note that this class gets invoked before Spring creates the logging subsystem, so 
- * we just use System.out.println instead.  
+ * <p>
+ * Note that this class gets invoked before Spring creates the logging subsystem, so
+ * we just use System.out.println instead.
  */
 @Service
 @Configuration
