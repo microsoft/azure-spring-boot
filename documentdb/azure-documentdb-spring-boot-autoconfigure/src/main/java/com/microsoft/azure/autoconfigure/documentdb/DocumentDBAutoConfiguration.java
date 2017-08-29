@@ -29,9 +29,6 @@ import org.springframework.data.annotation.Persistent;
 
 @Configuration
 @ConditionalOnClass({DocumentClient.class, DocumentDbTemplate.class})
-@ConditionalOnMissingBean(type =
-        {"com.microsoft.azure.spring.data.documentdb.DocumentDbFactory",
-                "com.microsoft.azure.documentdb.DocumentClient"})
 @EnableConfigurationProperties(DocumentDBProperties.class)
 public class DocumentDBAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(DocumentDBAutoConfiguration.class);
@@ -75,15 +72,15 @@ public class DocumentDBAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public DocumentDbFactory documentDbFactory() {
-        return new DocumentDbFactory(this.documentClient());
+    public DocumentDbFactory documentDbFactory(DocumentClient documentClient) {
+        return new DocumentDbFactory(documentClient);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public DocumentDbTemplate documentDbTemplate() {
-        return new DocumentDbTemplate(this.documentDbFactory(),
-                mappingDocumentDbConverter(),
+    public DocumentDbTemplate documentDbTemplate(DocumentDbFactory documentDbFactory,
+                                                 MappingDocumentDbConverter mappingDocumentDbConverter) {
+        return new DocumentDbTemplate(documentDbFactory, mappingDocumentDbConverter,
                 properties.getDatabase());
     }
 
@@ -103,7 +100,8 @@ public class DocumentDBAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public MappingDocumentDbConverter mappingDocumentDbConverter() {
-        return new MappingDocumentDbConverter(documentDbMappingContext());
+    public MappingDocumentDbConverter mappingDocumentDbConverter(
+            DocumentDbMappingContext documentDbMappingContext) {
+        return new MappingDocumentDbConverter(documentDbMappingContext);
     }
 }
