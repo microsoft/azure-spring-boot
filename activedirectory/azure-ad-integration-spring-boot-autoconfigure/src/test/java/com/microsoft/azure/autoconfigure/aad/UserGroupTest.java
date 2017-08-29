@@ -10,6 +10,7 @@ import org.junit.Test;
 
 public class UserGroupTest {
     private static final UserGroup group1 = new UserGroup("12345", "test");
+
     @Test
     public void getDisplayName() throws Exception {
         Assert.assertTrue(group1.getDisplayName().equals("test"));

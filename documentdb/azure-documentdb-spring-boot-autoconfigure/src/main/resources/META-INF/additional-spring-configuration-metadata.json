@@ -1,0 +1,10 @@
+{
+  "properties": [
+    {
+      "name": "azure.documentdb.repositories.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable DocumentDb repositories.",
+      "defaultValue": true
+    }
+  ]
+}

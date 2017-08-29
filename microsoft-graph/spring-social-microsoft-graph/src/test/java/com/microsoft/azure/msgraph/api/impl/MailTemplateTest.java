@@ -7,7 +7,14 @@
 package com.microsoft.azure.msgraph.api.impl;
 
 import com.fasterxml.jackson.databind.util.StdDateFormat;
-import com.microsoft.azure.msgraph.api.*;
+import com.microsoft.azure.msgraph.api.BodyType;
+import com.microsoft.azure.msgraph.api.EmailAddress;
+import com.microsoft.azure.msgraph.api.Importance;
+import com.microsoft.azure.msgraph.api.InferenceClassificationType;
+import com.microsoft.azure.msgraph.api.ItemBody;
+import com.microsoft.azure.msgraph.api.Message;
+import com.microsoft.azure.msgraph.api.Messages;
+import com.microsoft.azure.msgraph.api.Recipient;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
@@ -20,7 +27,10 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 public class MailTemplateTest extends AbstractMicrosoftApiTest {
