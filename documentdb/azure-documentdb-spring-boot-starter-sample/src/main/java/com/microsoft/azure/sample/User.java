@@ -5,6 +5,7 @@
  */
 
 package com.microsoft.azure.sample;
+
 import com.microsoft.azure.spring.data.documentdb.core.mapping.Document;
 
 @Document(collection = "mycollection")

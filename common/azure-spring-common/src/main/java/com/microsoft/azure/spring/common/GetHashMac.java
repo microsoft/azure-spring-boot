@@ -12,7 +12,11 @@
 
 package com.microsoft.azure.spring.common;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
@@ -22,7 +26,7 @@ public class GetHashMac {
     public static final String MAC_REGEX = "([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}";
     public static final String MAC_REGEX_ZERO = "([0]{2}[:-]){5}[0]{2}";
     public static final String HASHED_MAC_REGEX = "[0-9a-f]{64}";
-    
+
     private GetHashMac() {
         super();
     }
