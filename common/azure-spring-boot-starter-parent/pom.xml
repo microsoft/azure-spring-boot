@@ -47,6 +47,7 @@
     </developers>
 
     <properties>
+        <java.version>1.8</java.version>
         <!-- For module that has different relative path to the root dir, project.rootdir should be redefined in its
         module pom file -->
         <project.rootdir>${project.basedir}/../..</project.rootdir>
@@ -70,6 +71,19 @@
             </properties>
         </profile>
     </profiles>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>1.5.4.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <pluginManagement>

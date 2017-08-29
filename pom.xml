@@ -45,217 +45,92 @@
         <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
     </scm>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
-        <java.version>1.8</java.version>
-
-        <bom.version>0.1.6-beta</bom.version>
-
-        <azure.adintegration.starter.version>${bom.version}</azure.adintegration.starter.version>
-        <azure.adintegration.autoconfigure.version>${bom.version}</azure.adintegration.autoconfigure.version>
-        <azure.documentdb.starter.version>${bom.version}</azure.documentdb.starter.version>
-        <azure.documentdb.autoconfigure.version>${bom.version}</azure.documentdb.autoconfigure.version>
-        <spring.data.documentdb.version>${bom.version}</spring.data.documentdb.version>
-        <spring.social.microsoft.graph.version>${bom.version}</spring.social.microsoft.graph.version>
-        <microsoft.graph.autoconfigure.version>${bom.version}</microsoft.graph.autoconfigure.version>
-        <microsoft.graph.starter.version>${bom.version}</microsoft.graph.starter.version>
-        <azure.storage.starter.version>${bom.version}</azure.storage.starter.version>
-        <azure.storage.autoconfigure.version>${bom.version}</azure.storage.autoconfigure.version>
-        <azure.servicebus.autoconfigure.version>${bom.version}</azure.servicebus.autoconfigure.version>
-        <azure.servicebus.starter.version>${bom.version}</azure.servicebus.starter.version>
-        <azure.mediaservices.starter.version>${bom.version}</azure.mediaservices.starter.version>
-        <azure.mediaservices.autoconfigure.version>${bom.version}</azure.mediaservices.autoconfigure.version>
-        <azure.keyvault.secrets.spring.boot.version>${bom.version}</azure.keyvault.secrets.spring.boot.version>
-        <azure.keyvault.secrets.starter.version>${bom.version}</azure.keyvault.secrets.starter.version>
-        <azure.spring.common.version>${bom.version}</azure.spring.common.version>
-        <azure.cloudfoundry.service.version>${bom.version}</azure.cloudfoundry.service.version>
-
-        <azure.documentdb.version>1.11.0</azure.documentdb.version>
-        <azure.servicebus.version>1.0.0-PREVIEW-3</azure.servicebus.version>
-        <azure.storage.version>5.3.1</azure.storage.version>
-        <azure.keyvault.version>1.0.0</azure.keyvault.version>
-        <aad.adal4j.version>0.0.2</aad.adal4j.version>
-        <azure.media.version>0.9.7</azure.media.version>
-        <azure.adal4j.version>1.2.0</azure.adal4j.version>
-        <jackson.version>2.8.7</jackson.version>
-        <nimbusds.version>4.39.2</nimbusds.version>
-        <javax.servlet.version>3.1.0</javax.servlet.version>
-        <mockito.version>2.8.9</mockito.version>
-        <powermock.version>1.7.0</powermock.version>
-    </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <!-- Import dependency management from Spring Boot -->
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring.boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-ad-integration-spring-boot-autoconfigure</artifactId>
-                <version>${azure.adintegration.autoconfigure.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
-                <version>${azure.documentdb.autoconfigure.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-documentdb-spring-boot-starter</artifactId>
-                <version>${azure.documentdb.starter.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-storage-spring-boot-autoconfigure</artifactId>
-                <version>${azure.storage.autoconfigure.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-storage-spring-boot-starter</artifactId>
-                <version>${azure.storage.starter.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-servicebus-spring-boot-autoconfigure</artifactId>
-                <version>${azure.servicebus.autoconfigure.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-servicebus-spring-boot-starter</artifactId>
-                <version>${azure.servicebus.starter.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>spring-data-azure-documentdb</artifactId>
-                <version>${spring.data.documentdb.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-keyvault-secrets-spring-boot</artifactId>
-                <version>${azure.keyvault.secrets.spring.boot.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
-                <version>${azure.keyvault.secrets.starter.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>spring-social-microsoft-graph</artifactId>
-                <version>${spring.social.microsoft.graph.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>microsoft-graph-spring-boot-autoconfigure</artifactId>
-                <version>${microsoft.graph.autoconfigure.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>microsoft-graph-spring-social-starter</artifactId>
-                <version>${microsoft.graph.starter.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-mediaservices-spring-boot-autoconfigure</artifactId>
-                <version>${azure.mediaservices.autoconfigure.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-mediaservices-spring-boot-starter</artifactId>
-                <version>${azure.mediaservices.starter.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-spring-common</artifactId>
-                <version>${azure.spring.common.version}</version>
+                <version>0.1.6-beta</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-cloud-foundry-service</artifactId>
-                <version>${azure.cloudfoundry.service.version}</version>
-            </dependency>
-
-            <!-- Azure libraries -->
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-documentdb</artifactId>
-                <version>${azure.documentdb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-servicebus</artifactId>
-                <version>${azure.servicebus.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-storage</artifactId>
-                <version>${azure.storage.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-keyvault</artifactId>
-                <version>${azure.keyvault.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.aad</groupId>
-                <artifactId>adal4j</artifactId>
-                <version>${aad.adal4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-media</artifactId>
-                <version>${azure.media.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>adal4j</artifactId>
-                <version>${azure.adal4j.version}</version>
-            </dependency>
-
-            <!-- third parties -->
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.nimbusds</groupId>
-                <artifactId>nimbus-jose-jwt</artifactId>
-                <version>${nimbusds.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>${javax.servlet.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.powermock</groupId>
-                <artifactId>powermock-module-junit4</artifactId>
-                <version>${powermock.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.powermock</groupId>
-                <artifactId>powermock-api-mockito2</artifactId>
-                <version>${powermock.version}</version>
-                <scope>test</scope>
+                <version>0.1.6-beta</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

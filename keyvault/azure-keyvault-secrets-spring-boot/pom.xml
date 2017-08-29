@@ -40,6 +40,11 @@
         <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
     </scm>
 
+    <properties>
+        <azure.keyvault.version>1.0.0</azure.keyvault.version>
+        <aad.adal4j.version>0.0.2</aad.adal4j.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -53,10 +58,12 @@
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-keyvault</artifactId>
+            <version>${azure.keyvault.version}</version>
         </dependency>
         <dependency>
             <groupId>com.microsoft.aad</groupId>
             <artifactId>adal4j</artifactId>
+            <version>${aad.adal4j.version}</version>
         </dependency>
 
         <dependency>
