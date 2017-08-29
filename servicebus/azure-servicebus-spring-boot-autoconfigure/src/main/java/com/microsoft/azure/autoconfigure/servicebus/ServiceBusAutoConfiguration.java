@@ -11,8 +11,6 @@ import com.microsoft.azure.servicebus.SubscriptionClient;
 import com.microsoft.azure.servicebus.TopicClient;
 import com.microsoft.azure.servicebus.primitives.ConnectionStringBuilder;
 import com.microsoft.azure.servicebus.primitives.ServiceBusException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,7 +21,6 @@ import org.springframework.context.annotation.Scope;
 @Configuration
 @EnableConfigurationProperties(ServiceBusProperties.class)
 public class ServiceBusAutoConfiguration {
-    private static final Logger LOG = LoggerFactory.getLogger(ServiceBusAutoConfiguration.class);
 
     private final ServiceBusProperties properties;
 

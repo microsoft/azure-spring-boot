@@ -18,14 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Service
-@Configuration
 /**
  * Parses VCAP_SERVICES environment variable and sets corresponding property values.
  *
  * Note that this class gets invoked before Spring creates the logging subsystem, so 
  * we just use System.out.println instead.  
  */
+@Service
+@Configuration
 public class VcapProcessor implements EnvironmentPostProcessor {
     public static final String VCAP_SERVICES = "VCAP_SERVICES";
     public static final String LOG_VARIABLE = "COM_MICROSOFT_AZURE_CLOUDFOUNDRY_SERVICE_LOG";
@@ -39,7 +39,6 @@ public class VcapProcessor implements EnvironmentPostProcessor {
     private static final String TAGS = "tags";
     private static final String VOLUME_MOUNTS = "volume_mounts";
     private boolean logFlag = false;
-    private VcapResult result;
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment confEnv,
@@ -54,7 +53,7 @@ public class VcapProcessor implements EnvironmentPostProcessor {
         log("VcapParser.postProcessEnvironment: Start");
         final String vcapServices = (String) environment
                 .get(VcapProcessor.VCAP_SERVICES);
-        result = parse(vcapServices);
+        final VcapResult result = parse(vcapServices);
         result.setLogFlag(logFlag);
         result.setConfEnv(confEnv);
         result.populateProperties();
@@ -64,7 +63,7 @@ public class VcapProcessor implements EnvironmentPostProcessor {
     public VcapResult parse(String vcapServices) {
         final VcapResult result = new VcapResult();
 
-        final List<VcapPojo> results = new ArrayList<VcapPojo>();
+        final List<VcapPojo> results = new ArrayList<>();
 
         log("VcapParser.parse:  vcapServices = " + vcapServices);
         if (vcapServices != null) {
@@ -122,7 +121,7 @@ public class VcapProcessor implements EnvironmentPostProcessor {
     }
 
     private String[] parseStringArray(JSONArray strings) {
-        final List<String> results = new ArrayList<String>();
+        final List<String> results = new ArrayList<>();
 
         for (int i = 0; i < strings.length(); i++) {
             try {

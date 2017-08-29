@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class VcapPojo {
     private String serviceBrokerName;
-    private Map<String, String> credentials = new HashMap<String, String>();
+    private Map<String, String> credentials = new HashMap<>();
     private String label;
     private String serviceInstanceName;
     private String servicePlan;
