@@ -36,19 +36,14 @@ public class AzureADGraphClient {
 
     private static String getResponseStringFromConn(HttpURLConnection conn) throws IOException {
 
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-            final StringBuffer stringBuffer = new StringBuffer();
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+            final StringBuilder stringBuffer = new StringBuilder();
             String line = "";
             while ((line = reader.readLine()) != null) {
                 stringBuffer.append(line);
             }
             return stringBuffer.toString();
-        } finally {
-            if (reader != null) {
-                reader.close();
-            }
-        }
+        } 
     }
 }

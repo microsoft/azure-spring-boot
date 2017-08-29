@@ -50,11 +50,11 @@ public class MediaServicesAutoConfiguration {
         LOG.debug("createMediaContract called");
         final com.microsoft.windowsazure.Configuration configuration = MediaConfiguration
                 .configureWithOAuthAuthentication(
-                        mediaServicesProperties.MEDIA_SERVICE_URI,
-                        mediaServicesProperties.OAUTH_URI,
+                        MediaServicesProperties.MEDIA_SERVICE_URI,
+                        MediaServicesProperties.OAUTH_URI,
                         mediaServicesProperties.getAccountName(),
                         mediaServicesProperties.getAccountKey(),
-                        mediaServicesProperties.SCOPE);
+                        MediaServicesProperties.SCOPE);
 
         if (nonNull(mediaServicesProperties.getProxyHost())
                 && nonNull(mediaServicesProperties.getProxyPort())) {

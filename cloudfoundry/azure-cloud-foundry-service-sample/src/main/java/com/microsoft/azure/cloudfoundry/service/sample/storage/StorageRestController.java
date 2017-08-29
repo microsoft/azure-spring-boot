@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -68,13 +67,9 @@ public class StorageRestController {
             blob.upload(new URL(IMAGE_PATH).openStream(), imageSize);
             LOG.debug("Uploading image complete");
 
-        } catch (MalformedURLException e) {
-            LOG.error("Error retrieving image", e);
         } catch (IOException e) {
             LOG.error("Error retrieving image", e);
-        } catch (URISyntaxException e) {
-            LOG.error("Error accessing azure storage container", e);
-        } catch (StorageException e) {
+        } catch (URISyntaxException | StorageException e) {
             LOG.error("Error accessing azure storage container", e);
         }
     }

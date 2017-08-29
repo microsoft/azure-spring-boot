@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 public class ServiceBusSampleApplication implements CommandLineRunner {
@@ -53,7 +54,7 @@ public class ServiceBusSampleApplication implements CommandLineRunner {
     private void receiveQueueMessage() throws ServiceBusException, InterruptedException {
         queueClientForReceiving.registerMessageHandler(new MessageHandler(), new MessageHandlerOptions());
 
-        Thread.sleep(5 * 1000);
+        TimeUnit.SECONDS.sleep(5);
         queueClientForReceiving.close();
     }
 
@@ -68,7 +69,7 @@ public class ServiceBusSampleApplication implements CommandLineRunner {
     private void receiveSubscriptionMessage() throws ServiceBusException, InterruptedException {
         subscriptionClient.registerMessageHandler(new MessageHandler(), new MessageHandlerOptions());
 
-        Thread.sleep(5 * 1000);
+        TimeUnit.SECONDS.sleep(5);
         subscriptionClient.close();
     }
 

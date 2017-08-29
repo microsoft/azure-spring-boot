@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 public class TodolistController {
-    private final List<TodoItem> todoList = new ArrayList<TodoItem>();
+    private final List<TodoItem> todoList = new ArrayList<>();
 
     public TodolistController() {
         todoList.add(0, new TodoItem(2398, "anything", "whoever"));
@@ -28,7 +28,7 @@ public class TodolistController {
 
     @RequestMapping("/home")
     public Map<String, Object> home() {
-        final Map<String, Object> model = new HashMap<String, Object>();
+        final Map<String, Object> model = new HashMap<>();
         model.put("id", UUID.randomUUID().toString());
         model.put("content", "home");
         return model;
@@ -41,9 +41,9 @@ public class TodolistController {
             method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getTodoItem(@PathVariable("index") int index) {
         if (index > todoList.size() - 1) {
-            return new ResponseEntity<Object>(new TodoItem(-1, "index out of range", null), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new TodoItem(-1, "index out of range", null), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<TodoItem>(todoList.get(index), HttpStatus.OK);
+        return new ResponseEntity<>(todoList.get(index), HttpStatus.OK);
     }
 
     /**
@@ -51,7 +51,7 @@ public class TodolistController {
      */
     @RequestMapping(value = "/api/todolist", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<TodoItem>> getAllTodoItems() {
-        return new ResponseEntity<List<TodoItem>>(todoList, HttpStatus.OK);
+        return new ResponseEntity<>(todoList, HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ROLE_group1')")
@@ -59,7 +59,7 @@ public class TodolistController {
     public ResponseEntity<String> addNewTodoItem(@RequestBody TodoItem item) {
         item.setID(todoList.size() + 1);
         todoList.add(todoList.size(), item);
-        return new ResponseEntity<String>("Entity created", HttpStatus.CREATED);
+        return new ResponseEntity<>("Entity created", HttpStatus.CREATED);
     }
 
     /**
@@ -72,9 +72,9 @@ public class TodolistController {
                 todoList.stream().filter(i -> i.getID() == item.getID()).collect(Collectors.toList());
         if (!find.isEmpty()) {
             todoList.set(todoList.indexOf(find.get(0)), item);
-            return new ResponseEntity<String>("Entity is updated", HttpStatus.OK);
+            return new ResponseEntity<>("Entity is updated", HttpStatus.OK);
         }
-        return new ResponseEntity<String>("Entity not found", HttpStatus.OK);
+        return new ResponseEntity<>("Entity not found", HttpStatus.OK);
     }
 
     /**
@@ -90,11 +90,11 @@ public class TodolistController {
             final List<TodoItem> find = todoList.stream().filter(i -> i.getID() == id).collect(Collectors.toList());
             if (!find.isEmpty()) {
                 todoList.remove(todoList.indexOf(find.get(0)));
-                return new ResponseEntity<String>("OK", HttpStatus.OK);
+                return new ResponseEntity<>("OK", HttpStatus.OK);
             }
-            return new ResponseEntity<String>("Entity not found", HttpStatus.OK);
+            return new ResponseEntity<>("Entity not found", HttpStatus.OK);
         } else {
-            return new ResponseEntity<String>("Access is denied", HttpStatus.OK);
+            return new ResponseEntity<>("Access is denied", HttpStatus.OK);
         }
 
     }

@@ -5,7 +5,7 @@
  */
 package com.microsoft.azure.autoconfigure.aad;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Constants {
@@ -14,11 +14,8 @@ public class Constants {
     public static final String TARGETED_GROUPS_PROPERTY = "azure.activedirectory.ActiveDirectoryGroups";
     public static final String CLIENT_ID = "real_client_id";
     public static final String CLIENT_SECRET = "real_client_secret";
-    public static final List<String> TARGETED_GROUPS = new ArrayList<String>() {{
-        add("group1");
-        add("group2");
-        add("group3");
-    }};
+    public static final List<String> TARGETED_GROUPS = Arrays.asList("group1", "group2",
+            "group3");
 
     public static final String TOKEN_HEADER = "Authorization";
     public static final String BEARER_TOKEN = "Bearer real_jtw_bearer_token";

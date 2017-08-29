@@ -5,6 +5,8 @@
  */
 package com.microsoft.azure.autoconfigure.aad;
 
+import static java.util.stream.Collectors.toList;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEException;
@@ -19,7 +21,14 @@ import com.nimbusds.jose.proc.JWSKeySelector;
 import com.nimbusds.jose.proc.JWSVerificationKeySelector;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.proc.*;
+import com.nimbusds.jwt.proc.BadJWTException;
+import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
+import com.nimbusds.jwt.proc.DefaultJWTClaimsVerifier;
+import com.nimbusds.jwt.proc.DefaultJWTProcessor;
+import com.nimbusds.jwt.proc.JWTClaimsSetVerifier;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,11 +40,13 @@ import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public class UserPrincipal {
 
+    private static final Logger LOG = LoggerFactory.getLogger(UserPrincipal.class);
     private static final String KEY_DISCOVERY_URI = "https://login.microsoftonline.com/common/discovery/keys";
     private static final JWKSet jwsKeySet = loadAadPublicKeys();
     private JWSObject jwsObject;
@@ -48,10 +59,12 @@ public class UserPrincipal {
         userGroups = null;
     }
 
-    public UserPrincipal(String idToken) throws Exception {
-        final ConfigurableJWTProcessor validator = getAadJwtTokenValidator();
+    public UserPrincipal(String idToken) throws MalformedURLException, ParseException,
+            BadJOSEException, JOSEException {
+        final ConfigurableJWTProcessor<SecurityContext> validator = getAadJwtTokenValidator();
         jwtClaimsSet = validator.process(idToken, null);
-        final JWTClaimsSetVerifier verifier = validator.getJWTClaimsSetVerifier();
+        final JWTClaimsSetVerifier<SecurityContext> verifier = validator
+                .getJWTClaimsSetVerifier();
         verifier.verify(jwtClaimsSet, null);
         jwsObject = JWSObject.parse(idToken);
         userGroups = null;
@@ -62,8 +75,7 @@ public class UserPrincipal {
             return JWKSet.load(
                     new URL(KEY_DISCOVERY_URI));
         } catch (IOException | ParseException e) {
-            System.err.println("Error loading AAD public keys: " + e.getMessage());
-            e.printStackTrace();
+            LOG.error("Error loading AAD public keys: {}" , e.getMessage());
         }
         return null;
     }
@@ -106,21 +118,17 @@ public class UserPrincipal {
         return !(userGroups == null || userGroups.isEmpty()) && userGroups.contains(group);
     }
 
-    public Collection<? extends GrantedAuthority> getAuthoritiesByUserGroups(List<UserGroup> userGroups,
-                                                                             List<String> targetdGroupNames) {
-        if (userGroups == null
-                || targetdGroupNames == null
-                || userGroups.isEmpty()
+    public List<GrantedAuthority> getAuthoritiesByUserGroups(List<UserGroup> userGroups,
+            List<String> targetdGroupNames) {
+        if (userGroups == null || targetdGroupNames == null || userGroups.isEmpty()
                 || targetdGroupNames.isEmpty()) {
-            return null;
+            return Collections.<GrantedAuthority>emptyList();
         }
-        final List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        for (final UserGroup group : userGroups) {
-            if (targetdGroupNames.contains(group.getDisplayName())) {
-                authorities.add(new SimpleGrantedAuthority("ROLE_" + group.getDisplayName()));
-            }
-        }
-        return authorities;
+        return userGroups.stream()
+                .filter(usergroup -> targetdGroupNames
+                        .contains(usergroup.getDisplayName()))
+                .map(usergroup -> "ROLE_" + usergroup.getDisplayName())
+                .map(SimpleGrantedAuthority::new).collect(toList());
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -131,16 +139,16 @@ public class UserPrincipal {
         return SecurityContextHolder.getContext().getAuthentication();
     }
 
-    private ConfigurableJWTProcessor getAadJwtTokenValidator()
-            throws ParseException, JOSEException, BadJOSEException, MalformedURLException {
-        final ConfigurableJWTProcessor jwtProcessor = new DefaultJWTProcessor();
-        final JWKSource keySource = new RemoteJWKSet(
+    private ConfigurableJWTProcessor<SecurityContext> getAadJwtTokenValidator()
+            throws MalformedURLException {
+        final ConfigurableJWTProcessor<SecurityContext> jwtProcessor = new DefaultJWTProcessor<>();
+        final JWKSource<SecurityContext> keySource = new RemoteJWKSet<>(
                 new URL(KEY_DISCOVERY_URI));
         final JWSAlgorithm expectedJWSAlg = JWSAlgorithm.RS256;
-        final JWSKeySelector keySelector = new JWSVerificationKeySelector(expectedJWSAlg, keySource);
+        final JWSKeySelector<SecurityContext> keySelector = new JWSVerificationKeySelector<>(expectedJWSAlg, keySource);
         jwtProcessor.setJWSKeySelector(keySelector);
 
-        jwtProcessor.setJWTClaimsSetVerifier(new DefaultJWTClaimsVerifier() {
+        jwtProcessor.setJWTClaimsSetVerifier(new DefaultJWTClaimsVerifier<SecurityContext>() {
             @Override
             public void verify(JWTClaimsSet claimsSet, SecurityContext ctx) throws BadJWTException {
                 super.verify(claimsSet, ctx);
@@ -155,7 +163,7 @@ public class UserPrincipal {
 
     private List<UserGroup> loadUserGroups(String graphApiToken) throws Exception {
         final String responseInJson = AzureADGraphClient.getUserMembershipsV1(graphApiToken);
-        final List<UserGroup> userGroups = new ArrayList<UserGroup>();
+        final List<UserGroup> lUserGroups = new ArrayList<>();
         final ObjectMapper objectMapper = JacksonObjectMapperFactory.getInstance();
         final JsonNode rootNode = objectMapper.readValue(responseInJson, JsonNode.class);
         final JsonNode valuesNode = rootNode.get("value");
@@ -163,13 +171,13 @@ public class UserPrincipal {
         while (valuesNode != null
                 && valuesNode.get(i) != null) {
             if (valuesNode.get(i).get("objectType").asText().equals("Group")) {
-                userGroups.add(new UserGroup(
+                lUserGroups.add(new UserGroup(
                         valuesNode.get(i).get("objectId").asText(),
                         valuesNode.get(i).get("displayName").asText()));
             }
             i++;
         }
-        return userGroups;
+        return lUserGroups;
     }
 }
 
