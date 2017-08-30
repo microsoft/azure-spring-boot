@@ -217,7 +217,6 @@
         <module>../../microsoft-graph/spring-social-microsoft-graph</module>
         <module>../../microsoft-graph/microsoft-graph-spring-boot-autoconfigure</module>
         <module>../../microsoft-graph/microsoft-graph-spring-social-starter</module>
-        <module>../../keyvault/azure-keyvault-secrets-spring-boot</module>
         <module>../../keyvault/azure-keyvault-secrets-spring-boot-starter</module>
         <module>../../cloudfoundry/azure-cloud-foundry-service</module>
     </modules>
