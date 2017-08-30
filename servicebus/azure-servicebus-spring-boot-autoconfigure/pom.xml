@@ -41,7 +41,7 @@
     </scm>
 
     <properties>
-        <azure.servicebus.version>1.0.0-PREVIEW-3</azure.servicebus.version>
+        <azure.servicebus.version>1.0.0</azure.servicebus.version>
     </properties>
 
     <dependencies>

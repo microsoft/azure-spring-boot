@@ -41,7 +41,7 @@
     </scm>
 
     <properties>
-        <azure.storage.version>5.3.1</azure.storage.version>
+        <azure.storage.version>5.5.0</azure.storage.version>
     </properties>
 
     <dependencies>

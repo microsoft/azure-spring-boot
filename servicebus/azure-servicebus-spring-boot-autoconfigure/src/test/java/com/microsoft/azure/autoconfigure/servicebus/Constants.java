@@ -19,8 +19,8 @@ public class Constants {
     public static final String CONNECTION_STRING = "Endpoint=sb://test.servicebus.windows.net/;" +
             "SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=dummy-key";
     public static final String QUEUE_NAME = "queue name";
-    public static final ReceiveMode QUEUE_RECEIVE_MODE = ReceiveMode.PeekLock;
+    public static final ReceiveMode QUEUE_RECEIVE_MODE = ReceiveMode.PEEKLOCK;
     public static final String TOPIC_NAME = "topic name";
     public static final String SUBSCRIPTION_NAME = "subscription name";
-    public static final ReceiveMode SUBSCRIPTION_RECEIVE_MODE = ReceiveMode.PeekLock;
+    public static final ReceiveMode SUBSCRIPTION_RECEIVE_MODE = ReceiveMode.PEEKLOCK;
 }
