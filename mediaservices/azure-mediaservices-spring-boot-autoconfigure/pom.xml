@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-starter-parent</artifactId>
-        <version>0.1.6-beta</version>
+        <version>0.1.6-SNAPSHOT</version>
         <relativePath>../../common/azure-spring-boot-starter-parent/pom.xml</relativePath>
     </parent>
 
@@ -40,6 +40,10 @@
         <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
     </scm>
 
+    <properties>
+        <azure.media.version>0.9.7</azure.media.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -53,6 +57,7 @@
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-media</artifactId>
+            <version>${azure.media.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

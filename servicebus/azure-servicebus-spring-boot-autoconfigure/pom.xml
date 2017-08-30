@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-starter-parent</artifactId>
-        <version>0.1.6-beta</version>
+        <version>0.1.6-SNAPSHOT</version>
         <relativePath>../../common/azure-spring-boot-starter-parent/pom.xml</relativePath>
     </parent>
 
@@ -40,6 +40,10 @@
         <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
     </scm>
 
+    <properties>
+        <azure.servicebus.version>1.0.0-PREVIEW-3</azure.servicebus.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -53,6 +57,7 @@
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-servicebus</artifactId>
+            <version>${azure.servicebus.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
