@@ -84,11 +84,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-spring-common</artifactId>
         </dependency>
