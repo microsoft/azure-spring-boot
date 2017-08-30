@@ -29,7 +29,6 @@ public class ServiceBusAutoConfiguration {
     }
 
     @Bean
-    @Scope("prototype")
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = "azure.servicebus", value = {"queue-name", "queue-receive-mode"})
     public QueueClient queueClient() throws InterruptedException, ServiceBusException {
@@ -38,7 +37,6 @@ public class ServiceBusAutoConfiguration {
     }
 
     @Bean
-    @Scope("prototype")
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = "azure.servicebus", value = "topic-name")
     public TopicClient topicClient() throws InterruptedException, ServiceBusException {
@@ -47,7 +45,6 @@ public class ServiceBusAutoConfiguration {
     }
 
     @Bean
-    @Scope("prototype")
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = "azure.servicebus",
             value = {"topic-name", "subscription-name", "subscription-receive-mode"})
