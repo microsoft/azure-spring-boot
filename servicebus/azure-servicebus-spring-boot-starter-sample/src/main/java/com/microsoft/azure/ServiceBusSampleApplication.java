@@ -27,10 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class ServiceBusSampleApplication implements CommandLineRunner {
 
     @Autowired
-    private QueueClient queueClientForSending;
-    @Autowired
-    private QueueClient queueClientForReceiving;
-
+    private QueueClient queueClient;
     @Autowired
     private TopicClient topicClient;
     @Autowired
@@ -54,15 +51,14 @@ public class ServiceBusSampleApplication implements CommandLineRunner {
         final String messageBody = "queue message";
         System.out.println("Sending message: " + messageBody);
         final Message message = new Message(messageBody.getBytes(StandardCharsets.UTF_8));
-        queueClientForSending.send(message);
-        queueClientForSending.close();
+        queueClient.send(message);
     }
 
     private void receiveQueueMessage() throws ServiceBusException, InterruptedException {
-        queueClientForReceiving.registerMessageHandler(new MessageHandler(), new MessageHandlerOptions());
+        queueClient.registerMessageHandler(new MessageHandler(), new MessageHandlerOptions());
 
         TimeUnit.SECONDS.sleep(5);
-        queueClientForReceiving.close();
+        queueClient.close();
     }
 
     private void sendTopicMessage() throws ServiceBusException, InterruptedException {

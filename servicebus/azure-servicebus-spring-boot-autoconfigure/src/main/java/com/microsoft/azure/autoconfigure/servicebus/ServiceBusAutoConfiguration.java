@@ -16,7 +16,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 
 @Configuration
 @EnableConfigurationProperties(ServiceBusProperties.class)
@@ -29,7 +28,6 @@ public class ServiceBusAutoConfiguration {
     }
 
     @Bean
-    @Scope("prototype")
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = "azure.servicebus", value = {"queue-name", "queue-receive-mode"})
     public QueueClient queueClient() throws InterruptedException, ServiceBusException {
@@ -38,7 +36,6 @@ public class ServiceBusAutoConfiguration {
     }
 
     @Bean
-    @Scope("prototype")
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = "azure.servicebus", value = "topic-name")
     public TopicClient topicClient() throws InterruptedException, ServiceBusException {
@@ -47,7 +44,6 @@ public class ServiceBusAutoConfiguration {
     }
 
     @Bean
-    @Scope("prototype")
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = "azure.servicebus",
             value = {"topic-name", "subscription-name", "subscription-receive-mode"})

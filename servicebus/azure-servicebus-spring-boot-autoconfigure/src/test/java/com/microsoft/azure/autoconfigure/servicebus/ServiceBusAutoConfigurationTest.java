@@ -67,26 +67,10 @@ public class ServiceBusAutoConfigurationTest {
         System.setProperty(Constants.QUEUE_NAME_PROPERTY, Constants.QUEUE_NAME);
         System.setProperty(Constants.QUEUE_RECEIVE_MODE_PROPERTY, Constants.QUEUE_RECEIVE_MODE.name());
 
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(ServiceBusAutoConfiguration.class);
-            context.refresh();
-
-            QueueClient queueClient = null;
-
-            Exception exception = null;
-            try {
-                queueClient = context.getBean(QueueClient.class);
-            } catch (Exception e) {
-                exception = e;
-            }
-
-            assertThat(exception).isNotNull();
-            assertThat(exception.getMessage()).contains(
-                    "IllegalConnectionStringFormatException: Connection String cannot be parsed");
-            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
-
-            assertThat(queueClient).isNull();
-        }
+        verifyBeanCreationException("Failed to instantiate [com.microsoft.azure.servicebus.QueueClient]: " +
+                "Factory method 'queueClient' threw exception; nested exception is " +
+                "com.microsoft.azure.servicebus.primitives.IllegalConnectionStringFormatException: " +
+                "Connection String cannot be parsed.");
 
         System.clearProperty(Constants.CONNECTION_STRING_PROPERTY);
         System.clearProperty(Constants.QUEUE_NAME_PROPERTY);
@@ -98,26 +82,10 @@ public class ServiceBusAutoConfigurationTest {
         System.setProperty(Constants.CONNECTION_STRING_PROPERTY, Constants.INVALID_CONNECTION_STRING);
         System.setProperty(Constants.TOPIC_NAME_PROPERTY, Constants.TOPIC_NAME);
 
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(ServiceBusAutoConfiguration.class);
-            context.refresh();
-
-            TopicClient topicClient = null;
-
-            Exception exception = null;
-            try {
-                topicClient = context.getBean(TopicClient.class);
-            } catch (Exception e) {
-                exception = e;
-            }
-
-            assertThat(exception).isNotNull();
-            assertThat(exception.getMessage()).contains(
-                    "IllegalConnectionStringFormatException: Connection String cannot be parsed");
-            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
-
-            assertThat(topicClient).isNull();
-        }
+        verifyBeanCreationException("Failed to instantiate [com.microsoft.azure.servicebus.TopicClient]: " +
+                "Factory method 'topicClient' threw exception; nested exception is " +
+                "com.microsoft.azure.servicebus.primitives.IllegalConnectionStringFormatException: " +
+                "Connection String cannot be parsed.");
 
         System.clearProperty(Constants.CONNECTION_STRING_PROPERTY);
         System.clearProperty(Constants.TOPIC_NAME_PROPERTY);
@@ -130,26 +98,10 @@ public class ServiceBusAutoConfigurationTest {
         System.setProperty(Constants.SUBSCRIPTION_NAME_PROPERTY, Constants.SUBSCRIPTION_NAME);
         System.setProperty(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY, Constants.SUBSCRIPTION_RECEIVE_MODE.name());
 
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(ServiceBusAutoConfiguration.class);
-            context.refresh();
-
-            SubscriptionClient subscriptionClient = null;
-
-            Exception exception = null;
-            try {
-                subscriptionClient = context.getBean(SubscriptionClient.class);
-            } catch (Exception e) {
-                exception = e;
-            }
-
-            assertThat(exception).isNotNull();
-            assertThat(exception.getMessage()).contains(
-                    "IllegalConnectionStringFormatException: Connection String cannot be parsed");
-            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
-
-            assertThat(subscriptionClient).isNull();
-        }
+        verifyBeanCreationException("Failed to instantiate [com.microsoft.azure.servicebus.TopicClient]: " +
+                "Factory method 'topicClient' threw exception; nested exception is " +
+                "com.microsoft.azure.servicebus.primitives.IllegalConnectionStringFormatException: " +
+                "Connection String cannot be parsed.");
 
         System.clearProperty(Constants.CONNECTION_STRING_PROPERTY);
         System.clearProperty(Constants.TOPIC_NAME_PROPERTY);
@@ -164,31 +116,31 @@ public class ServiceBusAutoConfigurationTest {
         System.setProperty(Constants.SUBSCRIPTION_NAME_PROPERTY, Constants.SUBSCRIPTION_NAME);
         System.setProperty(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY, Constants.SUBSCRIPTION_RECEIVE_MODE.name());
 
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(ServiceBusAutoConfiguration.class);
-            context.refresh();
-
-            SubscriptionClient subscriptionClient = null;
-
-            Exception exception = null;
-            try {
-                subscriptionClient = context.getBean(SubscriptionClient.class);
-            } catch (Exception e) {
-                exception = e;
-            }
-
-            assertThat(exception).isNotNull();
-            assertThat(exception.getMessage()).contains(
-                    "BeanInstantiationException: Failed to instantiate [com.microsoft.azure.servicebus." +
-                            "SubscriptionClient]: Factory method 'subscriptionClient' threw exception;");
-            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
-
-            assertThat(subscriptionClient).isNull();
-        }
+        verifyBeanCreationException("Failed to instantiate [com.microsoft.azure.servicebus.TopicClient]: " +
+                "Factory method 'topicClient' threw exception; nested exception is " +
+                "com.microsoft.azure.servicebus.primitives.CommunicationException: " +
+                "java.nio.channels.UnresolvedAddressException. This is usually caused by incorrect hostname" +
+                " or network configuration.");
 
         System.clearProperty(Constants.CONNECTION_STRING_PROPERTY);
         System.clearProperty(Constants.TOPIC_NAME_PROPERTY);
         System.clearProperty(Constants.SUBSCRIPTION_NAME_PROPERTY);
         System.clearProperty(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY);
+    }
+
+    private void verifyBeanCreationException(String message) {
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            Exception exception = null;
+            try {
+                context.register(ServiceBusAutoConfiguration.class);
+                context.refresh();
+            } catch (Exception e) {
+                exception = e;
+            }
+
+            assertThat(exception).isNotNull();
+            assertThat(exception.getMessage()).contains(message);
+            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
+        }
     }
 }

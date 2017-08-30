@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-starter-parent</artifactId>
-        <version>0.1.6-beta</version>
+        <version>0.1.6-SNAPSHOT</version>
         <relativePath>../../common/azure-spring-boot-starter-parent/pom.xml</relativePath>
     </parent>
 
@@ -40,6 +40,10 @@
         <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
     </scm>
 
+    <properties>
+        <azure.documentdb.version>1.13.0</azure.documentdb.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -53,6 +57,7 @@
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-documentdb</artifactId>
+            <version>${azure.documentdb.version}</version>
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
@@ -61,6 +66,12 @@
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-spring-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>2.8.9</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
