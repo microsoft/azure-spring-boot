@@ -12,13 +12,13 @@ This package provides a Spring Security filter to validate the Jwt token from Az
 
 ### Add the dependency
 
-`azure-ad-integration-spring-boot-autoconfigure` is published on Maven Central Repository.
+`azure-ad-integration-spring-boot-starter` is published on Maven Central Repository.
 If you are using Maven, add the following dependency.
 
 ```xml
 <dependency>
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-ad-integration-spring-boot-autoconfigure</artifactId>
+    <artifactId>azure-ad-integration-spring-boot-starter</artifactId>
     <version>0.1.5</version>
 </dependency>
 ```
@@ -40,4 +40,4 @@ azure.activedirectory.ActiveDirectoryGroups=Aad-groups e.g. group1,group2,group3
 private AADAuthenticationFilter aadAuthFilter;
 ```
 
-You can refer to [azure-ad-integration-spring-boot-autoconfigure-sample]() for how to integrate Spring Security and Azure AD for authentication and authorization in a Single Page Application (SPA) scenario.
+You can refer to [azure-ad-integration-spring-boot-starter-sample](../azure-ad-integration-spring-boot-starter-sample/README.md) for how to integrate Spring Security and Azure AD for authentication and authorization in a Single Page Application (SPA) scenario.

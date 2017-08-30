@@ -11,12 +11,12 @@
     </parent>
 
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-ad-integration-spring-boot-autoconfigure-sample</artifactId>
+    <artifactId>azure-ad-integration-spring-boot-starter-sample</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Azure AD Spring Security Integration Spring Boot Autoconfigure Sample</name>
-    <description>Azure AD Spring Security Integration Spring Boot Autoconfigure Sample</description>
+    <name>Azure AD Spring Security Integration Spring Boot Sample</name>
+    <description>Azure AD Spring Security Integration Spring Boot Sample</description>
     <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
 
     <licenses>
@@ -68,7 +68,11 @@
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
+<<<<<<< HEAD:activedirectory/azure-ad-integration-spring-boot-autoconfigure-sample/pom.xml
             <artifactId>azure-ad-integration-spring-boot-autoconfigure</artifactId>
+=======
+            <artifactId>azure-ad-integration-spring-boot-starter</artifactId>
+>>>>>>> master:activedirectory/azure-ad-integration-spring-boot-starter-sample/pom.xml
         </dependency>
     </dependencies>
 
