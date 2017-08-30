@@ -68,11 +68,7 @@
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-<<<<<<< HEAD:activedirectory/azure-ad-integration-spring-boot-autoconfigure-sample/pom.xml
-            <artifactId>azure-ad-integration-spring-boot-autoconfigure</artifactId>
-=======
             <artifactId>azure-ad-integration-spring-boot-starter</artifactId>
->>>>>>> master:activedirectory/azure-ad-integration-spring-boot-starter-sample/pom.xml
         </dependency>
     </dependencies>
 
@@ -136,6 +132,17 @@
                         <phase>compile</phase>
                         <goals>
                             <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
                         </goals>
                     </execution>
                 </executions>
