@@ -208,11 +208,8 @@
         <module>../../documentdb/spring-data-azure-documentdb</module>
         <module>../../documentdb/azure-documentdb-spring-boot-autoconfigure</module>
         <module>../../documentdb/azure-documentdb-spring-boot-starter</module>
-        <module>../../storage/azure-storage-spring-boot-autoconfigure</module>
         <module>../../storage/azure-storage-spring-boot-starter</module>
-        <module>../../servicebus/azure-servicebus-spring-boot-autoconfigure</module>
         <module>../../servicebus/azure-servicebus-spring-boot-starter</module>
-        <module>../../mediaservices/azure-mediaservices-spring-boot-autoconfigure</module>
         <module>../../mediaservices/azure-mediaservices-spring-boot-starter</module>
         <module>../../microsoft-graph/spring-social-microsoft-graph</module>
         <module>../../microsoft-graph/microsoft-graph-spring-boot-autoconfigure</module>
