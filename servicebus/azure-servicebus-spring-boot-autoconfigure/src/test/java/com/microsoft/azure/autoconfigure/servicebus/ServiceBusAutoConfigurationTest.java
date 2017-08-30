@@ -9,7 +9,6 @@ import com.microsoft.azure.servicebus.QueueClient;
 import com.microsoft.azure.servicebus.SubscriptionClient;
 import com.microsoft.azure.servicebus.TopicClient;
 import org.junit.Test;
-import org.springframework.beans.BeanInstantiationException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -129,7 +128,7 @@ public class ServiceBusAutoConfigurationTest {
         System.clearProperty(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY);
     }
 
-    private void verifyBeanCreationException(String message){
+    private void verifyBeanCreationException(String message) {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             Exception exception = null;
             try {
