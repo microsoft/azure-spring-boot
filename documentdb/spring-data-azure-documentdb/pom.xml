@@ -41,7 +41,7 @@
     </scm>
 
     <properties>
-        <azure.documentdb.version>1.11.0</azure.documentdb.version>
+        <azure.documentdb.version>1.13.0</azure.documentdb.version>
 
         <azure.test.resourcegroup>documentdbtest</azure.test.resourcegroup>
         <azure.test.dbname>springdocdbtestdb</azure.test.dbname>
