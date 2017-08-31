@@ -13,8 +13,9 @@ List all the AAD groups `ActiveDirectoryGroups` that you want to have a Spring S
 `azure.activedirectory.ActiveDirectoryGroups=group1,group2`
 You can use `@PreAuthorize` annotation or `UserPrincipal` to manage access to web API based on user's group membership. You will need to change `ROLE_group1` to groups you want to allow to access the API or you will get "Access is denied".
 
-##### Note: The sample retrieves user's group membership using Azure AD graph API which requires the registered app to have `Access the directory as the signed-in user` under `Delegated Permissions`. You need AAD admin privilege to be able to grant the permission in API ACCESS -> Required permission.
-
+##### Note: 
+- The sample retrieves user's group membership using Azure AD graph API which requires the registered app to have `Access the directory as the signed-in user` under `Delegated Permissions`. You need AAD admin privilege to be able to grant the permission in API ACCESS -> Required permission.
+- Add `http://localhost:8080` as one of the `Reply URLs` in the settings of your registered app.
 
 #### Angular JS
 In `app.js`, make following changes. The client leverages Azure AD library for JS to handle AAD authentication in single page application. The following snippet of code configures adal provider for your registered app.
