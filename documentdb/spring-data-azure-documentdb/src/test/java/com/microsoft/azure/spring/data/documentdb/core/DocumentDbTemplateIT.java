@@ -32,8 +32,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @PropertySource(value = {"classpath:application.properties"})
 public class DocumentDbTemplateIT {
 
+    private static final String TEST_ID = "testid";
+    private static final String TEST_NOTEXIST_ID = "testid2";
+
     private static final String TEST_DB_NAME = "testdb";
-    private static final Person TEST_PERSON = new Person("testid", "testfirstname", "testlastname");
+    private static final Person TEST_PERSON = new Person(TEST_ID, "testfirstname", "testlastname");
 
     @Value("${documentdb.uri}")
     private String documentDbUri;
@@ -93,6 +96,9 @@ public class DocumentDbTemplateIT {
         assertThat(result.getId()).isEqualTo(TEST_PERSON.getId());
         assertThat(result.getFirstName()).isEqualTo(TEST_PERSON.getFirstName());
         assertThat(result.getLastName()).isEqualTo(TEST_PERSON.getLastName());
+
+        final Person nullResult = dbTemplate.findById(Person.class.getSimpleName(), TEST_NOTEXIST_ID, Person.class);
+        assertThat(nullResult).isNull();
     }
 
     @Test

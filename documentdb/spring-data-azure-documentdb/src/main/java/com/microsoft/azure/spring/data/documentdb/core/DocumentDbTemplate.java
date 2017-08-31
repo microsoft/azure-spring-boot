@@ -16,6 +16,7 @@ import com.microsoft.azure.documentdb.Resource;
 import com.microsoft.azure.documentdb.SqlParameter;
 import com.microsoft.azure.documentdb.SqlParameterCollection;
 import com.microsoft.azure.documentdb.SqlQuerySpec;
+import com.microsoft.azure.documentdb.internal.HttpConstants;
 import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
 import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
 import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbPersistentEntity;
@@ -114,6 +115,10 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                 return null;
             }
         } catch (DocumentClientException e) {
+            if (e.getStatusCode() == HttpConstants.StatusCodes.NOTFOUND) {
+                return null;
+            }
+
             throw new RuntimeException("findById exception", e);
         }
     }
