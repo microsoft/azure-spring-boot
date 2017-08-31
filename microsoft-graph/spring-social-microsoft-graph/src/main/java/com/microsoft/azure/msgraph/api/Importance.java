@@ -13,17 +13,17 @@ public enum Importance {
     /**
      * low
      */
-    LOW,
+    low,
     /**
      * normal
      */
-    NORMAL,
+    normal,
     /**
      * high
      */
-    HIGH,
+    high,
     /**
      * For Importance values that were not expected from the service
      */
-    UNEXPECTEDVALUE
+    unexpectedvalue
 }

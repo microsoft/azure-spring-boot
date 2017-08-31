@@ -13,13 +13,13 @@ public enum BodyType {
     /**
      * text
      */
-    TEXT,
+    text,
     /**
      * html
      */
-    HTML,
+    html,
     /**
      * For BodyType values that were not expected from the service
      */
-    UNEXPECTEDVALUE
+    unexpectedvalue
 }
