@@ -17,11 +17,14 @@ This repo is for Spring Boot Starters of Azure services. It helps Spring Boot de
 
 Below starters are available. You can find them in [Maven Central Repository](https://search.maven.org/).
 
+- [azure-ad-integration-spring-boot-starter](activedirectory/azure-ad-integration-spring-boot-starter/README.md)
+- [azure-cloud-foundry-service](cloudfoundry/azure-cloud-foundry-service/README.md)
 - [azure-documentdb-spring-boot-starter](documentdb/azure-documentdb-spring-boot-starter/README.md)
+- [azure-keyvault-secrets-spring-boot-starter](keyvault/azure-keyvault-secrets-spring-boot-starter/README.md)
 - [azure-mediaservices-spring-boot-starter](mediaservices/azure-mediaservices-spring-boot-starter/README.md)
+- [microsoft-graph-spring-social-starter](microsoft-graph/microsoft-graph-spring-social-starter-sample/README.md)
 - [azure-servicebus-spring-boot-starter](servicebus/azure-servicebus-spring-boot-starter/README.md)
 - [azure-storage-spring-boot-starter](storage/azure-storage-spring-boot-starter/README.md)
-- [microsoft-graph-spring-social-starter](microsoft-graph/microsoft-graph-spring-social-starter-sample/README.md)
 
 
 ### How to Build and Contribute
