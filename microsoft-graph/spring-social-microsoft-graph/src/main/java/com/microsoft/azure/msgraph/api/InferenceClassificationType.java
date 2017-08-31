@@ -21,5 +21,5 @@ public enum InferenceClassificationType {
     /**
      * For InferenceClassificationType values that were not expected from the service
      */
-    unexpectedvalue
+    unexpectedValue
 }

@@ -21,5 +21,5 @@ public enum BodyType {
     /**
      * For BodyType values that were not expected from the service
      */
-    unexpectedvalue
+    unexpectedValue
 }

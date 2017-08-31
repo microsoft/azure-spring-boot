@@ -25,5 +25,5 @@ public enum Importance {
     /**
      * For Importance values that were not expected from the service
      */
-    unexpectedvalue
+    unexpectedValue
 }
