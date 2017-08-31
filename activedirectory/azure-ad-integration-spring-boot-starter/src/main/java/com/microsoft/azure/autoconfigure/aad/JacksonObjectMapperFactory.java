@@ -18,5 +18,6 @@ public class JacksonObjectMapperFactory {
 
     private static class SingletonHelper {
         private static final ObjectMapper INSTANCE = new ObjectMapper();
+        
     }
 }

@@ -52,7 +52,7 @@ public class DocumentDbEntityInformation<T, ID extends Serializable>
 
         final List<Field> fields = FieldUtils.getFieldsListWithAnnotation(domainClass, Id.class);
 
-        if (fields.size() == 0) {
+        if (fields.isEmpty()) {
             idField = ReflectionUtils.findField(getJavaType(), "id");
         } else if (fields.size() == 1) {
             idField = fields.get(0);
@@ -67,14 +67,14 @@ public class DocumentDbEntityInformation<T, ID extends Serializable>
     }
 
     private String getCustomCollection(Class<?> domainClass) {
-        String collectionName = domainClass.getSimpleName();
+        String customCollectionName = domainClass.getSimpleName();
 
         final Document annotation = domainClass.getAnnotation(Document.class);
 
         if (annotation != null && annotation.collection() != null && !annotation.collection().isEmpty()) {
-            collectionName = annotation.collection();
+            customCollectionName = annotation.collection();
         }
 
-        return collectionName;
+        return customCollectionName;
     }
 }

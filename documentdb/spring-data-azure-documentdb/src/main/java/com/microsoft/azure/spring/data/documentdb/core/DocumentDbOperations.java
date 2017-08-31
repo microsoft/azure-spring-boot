@@ -15,7 +15,7 @@ public interface DocumentDbOperations {
 
     String getCollectionName(Class<?> entityClass);
 
-    <T> DocumentCollection createCollection(String collectionName, RequestOptions collectionOptions);
+    DocumentCollection createCollection(String collectionName, RequestOptions collectionOptions);
 
     <T> List<T> findAll(Class<T> entityClass);
 
@@ -33,7 +33,7 @@ public interface DocumentDbOperations {
 
     <T> void update(String collectionName, T object);
 
-    <T> void deleteById(String collectionName, Object id);
+    void deleteById(String collectionName, Object id);
 
     void deleteAll(String collectionName);
 }
