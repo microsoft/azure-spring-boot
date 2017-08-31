@@ -44,7 +44,6 @@ public class AADAuthenticationFilterTest {
         final HttpServletResponse response = mock(HttpServletResponse.class);
         final FilterChain filterChain = mock(FilterChain.class);
 
-        Authentication authentication = mock(Authentication.class);
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(AADAuthenticationFilterAutoConfiguration.class);
             context.refresh();
@@ -55,7 +54,7 @@ public class AADAuthenticationFilterTest {
 
             azureADJwtTokenFilter.doFilterInternal(request, response, filterChain);
 
-            authentication = SecurityContextHolder.getContext().getAuthentication();
+            final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             assertThat(authentication.getPrincipal()).isNotNull();
             assertThat(authentication.getPrincipal()).isExactlyInstanceOf(UserPrincipal.class);
             assertThat(authentication.getAuthorities()).isNotNull();

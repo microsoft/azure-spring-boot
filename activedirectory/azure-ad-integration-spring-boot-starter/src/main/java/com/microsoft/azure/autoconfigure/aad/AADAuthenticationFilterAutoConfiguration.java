@@ -8,13 +8,14 @@ package com.microsoft.azure.autoconfigure.aad;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 @Configuration
-@ConditionalOnMissingBean(AADAuthenticationFilter.class)
+@ConditionalOnWebApplication
 @EnableConfigurationProperties(AADAuthenticationFilterProperties.class)
 public class AADAuthenticationFilterAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationFilterProperties.class);
@@ -32,6 +33,7 @@ public class AADAuthenticationFilterAutoConfiguration {
      */
     @Bean
     @Scope("singleton")
+    @ConditionalOnMissingBean(AADAuthenticationFilter.class)
     public AADAuthenticationFilter azureADJwtTokenFilter() {
         LOG.info("AzureADJwtTokenFilter Constructor.");
         return new AADAuthenticationFilter(aadAuthFilterProperties);
