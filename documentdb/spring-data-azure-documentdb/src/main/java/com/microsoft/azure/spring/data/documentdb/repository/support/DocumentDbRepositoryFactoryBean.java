@@ -7,7 +7,6 @@
 package com.microsoft.azure.spring.data.documentdb.repository.support;
 
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbOperations;
-
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -48,5 +47,4 @@ public class DocumentDbRepositoryFactoryBean<T extends Repository<S, ID>, S, ID 
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
     }
-
 }

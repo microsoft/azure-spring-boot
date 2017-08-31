@@ -13,13 +13,13 @@ public enum InferenceClassificationType {
     /**
      * focused
      */
-    focused,
+    FOCUSED,
     /**
      * other
      */
-    other,
+    OTHER,
     /**
      * For InferenceClassificationType values that were not expected from the service
      */
-    unexpectedValue
+    UNEXPECTEDVALUE
 }

@@ -127,7 +127,7 @@ public class MailTemplateTest extends AbstractMicrosoftApiTest {
         message.setSubject("Meet for lunch?");
 
         final ItemBody body = new ItemBody();
-        body.setContentType(BodyType.text);
+        body.setContentType(BodyType.TEXT);
         body.setContent("The new cafeteria is open.");
         message.setBody(body);
 
@@ -165,7 +165,7 @@ public class MailTemplateTest extends AbstractMicrosoftApiTest {
                         "Organization: MICROSOFT API SANDBOX\r\n        Is this digest useful to you?   Yes" +
                         "     No      Tell us more...\r\nOffice 365 announcements from last week" +
                         "         Edit Message cente");
-        assertThat(message.getImportance()).isEqualTo(Importance.normal);
+        assertThat(message.getImportance()).isEqualTo(Importance.NORMAL);
         assertThat(message.getParentFolderId()).
                 isEqualTo("AQMkADRmZWM1ODE4LWQ4YWItNDlkYS1iZTY4LWVhZWEzYjRlODgAMzkALgAAAwuZXteXVEJLqYcO_ELlrI" +
                         "4BAG5bRHPEmFRPh7PkFZALEj0AAAIBDAAAAA==");
@@ -178,10 +178,10 @@ public class MailTemplateTest extends AbstractMicrosoftApiTest {
         assertThat(message.getWebLink()).isEqualTo("https://outlook.office365.com/owa/?ItemID=AAMkADRmZWM1O" +
                 "DE4LWQ4YWItNDlkYS1iZTY4LWVhZWEzYjRlODgzOQBGAAAAAAALmV7Xl1RCS6mHDvhC5ayOBwBuW0RzxJhUT4ez" +
                 "5BWQCxI9AAAAAAEMAABuW0RzxJhUT4ez5BWQCxI9AABdGgEMAAA%3D&exvsurl=1&viewmodel=ReadMessageItem");
-        assertThat(message.getInferenceClassification()).isEqualTo(InferenceClassificationType.focused);
+        assertThat(message.getInferenceClassification()).isEqualTo(InferenceClassificationType.FOCUSED);
 
         final ItemBody itemBody = message.getBody();
-        assertThat(itemBody.getContentType()).isEqualTo(BodyType.html);
+        assertThat(itemBody.getContentType()).isEqualTo(BodyType.HTML);
         assertThat(itemBody.getContent()).isEqualTo("<html>\r\n<head>\r\n<meta http-equiv=\"Content-Type\" " +
                 "content=\"text/html; charset=utf-8\">\r\n</html>\r\n");
 

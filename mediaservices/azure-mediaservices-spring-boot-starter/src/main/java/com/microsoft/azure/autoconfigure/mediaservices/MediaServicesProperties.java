@@ -28,12 +28,12 @@ public class MediaServicesProperties {
     /**
      * Media service account name.
      */
-    @NotEmpty
+    @NotEmpty(message = "Please Set accountName in application.properties")
     private String accountName;
     /**
      * Media service account key.
      */
-    @NotEmpty
+    @NotEmpty(message = "Please Set accountKey in application.properties")
     private String accountKey;
     /**
      * Proxy host if to use proxy.
