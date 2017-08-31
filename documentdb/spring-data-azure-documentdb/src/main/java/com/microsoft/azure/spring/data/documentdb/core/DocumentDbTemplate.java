@@ -115,7 +115,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                 return null;
             }
         } catch (DocumentClientException e) {
-            if (e.getStatusCode() == HttpConstants.StatusCodes.NOTFOUND){
+            if (e.getStatusCode() == HttpConstants.StatusCodes.NOTFOUND) {
                 return null;
             }
 
