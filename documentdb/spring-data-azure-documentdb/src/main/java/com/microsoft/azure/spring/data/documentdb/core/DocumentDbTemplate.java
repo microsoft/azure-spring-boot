@@ -55,7 +55,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         this.documentDbFactory = documentDbFactory;
         this.mappingDocumentDbConverter = mappingDocumentDbConverter;
         this.mappingContext = mappingDocumentDbConverter.getMappingContext();
-        this.collectionCache = new ArrayList<String>();
+        this.collectionCache = new ArrayList<>();
     }
 
     public DocumentDbTemplate(DocumentClient client,
@@ -211,7 +211,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                         "SELECT * FROM c", null)
                 .getQueryIterable().toList();
 
-        final List<T> entities = new ArrayList<T>();
+        final List<T> entities = new ArrayList<>();
 
         for (int i = 0; i < results.size(); i++) {
             final T entity = mappingDocumentDbConverter.read(entityClass, results.get(i));
@@ -232,7 +232,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                             new SqlParameterCollection(new SqlParameter("@id", dbName))), null)
                     .getQueryIterable().toList();
 
-            if (dbList.size() > 0) {
+            if (!dbList.isEmpty()) {
                 return dbList.get(0);
             } else {
                 // create new database
@@ -297,7 +297,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                                 new SqlParameterCollection(new SqlParameter("@id", collectionName))), null)
                 .getQueryIterable().toList();
 
-        if (collectionList.size() > 0) {
+        if (!collectionList.isEmpty()) {
             return collectionList.get(0);
         } else {
             final RequestOptions requestOptions = new RequestOptions();

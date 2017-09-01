@@ -48,7 +48,7 @@ public class DocumentDbRepositoryConfigurationExtension extends RepositoryConfig
 
     @Override
     protected Collection<Class<? extends Annotation>> getIdentifyingAnnotations() {
-        return null;
+        return Collections.emptyList();
     }
 
 

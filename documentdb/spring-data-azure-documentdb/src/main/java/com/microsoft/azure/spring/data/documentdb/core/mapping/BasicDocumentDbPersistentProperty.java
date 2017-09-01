@@ -8,7 +8,6 @@ package com.microsoft.azure.spring.data.documentdb.core.mapping;
 
 import org.springframework.data.mapping.Association;
 import org.springframework.data.mapping.model.AnnotationBasedPersistentProperty;
-import org.springframework.data.mapping.model.FieldNamingStrategy;
 import org.springframework.data.mapping.model.SimpleTypeHolder;
 
 import java.beans.PropertyDescriptor;
@@ -22,14 +21,13 @@ public class BasicDocumentDbPersistentProperty extends AnnotationBasedPersistent
 
     public BasicDocumentDbPersistentProperty(Field field, PropertyDescriptor propertyDescriptor,
                                              DocumentDbPersistentEntity<?> owner,
-                                             SimpleTypeHolder simpleTypeHolder,
-                                             FieldNamingStrategy fieldNamingStrategy) {
+                                             SimpleTypeHolder simpleTypeHolder) {
         super(field, propertyDescriptor, owner, simpleTypeHolder);
     }
 
     @Override
     protected Association<DocumentDbPersistentProperty> createAssociation() {
-        return new Association<DocumentDbPersistentProperty>(this, null);
+        return new Association<>(this, null);
     }
 
     @Override

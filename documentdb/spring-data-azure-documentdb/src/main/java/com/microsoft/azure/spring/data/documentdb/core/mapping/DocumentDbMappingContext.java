@@ -6,11 +6,9 @@
 
 package com.microsoft.azure.spring.data.documentdb.core.mapping;
 
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.mapping.context.AbstractMappingContext;
-import org.springframework.data.mapping.model.PropertyNameFieldNamingStrategy;
 import org.springframework.data.mapping.model.SimpleTypeHolder;
 import org.springframework.data.util.TypeInformation;
 
@@ -26,7 +24,7 @@ public class DocumentDbMappingContext
 
     @Override
     protected <T> BasicDocumentDbPersistentEntity<T> createPersistentEntity(TypeInformation<T> typeInformation) {
-        final BasicDocumentDbPersistentEntity<T> entity = new BasicDocumentDbPersistentEntity<T>(typeInformation);
+        final BasicDocumentDbPersistentEntity<T> entity = new BasicDocumentDbPersistentEntity<>(typeInformation);
 
         if (context != null) {
             entity.setApplicationContext(context);
@@ -39,11 +37,11 @@ public class DocumentDbMappingContext
                                                                  BasicDocumentDbPersistentEntity<?> owner,
                                                                  SimpleTypeHolder simpleTypeHolder) {
         return new BasicDocumentDbPersistentProperty(field, propertyDescriptor, owner,
-                simpleTypeHolder, PropertyNameFieldNamingStrategy.INSTANCE);
+                simpleTypeHolder);
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(ApplicationContext applicationContext) {
         this.context = applicationContext;
     }
 }

@@ -9,7 +9,6 @@ import com.microsoft.azure.documentdb.Document;
 import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbPersistentEntity;
 import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbPersistentProperty;
 import org.apache.commons.lang3.ClassUtils;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.convert.ConversionService;
@@ -105,7 +104,7 @@ public class MappingDocumentDbConverter
         }
 
         for (final Field field : entity.getClass().getDeclaredFields()) {
-            if (field.getName().equals(idProperty.getName())) {
+            if (null != idProperty && field.getName().equals(idProperty.getName())) {
                 continue;
             }
             targetDocument.set(field.getName(),
@@ -118,7 +117,7 @@ public class MappingDocumentDbConverter
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
@@ -141,7 +140,7 @@ public class MappingDocumentDbConverter
     private <T> T instantiate(Class<T> tClass) {
         try {
             final Constructor<T> constructor = (Constructor<T>) tClass.getConstructors()[0];
-            final List<Object> params = new ArrayList<Object>();
+            final List<Object> params = new ArrayList<>();
             for (final Class<?> paramType : constructor.getParameterTypes()) {
                 params.add((paramType.isPrimitive()) ? ClassUtils.primitiveToWrapper(paramType).newInstance() : null);
             }

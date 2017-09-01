@@ -13,7 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 
-public class AbstractMicrosoftApiTest {
+public abstract class AbstractMicrosoftApiTest {
     protected MicrosoftTemplate microsoft;
     protected MockRestServiceServer mockServer;
     protected HttpHeaders responseHeaders;
