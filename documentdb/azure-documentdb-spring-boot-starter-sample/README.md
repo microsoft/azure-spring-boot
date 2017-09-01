@@ -31,6 +31,17 @@ This sample project demonstrates how to use Azure DocumentDB via Spring Boot Sta
 mvn package
 java -jar target/azure-ducumentdb-spring-boot-starter-sample-0.0.1-SNAPSHOT.jar
 ```
+### Known issue
+
+Directly running the sample app from IDE IntelliJ or Eclipse has below security exception if using our *released* starters. The root cause
+ is that the release jars are signed. We're working actively to resolve this issue. 
+
+```
+Caused by: java.lang.SecurityException: class "com.microsoft.azure.sample.User_Accessor_yhb3bq"'s signer information does not match signer information of other classes in the same package
+	at java.lang.ClassLoader.checkCerts(ClassLoader.java:898) ~[na:1.8.0_131]
+	at java.lang.ClassLoader.preDefineClass(ClassLoader.java:668) ~[na:1.8.0_131]
+	at java.lang.ClassLoader.defineClass(ClassLoader.java:761) ~[na:1.8.0_131]
+```
 
 ### More details
 
