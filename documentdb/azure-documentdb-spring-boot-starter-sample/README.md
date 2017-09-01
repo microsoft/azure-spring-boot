@@ -33,8 +33,8 @@ java -jar target/azure-ducumentdb-spring-boot-starter-sample-0.0.1-SNAPSHOT.jar
 ```
 ### Known issue
 
-Directly running the sample app from IDE IntelliJ or Eclipse has below security exception if using our *released* starters. The root cause
- is that the release jars are signed. We're working actively to resolve this issue. 
+Directly running the sample app from IDE IntelliJ or Eclipse has below security exception if using the *released* starter. The root cause
+ is that the release `spring-data-azure-documentdb` jar is code-signed by us. We're working actively to resolve this issue. 
 
 ```
 Caused by: java.lang.SecurityException: class "com.microsoft.azure.sample.User_Accessor_yhb3bq"'s signer information does not match signer information of other classes in the same package
