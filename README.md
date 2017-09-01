@@ -17,14 +17,16 @@ This repo is for Spring Boot Starters of Azure services. It helps Spring Boot de
 
 Below starters are available. You can find them in [Maven Central Repository](https://search.maven.org/).
 
-- [azure-ad-integration-spring-boot-starter](activedirectory/azure-ad-integration-spring-boot-starter/README.md)
-- [azure-cloud-foundry-service](cloudfoundry/azure-cloud-foundry-service/README.md)
-- [azure-documentdb-spring-boot-starter](documentdb/azure-documentdb-spring-boot-starter/README.md)
-- [azure-keyvault-secrets-spring-boot-starter](keyvault/azure-keyvault-secrets-spring-boot-starter/README.md)
-- [azure-mediaservices-spring-boot-starter](mediaservices/azure-mediaservices-spring-boot-starter/README.md)
-- [microsoft-graph-spring-social-starter](microsoft-graph/microsoft-graph-spring-social-starter-sample/README.md)
-- [azure-servicebus-spring-boot-starter](servicebus/azure-servicebus-spring-boot-starter/README.md)
-- [azure-storage-spring-boot-starter](storage/azure-storage-spring-boot-starter/README.md)
+Starter Name | Version
+---|---
+[azure-ad-integration-spring-boot-starter](activedirectory/azure-ad-integration-spring-boot-starter/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.microsoft.azure/azure-ad-integration-spring-boot-starter.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.microsoft.azure%22%20AND%20a%3A%22azure-ad-integration-spring-boot-starter%22)
+[azure-cloud-foundry-service](cloudfoundry/azure-cloud-foundry-service/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.microsoft.azure/azure-cloud-foundry-service.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.microsoft.azure%22%20AND%20a%3A%22azure-cloud-foundry-service%22)
+[azure-documentdb-spring-boot-starter](documentdb/azure-documentdb-spring-boot-starter/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.microsoft.azure/azure-documentdb-spring-boot-starter.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.microsoft.azure%22%20AND%20a%3A%22azure-documentdb-spring-boot-starter%22)
+[azure-keyvault-secrets-spring-boot-starter](keyvault/azure-keyvault-secrets-spring-boot-starter/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.microsoft.azure/azure-keyvault-secrets-spring-boot-starter.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.microsoft.azure%22%20AND%20a%3A%22azure-keyvault-secrets-spring-boot-starter%22)
+[azure-mediaservices-spring-boot-starter](mediaservices/azure-mediaservices-spring-boot-starter/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.microsoft.azure/azure-mediaservices-spring-boot-starter.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.microsoft.azure%22%20AND%20a%3A%22azure-mediaservices-spring-boot-starter%22)
+[microsoft-graph-spring-social-starter](microsoft-graph/microsoft-graph-spring-social-starter-sample/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.microsoft.azure/microsoft-graph-spring-social-starter.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.microsoft.azure%22%20AND%20a%3A%22microsoft-graph-spring-social-starter%22)
+[azure-servicebus-spring-boot-starter](servicebus/azure-servicebus-spring-boot-starter/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.microsoft.azure/azure-servicebus-spring-boot-starter.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.microsoft.azure%22%20AND%20a%3A%22azure-servicebus-spring-boot-starter%22)
+[azure-storage-spring-boot-starter](storage/azure-storage-spring-boot-starter/README.md) | [![Maven Central](https://img.shields.io/maven-central/v/com.microsoft.azure/azure-storage-spring-boot-starter.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.microsoft.azure%22%20AND%20a%3A%22azure-storage-spring-boot-starter%22)
 
 
 ### How to Build and Contribute
