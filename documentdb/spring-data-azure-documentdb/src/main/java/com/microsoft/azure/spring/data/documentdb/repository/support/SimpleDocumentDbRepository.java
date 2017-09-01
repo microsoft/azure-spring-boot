@@ -102,7 +102,7 @@ public class SimpleDocumentDbRepository<T, ID extends Serializable> implements D
 
     @Override
     public boolean exists(ID primaryKey) {
-        throw new UnsupportedOperationException("exists not supported yet.");
+        return findOne(primaryKey) != null;
     }
 
 }
