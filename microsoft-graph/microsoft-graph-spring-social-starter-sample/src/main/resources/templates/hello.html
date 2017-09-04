@@ -1,6 +1,11 @@
 <html>
 <head>
     <title>Hello Microsoft Graph</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
 <table>
@@ -47,6 +52,10 @@
     <tr>
         <th>User Principal Name</th>
         <td th:text="${user.userPrincipalName}"/>
+    </tr>
+    <tr>
+        <th>Messages</th>
+        <td><a href="/messages.html">click here</a></td>
     </tr>
     <tr>
         <th>Contacts</th>

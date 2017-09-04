@@ -37,6 +37,17 @@ public class HelloController {
         return "hello";
     }
 
+    @RequestMapping("/messages")
+    public String getMessages(Model model) {
+        if (connectionRepository.findPrimaryConnection(Microsoft.class) == null) {
+            return "redirect:/connect/microsoft";
+        }
+
+        model.addAttribute("messages", microsoft.mailOperations().listMessages().getValue());
+
+        return "messages";
+    }
+
     @RequestMapping("/contacts")
     public String getContacts(Model model) {
         if (connectionRepository.findPrimaryConnection(Microsoft.class) == null) {
