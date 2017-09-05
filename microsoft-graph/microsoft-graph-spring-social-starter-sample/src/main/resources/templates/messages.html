@@ -10,12 +10,12 @@
 <body>
 <table>
     <tr>
-        <th>Name</th>
-        <th>Phone</th>
+        <th>Subject</th>
+        <th>Body Preview</th>
     </tr>
-    <tr th:each="contact : ${contacts}">
-        <td th:text="${contact.getDisplayName()}"/>
-        <td th:text="${contact.getMobilePhone()}"/>
+    <tr th:each="message : ${messages}">
+        <td th:text="${message.getSubject()}"/>
+        <td th:text="${message.getBodyPreview()}"/>
     </tr>
 </table>
 </body>

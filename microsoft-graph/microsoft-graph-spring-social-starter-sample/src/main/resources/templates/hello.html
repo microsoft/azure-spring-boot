@@ -1,6 +1,11 @@
 <html>
 <head>
     <title>Hello Microsoft Graph</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
 <table>
@@ -49,9 +54,21 @@
         <td th:text="${user.userPrincipalName}"/>
     </tr>
     <tr>
+        <th>Messages</th>
+        <td><a href="/messages.html">click here</a></td>
+    </tr>
+    <tr>
         <th>Contacts</th>
         <td><a href="/contacts.html">click here</a></td>
     </tr>
 </table>
+
+<form action="/connect/microsoft" method="POST">
+    <input type="hidden" name="_method" value="DELETE"/>
+    <p>
+        <button type="submit">Logout</button>
+    </p>
+</form>
+
 </body>
 </html>
