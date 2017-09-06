@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.domain.EntityScanner;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -29,6 +30,7 @@ import org.springframework.data.annotation.Persistent;
 
 @Configuration
 @ConditionalOnClass({DocumentClient.class, DocumentDbTemplate.class})
+@ConditionalOnProperty(prefix = "azure.documentdb", value = {"uri", "key"})
 @EnableConfigurationProperties(DocumentDBProperties.class)
 public class DocumentDBAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(DocumentDBAutoConfiguration.class);
@@ -78,6 +80,7 @@ public class DocumentDBAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = "azure.documentdb", value = "database")
     public DocumentDbTemplate documentDbTemplate(DocumentDbFactory documentDbFactory,
                                                  MappingDocumentDbConverter mappingDocumentDbConverter) {
         return new DocumentDbTemplate(documentDbFactory, mappingDocumentDbConverter,
