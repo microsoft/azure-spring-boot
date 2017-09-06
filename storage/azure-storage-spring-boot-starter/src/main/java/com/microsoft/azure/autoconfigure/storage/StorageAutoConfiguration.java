@@ -10,6 +10,7 @@ import com.microsoft.azure.storage.CloudStorageAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ import java.security.InvalidKeyException;
 @Configuration
 @ConditionalOnMissingBean(CloudStorageAccount.class)
 @EnableConfigurationProperties(StorageProperties.class)
+@ConditionalOnProperty(prefix = "azure.storage", value = "connection-string")
 public class StorageAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(StorageAutoConfiguration.class);
 

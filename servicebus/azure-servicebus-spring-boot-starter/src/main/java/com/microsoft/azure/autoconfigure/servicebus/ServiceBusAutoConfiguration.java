@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties(ServiceBusProperties.class)
+@ConditionalOnProperty(prefix = "azure.servicebus", value = "connection-string")
 public class ServiceBusAutoConfiguration {
 
     private final ServiceBusProperties properties;
