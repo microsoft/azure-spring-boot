@@ -6,8 +6,8 @@
 
 package com.microsoft.azure.msgraph.sample;
 
-import com.microsoft.azure.msgraph.sample.custom.Contacts;
 import com.microsoft.azure.msgraph.api.Microsoft;
+import com.microsoft.azure.msgraph.sample.custom.Contacts;
 import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
