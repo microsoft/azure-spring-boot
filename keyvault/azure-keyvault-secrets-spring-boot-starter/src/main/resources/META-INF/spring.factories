@@ -1,1 +1,2 @@
-org.springframework.context.ApplicationContextInitializer=com.microsoft.azure.keyvault.spring.boot.KeyVaultPropertyInitializer
+org.springframework.boot.env.EnvironmentPostProcessor=\
+com.microsoft.azure.keyvault.spring.boot.KeyVaultPropertyEnvironmentPostProcessor
