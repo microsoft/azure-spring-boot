@@ -21,6 +21,11 @@ public class KeyVaultPropertyInitializer implements ApplicationContextInitialize
 
         final ConfigurableEnvironment env = ctx.getEnvironment();
 
+        if (env.getProperty(Constants.AZURE_CLIENTID) == null) {
+            // User doesn't want to enable Key Vault property initializer.
+            return;
+        }
+
         final String clientId = getProperty(env, Constants.AZURE_CLIENTID);
         final String clientKey = getProperty(env, Constants.AZURE_CLIENTKEY);
         final String vaultUri = getProperty(env, Constants.AZURE_KEYVAULT_VAULT_URI);
