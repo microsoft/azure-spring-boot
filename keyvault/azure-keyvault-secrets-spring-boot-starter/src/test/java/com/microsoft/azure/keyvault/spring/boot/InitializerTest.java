@@ -20,7 +20,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.junit.Assert.assertFalse;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(initializers = KeyVaultPropertyInitializer.class)
 @TestPropertySource(locations = "classpath:application.properties")
 public class InitializerTest {
 
