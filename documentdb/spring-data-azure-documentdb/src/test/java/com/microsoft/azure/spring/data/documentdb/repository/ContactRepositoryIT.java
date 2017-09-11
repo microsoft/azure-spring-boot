@@ -87,4 +87,16 @@ public class ContactRepositoryIT {
         assertThat(result.get(0).getLogicId()).isEqualTo(TEST_CONTACT.getLogicId());
         assertThat(result.get(0).getTitle()).isEqualTo(TEST_CONTACT.getTitle());
     }
+
+    @Test
+    public void testUpdateEntity() {
+        final Contact updatedContact = new Contact(TEST_CONTACT.getLogicId(), "updated");
+
+        repository.update(updatedContact);
+
+        final Contact contact = repository.findOne(TEST_CONTACT.getLogicId());
+
+        assertThat(contact.getLogicId()).isEqualTo(updatedContact.getLogicId());
+        assertThat(contact.getTitle()).isEqualTo(updatedContact.getTitle());
+    }
 }

@@ -64,4 +64,17 @@ public class SimpleDocumentDbRepositoryUnitTest {
         assertEquals(result.getLastName(), TEST_PERSON.getLastName());
     }
 
+    @Test
+    public void testUpdate() {
+        final Person updatedPerson = new Person(TEST_PERSON.getId(), "updated", "updated");
+        repository.update(updatedPerson);
+
+        when(dbOperations.findById(anyString(), anyObject(), any())).thenReturn(updatedPerson);
+
+        final Person result = repository.findOne(TEST_PERSON.getId());
+
+        assertEquals(result.getId(), updatedPerson.getId());
+        assertEquals(result.getFirstName(), updatedPerson.getFirstName());
+        assertEquals(result.getLastName(), updatedPerson.getLastName());
+    }
 }
