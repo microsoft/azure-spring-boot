@@ -29,9 +29,9 @@ public interface DocumentDbOperations {
 
     <T> T insert(String collectionName, T objectToSave);
 
-    <T> void update(T object);
+    <T> void update(T object, String id);
 
-    <T> void update(String collectionName, T object);
+    <T> void update(String collectionName, T object, String id);
 
     void deleteById(String collectionName, Object id);
 

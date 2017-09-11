@@ -17,5 +17,7 @@ public interface DocumentDbRepository<T, ID extends Serializable> extends Paging
 
     @Override
     List<T> findAll();
+
+    void update(T entity);
 }
 

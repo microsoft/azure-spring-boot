@@ -105,4 +105,10 @@ public class SimpleDocumentDbRepository<T, ID extends Serializable> implements D
         return findOne(primaryKey) != null;
     }
 
+    @Override
+    public void update(T entity) {
+        documentDbOperations.update(entityInformation.getCollectionName(), entity,
+                ((String) entityInformation.getId(entity)));
+    }
+
 }

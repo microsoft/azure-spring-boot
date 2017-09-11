@@ -6,16 +6,7 @@
 
 package com.microsoft.azure.spring.data.documentdb.core;
 
-import com.microsoft.azure.documentdb.Database;
-import com.microsoft.azure.documentdb.Document;
-import com.microsoft.azure.documentdb.DocumentClient;
-import com.microsoft.azure.documentdb.DocumentClientException;
-import com.microsoft.azure.documentdb.DocumentCollection;
-import com.microsoft.azure.documentdb.RequestOptions;
-import com.microsoft.azure.documentdb.Resource;
-import com.microsoft.azure.documentdb.SqlParameter;
-import com.microsoft.azure.documentdb.SqlParameterCollection;
-import com.microsoft.azure.documentdb.SqlQuerySpec;
+import com.microsoft.azure.documentdb.*;
 import com.microsoft.azure.documentdb.internal.HttpConstants;
 import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
 import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
@@ -28,9 +19,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.util.Assert;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,21 +112,12 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         }
     }
 
-    public <T> void update(T object) {
-        update(getCollectionName(object.getClass()), object);
+    public <T> void update(T object, String id) {
+        update(getCollectionName(object.getClass()), object, id);
     }
 
 
-    public <T> void update(String collectionName, T object) {
-        final Field idField = ReflectionUtils.findField(object.getClass(), "id");
-
-        final String id;
-        try {
-            ReflectionUtils.makeAccessible(idField);
-            id = idField.get(object).toString();
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+    public <T> void update(String collectionName, T object, String id) {
 
         try {
             final Resource resource = documentDbFactory.getDocumentClient()
