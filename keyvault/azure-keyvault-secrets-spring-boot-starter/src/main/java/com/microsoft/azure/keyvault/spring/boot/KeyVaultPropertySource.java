@@ -12,9 +12,9 @@ public class KeyVaultPropertySource extends EnumerablePropertySource<KeyVaultOpe
 
     private final KeyVaultOperation operations;
 
-    public KeyVaultPropertySource(KeyVaultOperation operations) {
-        super(Constants.AZURE_KEYVAULT_PROPERTYSOURCE_NAME, operations);
-        this.operations = operations;
+    public KeyVaultPropertySource(KeyVaultOperation operation) {
+        super(Constants.AZURE_KEYVAULT_PROPERTYSOURCE_NAME, operation);
+        this.operations = operation;
     }
 
 
