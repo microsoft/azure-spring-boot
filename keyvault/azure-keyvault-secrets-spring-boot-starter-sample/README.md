@@ -54,8 +54,8 @@ Open `application.properties` file and add below properties to specify your Azur
 
 ```
 azure.keyvault.uri=put-your-azure-keyvault-uri-here
-azure.client-id=put-your-azure-client-id-here
-azure.client-key=put-your-azure-client-key-here
+azure.keyvault.client-id=put-your-azure-client-id-here
+azure.keyvault.client-key=put-your-azure-client-key-here
 ```
 
 ## Get Key Vault secret value as property
