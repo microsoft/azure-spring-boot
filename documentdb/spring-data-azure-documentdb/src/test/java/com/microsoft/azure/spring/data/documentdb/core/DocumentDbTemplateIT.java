@@ -105,7 +105,7 @@ public class DocumentDbTemplateIT {
     public void testUpdate() {
         final Person updated = new Person(TEST_PERSON.getId(), "updatedname",
                 TEST_PERSON.getLastName());
-        dbTemplate.update(Person.class.getSimpleName(), updated);
+        dbTemplate.update(Person.class.getSimpleName(), updated, updated.getId());
 
         final Person result = dbTemplate.findById(Person.class.getSimpleName(), updated.getId(), Person.class);
 
