@@ -46,7 +46,7 @@ public class KeyVaultOperation {
 
     public Object get(String secretName) {
         // NOTE: azure keyvault secret name convention: ^[0-9a-zA-Z-]+$ "." is not allowed
-        secretName = secretName.replace(".", "-");
+        final String localSecretName = secretName.replace(".", "-");
 
         // refresh periodically
         if (System.currentTimeMillis() - lastUpdateTime.get() > CACHE_REFRESH_INTERVAL_IN_MS) {
@@ -59,7 +59,7 @@ public class KeyVaultOperation {
         }
 
         if (propertyNamesHashMap.containsKey(secretName)) {
-            final SecretBundle secretBundle = keyVaultClient.getSecret(vaultUri, secretName);
+            final SecretBundle secretBundle = keyVaultClient.getSecret(vaultUri, localSecretName);
             return secretBundle.value();
 
         } else {
@@ -80,7 +80,8 @@ public class KeyVaultOperation {
             final PagedList<SecretItem> secrets = keyVaultClient.listSecrets(vaultUri);
             secrets.loadAll();
             for (final SecretItem secret : secrets) {
-                propertyNamesHashMap.putIfAbsent(secret.id().replaceFirst(vaultUri + "/secrets/", ""), secret.id());
+                propertyNamesHashMap.putIfAbsent(secret.id().replaceFirst(vaultUri + "/secrets/", "")
+                        .replaceAll("-", "."), secret.id());
             }
             lastUpdateTime.set(System.currentTimeMillis());
         } finally {
