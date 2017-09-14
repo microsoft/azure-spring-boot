@@ -5,17 +5,10 @@
  */
 package com.microsoft.azure.spring.data.documentdb.core.mapping;
 
-import org.springframework.data.annotation.Persistent;
-
 import java.lang.annotation.*;
 
-@Persistent
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-public @interface Document {
-
-    String collection() default "";
-
-    String ru() default "4000";
+@Target({ElementType.FIELD})
+public @interface PartitionKey {
 }

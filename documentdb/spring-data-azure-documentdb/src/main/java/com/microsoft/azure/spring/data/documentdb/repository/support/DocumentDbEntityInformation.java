@@ -7,6 +7,7 @@
 package com.microsoft.azure.spring.data.documentdb.repository.support;
 
 import com.microsoft.azure.spring.data.documentdb.core.mapping.Document;
+import com.microsoft.azure.spring.data.documentdb.core.mapping.PartitionKey;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.repository.core.support.AbstractEntityInformation;
@@ -21,7 +22,9 @@ public class DocumentDbEntityInformation<T, ID extends Serializable>
         extends AbstractEntityInformation<T, ID> {
 
     private Field id;
+    private Field partitionKeyField;
     private String collectionName;
+    private Integer requestUnit;
 
     public DocumentDbEntityInformation(Class<T> domainClass) {
         super(domainClass);
@@ -31,7 +34,13 @@ public class DocumentDbEntityInformation<T, ID extends Serializable>
             ReflectionUtils.makeAccessible(this.id);
         }
 
-        this.collectionName = getCustomCollection(domainClass);
+        this.collectionName = getCollectionName(domainClass);
+        this.partitionKeyField = getPartitionKeyField(domainClass);
+        if (this.partitionKeyField != null) {
+            ReflectionUtils.makeAccessible(this.partitionKeyField);
+        }
+
+        this.requestUnit = getRequestUnit(domainClass);
     }
 
 
@@ -45,6 +54,18 @@ public class DocumentDbEntityInformation<T, ID extends Serializable>
 
     public String getCollectionName() {
         return this.collectionName;
+    }
+
+    public Integer getRequestUint() {
+        return this.requestUnit;
+    }
+
+    public String getPartitionKeyFieldName() {
+        return partitionKeyField == null ? null : partitionKeyField.getName();
+    }
+
+    public String getPartitionKeyFieldValue(T entity) {
+        return partitionKeyField == null ? null : (String) ReflectionUtils.getField(partitionKeyField, entity);
     }
 
     private Field getIdField(Class<?> domainClass) {
@@ -66,7 +87,7 @@ public class DocumentDbEntityInformation<T, ID extends Serializable>
         return idField;
     }
 
-    private String getCustomCollection(Class<?> domainClass) {
+    private String getCollectionName(Class<?> domainClass) {
         String customCollectionName = domainClass.getSimpleName();
 
         final Document annotation = domainClass.getAnnotation(Document.class);
@@ -76,5 +97,33 @@ public class DocumentDbEntityInformation<T, ID extends Serializable>
         }
 
         return customCollectionName;
+    }
+
+    private Field getPartitionKeyField(Class<?> domainClass) {
+        Field partitionKeyField = null;
+
+        final List<Field> fields = FieldUtils.getFieldsListWithAnnotation(domainClass, PartitionKey.class);
+
+        if (fields.size() == 1) {
+            partitionKeyField = fields.get(0);
+        } else if (fields.size() > 1) {
+            throw new IllegalArgumentException("Azure Cosmos DB supports only one partition key, " +
+                    "only one field with @PartitionKey annotation!");
+        }
+
+        if (partitionKeyField != null && partitionKeyField.getType() != String.class) {
+            throw new IllegalArgumentException("type of PartitionKey field must be String");
+        }
+        return partitionKeyField;
+    }
+
+    private Integer getRequestUnit(Class<?> domainClass) {
+        Integer ru = 4000;
+        final Document annotation = domainClass.getAnnotation(Document.class);
+
+        if (annotation != null && annotation.ru() != null && !annotation.ru().isEmpty()) {
+            ru = Integer.parseInt(annotation.ru());
+        }
+        return ru;
     }
 }

@@ -5,12 +5,16 @@
  */
 package com.microsoft.azure.spring.data.documentdb.domain;
 
+import com.microsoft.azure.spring.data.documentdb.core.mapping.Document;
+import com.microsoft.azure.spring.data.documentdb.core.mapping.PartitionKey;
 import org.springframework.data.annotation.Id;
 
+@Document(ru = "1000")
 public class Address {
     @Id
     String postalCode;
     String street;
+    @PartitionKey
     String city;
 
     public Address(String postalCode, String city, String street) {

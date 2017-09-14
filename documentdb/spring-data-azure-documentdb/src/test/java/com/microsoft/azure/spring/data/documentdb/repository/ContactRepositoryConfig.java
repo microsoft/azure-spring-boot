@@ -31,6 +31,6 @@ public class ContactRepositoryConfig extends AbstractDocumentDbConfiguration {
 
     @Override
     public String getDatabase() {
-        return "contact";
+        return "itdb";
     }
 }
