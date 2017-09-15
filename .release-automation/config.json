@@ -1,0 +1,46 @@
+{
+    "releaseVersion" : "0.1.8",
+    "moduleNames": [
+        "azure-spring-boot-starter-parent",
+        "azure-spring-boot-starter-bom",
+        "azure-spring-common",
+        "azure-ad-integration-spring-boot-starter",
+        "spring-data-azure-documentdb",
+        "azure-documentdb-spring-boot-autoconfigure",
+        "azure-documentdb-spring-boot-starter",
+        "azure-storage-spring-boot-starter",
+        "azure-servicebus-spring-boot-starter",
+        "azure-mediaservices-spring-boot-starter",
+        "spring-social-microsoft-graph",
+        "microsoft-graph-spring-boot-autoconfigure",
+        "microsoft-graph-spring-social-starter",
+        "azure-keyvault-secrets-spring-boot-starter",
+        "azure-cloud-foundry-service"
+    ],
+    "srcFolder": "",
+    "targetFolder": "D:/Signed",
+    "toSignFolder": "//ADXInfra1/ToSign/",
+    "signedFilder": "//ADXInfra1/Signed",
+    "jenkins": {
+        "url": "http://azuresdkci.cloudapp.net/",
+        "username": "ZhijunZhao",
+        "signJar" : {
+            "Description": "Spring Boot Starters for Azure services",
+            "Keywords": "azure,starters"
+        }
+    },
+    "nexus": {
+        "username": "zhijzhao",
+        "stagingRepoDescription": "<promoteRequest><data><description>Spring Boot Starters for Azure Services</description></data></promoteRequest>",
+        "createRepoURL": "https://oss.sonatype.org/service/local/staging/profiles/534d15ee3800f4/start",
+        "closeRepoURL": "https://oss.sonatype.org/service/local/staging/profiles/534d15ee3800f4/finish",
+        "deployRepoURL": "https://oss.sonatype.org/service/local/staging/deployByRepositoryId",
+        "repoBaseURL": "https://oss.sonatype.org/service/local/staging/repository",
+        "deployGroupPath": "com/microsoft/azure"
+    },
+    "passwords": {
+        "jenkins": "",
+        "gpg": "",
+        "nexus": ""
+    }
+}
