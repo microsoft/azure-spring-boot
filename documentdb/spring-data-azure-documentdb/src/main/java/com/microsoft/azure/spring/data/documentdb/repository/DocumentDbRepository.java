@@ -19,5 +19,15 @@ public interface DocumentDbRepository<T, ID extends Serializable> extends Paging
     List<T> findAll();
 
     void update(T entity);
+
+    List<T> findAll(String partitionKeyValue);
+
+    T findOne(ID id, String partitionKeyValue);
+
+    void delete(ID id, String partitionKeyValue);
+
+    void delete(T entity, String partitionKeyValue);
+
+    void update(T entity, String partitionKeyValue);
 }
 

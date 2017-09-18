@@ -54,16 +54,19 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         this(new DocumentDbFactory(client), mappingDocumentDbConverter, dbName);
     }
 
-
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
     }
 
-    public <T> T insert(T objectToSave) {
-        return insert(getCollectionName(objectToSave.getClass()), objectToSave);
+    public <T> T insert(T objectToSave, String partitionKeyFieldValue) {
+        return insert(getCollectionName(objectToSave.getClass()),
+                objectToSave,
+                partitionKeyFieldValue);
     }
 
 
-    public <T> T insert(String collectionName, T objectToSave) {
+    public <T> T insert(String collectionName,
+                        T objectToSave,
+                        String partitionKeyFieldValue) {
         final Document document = new Document();
         mappingDocumentDbConverter.write(objectToSave, document);
 
@@ -73,29 +76,33 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         }
 
         try {
-            if (!this.collectionCache.contains(collectionName)) {
-                createCollectionIfNotExists(this.databaseName, collectionName);
-                this.collectionCache.add(collectionName);
-            }
-
             documentDbFactory.getDocumentClient()
-                    .createDocument(getCollectionLink(this.databaseName, collectionName), document, null, false);
+                    .createDocument(getCollectionLink(this.databaseName, collectionName), document,
+                            getRequestOptions(partitionKeyFieldValue, null), false);
             return objectToSave;
         } catch (DocumentClientException e) {
             throw new RuntimeException("insert exception", e);
         }
     }
 
-    public <T> T findById(Object id, Class<T> entityClass) {
-        return findById(getCollectionName(entityClass), id, entityClass);
+    public <T> T findById(Object id,
+                          Class<T> entityClass,
+                          String partitionKeyFieldValue) {
+        return findById(getCollectionName(entityClass),
+                id,
+                entityClass,
+                partitionKeyFieldValue);
     }
 
-    public <T> T findById(String collectionName, Object id, Class<T> entityClass) {
+    public <T> T findById(String collectionName,
+                          Object id,
+                          Class<T> entityClass,
+                          String partitionKeyFieldValue) {
+
         try {
             final Resource resource = documentDbFactory.getDocumentClient()
-                    .readDocument(
-                            getDocumentLink(this.databaseName, collectionName, id.toString()), null)
-                    .getResource();
+                    .readDocument(getDocumentLink(this.databaseName, collectionName, (String) id),
+                            getRequestOptions(partitionKeyFieldValue, null)).getResource();
 
             if (resource instanceof Document) {
                 final Document document = (Document) resource;
@@ -112,16 +119,17 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         }
     }
 
-    public <T> void update(T object, String id) {
-        update(getCollectionName(object.getClass()), object, id);
+    public <T> void update(T object, String id, String partitionKeyFieldValue) {
+        update(getCollectionName(object.getClass()), object, id, partitionKeyFieldValue);
     }
 
 
-    public <T> void update(String collectionName, T object, String id) {
+    public <T> void update(String collectionName, T object, String id, String partitionKeyFieldValue) {
 
         try {
             final Resource resource = documentDbFactory.getDocumentClient()
-                    .readDocument(getDocumentLink(this.databaseName, collectionName, id), null)
+                    .readDocument(getDocumentLink(this.databaseName, collectionName, id),
+                            getRequestOptions(partitionKeyFieldValue, null))
                     .getResource();
 
             if (resource instanceof Document) {
@@ -137,7 +145,7 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                 documentDbFactory.getDocumentClient().replaceDocument(
                         originalDoc.getSelfLink(),
                         originalDoc,
-                        null);
+                        getRequestOptions(partitionKeyFieldValue, null));
             } else {
                 LOGGER.error("invalid Document to update {}", resource.getSelfLink());
                 throw new RuntimeException("invalid Document to update " + resource.getSelfLink());
@@ -147,8 +155,53 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         }
     }
 
-    public <T> List<T> findAll(Class<T> entityClass) {
-        return findAll(getCollectionName(entityClass), entityClass);
+    public <T> List<T> findAll(Class<T> entityClass,
+                               String partitionKeyFieldName,
+                               String partitionKeyFieldValue) {
+        return findAll(getCollectionName(entityClass),
+                entityClass,
+                partitionKeyFieldName,
+                partitionKeyFieldValue);
+    }
+
+
+    public <T> List<T> findAll(String collectionName,
+                               final Class<T> entityClass,
+                               String partitionKeyFieldName,
+                               String partitionKeyFieldValue) {
+        final List<DocumentCollection> collections = documentDbFactory.getDocumentClient().
+                queryCollections(
+                        getDatabaseLink(this.databaseName),
+                        new SqlQuerySpec("SELECT * FROM ROOT r WHERE r.id=@id",
+                                new SqlParameterCollection(new SqlParameter("@id", collectionName))), null)
+                .getQueryIterable().toList();
+
+        if (collections.size() != 1) {
+            throw new RuntimeException("expect only one collection: " + collectionName
+                    + " in database: " + this.databaseName + ", but found " + collections.size());
+        }
+
+        SqlQuerySpec sqlQuerySpec = new SqlQuerySpec("SELECT * FROM root c");
+        if (partitionKeyFieldName != null && !partitionKeyFieldName.isEmpty()) {
+            sqlQuerySpec = new SqlQuerySpec("SELECT * FROM root c WHERE c." + partitionKeyFieldName + "=@partition",
+                    new SqlParameterCollection(new SqlParameter("@partition", partitionKeyFieldValue)));
+        }
+
+        final FeedOptions feedOptions = new FeedOptions();
+        feedOptions.setEnableCrossPartitionQuery(true);
+        final List<Document> results = documentDbFactory.getDocumentClient()
+                .queryDocuments(collections.get(0).getSelfLink(),
+                        sqlQuerySpec, feedOptions)
+                .getQueryIterable().toList();
+
+        final List<T> entities = new ArrayList<>();
+
+        for (int i = 0; i < results.size(); i++) {
+            final T entity = mappingDocumentDbConverter.read(entityClass, results.get(i));
+            entities.add(entity);
+        }
+
+        return entities;
     }
 
     public void deleteAll(String collectionName) {
@@ -171,34 +224,6 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
                 throw new RuntimeException("deleteAll exception", ex);
             }
         }
-    }
-
-    public <T> List<T> findAll(String collectionName, final Class<T> entityClass) {
-        final List<DocumentCollection> collections = documentDbFactory.getDocumentClient().
-                queryCollections(
-                        getDatabaseLink(this.databaseName),
-                        new SqlQuerySpec("SELECT * FROM ROOT r WHERE r.id=@id",
-                                new SqlParameterCollection(new SqlParameter("@id", collectionName))), null)
-                .getQueryIterable().toList();
-
-        if (collections.size() != 1) {
-            throw new RuntimeException("expect only one collection: " + collectionName
-                    + " in database: " + this.databaseName + ", but found " + collections.size());
-        }
-
-        final List<Document> results = documentDbFactory.getDocumentClient()
-                .queryDocuments(collections.get(0).getSelfLink(),
-                        "SELECT * FROM c", null)
-                .getQueryIterable().toList();
-
-        final List<T> entities = new ArrayList<>();
-
-        for (int i = 0; i < results.size(); i++) {
-            final T entity = mappingDocumentDbConverter.read(entityClass, results.get(i));
-            entities.add(entity);
-        }
-
-        return entities;
     }
 
     public String getCollectionName(Class<?> entityClass) {
@@ -238,15 +263,27 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         }
     }
 
-    public DocumentCollection createCollection(String collectionName, RequestOptions collectionOptions) {
-        return createCollection(this.databaseName, collectionName, collectionOptions);
+    public DocumentCollection createCollection(String collectionName,
+                                               RequestOptions collectionOptions,
+                                               String partitionKeyFieldName) {
+        return createCollection(this.databaseName, collectionName, collectionOptions, partitionKeyFieldName);
     }
 
     public DocumentCollection createCollection(String dbName,
                                                String collectionName,
-                                               RequestOptions collectionOptions) {
+                                               RequestOptions collectionOptions,
+                                               String partitionKeyFieldName) {
         DocumentCollection collection = new DocumentCollection();
         collection.setId(collectionName);
+
+        if (partitionKeyFieldName != null && !partitionKeyFieldName.isEmpty()) {
+            final PartitionKeyDefinition partitionKeyDefinition = new PartitionKeyDefinition();
+            final ArrayList<String> paths = new ArrayList<String>();
+
+            paths.add(getPartitionKeyPath(partitionKeyFieldName));
+            partitionKeyDefinition.setPaths(paths);
+            collection.setPartitionKey(partitionKeyDefinition);
+        }
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("execute createCollection in database {} collection {}", dbName, collectionName);
@@ -266,13 +303,15 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
 
     }
 
-    private DocumentCollection createCollectionIfNotExists(String dbName, String collectionName) {
+    public DocumentCollection createCollectionIfNotExists(String collectionName,
+                                                          String partitionKeyFieldName,
+                                                          Integer requestUnit) {
         if (this.databaseCache == null) {
-            this.databaseCache = createDatabaseIfNotExists(dbName);
+            this.databaseCache = createDatabaseIfNotExists(this.databaseName);
         }
 
         final List<DocumentCollection> collectionList = documentDbFactory.getDocumentClient()
-                .queryCollections(getDatabaseLink(dbName),
+                .queryCollections(getDatabaseLink(this.databaseName),
                         new SqlQuerySpec("SELECT * FROM root r WHERE r.id=@id",
                                 new SqlParameterCollection(new SqlParameter("@id", collectionName))), null)
                 .getQueryIterable().toList();
@@ -280,21 +319,24 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
         if (!collectionList.isEmpty()) {
             return collectionList.get(0);
         } else {
-            final RequestOptions requestOptions = new RequestOptions();
-            requestOptions.setOfferThroughput(1000);
-
-            return createCollection(dbName, collectionName, requestOptions);
+            final RequestOptions requestOptions = getRequestOptions(null, requestUnit);
+            return createCollection(this.databaseName, collectionName, requestOptions, partitionKeyFieldName);
         }
     }
 
-    public void deleteById(String collectionName, Object id) {
+    public <T> void deleteById(String collectionName,
+                               Object id,
+                               Class<T> domainClass,
+                               String partitionKeyFieldValue) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("execute deleteById in database {} collection {}", this.databaseName, collectionName);
         }
 
         try {
             documentDbFactory.getDocumentClient().deleteDocument(
-                    getDocumentLink(this.databaseName, collectionName, id.toString()), null);
+                    getDocumentLink(this.databaseName, collectionName, id.toString()),
+                    getRequestOptions(partitionKeyFieldValue, null));
+
         } catch (DocumentClientException ex) {
             throw new RuntimeException("deleteById exception", ex);
         }
@@ -310,5 +352,25 @@ public class DocumentDbTemplate implements DocumentDbOperations, ApplicationCont
 
     private String getDocumentLink(String databaseName, String collectionName, String documentId) {
         return getCollectionLink(databaseName, collectionName) + "/docs/" + documentId;
+    }
+
+    private String getPartitionKeyPath(String partitionKey) {
+        return "/" + partitionKey;
+    }
+
+    private RequestOptions getRequestOptions(String partitionKeyValue, Integer requestUnit) {
+        if ((partitionKeyValue == null || partitionKeyValue.isEmpty()) && requestUnit == null) {
+            return null;
+        }
+
+        final RequestOptions requestOptions = new RequestOptions();
+        if (!(partitionKeyValue == null || partitionKeyValue.isEmpty())) {
+            requestOptions.setPartitionKey(new PartitionKey(partitionKeyValue));
+        }
+        if (requestUnit != null) {
+            requestOptions.setOfferThroughput(requestUnit);
+        }
+
+        return requestOptions;
     }
 }
