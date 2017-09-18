@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-spring-boot-starter-bom</artifactId>
+    <artifactId>azure-spring-boot-bom</artifactId>
     <version>0.1.8-SNAPSHOT</version>
     <packaging>pom</packaging>
 
