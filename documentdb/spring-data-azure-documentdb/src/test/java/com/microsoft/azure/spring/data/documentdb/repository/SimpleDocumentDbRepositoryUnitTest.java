@@ -21,7 +21,6 @@ import java.util.Arrays;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -38,7 +37,10 @@ public class SimpleDocumentDbRepositoryUnitTest {
     public void setUp() {
         when(entityInformation.getJavaType()).thenReturn(Person.class);
         when(entityInformation.getCollectionName()).thenReturn(Person.class.getSimpleName());
-        when(dbOperations.findAll(Person.class.getSimpleName(), Person.class)).thenReturn(Arrays.asList(TEST_PERSON));
+        when(entityInformation.getPartitionKeyFieldName()).thenReturn("lastName");
+        when(entityInformation.getRequestUint()).thenReturn(1000);
+        when(dbOperations.findAll(anyString(), any(), anyString(), anyString()))
+                .thenReturn(Arrays.asList(TEST_PERSON));
 
         repository = new SimpleDocumentDbRepository<Person, String>(entityInformation, dbOperations);
     }
@@ -47,17 +49,17 @@ public class SimpleDocumentDbRepositoryUnitTest {
     public void testSave() {
         repository.save(TEST_PERSON);
 
-        assertEquals(1, repository.findAll().size());
-        assertEquals(TEST_PERSON.getFirstName(), repository.findAll().get(0).getFirstName());
+        assertEquals(1, repository.findAll(TEST_PERSON.getLastName()).size());
+        assertEquals(TEST_PERSON.getFirstName(), repository.findAll(TEST_PERSON.getLastName()).get(0).getFirstName());
     }
 
     @Test
     public void testFindOne() {
-        when(dbOperations.findById(anyString(), anyObject(), any())).thenReturn(TEST_PERSON);
+        when(dbOperations.findById(anyString(), any(), any(), anyString())).thenReturn(TEST_PERSON);
 
         repository.save(TEST_PERSON);
 
-        final Person result = repository.findOne(TEST_PERSON.getId());
+        final Person result = repository.findOne(TEST_PERSON.getId(), TEST_PERSON.getLastName());
 
         assertEquals(result.getId(), TEST_PERSON.getId());
         assertEquals(result.getFirstName(), TEST_PERSON.getFirstName());
@@ -69,9 +71,9 @@ public class SimpleDocumentDbRepositoryUnitTest {
         final Person updatedPerson = new Person(TEST_PERSON.getId(), "updated", "updated");
         repository.update(updatedPerson);
 
-        when(dbOperations.findById(anyString(), anyObject(), any())).thenReturn(updatedPerson);
+        when(dbOperations.findById(anyString(), any(), any(), anyString())).thenReturn(updatedPerson);
 
-        final Person result = repository.findOne(TEST_PERSON.getId());
+        final Person result = repository.findOne(TEST_PERSON.getId(), TEST_PERSON.getLastName());
 
         assertEquals(result.getId(), updatedPerson.getId());
         assertEquals(result.getFirstName(), updatedPerson.getFirstName());
