@@ -6,16 +6,16 @@
 
     <parent>
         <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-spring-boot-starter-bom</artifactId>
+        <artifactId>azure-spring-boot-bom</artifactId>
         <version>0.1.8-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>azure-spring-boot-starter-parent</artifactId>
+    <artifactId>azure-spring-boot-parent</artifactId>
     <packaging>pom</packaging>
 
-    <name>Azure Spring Boot Starter Parent</name>
-    <description>Parent package for Azure Spring Boot Starters</description>
+    <name>Azure Spring Boot Parent</name>
+    <description>Parent package for Azure Spring Boot</description>
     <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
 
     <scm>

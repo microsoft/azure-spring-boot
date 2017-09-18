@@ -3,7 +3,7 @@
 [![codecov](https://codecov.io/gh/microsoft/azure-spring-boot-starters/branch/master/graph/badge.svg)](https://codecov.io/gh/microsoft/azure-spring-boot-starters)
 [![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://github.com/Microsoft/azure-spring-boot-starters/blob/master/LICENSE)
 
-# Azure Spring Boot Starters
+# Azure Spring Boot
 
 ### Introduction
 
