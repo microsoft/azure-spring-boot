@@ -28,7 +28,7 @@ install:
   - cmd: cd "C:\Program Files\Java\jdk1.8.0\jre\lib\security"
   - cmd: certutil -encode c:\documentdb.cer documentdbemulatordb.cer
   - cmd: keytool -keystore cacerts -importcert -alias documentdbemulatorcert -file .\documentdbemulatordb.cer -storepass changeit -trustcacerts -noprompt
-  - cmd: cd "C:\projects\azure-spring-boot-starters"
+  - cmd: cd "C:\projects\azure-spring-boot"
 
 
 build_script:
