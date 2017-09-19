@@ -13,9 +13,10 @@
 
     <artifactId>samples</artifactId>
     <packaging>pom</packaging>
+    <version>0.1.0-SNAPSHOT</version>
 
-    <name>Samples</name>
-    <description>Samples for starter usage</description>
+    <name>Azure Spring Boot Samples</name>
+    <description>Samples for Azure Spring Boot</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
     <licenses>
@@ -49,6 +50,19 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.rootdir>${project.basedir}/..</project.rootdir>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>1.5.4.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
