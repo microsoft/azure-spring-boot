@@ -12,35 +12,54 @@
     </parent>
 
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-servicebus-spring-boot-starter-sample</artifactId>
+    <artifactId>azure-samples</artifactId>
+    <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
 
-    <name>Azure Service Bus Spring Boot Starter Sample</name>
-    <description>Sample project for Spring Boot Service Bus Starter</description>
-    <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
+    <name>Azure Spring Boot Samples</name>
+    <description>Samples for Azure Spring Boot</description>
+    <url>https://github.com/Microsoft/azure-spring-boot</url>
 
     <licenses>
         <license>
             <name>MIT</name>
-            <url>https://github.com/Microsoft/azure-spring-boot-starters/blob/master/LICENSE</url>
+            <url>https://github.com/Microsoft/azure-spring-boot/blob/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
 
     <developers>
         <developer>
+            <id>yungez</id>
+            <name>yunge zhu</name>
+            <email>yungez@microsoft.com</email>
+        </developer>
+
+        <developer>
             <id>ZhijunZhao</id>
             <name>Zhijun Zhao</name>
             <email>zhijzhao@microsoft.com</email>
+        </developer>
+
+        <developer>
+            <id>rajadilipkolli</id>
+            <name>Raja Dilip Kolli</name>
+            <email>rajadileepkolli@outlook.com</email>
         </developer>
     </developers>
 
     <scm>
         <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
         <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
-        <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
+        <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
     </scm>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.rootdir>${project.basedir}/..</project.rootdir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
@@ -53,20 +72,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-servicebus-spring-boot-starter</artifactId>
-        </dependency>
-    </dependencies>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.rootdir>${project.basedir}/../..</project.rootdir>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
 
     <build>
         <plugins>
@@ -138,4 +143,16 @@
         </plugins>
     </build>
 
+    <modules>
+        <module>azure-ad-integration-spring-boot-starter-sample</module>
+        <module>azure-documentdb-spring-boot-starter-sample</module>
+        <module>azure-documentdb-spring-boot-autoconfigure-sample</module>
+        <module>spring-data-azure-documentdb-sample</module>
+        <module>azure-keyvault-secrets-spring-boot-starter-sample</module>
+        <module>azure-mediaservices-spring-boot-starter-sample</module>
+        <module>microsoft-graph-spring-social-starter-sample</module>
+        <module>azure-servicebus-spring-boot-starter-sample</module>
+        <module>azure-storage-spring-boot-starter-sample</module>
+        <module>azure-cloud-foundry-service-sample</module>
+    </modules>
 </project>

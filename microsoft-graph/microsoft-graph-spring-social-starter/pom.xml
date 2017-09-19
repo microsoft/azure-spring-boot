@@ -18,12 +18,12 @@
     <description>A provider extension for Spring Social to enable connectivity with Microsoft Graph and an API binding
         for Microsoft Graph API
     </description>
-    <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
+    <url>https://github.com/Microsoft/azure-spring-boot</url>
 
     <licenses>
         <license>
             <name>MIT</name>
-            <url>https://github.com/Microsoft/azure-spring-boot-starters/blob/master/LICENSE</url>
+            <url>https://github.com/Microsoft/azure-spring-boot/blob/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -39,7 +39,7 @@
     <scm>
         <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
         <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
-        <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
+        <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
     </scm>
 
     <dependencies>

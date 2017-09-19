@@ -16,18 +16,18 @@
 
     <name>Azure Spring Boot Parent</name>
     <description>Parent package for Azure Spring Boot</description>
-    <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
+    <url>https://github.com/Microsoft/azure-spring-boot</url>
 
     <scm>
         <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
         <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
-        <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
+        <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
     </scm>
 
     <licenses>
         <license>
             <name>MIT</name>
-            <url>https://github.com/Microsoft/azure-spring-boot-starters/blob/master/LICENSE</url>
+            <url>https://github.com/Microsoft/azure-spring-boot/blob/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
