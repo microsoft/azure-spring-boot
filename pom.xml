@@ -10,12 +10,12 @@
 
     <name>Azure Spring Boot BOM</name>
     <description>BOM for Microsoft Azure Spring Boot Support</description>
-    <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
+    <url>https://github.com/Microsoft/azure-spring-boot</url>
 
     <licenses>
         <license>
             <name>MIT</name>
-            <url>https://github.com/Microsoft/azure-spring-boot-starters/blob/master/LICENSE</url>
+            <url>https://github.com/Microsoft/azure-spring-boot/blob/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -42,7 +42,7 @@
     <scm>
         <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
         <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
-        <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
+        <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
     </scm>
 
     <properties>
@@ -184,15 +184,6 @@
 
     <modules>
         <module>common/azure-spring-boot-parent</module>
-        <module>activedirectory/azure-ad-integration-spring-boot-starter-sample</module>
-        <module>documentdb/azure-documentdb-spring-boot-starter-sample</module>
-        <module>documentdb/azure-documentdb-spring-boot-autoconfigure-sample</module>
-        <module>documentdb/spring-data-azure-documentdb-sample</module>
-        <module>keyvault/azure-keyvault-secrets-spring-boot-starter-sample</module>
-        <module>mediaservices/azure-mediaservices-spring-boot-starter-sample</module>
-        <module>microsoft-graph/microsoft-graph-spring-social-starter-sample</module>
-        <module>servicebus/azure-servicebus-spring-boot-starter-sample</module>
-        <module>storage/azure-storage-spring-boot-starter-sample</module>
-        <module>cloudfoundry/azure-cloud-foundry-service-sample</module>
+        <module>samples</module>
     </modules>
 </project>

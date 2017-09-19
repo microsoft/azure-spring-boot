@@ -5,17 +5,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-spring-boot-parent</artifactId>
-        <version>0.1.8-SNAPSHOT</version>
-        <relativePath>../../common/azure-spring-boot-parent/pom.xml</relativePath>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <artifactId>azure-documentdb-spring-boot-starter</artifactId>
+    <groupId>com.microsoft.azure</groupId>
+    <artifactId>spring-data-azure-documentdb-sample</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Azure Document DB Spring Boot Starter</name>
-    <description>Spring Boot Starter for Azure Document DB service</description>
+    <name>Spring Data Azure Document DB Sample</name>
+    <description>Sample project for Spring Data Azure Document DB</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
     <licenses>
@@ -28,9 +30,9 @@
 
     <developers>
         <developer>
-            <id>ZhijunZhao</id>
-            <name>Zhijun Zhao</name>
-            <email>zhijzhao@microsoft.com</email>
+            <id>yungez</id>
+            <name>yunge zhu</name>
+            <email>yungez@microsoft.com</email>
         </developer>
     </developers>
 
@@ -40,15 +42,32 @@
         <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
     </scm>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-spring-boot-bom</artifactId>
+                <version>0.1.8-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>spring-data-azure-documentdb</artifactId>
         </dependency>
     </dependencies>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.rootdir>${project.basedir}/../..</project.rootdir>
+    </properties>
+
 </project>

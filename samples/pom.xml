@@ -5,30 +5,33 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.4.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.microsoft.azure</groupId>
+        <artifactId>azure-spring-boot-bom</artifactId>
+        <version>0.1.8-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-servicebus-spring-boot-starter-sample</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <artifactId>samples</artifactId>
+    <packaging>pom</packaging>
 
-    <name>Azure Service Bus Spring Boot Starter Sample</name>
-    <description>Sample project for Spring Boot Service Bus Starter</description>
-    <url>https://github.com/Microsoft/azure-spring-boot-starters</url>
+    <name>Samples</name>
+    <description>Samples for starter usage</description>
+    <url>https://github.com/Microsoft/azure-spring-boot</url>
 
     <licenses>
         <license>
             <name>MIT</name>
-            <url>https://github.com/Microsoft/azure-spring-boot-starters/blob/master/LICENSE</url>
+            <url>https://github.com/Microsoft/azure-spring-boot/blob/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
 
     <developers>
+        <developer>
+            <id>yungez</id>
+            <name>yunge zhu</name>
+            <email>yungez@microsoft.com</email>
+        </developer>
         <developer>
             <id>ZhijunZhao</id>
             <name>Zhijun Zhao</name>
@@ -39,33 +42,12 @@
     <scm>
         <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
         <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
-        <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
+        <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
     </scm>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-spring-boot-bom</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-servicebus-spring-boot-starter</artifactId>
-        </dependency>
-    </dependencies>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.rootdir>${project.basedir}/../..</project.rootdir>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.rootdir>${project.basedir}/..</project.rootdir>
     </properties>
 
     <build>
@@ -138,4 +120,16 @@
         </plugins>
     </build>
 
+    <modules>
+        <module>azure-ad-integration-spring-boot-starter-sample</module>
+        <module>azure-documentdb-spring-boot-starter-sample</module>
+        <module>azure-documentdb-spring-boot-autoconfigure-sample</module>
+        <module>spring-data-azure-documentdb-sample</module>
+        <module>azure-keyvault-secrets-spring-boot-starter-sample</module>
+        <module>azure-mediaservices-spring-boot-starter-sample</module>
+        <module>microsoft-graph-spring-social-starter-sample</module>
+        <module>azure-servicebus-spring-boot-starter-sample</module>
+        <module>azure-storage-spring-boot-starter-sample</module>
+        <module>azure-cloud-foundry-service-sample</module>
+    </modules>
 </project>

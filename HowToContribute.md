@@ -9,7 +9,7 @@ This instruction is guideline for building and code contribution.
 To build the project, run maven commands.
 
 ```bash
-git clone https://github.com/Microsoft/azure-spring-boot-starters.git 
+git clone https://github.com/Microsoft/azure-spring-boot.git 
 cd azure-spring-boot-starters
 mvnw clean install
 ```

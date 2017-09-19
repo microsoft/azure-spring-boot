@@ -5,19 +5,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-spring-boot-parent</artifactId>
-        <version>0.1.8-SNAPSHOT</version>
-        <relativePath>../../common/azure-spring-boot-parent/pom.xml</relativePath>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <artifactId>spring-social-microsoft-graph</artifactId>
+    <groupId>com.microsoft.azure</groupId>
+    <artifactId>microsoft-graph-spring-social-starter-sample</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Spring Social Microsoft Graph</name>
-    <description>extension for Spring Social to enable connectivity with Microsoft Graph and an API binding for
-        Microsoft Graph API
-    </description>
+    <name>Microsoft Graph Spring Social Starter Sample</name>
+    <description>Sample project for Microsoft Graph Spring Social Starter</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
     <licenses>
@@ -42,23 +42,32 @@
         <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
     </scm>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-spring-boot-bom</artifactId>
+                <version>0.1.8-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-logging</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>microsoft-graph-spring-social-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
     </dependencies>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.rootdir>${project.basedir}/../..</project.rootdir>
+    </properties>
+
 </project>

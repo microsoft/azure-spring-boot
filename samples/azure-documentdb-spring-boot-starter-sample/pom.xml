@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>com.microsoft.azure</groupId>
+    <artifactId>azure-documentdb-spring-boot-starter-sample</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>Azure Document DB Spring Boot Starter Sample</name>
+    <description>Sample project for Azure Document DB Starter</description>
+    <url>https://github.com/Microsoft/azure-spring-boot</url>
+
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://github.com/Microsoft/azure-spring-boot/blob/master/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>ZhijunZhao</id>
+            <name>Zhijun Zhao</name>
+            <email>zhijzhao@microsoft.com</email>
+        </developer>
+
+        <developer>
+            <id>yungez</id>
+            <name>yunge zhu</name>
+            <email>yungez@microsoft.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
+        <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
+        <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
+    </scm>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-spring-boot-bom</artifactId>
+                <version>0.1.8-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-documentdb-spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.rootdir>${project.basedir}/../..</project.rootdir>
+    </properties>
+
+</project>
