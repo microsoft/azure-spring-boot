@@ -53,6 +53,7 @@
         <aad.adal4j.version>0.0.2</aad.adal4j.version>
         <azure.media.version>0.9.7</azure.media.version>
         <azure.servicebus.version>1.0.0</azure.servicebus.version>
+        <spring.data.cosmosdb.documentdb.version>0.1.1</spring.data.cosmosdb.documentdb.version>
     </properties>
 
     <dependencyManagement>
@@ -64,17 +65,7 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-documentdb-spring-boot-starter</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-storage-spring-boot-autoconfigure</artifactId>
                 <version>0.1.8-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -84,17 +75,7 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-servicebus-spring-boot-autoconfigure</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-servicebus-spring-boot-starter</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>spring-data-azure-documentdb</artifactId>
                 <version>0.1.8-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -114,17 +95,7 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
-                <artifactId>microsoft-graph-spring-boot-autoconfigure</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
                 <artifactId>microsoft-graph-spring-social-starter</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-mediaservices-spring-boot-autoconfigure</artifactId>
                 <version>0.1.8-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -134,15 +105,20 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-spring-common</artifactId>
+                <artifactId>azure-cloud-foundry-service</artifactId>
                 <version>0.1.8-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-cloud-foundry-service</artifactId>
+                <artifactId>azure-spring-boot-autoconfigure</artifactId>
                 <version>0.1.8-SNAPSHOT</version>
             </dependency>
-
+            <!-- Spring Data Cosmos DB library -->
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>spring-data-azure-cosmosdb-documentdb</artifactId>
+                <version>${spring.data.cosmosdb.documentdb.version}</version>
+            </dependency>
             <!-- Azure related libraries-->
             <dependency>
                 <groupId>com.microsoft.azure</groupId>

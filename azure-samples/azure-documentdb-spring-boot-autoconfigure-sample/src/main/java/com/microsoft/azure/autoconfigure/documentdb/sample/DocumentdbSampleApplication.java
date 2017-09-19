@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.autoconfigure.documentdb.sample;
+package com.microsoft.azure.spring.boot.autoconfigure.cosmosdb.sample;
 
 import com.microsoft.azure.documentdb.Database;
 import com.microsoft.azure.documentdb.DocumentClient;

@@ -4,7 +4,7 @@
  * license information.
  */
 
-package com.microsoft.azure.autoconfigure.storage.sample;
+package com.microsoft.azure.spring.boot.autoconfigure.storage.sample;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
 import com.microsoft.azure.storage.StorageException;

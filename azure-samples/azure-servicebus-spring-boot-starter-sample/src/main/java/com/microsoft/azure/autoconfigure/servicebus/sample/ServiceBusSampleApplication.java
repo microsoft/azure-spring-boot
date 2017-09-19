@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.autoconfigure.servicebus.sample;
+package com.microsoft.azure.spring.boot.autoconfigure.servicebus.sample;
 
 import com.microsoft.azure.servicebus.ExceptionPhase;
 import com.microsoft.azure.servicebus.IMessage;

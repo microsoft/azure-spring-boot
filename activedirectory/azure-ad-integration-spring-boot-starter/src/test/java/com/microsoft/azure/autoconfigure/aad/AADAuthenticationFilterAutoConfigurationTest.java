@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.autoconfigure.aad;
+package com.microsoft.azure.spring.boot.autoconfigure.aad;
 
 import org.junit.Test;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;

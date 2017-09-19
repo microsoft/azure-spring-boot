@@ -3,11 +3,11 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.autoconfigure.aad.sample.controller;
+package com.microsoft.azure.spring.boot.autoconfigure.aad.sample.controller;
 
-import com.microsoft.azure.autoconfigure.aad.UserGroup;
-import com.microsoft.azure.autoconfigure.aad.UserPrincipal;
-import com.microsoft.azure.autoconfigure.aad.sample.model.TodoItem;
+import com.microsoft.azure.spring.boot.autoconfigure.aad.UserGroup;
+import com.microsoft.azure.spring.boot.autoconfigure.aad.UserPrincipal;
+import com.microsoft.azure.spring.boot.autoconfigure.aad.sample.model.TodoItem;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

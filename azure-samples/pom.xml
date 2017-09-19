@@ -147,7 +147,6 @@
         <module>azure-ad-integration-spring-boot-starter-sample</module>
         <module>azure-documentdb-spring-boot-starter-sample</module>
         <module>azure-documentdb-spring-boot-autoconfigure-sample</module>
-        <module>spring-data-azure-documentdb-sample</module>
         <module>azure-keyvault-secrets-spring-boot-starter-sample</module>
         <module>azure-mediaservices-spring-boot-starter-sample</module>
         <module>microsoft-graph-spring-social-starter-sample</module>
