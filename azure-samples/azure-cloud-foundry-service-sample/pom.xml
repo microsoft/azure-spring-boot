@@ -18,45 +18,9 @@
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.rootdir>${project.basedir}/../..</project.rootdir>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
-    <licenses>
-        <license>
-            <name>MIT</name>
-            <url>https://github.com/Microsoft/azure-spring-boot/blob/master/LICENSE</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <id>ZhijunZhao</id>
-            <name>Zhijun Zhao</name>
-            <email>zhijzhao@microsoft.com</email>
-        </developer>
-    </developers>
-
-    <scm>
-        <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
-        <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
-        <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
-    </scm>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-spring-boot-bom</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <dependency>

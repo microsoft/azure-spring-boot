@@ -5,15 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-spring-boot-bom</artifactId>
-        <version>0.1.8-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <artifactId>samples</artifactId>
+    <artifactId>azure-samples</artifactId>
     <packaging>pom</packaging>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
 
     <name>Azure Spring Boot Samples</name>
     <description>Samples for Azure Spring Boot</description>
@@ -33,10 +33,17 @@
             <name>yunge zhu</name>
             <email>yungez@microsoft.com</email>
         </developer>
+
         <developer>
             <id>ZhijunZhao</id>
             <name>Zhijun Zhao</name>
             <email>zhijzhao@microsoft.com</email>
+        </developer>
+
+        <developer>
+            <id>rajadilipkolli</id>
+            <name>Raja Dilip Kolli</name>
+            <email>rajadileepkolli@outlook.com</email>
         </developer>
     </developers>
 
@@ -47,17 +54,18 @@
     </scm>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
         <project.rootdir>${project.basedir}/..</project.rootdir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <!-- Import dependency management from Spring Boot -->
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>1.5.4.RELEASE</version>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-spring-boot-bom</artifactId>
+                <version>0.1.8-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -123,7 +131,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.5.7.RELEASE</version>
                 <executions>
                     <execution>
                         <goals>

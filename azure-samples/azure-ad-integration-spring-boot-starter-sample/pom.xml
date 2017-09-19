@@ -17,40 +17,6 @@
     <description>Azure AD Spring Security Integration Spring Boot Sample</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
-    <licenses>
-        <license>
-            <name>MIT</name>
-            <url>https://github.com/Microsoft/azure-spring-boot/blob/master/LICENSE</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <id>yaweiw</id>
-            <name>Yawei Wang</name>
-            <email>yaweiw@microsoft.com</email>
-        </developer>
-    </developers>
-
-    <scm>
-        <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
-        <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
-        <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
-    </scm>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-spring-boot-bom</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -72,10 +38,6 @@
 
     <properties>
         <project.rootdir>${project.basedir}/../..</project.rootdir>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
 </project>
