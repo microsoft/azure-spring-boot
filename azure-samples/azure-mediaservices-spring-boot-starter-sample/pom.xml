@@ -6,8 +6,8 @@
 
     <parent>
         <groupId>com.microsoft.azure</groupId>
-        <artifactId>samples</artifactId>
-        <version>0.1.0-SNAPSHOT</version>
+        <artifactId>azure-samples</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
