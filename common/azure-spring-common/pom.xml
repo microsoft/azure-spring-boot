@@ -6,9 +6,9 @@
 
     <parent>
         <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-spring-boot-starter-parent</artifactId>
+        <artifactId>azure-spring-boot-parent</artifactId>
         <version>0.1.8-SNAPSHOT</version>
-        <relativePath>../azure-spring-boot-starter-parent/pom.xml</relativePath>
+        <relativePath>../azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>azure-spring-common</artifactId>

@@ -6,9 +6,9 @@
 
     <parent>
         <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-spring-boot-starter-parent</artifactId>
+        <artifactId>azure-spring-boot-parent</artifactId>
         <version>0.1.8-SNAPSHOT</version>
-        <relativePath>../../common/azure-spring-boot-starter-parent/pom.xml</relativePath>
+        <relativePath>../../common/azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>spring-data-azure-documentdb</artifactId>
@@ -41,8 +41,6 @@
     </scm>
 
     <properties>
-        <azure.documentdb.version>1.13.0</azure.documentdb.version>
-
         <azure.test.resourcegroup>documentdbtest</azure.test.resourcegroup>
         <azure.test.dbname>springdocdbtestdb</azure.test.dbname>
         <skip.integration.tests>true</skip.integration.tests>
@@ -96,7 +94,6 @@
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-documentdb</artifactId>
-            <version>${azure.documentdb.version}</version>
         </dependency>
 
         <dependency>

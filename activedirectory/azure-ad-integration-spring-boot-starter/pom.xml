@@ -6,9 +6,9 @@
 
     <parent>
         <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-spring-boot-starter-parent</artifactId>
+        <artifactId>azure-spring-boot-parent</artifactId>
         <version>0.1.8-SNAPSHOT</version>
-        <relativePath>../../common/azure-spring-boot-starter-parent/pom.xml</relativePath>
+        <relativePath>../../common/azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>azure-ad-integration-spring-boot-starter</artifactId>
@@ -40,10 +40,6 @@
         <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
     </scm>
 
-    <properties>
-        <azure.adal4j.version>1.2.0</azure.adal4j.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -69,7 +65,6 @@
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>adal4j</artifactId>
-            <version>${azure.adal4j.version}</version>
         </dependency>
         <dependency>
             <groupId>com.nimbusds</groupId>
