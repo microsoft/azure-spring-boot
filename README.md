@@ -1,7 +1,7 @@
-[![Travis CI](https://travis-ci.org/Microsoft/azure-spring-boot-starters.svg?branch=master)](https://travis-ci.org/Microsoft/azure-spring-boot-starters)
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/eashoj50qw399l8a/branch/master?svg=true)](https://ci.appveyor.com/project/yungez/azure-spring-boot-starters)
-[![codecov](https://codecov.io/gh/microsoft/azure-spring-boot-starters/branch/master/graph/badge.svg)](https://codecov.io/gh/microsoft/azure-spring-boot-starters)
-[![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://github.com/Microsoft/azure-spring-boot-starters/blob/master/LICENSE)
+[![Travis CI](https://travis-ci.org/Microsoft/azure-spring-boot.svg?branch=master)](https://travis-ci.org/Microsoft/azure-spring-boot)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/af0qeprdv3g9ox07/branch/master?svg=true)](https://ci.appveyor.com/project/yungez/azure-spring-boot)
+[![codecov](https://codecov.io/gh/Microsoft/azure-spring-boot/branch/master/graph/badge.svg)](https://codecov.io/gh/Microsoft/azure-spring-boot)
+[![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://github.com/Microsoft/azure-spring-boot/blob/master/LICENSE)
 
 # Azure Spring Boot
 
@@ -39,13 +39,13 @@ You could check below articles to learn more on usage of specific starters.
 
 ### Filing Issues
 
-If you encounter any bug, please file an issue [here](https://github.com/Microsoft/azure-spring-boot-starters/issues/new).
+If you encounter any bug, please file an issue [here](https://github.com/Microsoft/azure-spring-boot/issues/new).
 
 To suggest a new feature or changes that could be made, file an issue the same way you would for a bug.
 
 ### Pull Requests
 
-Pull requests are welcome. To open your own pull request, click [here](https://github.com/Microsoft/azure-spring-boot-starters/compare). When creating a pull request, make sure you are pointing to the fork and branch that your changes were made in.
+Pull requests are welcome. To open your own pull request, click [here](https://github.com/Microsoft/azure-spring-boot/compare). When creating a pull request, make sure you are pointing to the fork and branch that your changes were made in.
 
 ### Code of Conduct
 
