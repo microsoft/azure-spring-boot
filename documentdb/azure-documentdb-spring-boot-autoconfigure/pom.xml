@@ -6,9 +6,9 @@
 
     <parent>
         <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-spring-boot-starter-parent</artifactId>
+        <artifactId>azure-spring-boot-parent</artifactId>
         <version>0.1.8-SNAPSHOT</version>
-        <relativePath>../../common/azure-spring-boot-starter-parent/pom.xml</relativePath>
+        <relativePath>../../common/azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
@@ -40,10 +40,6 @@
         <url>https://github.com/Microsoft/azure-spring-boot-starters/tree/master</url>
     </scm>
 
-    <properties>
-        <azure.documentdb.version>1.13.0</azure.documentdb.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -53,7 +49,6 @@
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-documentdb</artifactId>
-            <version>${azure.documentdb.version}</version>
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
