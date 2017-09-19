@@ -184,6 +184,6 @@
 
     <modules>
         <module>common/azure-spring-boot-parent</module>
-        <module>samples</module>
+        <module>azure-samples</module>
     </modules>
 </project>
