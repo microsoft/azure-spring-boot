@@ -4,16 +4,16 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.boot.autoconfigure.cosmosdb;
+package com.microsoft.azure.spring.boot.autoconfigure.documentdb;
 
 import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.boot.autoconfigure.common.GetHashMac;
-import com.microsoft.azure.spring.data.cosmosdb.documentdb.DocumentDbFactory;
-import com.microsoft.azure.spring.data.cosmosdb.documentdb.core.DocumentDbTemplate;
-import com.microsoft.azure.spring.data.cosmosdb.documentdb.core.convert.MappingDocumentDbConverter;
-import com.microsoft.azure.spring.data.cosmosdb.documentdb.core.mapping.DocumentDbMappingContext;
+import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
+import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
+import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
+import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbMappingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
