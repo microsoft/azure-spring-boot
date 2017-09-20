@@ -51,6 +51,10 @@
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-support</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>spring-social-microsoft-graph</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
