@@ -1,6 +1,6 @@
 org.springframework.boot.env.EnvironmentPostProcessor=com.microsoft.azure.cloudfoundry.service.VcapProcessor
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.microsoft.azure.spring.boot.autoconfigure.cosmosdb.DocumentDBAutoConfiguration,\
-com.microsoft.azure.spring.boot.autoconfigure.cosmosdb.DocumentDbRepositoriesAutoConfiguration,\
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.microsoft.azure.spring.boot.autoconfigure.documentdb.DocumentDBAutoConfiguration,\
+com.microsoft.azure.spring.boot.autoconfigure.documentdb.DocumentDbRepositoriesAutoConfiguration,\
 com.microsoft.azure.spring.boot.autoconfigure.mediaservices.MediaServicesAutoConfiguration,\
 com.microsoft.azure.spring.boot.autoconfigure.msgraph.MicrosoftAutoConfiguration,\
 com.microsoft.azure.spring.boot.autoconfigure.servicebus.ServiceBusAutoConfiguration,\

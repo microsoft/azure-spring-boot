@@ -67,7 +67,7 @@
         <!-- Spring Data -->
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>spring-data-azure-cosmosdb-documentdb</artifactId>
+            <artifactId>spring-data-documentdb</artifactId>
             <optional>true</optional>
         </dependency>
 

@@ -4,9 +4,9 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.boot.autoconfigure.cosmosdb.domain;
+package com.microsoft.azure.spring.boot.autoconfigure.documentdb.domain;
 
-import com.microsoft.azure.spring.data.cosmosdb.documentdb.repository.DocumentDbRepository;
+import com.microsoft.azure.spring.data.documentdb.repository.DocumentDbRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
