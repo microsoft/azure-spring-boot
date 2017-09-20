@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <FindBugsFilter>
-    <Class name="com.microsoft.azure.spring.common.GetHashMac"/>
+    <Class name="com.microsoft.azure.spring.boot.autoconfigure.common.GetHashMac"/>
     <Bug pattern="NP_NONNULL_PARAM_VIOLATION"/>
     <Bug pattern="Unwritten field"/>
     <Bug pattern="SIC_INNER_SHOULD_BE_STATIC_ANON"/>

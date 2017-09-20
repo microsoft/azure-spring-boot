@@ -43,12 +43,12 @@
     <dependencies>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-documentdb-spring-boot-autoconfigure</artifactId>
+            <artifactId>azure-spring-boot-autoconfigure</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>spring-data-azure-documentdb</artifactId>
+            <artifactId>spring-data-azure-cosmosdb-documentdb</artifactId>
         </dependency>
     </dependencies>
 </project>

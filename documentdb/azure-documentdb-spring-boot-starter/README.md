@@ -83,7 +83,7 @@ Annotation `@Document(collection="mycollection")` is used to specify collection 
 Extends DocumentDbRepository interface, which provides Spring Data repository support.
 
 ```
-import com.microsoft.azure.spring.data.documentdb.repository.DocumentDbRepository;
+import com.microsoft.azure.spring.data.cosmosdb.documentdb.repository.DocumentDbRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

@@ -4,7 +4,7 @@
  * license information.
  */
 
-package com.microsoft.azure.autoconfigure.mediaservices.sample;
+package com.microsoft.azure.spring.boot.autoconfigure.mediaservices.sample;
 
 import com.microsoft.windowsazure.exception.ServiceException;
 import com.microsoft.windowsazure.services.media.MediaContract;

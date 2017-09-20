@@ -45,7 +45,7 @@
     <dependencies>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>microsoft-graph-spring-boot-autoconfigure</artifactId>
+            <artifactId>azure-spring-boot-autoconfigure</artifactId>
         </dependency>
     </dependencies>
 
