@@ -1,23 +1,15 @@
 {
     "releaseVersion" : "0.1.8",
     "moduleNames": [
-        "azure-spring-boot-starter-parent",
-        "azure-spring-boot-starter-bom",
-        "azure-spring-common",
+        "azure-spring-boot-parent",
+        "azure-spring-boot-bom",
+        "azure-support",
         "azure-ad-integration-spring-boot-starter",
-        "spring-data-azure-documentdb",
-        "azure-documentdb-spring-boot-autoconfigure",
         "azure-documentdb-spring-boot-starter",
         "azure-storage-spring-boot-starter",
-        "azure-servicebus-spring-boot-starter",
-        "azure-mediaservices-spring-boot-starter",
-        "spring-social-microsoft-graph",
-        "microsoft-graph-spring-boot-autoconfigure",
-        "microsoft-graph-spring-social-starter",
-        "azure-keyvault-secrets-spring-boot-starter",
-        "azure-cloud-foundry-service"
+        "azure-keyvault-secrets-spring-boot-starter"
     ],
-    "srcFolder": "",
+    "srcFolder": "C:/Users/zhijzhao/.m2/repository/com/microsoft/azure",
     "targetFolder": "D:/Signed",
     "toSignFolder": "//ADXInfra1/ToSign/",
     "signedFilder": "//ADXInfra1/Signed",
