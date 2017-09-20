@@ -47,7 +47,11 @@
     <dependencies>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-spring-boot-autoconfigure</artifactId>
+            <artifactId>azure-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-media</artifactId>
         </dependency>
     </dependencies>
 </project>
