@@ -212,7 +212,5 @@
         <module>../azure-starters/azure-mediaservices-spring-boot-starter</module>
         <module>../azure-starters/azure-keyvault-secrets-spring-boot-starter</module>
         <module>../cloudfoundry/azure-cloud-foundry-service</module>
-        <module>../microsoft-graph/spring-social-microsoft-graph</module>
-        <module>../microsoft-graph/microsoft-graph-spring-social-starter</module>
     </modules>
 </project>

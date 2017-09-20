@@ -54,6 +54,7 @@
         <azure.media.version>0.9.7</azure.media.version>
         <azure.servicebus.version>1.0.0</azure.servicebus.version>
         <spring.data.documentdb.version>0.1.2</spring.data.documentdb.version>
+        <spring.social.microsoft.graph.version>0.1.7</spring.social.microsoft.graph.version>
     </properties>
 
     <dependencyManagement>
@@ -90,11 +91,6 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
-                <artifactId>spring-social-microsoft-graph</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
                 <artifactId>microsoft-graph-spring-social-starter</artifactId>
                 <version>0.1.8-SNAPSHOT</version>
             </dependency>
@@ -112,6 +108,12 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-support</artifactId>
                 <version>0.1.8-SNAPSHOT</version>
+            </dependency>
+            <!-- Spring Social Microsoft Graph library -->
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>spring-social-microsoft-graph</artifactId>
+                <version>${spring.social.microsoft.graph.version}</version>
             </dependency>
             <!-- Spring Data Cosmos DB library -->
             <dependency>
