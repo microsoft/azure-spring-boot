@@ -11,7 +11,7 @@
         <relativePath>../azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>azure-spring-boot-autoconfigure</artifactId>
+    <artifactId>azure-support</artifactId>
     <packaging>jar</packaging>
 
     <name>Azure Spring Boot AutoConfigure</name>
