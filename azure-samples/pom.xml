@@ -141,7 +141,6 @@
         <module>azure-documentdb-spring-boot-starter-sample</module>
         <module>azure-keyvault-secrets-spring-boot-starter-sample</module>
         <module>azure-mediaservices-spring-boot-starter-sample</module>
-        <module>microsoft-graph-spring-social-starter-sample</module>
         <module>azure-servicebus-spring-boot-starter-sample</module>
         <module>azure-storage-spring-boot-starter-sample</module>
         <module>azure-cloud-foundry-service-sample</module>
