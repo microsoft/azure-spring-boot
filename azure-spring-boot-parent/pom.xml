@@ -211,6 +211,5 @@
         <module>../azure-starters/azure-servicebus-spring-boot-starter</module>
         <module>../azure-starters/azure-mediaservices-spring-boot-starter</module>
         <module>../azure-starters/azure-keyvault-secrets-spring-boot-starter</module>
-        <module>../cloudfoundry/azure-cloud-foundry-service</module>
     </modules>
 </project>
