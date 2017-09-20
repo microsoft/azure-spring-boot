@@ -110,7 +110,7 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-spring-boot-autoconfigure</artifactId>
+                <artifactId>azure-support</artifactId>
                 <version>0.1.8-SNAPSHOT</version>
             </dependency>
             <!-- Spring Data Cosmos DB library -->
@@ -159,7 +159,7 @@
     </dependencyManagement>
 
     <modules>
-        <module>common/azure-spring-boot-parent</module>
+        <module>azure-spring-boot-parent</module>
         <module>azure-samples</module>
     </modules>
 </project>
