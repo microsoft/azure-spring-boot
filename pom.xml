@@ -53,7 +53,7 @@
         <aad.adal4j.version>0.0.2</aad.adal4j.version>
         <azure.media.version>0.9.7</azure.media.version>
         <azure.servicebus.version>1.0.0</azure.servicebus.version>
-        <spring.data.cosmosdb.documentdb.version>0.1.1</spring.data.cosmosdb.documentdb.version>
+        <spring.data.documentdb.version>0.1.2</spring.data.documentdb.version>
     </properties>
 
     <dependencyManagement>
@@ -116,8 +116,8 @@
             <!-- Spring Data Cosmos DB library -->
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
-                <artifactId>spring-data-azure-cosmosdb-documentdb</artifactId>
-                <version>${spring.data.cosmosdb.documentdb.version}</version>
+                <artifactId>spring-data-documentdb</artifactId>
+                <version>${spring.data.documentdb.version}</version>
             </dependency>
             <!-- Azure related libraries-->
             <dependency>

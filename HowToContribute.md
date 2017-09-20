@@ -10,33 +10,15 @@ To build the project, run maven commands.
 
 ```bash
 git clone https://github.com/Microsoft/azure-spring-boot.git 
-cd azure-spring-boot-starters
+cd azure-spring-boot
 mvnw clean install
 ```
 
 ## Test
-There're 2 profiles: `dev` and `integration-test-azure`. Default profile is `dev`. Profile `integration-test-azure` will trigger integration test execution.
 
 - Run unit tests
 ```bash
 mvnw clean install
-```
-
-- Run unit tests and integration tests
- 
-  >**NOTE** Please note that integration test will automatically create a Azure Cosmos DB Document API in your Azure subscription, then there will be **Azure usage fee.**
- 
-  Integration tests will require a Azure Subscription. If you don't already have an Azure subscription, you can activate your [MSDN subscriber benefits](https://azure.microsoft.com/en-us/pricing/member-offers/msdn-benefits-details/) or sign up for a [free Azure account](https://azure.microsoft.com/en-us/free/). 
-  
-  1. Create a service principal by using Azure Cli or by [Azure Portal](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-create-service-principal-portal). 
-  2. After service principal ready, set environment variables CLIENT_ID, CLIENT_KEY and TENANT_ID, where value of them are service principal id, key and tenant id.
-  3. Run maven command with `integration-test-azure` profile. 
-  
-```bash
-set CLIENT_ID=your-azure-service-principal-id
-set CLIENT_KEY=your-azure-service-principal-key
-set TENANT_ID=your-azure-subscription-tenant-id
-mvnw -P integration-test-azure clean install
 ```
 
 - Skip tests execution
@@ -48,7 +30,7 @@ mvnw clean install -DskipTests
 Developing version naming convention is like `0.1.7-SNAPSHOT`. Release version naming convention is like `0.1.7`. Please don't update version if no release plan. 
 
 ## CI
-Both [travis](https://travis-ci.org/Microsoft/azure-spring-boot-starters) and [appveyor](https://ci.appveyor.com/project/yungez/azure-spring-boot-starters) CI is enabled.
+Both [travis](https://travis-ci.org/Microsoft/azure-spring-boot) and [appveyor](https://ci.appveyor.com/project/yungez/azure-spring-boot) CI is enabled.
 
 ## Contribute to code
 Code contribution is welcome. To contribute to existing code or add new Starter, please make sure below check list are checked.

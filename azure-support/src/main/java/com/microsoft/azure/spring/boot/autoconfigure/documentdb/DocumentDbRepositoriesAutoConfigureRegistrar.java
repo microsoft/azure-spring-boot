@@ -4,10 +4,10 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.boot.autoconfigure.cosmosdb;
+package com.microsoft.azure.spring.boot.autoconfigure.documentdb;
 
-import com.microsoft.azure.spring.data.cosmosdb.documentdb.repository.config.DocumentDbRepositoryConfigurationExtension;
-import com.microsoft.azure.spring.data.cosmosdb.documentdb.repository.config.EnableDocumentDbRepositories;
+import com.microsoft.azure.spring.data.documentdb.repository.config.DocumentDbRepositoryConfigurationExtension;
+import com.microsoft.azure.spring.data.documentdb.repository.config.EnableDocumentDbRepositories;
 import org.springframework.boot.autoconfigure.data.AbstractRepositoryConfigurationSourceSupport;
 import org.springframework.data.repository.config.RepositoryConfigurationExtension;
 
