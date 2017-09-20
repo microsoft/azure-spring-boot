@@ -159,7 +159,7 @@
     </dependencyManagement>
 
     <modules>
-        <module>common/azure-spring-boot-parent</module>
+        <module>azure-spring-boot-parent</module>
         <module>azure-samples</module>
     </modules>
 </project>

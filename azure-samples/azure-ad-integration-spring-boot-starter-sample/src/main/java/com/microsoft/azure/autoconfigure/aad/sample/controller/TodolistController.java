@@ -5,8 +5,8 @@
  */
 package com.microsoft.azure.spring.boot.autoconfigure.aad.sample.controller;
 
-import com.microsoft.azure.spring.boot.autoconfigure.aad.UserGroup;
-import com.microsoft.azure.spring.boot.autoconfigure.aad.UserPrincipal;
+import com.microsoft.azure.autoconfigure.aad.UserGroup;
+import com.microsoft.azure.autoconfigure.aad.UserPrincipal;
 import com.microsoft.azure.spring.boot.autoconfigure.aad.sample.model.TodoItem;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

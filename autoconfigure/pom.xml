@@ -8,7 +8,7 @@
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-parent</artifactId>
         <version>0.1.8-SNAPSHOT</version>
-        <relativePath>../common/azure-spring-boot-parent/pom.xml</relativePath>
+        <relativePath>../azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>azure-spring-boot-autoconfigure</artifactId>
@@ -45,10 +45,6 @@
         <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot.git</developerConnection>
         <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
     </scm>
-
-    <properties>
-        <project.rootdir>${project.basedir}/..</project.rootdir>
-    </properties>
 
     <dependencies>
         <dependency>

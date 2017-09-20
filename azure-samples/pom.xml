@@ -84,7 +84,7 @@
                         <id>validate</id>
                         <phase>validate</phase>
                         <configuration>
-                            <configLocation>${project.rootdir}/common/config/checkstyle.xml</configLocation>
+                            <configLocation>${project.rootdir}/config/checkstyle.xml</configLocation>
                             <encoding>UTF-8</encoding>
                             <consoleOutput>true</consoleOutput>
                             <failsOnError>true</failsOnError>
@@ -111,7 +111,7 @@
                     <xmlOutput>true</xmlOutput>
                     <findbugsXmlOutputDirectory>${project.build.directory}/findbugs
                     </findbugsXmlOutputDirectory>
-                    <excludeFilterFile>${project.rootdir}/common/config/findbugs-exclude.xml</excludeFilterFile>
+                    <excludeFilterFile>${project.rootdir}/config/findbugs-exclude.xml</excludeFilterFile>
                 </configuration>
                 <dependencies>
                     <dependency>

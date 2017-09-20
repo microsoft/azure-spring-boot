@@ -52,7 +52,7 @@ Both [travis](https://travis-ci.org/Microsoft/azure-spring-boot-starters) and [a
 
 ## Contribute to code
 Code contribution is welcome. To contribute to existing code or add new Starter, please make sure below check list are checked.
-- [ ] Build pass. checkstyle and findbugs is enabled by default. Please check [checkstyle.xml](./common/config/checkstyle.xml) to learn detail checkstyle configuration.
+- [ ] Build pass. checkstyle and findbugs is enabled by default. Please check [checkstyle.xml](config/checkstyle.xml) to learn detail checkstyle configuration.
 - [ ] Documents are updated to aligning with code.
 - [ ] New starter must have sample folder contains sample code and corresponding readme file.
 - [ ] Code coverage for new codes >= 65%. Code coverage check is enabled with 65% bar.

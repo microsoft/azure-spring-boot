@@ -5,7 +5,7 @@
  */
 package com.microsoft.azure.spring.boot.autoconfigure.aad.sample.security;
 
-import com.microsoft.azure.spring.boot.autoconfigure.aad.AADAuthenticationFilter;
+import com.microsoft.azure.autoconfigure.aad.AADAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

@@ -11,13 +11,11 @@
         <relativePath>../../azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>spring-social-microsoft-graph</artifactId>
+    <artifactId>azure-storage-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
 
-    <name>Spring Social Microsoft Graph</name>
-    <description>extension for Spring Social to enable connectivity with Microsoft Graph and an API binding for
-        Microsoft Graph API
-    </description>
+    <name>Azure Storage Spring Boot Starter</name>
+    <description>Spring Boot Starter for Azure Storage service</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
     <licenses>
@@ -48,21 +46,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-logging</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-spring-boot-autoconfigure</artifactId>
         </dependency>
     </dependencies>
 </project>
