@@ -5,6 +5,7 @@ import json
 import hashlib
 import glob
 import os
+import re
 import shutil
 import subprocess
 import time
@@ -20,7 +21,7 @@ def upload_jars(configs):
     print("Upload jars to signing server...")
     jar_list = []
     for module_name in configs["moduleNames"]:
-        module_folder = os.path.join(configs["srcFolder"], module_name, configs["releaseVersion"])
+        module_folder = get_module_folder(configs, module_name)
         module_jars = glob.glob(os.path.join(module_folder, "*.jar"))
 
         for module_jar in module_jars:
@@ -66,7 +67,7 @@ def copy_poms(configs, artifact_folder):
     """
     print("Copying POM files to artifact folder...")
     for module_name in configs["moduleNames"]:
-        module_folder = os.path.join(configs["srcFolder"], module_name, configs["releaseVersion"])
+        module_folder = get_module_folder(configs, module_name)
         pom_files = glob.glob(os.path.join(module_folder, "*.pom"))
 
         for pom_file in pom_files:
@@ -92,7 +93,9 @@ def generate_checksum(artifact_folder):
     """
     print("Generating checksum files...")
     types = (os.path.join(artifact_folder, "*.jar"), os.path.join(artifact_folder, "*.pom"))
-    files_grabed = [glob.glob(file) for file in types]
+    files_grabed = []
+    for file in types:
+        files_grabed.extend(glob.glob(file))
 
     for file in files_grabed:
         file_name = os.path.basename(file)
@@ -157,7 +160,7 @@ def deploy_to_staging_repo(configs, artifact_folder, repo_name):
             print("--" + file_path)
             file_name = os.path.basename(file_path)
             url_join_items = [configs["nexus"]["deployRepoURL"],
-                              repo_name, configs["nexus"]["deployGroupPath"],
+                              repo_name, configs["groupId"].replace(".", "/"),
                               module_name, configs["releaseVersion"], file_name]
             upload_url = ("/".join(url_join_items))
             files = {'file': open(file_path, 'rb')}
@@ -235,3 +238,21 @@ def get_repo_activity(configs, repo_id):
     else:
         raise Exception("----Failed at getting repo activity. Status code: " +
                         str(response.status_code) + " Response content: " + response.text)
+
+def get_local_repository_path():
+    """
+    Get maven's local repository
+    """
+    result = subprocess.run("cmd /c mvn help:evaluate -Dexpression=settings.localRepository",
+                            stdout=subprocess.PIPE)
+
+    regex = re.compile('.*[INFO].*')
+    path = regex.sub("", result.stdout.decode("utf-8")).rstrip().lstrip()
+    return path
+
+def get_module_folder(configs, module_name):
+    """
+    Get the full path of local module folder
+    """
+    repo_path = get_local_repository_path()
+    return os.path.join(repo_path, module_name, configs["releaseVersion"])
