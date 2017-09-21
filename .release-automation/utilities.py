@@ -92,9 +92,7 @@ def generate_checksum(artifact_folder):
     """
     print("Generating checksum files...")
     types = (os.path.join(artifact_folder, "*.jar"), os.path.join(artifact_folder, "*.pom"))
-    files_grabed = []
-    for file in types:
-        files_grabed.extend(glob.glob(file))
+    files_grabed = [glob.glob(file) for file in types]
 
     for file in files_grabed:
         file_name = os.path.basename(file)
