@@ -14,7 +14,9 @@ import xmltodict
 from jenkinsapi.jenkins import Jenkins
 
 def upload_jars(configs):
-    """Uploading local built jars to sign server"""
+    """
+    Uploading local built jars to sign server
+    """
     print("Upload jars to signing server...")
     jar_list = []
     for module_name in configs["moduleNames"]:
@@ -30,7 +32,9 @@ def upload_jars(configs):
 
 
 def sign_jars(configs):
-    """Use Jenkins job to sign uploaded jars"""
+    """
+    Use Jenkins job to sign uploaded jars
+    """
     print("Using Jenkins job to sign uploaded Jars...")
     jenkins = Jenkins(configs["jenkins"]["url"],
                       configs["jenkins"]["username"], configs["passwords"]["jenkins"])
@@ -45,7 +49,9 @@ def sign_jars(configs):
 
 
 def download_and_delete_jars(configs, artifact_folder, jar_list):
-    """Download signed jars to local shared folder for further releasing"""
+    """
+    Download signed jars to local shared folder for further releasing
+    """
     print("Downloading signed jar to artifact folder...")
     for jar_name in jar_list:
         print("--" + jar_name)
@@ -55,7 +61,9 @@ def download_and_delete_jars(configs, artifact_folder, jar_list):
 
 
 def copy_poms(configs, artifact_folder):
-    """Copy POM files from local maven repo to shared folder"""
+    """
+    Copy POM files from local maven repo to shared folder
+    """
     print("Copying POM files to artifact folder...")
     for module_name in configs["moduleNames"]:
         module_folder = os.path.join(configs["srcFolder"], module_name, configs["releaseVersion"])
@@ -67,7 +75,9 @@ def copy_poms(configs, artifact_folder):
 
 
 def gpg_sign(configs, artifact_folder):
-    """Sign all files using gpg utility from www.gnupg.org"""
+    """
+    Sign all files using gpg utility from www.gnupg.org
+    """
     print("GPG sign all files in artifact folder...")
     for file_to_sign in os.listdir(artifact_folder):
         gpg_str = 'gpg --batch --passphrase {0} -ab {1}'.format(
@@ -77,7 +87,9 @@ def gpg_sign(configs, artifact_folder):
 
 
 def generate_checksum(artifact_folder):
-    """Generate md5 and sh1 for all jars and poms"""
+    """
+    Generate md5 and sh1 for all jars and poms
+    """
     print("Generating checksum files...")
     types = (os.path.join(artifact_folder, "*.jar"), os.path.join(artifact_folder, "*.pom"))
     files_grabed = []
@@ -99,7 +111,9 @@ def generate_checksum(artifact_folder):
 
 
 def prepare_artifacts(configs, jar_list):
-    """Make all artifacts readly in a temp folder under specificed target folder"""
+    """
+    Make all artifacts readly in a temp folder under specificed target folder
+    """
     artifact_folder = os.path.join(configs["targetFolder"],
                                    datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
     print("Creating artifact folder {0}...".format(artifact_folder))
@@ -114,7 +128,9 @@ def prepare_artifacts(configs, jar_list):
 
 
 def create_staging_repo(configs):
-    """Create a Nexus staging repo for deploying artifacts"""
+    """
+    Create a Nexus staging repo for deploying artifacts
+    """
     print("Creating staging repo...")
 
     url = configs["nexus"]["createRepoURL"]
@@ -134,7 +150,9 @@ def create_staging_repo(configs):
 
 
 def deploy_to_staging_repo(configs, artifact_folder, repo_name):
-    """Upload articfacts to created staging repo"""
+    """
+    Upload articfacts to created staging repo
+    """
     print("Deploying artifacts to staging repo...")
     for module_name in configs["moduleNames"]:
         for file_path in glob.glob(os.path.join(artifact_folder, module_name + "*")):
@@ -156,7 +174,9 @@ def deploy_to_staging_repo(configs, artifact_folder, repo_name):
 
 
 def close_staging_repo(configs, repo_id):
-    """Close staging repo to verify uploaded artifacts"""
+    """
+    Close staging repo to verify uploaded artifacts
+    """
     print("Closing staging repo...")
 
     url = configs["nexus"]["closeRepoURL"]
@@ -185,7 +205,9 @@ def close_staging_repo(configs, repo_id):
 
 
 def get_repo_status(configs, repo_id):
-    """Utility to get repo status"""
+    """
+    Utility to get repo status
+    """
     print("--Getting staging repo status...")
     url = "/".join([configs["nexus"]["repoBaseURL"], repo_id])
     basic_auth = HTTPBasicAuth(configs["nexus"]["username"], configs["passwords"]["nexus"])
@@ -202,7 +224,9 @@ def get_repo_status(configs, repo_id):
 
 
 def get_repo_activity(configs, repo_id):
-    """Utility to get repo activity"""
+    """
+    Utility to get repo activity
+    """
     print("--Getting staging repo activity...")
     url = "/".join([configs["nexus"]["repoBaseURL"], repo_id, "activity"])
     basic_auth = HTTPBasicAuth(configs["nexus"]["username"], configs["passwords"]["nexus"])

@@ -4,7 +4,9 @@ import json
 import utilities
 
 def main():
-    """Release jars to staging repo"""
+    """
+    Release jars to staging repo
+    """
     with open('config.json') as config_file:
         configs = json.load(config_file)
 
