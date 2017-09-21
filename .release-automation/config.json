@@ -7,7 +7,9 @@
         "azure-ad-integration-spring-boot-starter",
         "azure-documentdb-spring-boot-starter",
         "azure-storage-spring-boot-starter",
-        "azure-keyvault-secrets-spring-boot-starter"
+        "azure-keyvault-secrets-spring-boot-starter",
+        "azure-mediaservices-spring-boot-starter",
+        "azure-servicebus-spring-boot-starter"
     ],
     "srcFolder": "C:/Users/zhijzhao/.m2/repository/com/microsoft/azure",
     "targetFolder": "D:/Signed",
