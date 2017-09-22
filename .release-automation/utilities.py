@@ -22,7 +22,7 @@ def upload_jars(configs):
     jar_list = []
     for module_name in configs["moduleNames"]:
         module_folder = get_module_folder(configs, module_name)
-        module_jars = glob.glob(os.path.join(module_folder, "*.jar"))
+        module_jars = get_folder_files(module_folder, ["*.jar"])
 
         for module_jar in module_jars:
             print("--Uploading " + module_jar)
@@ -68,7 +68,7 @@ def copy_poms(configs, artifact_folder):
     print("Copying POM files to artifact folder...")
     for module_name in configs["moduleNames"]:
         module_folder = get_module_folder(configs, module_name)
-        pom_files = glob.glob(os.path.join(module_folder, "*.pom"))
+        pom_files = get_folder_files(module_folder, ["*.pom"])
 
         for pom_file in pom_files:
             print("--" + pom_file)
@@ -92,11 +92,7 @@ def generate_checksum(artifact_folder):
     Generate md5 and sh1 for all jars and poms
     """
     print("Generating checksum files...")
-    types = (os.path.join(artifact_folder, "*.jar"), os.path.join(artifact_folder, "*.pom"))
-    files_grabed = []
-    for file in types:
-        files_grabed.extend(glob.glob(file))
-
+    files_grabed = get_folder_files(artifact_folder, ["*.jar", "*.pom"])
     for file in files_grabed:
         file_name = os.path.basename(file)
 
@@ -255,4 +251,14 @@ def get_module_folder(configs, module_name):
     Get the full path of local module folder
     """
     repo_path = get_local_repository_path()
-    return os.path.join(repo_path, module_name, configs["releaseVersion"])
+    return os.path.join(repo_path, configs["groupId"].replace(".", "/"),
+                        module_name, configs["releaseVersion"])
+
+def get_folder_files(folder, types):
+    """
+    Get file list with given folder and types
+    """
+    files_grabed = []
+    for file_type in types:
+        files_grabed.extend(glob.glob(os.path.join(folder, file_type)))
+    return files_grabed
