@@ -11,7 +11,7 @@
         "azure-mediaservices-spring-boot-starter",
         "azure-servicebus-spring-boot-starter"
     ],
-    "srcFolder": "C:/Users/zhijzhao/.m2/repository/com/microsoft/azure",
+    "groupId": "com.microsoft.azure",
     "targetFolder": "D:/Signed",
     "toSignFolder": "//ADXInfra1/ToSign/",
     "signedFilder": "//ADXInfra1/Signed",
@@ -29,8 +29,7 @@
         "createRepoURL": "https://oss.sonatype.org/service/local/staging/profiles/534d15ee3800f4/start",
         "closeRepoURL": "https://oss.sonatype.org/service/local/staging/profiles/534d15ee3800f4/finish",
         "deployRepoURL": "https://oss.sonatype.org/service/local/staging/deployByRepositoryId",
-        "repoBaseURL": "https://oss.sonatype.org/service/local/staging/repository",
-        "deployGroupPath": "com/microsoft/azure"
+        "repoBaseURL": "https://oss.sonatype.org/service/local/staging/repository"
     },
     "passwords": {
         "jenkins": "",
