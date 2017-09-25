@@ -27,7 +27,7 @@ mvnw clean install -DskipTests
 ```
 
 ## Version management
-Developing version naming convention is like `0.1.7-SNAPSHOT`. Release version naming convention is like `0.1.7`. Please don't update version if no release plan. 
+Developing version naming convention is like `0.1.8-SNAPSHOT`. Release version naming convention is like `0.1.8`. Please don't update version if no release plan. 
 
 ## CI
 Both [travis](https://travis-ci.org/Microsoft/azure-spring-boot) and [appveyor](https://ci.appveyor.com/project/yungez/azure-spring-boot) CI is enabled.
