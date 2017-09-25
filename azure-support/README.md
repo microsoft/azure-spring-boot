@@ -2,7 +2,6 @@
 
 ## Azure Spring Boot AutoConfigure
 This package provides auto-configuration for below Azure Services:
-- AAD
 - Cosmos DB DocumentDB API
 - Media Service
 - Service Bus
