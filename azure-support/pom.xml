@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-parent</artifactId>
-        <version>0.1.8-SNAPSHOT</version>
+        <version>0.1.9-SNAPSHOT</version>
         <relativePath>../azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
@@ -72,18 +72,6 @@
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>spring-data-documentdb</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <!-- Spring Social -->
-        <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>spring-social-microsoft-graph</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.social</groupId>
-            <artifactId>spring-social-config</artifactId>
             <optional>true</optional>
         </dependency>
 

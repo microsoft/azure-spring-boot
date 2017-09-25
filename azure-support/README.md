@@ -1,8 +1,13 @@
-# Azure Spring Boot AutoConfigure
-This package is Spring Boot AutoConfigure for below Azure Services:
-- AAD
+# Azure Support
+
+## Azure Spring Boot AutoConfigure
+This package provides auto-configuration for below Azure Services:
 - Cosmos DB DocumentDB API
-- Microsoft Graph
-- Storage
-- Service Bus
 - Media Service
+- Service Bus
+- Storage
+
+## Azure Cloud Foundry Service		
+This module also provides the ability to automatically inject credentials from Cloud Foundry into your
+applications consuming Azure services. It does this by reading the VCAP_SERVICES environment
+variable and setting the appropriate properties on the azure auto-configuration projects.
