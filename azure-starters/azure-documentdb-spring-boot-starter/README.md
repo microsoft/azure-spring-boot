@@ -130,6 +130,6 @@ Find more information about Azure Service Privacy Statement, please check [Micro
 
 ### Further info
 
-Besides using Azure Cosmos DB DocumentDB API Spring boot starter, you can directly use Azure Cosmos DB DocumentDB API Spring Data package to more complex scenario, detail pls refer to [Azure Cosmos DB DocumentDB API Spring Data](../spring-data-azure-documentdb/README.md).
+Besides using Azure Cosmos DB DocumentDB API Spring boot starter, you can directly use Azure Cosmos DB DocumentDB API Spring Data package to more complex scenario, detail pls refer to [Spring Data for Azure Cosmos DB DocumentDB API ](https://github.com/Microsoft/spring-data-documentdb/README.md).
 
 
