@@ -5,7 +5,7 @@
 
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-spring-boot-bom</artifactId>
-    <version>0.1.8-SNAPSHOT</version>
+    <version>0.1.9-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Azure Spring Boot BOM</name>
@@ -62,52 +62,52 @@
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-ad-integration-spring-boot-starter</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
+                <version>0.1.9-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-documentdb-spring-boot-starter</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
+                <version>0.1.9-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-storage-spring-boot-starter</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
+                <version>0.1.9-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-servicebus-spring-boot-starter</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
+                <version>0.1.9-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-keyvault-secrets-spring-boot</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
+                <version>0.1.9-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
+                <version>0.1.9-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>microsoft-graph-spring-social-starter</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
+                <version>0.1.9-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-mediaservices-spring-boot-starter</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
+                <version>0.1.9-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-cloud-foundry-service</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
+                <version>0.1.9-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-support</artifactId>
-                <version>0.1.8-SNAPSHOT</version>
+                <version>0.1.9-SNAPSHOT</version>
             </dependency>
             <!-- Spring Social Microsoft Graph library -->
             <dependency>
