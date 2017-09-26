@@ -13,11 +13,10 @@ az login
 az account set --subscription <your_subscription_id>
 
 # create azure service principal by azure cli
-az ad app create --display-name <your_app_name> --identifier-uris http://test.com/test --homepage http://test.com/test
-# save the appId from output
-az ad sp create --id <app_id_created_from_above_step>
+az ad sp create-for-rbac --name <your_azure_service_principal_name>
+# save the appId and password from output
 ```
-Save the service principal id and password contained in the output of the previous command.
+Save the service principal id and password contained in the output from above command.
 
 - Create Azure Key Vault by using Azure CLI or via [Azure Portal](https://portal.azure.com). You also need to grant appropriate permissions to the service principal created.
 You can use the following az cli commands:
