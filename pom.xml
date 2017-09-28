@@ -49,7 +49,7 @@
         <module>azure-spring-boot-bom</module>
         <module>azure-spring-boot-parent</module>
         <module>azure-spring-boot</module>
-        <module>azure-starters</module>
+        <module>azure-spring-boot-starters</module>
         <module>azure-samples</module>
     </modules>
 

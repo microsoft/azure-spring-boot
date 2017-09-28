@@ -11,7 +11,7 @@
         <relativePath>../azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>azure-starters</artifactId>
+    <artifactId>azure-spring-boot-starters</artifactId>
     <packaging>pom</packaging>
 
     <name>Azure Spring Boot Starers</name>
