@@ -8,7 +8,7 @@
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-bom</artifactId>
         <version>0.1.9-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../azure-spring-boot-bom/pom.xml</relativePath>
     </parent>
 
     <artifactId>azure-spring-boot-parent</artifactId>
@@ -203,14 +203,4 @@
         </plugins>
     </build>
 
-    <modules>
-        <module>../azure-support</module>
-		<module>../azure-starters/azure-spring-boot-starter</module>
-        <module>../azure-starters/azure-ad-integration-spring-boot-starter</module>
-        <module>../azure-starters/azure-documentdb-spring-boot-starter</module>
-        <module>../azure-starters/azure-storage-spring-boot-starter</module>
-        <module>../azure-starters/azure-servicebus-spring-boot-starter</module>
-        <module>../azure-starters/azure-mediaservices-spring-boot-starter</module>
-        <module>../azure-starters/azure-keyvault-secrets-spring-boot-starter</module>
-    </modules>
 </project>

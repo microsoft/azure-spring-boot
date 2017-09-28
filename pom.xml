@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-spring-boot-bom</artifactId>
+    <artifactId>azure-spring-boot-build</artifactId>
     <version>0.1.9-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Azure Spring Boot BOM</name>
-    <description>BOM for Microsoft Azure Spring Boot Support</description>
+    <name>Azure Spring Boot Build</name>
+    <description>Build for Microsoft Azure Spring Boot Support</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
     <licenses>
@@ -45,107 +45,12 @@
         <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
     </scm>
 
-    <properties>
-        <azure.adal4j.version>1.2.0</azure.adal4j.version>
-        <azure.documentdb.version>1.13.0</azure.documentdb.version>
-        <azure.storage.version>5.5.0</azure.storage.version>
-        <azure.keyvault.version>1.0.0</azure.keyvault.version>
-        <aad.adal4j.version>0.0.2</aad.adal4j.version>
-        <azure.media.version>0.9.7</azure.media.version>
-        <azure.servicebus.version>1.0.0</azure.servicebus.version>
-        <spring.data.documentdb.version>0.1.2</spring.data.documentdb.version>
-    </properties>
-
-    <dependencyManagement>
-        <dependencies>
-			<dependency>
-				<groupId>com.microsoft.azure</groupId>
-				<artifactId>azure-spring-boot-starter</artifactId>
-				<version>0.1.9-SNAPSHOT</version>
-			</dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-ad-integration-spring-boot-starter</artifactId>
-                <version>0.1.9-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-documentdb-spring-boot-starter</artifactId>
-                <version>0.1.9-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-storage-spring-boot-starter</artifactId>
-                <version>0.1.9-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-servicebus-spring-boot-starter</artifactId>
-                <version>0.1.9-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
-                <version>0.1.9-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-mediaservices-spring-boot-starter</artifactId>
-                <version>0.1.9-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-support</artifactId>
-                <version>0.1.9-SNAPSHOT</version>
-            </dependency>
-
-            <!-- Spring Data Cosmos DB library -->
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>spring-data-documentdb</artifactId>
-                <version>${spring.data.documentdb.version}</version>
-            </dependency>
-            <!-- Azure related libraries-->
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>adal4j</artifactId>
-                <version>${azure.adal4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-storage</artifactId>
-                <version>${azure.storage.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-documentdb</artifactId>
-                <version>${azure.documentdb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-keyvault</artifactId>
-                <version>${azure.keyvault.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.aad</groupId>
-                <artifactId>adal4j</artifactId>
-                <version>${aad.adal4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-media</artifactId>
-                <version>${azure.media.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-servicebus</artifactId>
-                <version>${azure.servicebus.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <modules>
+		<module>azure-spring-boot-bom</module>
         <module>azure-spring-boot-parent</module>
         <module>azure-samples</module>
+		<module>azure-support</module>
+		<module>azure-starters</module>
     </modules>
+	
 </project>
