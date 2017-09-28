@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-samples</artifactId>
+    <artifactId>azure-spring-boot-samples</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
@@ -137,12 +137,12 @@
     </build>
 
     <modules>
-        <module>azure-ad-integration-spring-boot-starter-sample</module>
-        <module>azure-documentdb-spring-boot-starter-sample</module>
-        <module>azure-keyvault-secrets-spring-boot-starter-sample</module>
-        <module>azure-mediaservices-spring-boot-starter-sample</module>
-        <module>azure-servicebus-spring-boot-starter-sample</module>
-        <module>azure-storage-spring-boot-starter-sample</module>
+        <module>azure-ad-integration-spring-boot-sample</module>
+        <module>azure-documentdb-spring-boot-sample</module>
+        <module>azure-keyvault-secrets-spring-boot-sample</module>
+        <module>azure-mediaservices-spring-boot-sample</module>
+        <module>azure-servicebus-spring-boot-sample</module>
+        <module>azure-storage-spring-boot-sample</module>
         <module>azure-cloud-foundry-service-sample</module>
     </modules>
 </project>

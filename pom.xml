@@ -50,7 +50,7 @@
         <module>azure-spring-boot-parent</module>
         <module>azure-spring-boot</module>
         <module>azure-spring-boot-starters</module>
-        <module>azure-samples</module>
+        <module>azure-spring-boot-samples</module>
     </modules>
 
 </project>

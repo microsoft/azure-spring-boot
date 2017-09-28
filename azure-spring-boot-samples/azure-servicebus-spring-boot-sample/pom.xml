@@ -6,12 +6,12 @@
 
     <parent>
         <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-samples</artifactId>
+        <artifactId>azure-spring-boot-samples</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>azure-servicebus-spring-boot-starter-sample</artifactId>
+    <artifactId>azure-servicebus-spring-boot-sample</artifactId>
     <packaging>jar</packaging>
 
     <name>Azure Service Bus Spring Boot Starter Sample</name>

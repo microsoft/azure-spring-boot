@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-samples</artifactId>
+        <artifactId>azure-spring-boot-samples</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>azure-keyvault-secrets-spring-boot-starter-sample</artifactId>
+    <artifactId>azure-documentdb-spring-boot-sample</artifactId>
     <packaging>jar</packaging>
 
-    <name>Azure Key Vault Secrets Spring Boot Starter Sample</name>
-    <description>Sample project for Azure Key Vault Secrets Starter</description>
+    <name>Azure Document DB Spring Boot Starter Sample</name>
+    <description>Sample project for Azure Document DB Starter</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
     <dependencies>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
+            <artifactId>azure-documentdb-spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
 

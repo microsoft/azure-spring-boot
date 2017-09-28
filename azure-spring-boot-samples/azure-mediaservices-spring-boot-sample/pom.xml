@@ -6,12 +6,12 @@
 
     <parent>
         <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-samples</artifactId>
+        <artifactId>azure-spring-boot-samples</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>azure-mediaservices-spring-boot-starter-sample</artifactId>
+    <artifactId>azure-mediaservices-spring-boot-sample</artifactId>
     <packaging>jar</packaging>
 
     <name>Azure Media Services Spring Boot Starter Sample</name>
