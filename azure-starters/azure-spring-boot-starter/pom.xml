@@ -4,9 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
-    <packaging>jar</packaging>
-
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-parent</artifactId>
@@ -14,8 +11,11 @@
         <relativePath>../../azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
-    <name>Azure Key Vault Secrets Spring Boot Starter</name>
-    <description>Spring Boot Starter supporting Azure Key Vault Secrets as PropertySource</description>
+    <artifactId>azure-spring-boot-starter</artifactId>
+    <packaging>jar</packaging>
+
+    <name>Azure Spring Boot Starter</name>
+    <description>Core starter, including auto-configuration support</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
     <licenses>
@@ -28,9 +28,9 @@
 
     <developers>
         <developer>
-            <id>yungez</id>
-            <name>Yunge Zhu</name>
-            <email>yungez@microsoft.com</email>
+            <id>rajadilipkolli</id>
+            <name>Raja Dilip Kolli</name>
+            <email>rajadileepkolli@outlook.com</email>
         </developer>
     </developers>
 
@@ -46,27 +46,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-keyvault</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.microsoft.aad</groupId>
-            <artifactId>adal4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>2.8.9</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-support</artifactId>
         </dependency>
     </dependencies>
 </project>

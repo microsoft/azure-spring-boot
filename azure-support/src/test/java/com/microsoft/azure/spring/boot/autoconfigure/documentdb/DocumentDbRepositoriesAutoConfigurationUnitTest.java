@@ -6,9 +6,9 @@
 
 package com.microsoft.azure.spring.boot.autoconfigure.documentdb;
 
+import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.boot.autoconfigure.documentdb.domain.Person;
 import com.microsoft.azure.spring.boot.autoconfigure.documentdb.domain.PersonRepository;
-import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.documentdb.repository.config.EnableDocumentDbRepositories;
 import org.junit.After;
