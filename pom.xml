@@ -46,11 +46,11 @@
     </scm>
 
     <modules>
-		<module>azure-spring-boot-bom</module>
+        <module>azure-spring-boot-bom</module>
         <module>azure-spring-boot-parent</module>
         <module>azure-samples</module>
-		<module>azure-support</module>
-		<module>azure-starters</module>
+        <module>azure-support</module>
+        <module>azure-starters</module>
     </modules>
-	
+
 </project>
