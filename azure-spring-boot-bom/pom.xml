@@ -95,7 +95,7 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-support</artifactId>
+                <artifactId>azure-spring-boot</artifactId>
                 <version>0.1.9-SNAPSHOT</version>
             </dependency>
 
