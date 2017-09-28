@@ -1,0 +1,7 @@
+org.springframework.boot.env.EnvironmentPostProcessor=com.microsoft.azure.cloudfoundry.service.VcapProcessor
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.microsoft.azure.spring.autoconfigure.documentdb.DocumentDBAutoConfiguration,\
+com.microsoft.azure.spring.autoconfigure.documentdb.DocumentDbRepositoriesAutoConfiguration,\
+com.microsoft.azure.spring.autoconfigure.mediaservices.MediaServicesAutoConfiguration,\
+com.microsoft.azure.spring.autoconfigure.msgraph.MicrosoftAutoConfiguration,\
+com.microsoft.azure.spring.autoconfigure.servicebus.ServiceBusAutoConfiguration,\
+com.microsoft.azure.spring.autoconfigure.storage.StorageAutoConfiguration
