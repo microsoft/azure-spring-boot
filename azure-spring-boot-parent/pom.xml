@@ -18,34 +18,6 @@
     <description>Parent package for Azure Spring Boot</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
-    <scm>
-        <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
-        <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
-        <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
-    </scm>
-
-    <licenses>
-        <license>
-            <name>MIT</name>
-            <url>https://github.com/Microsoft/azure-spring-boot/blob/master/LICENSE</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <id>ZhijunZhao</id>
-            <name>Zhijun Zhao</name>
-            <email>zhijzhao@microsoft.com</email>
-        </developer>
-
-        <developer>
-            <id>yungez</id>
-            <name>Yunge Zhu</name>
-            <email>yungez@microsoft.com</email>
-        </developer>
-    </developers>
-
     <properties>
         <!-- For module that has different relative path to the root dir, project.rootdir should be redefined in its
         module pom file -->

@@ -5,7 +5,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
-    <packaging>jar</packaging>
 
     <parent>
         <groupId>com.microsoft.azure</groupId>
@@ -17,28 +16,6 @@
     <name>Azure Key Vault Secrets Spring Boot Starter</name>
     <description>Spring Boot Starter supporting Azure Key Vault Secrets as PropertySource</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
-
-    <licenses>
-        <license>
-            <name>MIT</name>
-            <url>https://github.com/Microsoft/azure-spring-boot/blob/master/LICENSE</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <id>yungez</id>
-            <name>Yunge Zhu</name>
-            <email>yungez@microsoft.com</email>
-        </developer>
-    </developers>
-
-    <scm>
-        <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
-        <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
-        <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
-    </scm>
 
     <properties>
         <project.rootdir>${project.basedir}/../..</project.rootdir>
@@ -54,19 +31,8 @@
             <artifactId>azure-keyvault</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.aad</groupId>
+            <groupId>com.microsoft.azure</groupId>
             <artifactId>adal4j</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>2.8.9</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
