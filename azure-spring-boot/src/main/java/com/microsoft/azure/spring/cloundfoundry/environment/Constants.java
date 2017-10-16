@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.cloudfoundry.service;
+package com.microsoft.azure.spring.cloundfoundry.environment;
 
 public class Constants {
     // Property namespaces
