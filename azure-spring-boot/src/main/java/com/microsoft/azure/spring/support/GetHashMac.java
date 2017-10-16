@@ -10,7 +10,7 @@
  *      Location in the repo: /Utils/azuretools-core/src/com/microsoft/azuretools/azurecommons/util/GetHashMac.java
  */
 
-package com.microsoft.azure.spring.autoconfigure.common;
+package com.microsoft.azure.spring.support;
 
 import java.io.BufferedReader;
 import java.io.IOException;

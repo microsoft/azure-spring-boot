@@ -9,7 +9,7 @@ package com.microsoft.azure.spring.autoconfigure.documentdb;
 import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import com.microsoft.azure.documentdb.DocumentClient;
-import com.microsoft.azure.spring.autoconfigure.common.GetHashMac;
+import com.microsoft.azure.spring.support.GetHashMac;
 import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
