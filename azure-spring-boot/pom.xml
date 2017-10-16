@@ -68,6 +68,16 @@
             <artifactId>azure-storage</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-keyvault</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.aad</groupId>
+            <artifactId>adal4j</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <!-- TEST-->
         <dependency>
