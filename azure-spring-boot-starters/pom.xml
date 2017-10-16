@@ -20,7 +20,7 @@
 
     <modules>
         <module>azure-spring-boot-starter</module>
-        <module>azure-ad-integration-spring-boot-starter</module>
+        <module>azure-active-directory-spring-boot-starter</module>
         <module>azure-documentdb-spring-boot-starter</module>
         <module>azure-keyvault-secrets-spring-boot-starter</module>
         <module>azure-mediaservices-spring-boot-starter</module>

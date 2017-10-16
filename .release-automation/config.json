@@ -4,7 +4,7 @@
     "azure-spring-boot-parent",
     "azure-spring-boot-bom",
     "azure-spring-boot",
-    "azure-ad-integration-spring-boot-starter",
+    "azure-active-directory-spring-boot-starter",
     "azure-documentdb-spring-boot-starter",
     "azure-storage-spring-boot-starter",
     "azure-keyvault-secrets-spring-boot-starter",

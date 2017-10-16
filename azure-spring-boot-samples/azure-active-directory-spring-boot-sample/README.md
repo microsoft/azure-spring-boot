@@ -1,5 +1,5 @@
 ## Overview
-This sample illustrates how to use `azure-ad-integration-spring-boot-starter` package to plugin JWT token filter into Spring Security filter chain. The filter injects `UserPrincipal` object that is associated with the thread of the current user request. User's AAD membership info, along with token claimsset, JWS object etc. are accessible from the object which can be used for role based authorization. Methods like `isMemberOf` is also supported.
+This sample illustrates how to use `azure-active-directory-spring-boot-starter` package to plugin JWT token filter into Spring Security filter chain. The filter injects `UserPrincipal` object that is associated with the thread of the current user request. User's AAD membership info, along with token claimsset, JWS object etc. are accessible from the object which can be used for role based authorization. Methods like `isMemberOf` is also supported.
 
 ### Get started
 The sample is composed of two layers: Angular JS client and Spring Boot RESTful Web Service. You need to make some changes to get it working with your Azure AD tenant on both sides.
@@ -35,7 +35,7 @@ In `app.js`, make following changes. The client leverages Azure AD library for J
 
 ### Give it a run
 * Go to `path-to-azure-spring-boot-starters`, run `mvn clean install`.
-* `cd activedirectory\azure-ad-integration-spring-boot-starter-sample`
+* `cd activedirectory\azure-active-directory-spring-boot-starter-sample`
 * `mvn spring-boot:run`
 * If running locally, browse to `http://localhost:8080` and click `Login` or `Todo List`, your brower will be redirected to `https://login.microsoftonline.com/` for authentication.
 * Upon successful login, `Todo List` will give you a default item and you can perform add, update or delete operation. The backend RESTful API will accept or deny your request based on authenticated user roles.

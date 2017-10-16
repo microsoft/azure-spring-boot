@@ -11,7 +11,7 @@
         <relativePath>../../azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>azure-ad-integration-spring-boot-starter</artifactId>
+    <artifactId>azure-active-directory-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
 
     <name>Azure AD Spring Security Integration Spring Boot Starter</name>

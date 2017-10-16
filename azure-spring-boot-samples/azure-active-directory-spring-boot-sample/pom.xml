@@ -10,7 +10,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>azure-ad-integration-spring-boot-sample</artifactId>
+    <artifactId>azure-active-directory-spring-boot-sample</artifactId>
     <packaging>jar</packaging>
 
     <name>Azure AD Spring Security Integration Spring Boot Sample</name>
@@ -32,7 +32,7 @@
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-ad-integration-spring-boot-starter</artifactId>
+            <artifactId>azure-active-directory-spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
 
