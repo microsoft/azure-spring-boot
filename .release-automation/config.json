@@ -1,9 +1,10 @@
 {
-  "releaseVersion": "0.1.9",
+  "releaseVersion": "0.1.9-SNAPSHOT",
   "moduleNames": [
     "azure-spring-boot-parent",
     "azure-spring-boot-bom",
     "azure-spring-boot",
+    "azure-spring-boot-starter",
     "azure-active-directory-spring-boot-starter",
     "azure-documentdb-spring-boot-starter",
     "azure-storage-spring-boot-starter",

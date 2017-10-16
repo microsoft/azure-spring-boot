@@ -18,34 +18,6 @@
     <description>Azure Spring Boot AutoConfigure</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
-    <licenses>
-        <license>
-            <name>MIT</name>
-            <url>https://github.com/Microsoft/azure-spring-boot/blob/master/LICENSE</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <id>ZhijunZhao</id>
-            <name>Zhijun Zhao</name>
-            <email>zhijzhao@microsoft.com</email>
-        </developer>
-
-        <developer>
-            <id>yungez</id>
-            <name>Yunge Zhu</name>
-            <email>yungez@microsoft.com</email>
-        </developer>
-    </developers>
-
-    <scm>
-        <connection>scm:git:git://github.com/Microsoft/azure-spring-boot.git</connection>
-        <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot.git</developerConnection>
-        <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
-    </scm>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
