@@ -12,7 +12,6 @@
     </parent>
 
     <artifactId>azure-spring-boot-starter</artifactId>
-    <packaging>jar</packaging>
 
     <name>Azure Spring Boot Starter</name>
     <description>Core starter, including auto-configuration support</description>

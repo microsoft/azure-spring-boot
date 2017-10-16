@@ -12,7 +12,6 @@
     </parent>
 
     <artifactId>azure-documentdb-spring-boot-starter</artifactId>
-    <packaging>jar</packaging>
 
     <name>Azure Document DB Spring Boot Starter</name>
     <description>Spring Boot Starter for Azure Document DB service</description>
