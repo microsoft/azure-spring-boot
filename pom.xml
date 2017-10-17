@@ -5,7 +5,7 @@
 
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-spring-boot-build</artifactId>
-    <version>0.1.9-SNAPSHOT</version>
+    <version>0.1.10-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Azure Spring Boot Build</name>
