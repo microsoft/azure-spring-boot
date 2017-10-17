@@ -34,7 +34,7 @@ import org.springframework.data.annotation.Persistent;
 @EnableConfigurationProperties(DocumentDBProperties.class)
 public class DocumentDBAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(DocumentDBAutoConfiguration.class);
-    private static final String USER_AGENT_SUFFIX = "spring-boot-starter/0.1.9-SNAPSHOT";
+    private static final String USER_AGENT_SUFFIX = "spring-boot-starter/0.1.10-SNAPSHOT";
 
     private final DocumentDBProperties properties;
     private final ConnectionPolicy connectionPolicy;
