@@ -62,11 +62,6 @@
                 <configuration>
                     <show>private</show>
                     <failOnError>false</failOnError>
-                    <sourceFileExcludes>
-                        <exclude>
-                            com/microsoft/azure/spring/data/documentdb/core/mapping/BasicDocumentDbPersistentProperty.java
-                        </exclude>
-                    </sourceFileExcludes>
                 </configuration>
                 <executions>
                     <execution>
