@@ -28,10 +28,13 @@ public class KeyVaultOperation {
 
     public KeyVaultOperation(KeyVaultClient keyVaultClient, String vaultUri) {
         this.keyVaultClient = keyVaultClient;
-        this.vaultUri = vaultUri;
+
+        vaultUri = vaultUri.trim();
         if (vaultUri.endsWith("/")) {
-            this.vaultUri = vaultUri.substring(0, vaultUri.length() - 1);
+            vaultUri = vaultUri.substring(0, vaultUri.length() - 1);
         }
+        this.vaultUri = vaultUri;
+
         createOrUpdateHashMap();
     }
 
