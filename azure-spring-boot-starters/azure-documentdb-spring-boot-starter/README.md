@@ -19,7 +19,7 @@
 - Supports [Azure Cosmos DB partition](https://docs.microsoft.com/en-us/azure/cosmos-db/partition-data). To specify a field of your domain class to be partition key field, just annotate it with `@PartitionKey`. When you do CRUD operation, pls specify your partition value. For more sample on partition CRUD, pls refer to [test here](./test/java/com/microsoft/azure/spring/data/documentdb/repository/AddressRepositoryIT.java)   
 
 ## Sample Code
-Please refer to [sample project here](../../azure-spring-boot-samples/azure-documentdb-spring-boot-starter-sample).
+Please refer to [sample project here](../../azure-spring-boot-samples/azure-documentdb-spring-boot-sample).
 
 ## Quick Start
 
