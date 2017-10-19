@@ -16,9 +16,17 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
 
+        if (isKeyVaultEnabled(environment)) {
+            final KeyVaultEnvironmentPostProcessorHelper helper =
+                    new KeyVaultEnvironmentPostProcessorHelper(environment);
+            helper.addKeyVaultPropertySource();
+        }
+    }
+
+    private boolean isKeyVaultEnabled(ConfigurableEnvironment environment){
         if (environment.getProperty(Constants.AZURE_CLIENTID) == null) {
             // User doesn't want to enable Key Vault property initializer.
-            return;
+            return false;
         }
 
         boolean enabled = true;
@@ -26,11 +34,10 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
             enabled = Boolean.parseBoolean(environment.getProperty(Constants.AZURE_KEYVAULT_ENABLED));
         }
 
-        if (enabled && ClassUtils.isPresent("com.microsoft.azure.keyvault.KeyVaultClient",
-                null)) {
-            final KeyVaultEnvironmentPostProcessorHelper helper =
-                    new KeyVaultEnvironmentPostProcessorHelper(environment);
-            helper.addKeyVaultPropertySource();
-        }
+        return enabled && isKeyVaultClientAvailable();
+    }
+
+    private boolean isKeyVaultClientAvailable(){
+        return ClassUtils.isPresent("com.microsoft.azure.keyvault.KeyVaultClient", null);
     }
 }
