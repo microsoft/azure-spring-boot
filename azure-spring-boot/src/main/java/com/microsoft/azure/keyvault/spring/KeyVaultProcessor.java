@@ -6,15 +6,13 @@
 
 package com.microsoft.azure.keyvault.spring;
 
-import com.microsoft.azure.keyvault.KeyVaultClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.MutablePropertySources;
-import org.springframework.core.env.StandardEnvironment;
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 
-public class KeyVaultPropertyEnvironmentPostProcessor implements EnvironmentPostProcessor {
+public class KeyVaultProcessor implements EnvironmentPostProcessor {
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
@@ -39,24 +37,11 @@ public class KeyVaultPropertyEnvironmentPostProcessor implements EnvironmentPost
                     environment.getProperty(Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS));
         }
 
-        if (enabled) {
-            final KeyVaultClient kvClient = new KeyVaultClient(
-                    new AzureKeyVaultCredential(clientId, clientKey, timeAcquiringTimeoutInSeconds));
-
-            try {
-                final MutablePropertySources sources = environment.getPropertySources();
-                final KeyVaultOperation kvOperation = new KeyVaultOperation(kvClient, vaultUri);
-
-                if (sources.contains(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME)) {
-                    sources.addAfter(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME,
-                            new KeyVaultPropertySource(kvOperation));
-                } else {
-                    sources.addFirst(new KeyVaultPropertySource(kvOperation));
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (enabled && ClassUtils.isPresent("com.microsoft.azure.keyvault.KeyVaultClient",
+                null)) {
+            final KeyVaultProcessorHelper keyVaultProcessorHelper = new KeyVaultProcessorHelper(
+                    environment, clientId, clientKey, vaultUri, timeAcquiringTimeoutInSeconds);
+            keyVaultProcessorHelper.addKeyVaultPropertySource();
         }
     }
 
