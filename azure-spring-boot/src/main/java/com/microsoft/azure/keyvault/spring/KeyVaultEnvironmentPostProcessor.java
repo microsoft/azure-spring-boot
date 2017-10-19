@@ -27,7 +27,7 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
         }
 
         if (enabled && ClassUtils.isPresent("com.microsoft.azure.keyvault.KeyVaultClient",
-                ClassLoader.getSystemClassLoader())) {
+                null)) {
             final KeyVaultEnvironmentPostProcessorHelper helper =
                     new KeyVaultEnvironmentPostProcessorHelper(environment);
             helper.addKeyVaultPropertySource();
