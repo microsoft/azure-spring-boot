@@ -40,12 +40,6 @@
             <artifactId>json</artifactId>
         </dependency>
 
-        <!--Keyvault-->
-        <dependency>
-            <groupId>com.microsoft.rest</groupId>
-            <artifactId>client-runtime</artifactId>
-        </dependency>
-
         <!--Azure active directory-->
         <dependency>
             <groupId>org.springframework</groupId>
