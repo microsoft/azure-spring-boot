@@ -6,30 +6,23 @@
 
 package com.microsoft.azure.keyvault.spring;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.env.EnvironmentPostProcessor;
+import com.microsoft.azure.keyvault.KeyVaultClient;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.MutablePropertySources;
+import org.springframework.core.env.StandardEnvironment;
 import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
 
-public class KeyVaultProcessor implements EnvironmentPostProcessor {
+public class KeyVaultEnvironmentPostProcessorHelper {
+    private ConfigurableEnvironment environment;
 
-    @Override
-    public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
+    public KeyVaultEnvironmentPostProcessorHelper(ConfigurableEnvironment environment) {
+        this.environment = environment;
+    }
 
-        if (environment.getProperty(Constants.AZURE_CLIENTID) == null) {
-            // User doesn't want to enable Key Vault property initializer.
-            return;
-        }
-
+    public void addKeyVaultPropertySource() {
         final String clientId = getProperty(environment, Constants.AZURE_CLIENTID);
         final String clientKey = getProperty(environment, Constants.AZURE_CLIENTKEY);
         final String vaultUri = getProperty(environment, Constants.AZURE_KEYVAULT_VAULT_URI);
-
-        boolean enabled = true;
-        if (environment.getProperty(Constants.AZURE_KEYVAULT_ENABLED) != null) {
-            enabled = Boolean.parseBoolean(environment.getProperty(Constants.AZURE_KEYVAULT_ENABLED));
-        }
 
         long timeAcquiringTimeoutInSeconds = 60;
         if (environment.getProperty(Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS) != null) {
@@ -37,11 +30,22 @@ public class KeyVaultProcessor implements EnvironmentPostProcessor {
                     environment.getProperty(Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS));
         }
 
-        if (enabled && ClassUtils.isPresent("com.microsoft.azure.keyvault.KeyVaultClient",
-                null)) {
-            final KeyVaultProcessorHelper keyVaultProcessorHelper = new KeyVaultProcessorHelper(
-                    environment, clientId, clientKey, vaultUri, timeAcquiringTimeoutInSeconds);
-            keyVaultProcessorHelper.addKeyVaultPropertySource();
+        final KeyVaultClient kvClient = new KeyVaultClient(
+                new AzureKeyVaultCredential(clientId, clientKey, timeAcquiringTimeoutInSeconds));
+
+        try {
+            final MutablePropertySources sources = environment.getPropertySources();
+            final KeyVaultOperation kvOperation = new KeyVaultOperation(kvClient, vaultUri);
+
+            if (sources.contains(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME)) {
+                sources.addAfter(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME,
+                        new KeyVaultPropertySource(kvOperation));
+            } else {
+                sources.addFirst(new KeyVaultPropertySource(kvOperation));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
