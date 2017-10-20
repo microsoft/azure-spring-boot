@@ -12,8 +12,9 @@ import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.util.Assert;
 
-public class KeyVaultEnvironmentPostProcessorHelper {
-    private ConfigurableEnvironment environment;
+class KeyVaultEnvironmentPostProcessorHelper {
+
+    private final ConfigurableEnvironment environment;
 
     public KeyVaultEnvironmentPostProcessorHelper(ConfigurableEnvironment environment) {
         this.environment = environment;
@@ -24,11 +25,8 @@ public class KeyVaultEnvironmentPostProcessorHelper {
         final String clientKey = getProperty(environment, Constants.AZURE_CLIENTKEY);
         final String vaultUri = getProperty(environment, Constants.AZURE_KEYVAULT_VAULT_URI);
 
-        long timeAcquiringTimeoutInSeconds = 60;
-        if (environment.getProperty(Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS) != null) {
-            timeAcquiringTimeoutInSeconds = Long.parseLong(
-                    environment.getProperty(Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS));
-        }
+        long timeAcquiringTimeoutInSeconds = environment.getProperty(
+                Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, Long.class, 60L);
 
         final KeyVaultClient kvClient = new KeyVaultClient(
                 new AzureKeyVaultCredential(clientId, clientKey, timeAcquiringTimeoutInSeconds));
@@ -44,8 +42,8 @@ public class KeyVaultEnvironmentPostProcessorHelper {
                 sources.addFirst(new KeyVaultPropertySource(kvOperation));
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            throw new IllegalStateException("Failed to configure KeyVault property source", ex);
         }
     }
 
@@ -56,7 +54,7 @@ public class KeyVaultEnvironmentPostProcessorHelper {
         final String property = env.getProperty(propertyName);
 
         if (property == null || property.isEmpty()) {
-            throw new IllegalArgumentException("property " + propertyName + " must not be null!");
+            throw new IllegalArgumentException("property " + propertyName + " must not be null");
         }
         return property;
     }

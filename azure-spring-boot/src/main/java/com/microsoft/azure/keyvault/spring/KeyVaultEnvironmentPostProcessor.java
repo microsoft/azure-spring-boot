@@ -28,13 +28,8 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
             // User doesn't want to enable Key Vault property initializer.
             return false;
         }
-
-        boolean enabled = true;
-        if (environment.getProperty(Constants.AZURE_KEYVAULT_ENABLED) != null) {
-            enabled = Boolean.parseBoolean(environment.getProperty(Constants.AZURE_KEYVAULT_ENABLED));
-        }
-
-        return enabled && isKeyVaultClientAvailable();
+        return environment.getProperty(Constants.AZURE_KEYVAULT_ENABLED, Boolean.class, true)
+                && isKeyVaultClientAvailable();
     }
 
     private boolean isKeyVaultClientAvailable(){
