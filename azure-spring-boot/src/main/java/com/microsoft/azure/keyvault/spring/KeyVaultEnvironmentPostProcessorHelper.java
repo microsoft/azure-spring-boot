@@ -25,7 +25,7 @@ class KeyVaultEnvironmentPostProcessorHelper {
         final String clientKey = getProperty(environment, Constants.AZURE_CLIENTKEY);
         final String vaultUri = getProperty(environment, Constants.AZURE_KEYVAULT_VAULT_URI);
 
-        long timeAcquiringTimeoutInSeconds = environment.getProperty(
+        final long timeAcquiringTimeoutInSeconds = environment.getProperty(
                 Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, Long.class, 60L);
 
         final KeyVaultClient kvClient = new KeyVaultClient(
