@@ -7,8 +7,9 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 
 import com.microsoft.aad.adal4j.AuthenticationContext;
 import com.microsoft.aad.adal4j.AuthenticationResult;
-import com.microsoft.aad.adal4j.ClientAssertion;
 import com.microsoft.aad.adal4j.ClientCredential;
+import com.microsoft.aad.adal4j.UserAssertion;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -47,7 +48,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
             String tenantId) throws Throwable {
         final ClientCredential credential = new ClientCredential(
                 aadAuthFilterProp.getClientId(), aadAuthFilterProp.getClientSecret());
-        final ClientAssertion assertion = new ClientAssertion(idToken);
+        final UserAssertion assertion = new UserAssertion(idToken);
 
         AuthenticationResult result = null;
         ExecutorService service = null;
