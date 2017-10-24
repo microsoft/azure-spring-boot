@@ -45,5 +45,5 @@ Caused by: java.lang.SecurityException: class "com.microsoft.azure.sample.User_A
 
 ### More details
 
-Please refer to [this article](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-java-spring-boot-starter-with-cosmos-db) for the toturial about how to use the Spring Boot Starter with Azure Cosmos DB DocumentDB API.
+Please refer to [this article](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-java-spring-boot-starter-with-cosmos-db) for the tutorial about how to use the Spring Boot Starter with Azure Cosmos DB DocumentDB API.
 

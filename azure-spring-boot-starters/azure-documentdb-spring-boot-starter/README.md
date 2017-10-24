@@ -13,10 +13,10 @@
   There're 2 ways to map a field in domain class to `id` of Azure Cosmos DB document.
   - annotate a field in domain class with @Id, this field will be mapped to document `id` in Cosmos DB. 
   - set name of this field to `id`, this field will be mapped to document `id` in Cosmos DB.
-    [Note] if both way appplied,    
+    [Note] if both way applied,    
 - Custom collection Name.
-   By default, collection name will be class name of user domain class. To customize it, add annoataion `@Document(collection="myCustomCollectionName")` to your domain class, that's all.
-- Supports [Azure Cosmos DB partition](https://docs.microsoft.com/en-us/azure/cosmos-db/partition-data). To specify a field of your domain class to be partition key field, just annotate it with `@PartitionKey`. When you do CRUD operation, pls specify your partition value. For more sample on partition CRUD, pls refer to [test here](./test/java/com/microsoft/azure/spring/data/documentdb/repository/AddressRepositoryIT.java)   
+   By default, collection name will be class name of user domain class. To customize it, add annotation `@Document(collection="myCustomCollectionName")` to your domain class, that's all.
+- Supports [Azure Cosmos DB partition](https://docs.microsoft.com/en-us/azure/cosmos-db/partition-data). To specify a field of your domain class to be partition key field, just annotate it with `@PartitionKey`. When you do CRUD operation, please specify your partition value. For more sample on partition CRUD, please refer to [test here](./test/java/com/microsoft/azure/spring/data/documentdb/repository/AddressRepositoryIT.java)   
 
 ## Sample Code
 Please refer to [sample project here](../../azure-spring-boot-samples/azure-documentdb-spring-boot-sample).
@@ -48,7 +48,7 @@ azure.documentdb.database=your-documentdb-databasename
 
 Property `azure.documentdb.consistency-level` is also supported.
 
-### Define en entity
+### Define an entity
 Define a simple entity as Document in DocumentDB.
 
 ```
@@ -130,6 +130,6 @@ Find more information about Azure Service Privacy Statement, please check [Micro
 
 ### Further info
 
-Besides using Azure Cosmos DB DocumentDB API Spring boot starter, you can directly use Azure Cosmos DB DocumentDB API Spring Data package to more complex scenario, detail pls refer to [Spring Data for Azure Cosmos DB DocumentDB API](https://github.com/Microsoft/spring-data-documentdb).
+Besides using Azure Cosmos DB DocumentDB API Spring boot starter, you can directly use Azure Cosmos DB DocumentDB API Spring Data package to more complex scenario, detail please refer to [Spring Data for Azure Cosmos DB DocumentDB API](https://github.com/Microsoft/spring-data-documentdb).
 
 
