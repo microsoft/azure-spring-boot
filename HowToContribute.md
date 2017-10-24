@@ -11,31 +11,31 @@ To build the project, run maven commands.
 ```bash
 git clone https://github.com/Microsoft/azure-spring-boot.git 
 cd azure-spring-boot
-mvnw clean install
+mvn clean install
 ```
 
 ## Test
 
 - Run unit tests
 ```bash
-mvnw clean install
+mvn clean install
 ```
 
-- Skip tests execution
+- Skip test execution
 ```bash
-mvnw clean install -DskipTests
+mvn clean install -DskipTests
 ```
 
 ## Version management
 Developing version naming convention is like `0.1.9-SNAPSHOT`. Release version naming convention is like `0.1.9`. Please don't update version if no release plan. 
 
 ## CI
-Both [travis](https://travis-ci.org/Microsoft/azure-spring-boot) and [appveyor](https://ci.appveyor.com/project/yungez/azure-spring-boot) CI is enabled.
+Both [Travis](https://travis-ci.org/Microsoft/azure-spring-boot) and [Appveyor](https://ci.appveyor.com/project/yungez/azure-spring-boot) CI is enabled.
 
-## Contribute to code
-Code contribution is welcome. To contribute to existing code or add new Starter, please make sure below check list are checked.
-- [ ] Build pass. checkstyle and findbugs is enabled by default. Please check [checkstyle.xml](config/checkstyle.xml) to learn detail checkstyle configuration.
-- [ ] Documents are updated to aligning with code.
-- [ ] New starter must have sample folder contains sample code and corresponding readme file.
-- [ ] Code coverage for new codes >= 65%. Code coverage check is enabled with 65% bar.
+## Contribution
+Code contribution is welcome. To contribute to existing code or add a new starter, please make sure below check list is checked.
+- [ ] Build pass. Checkstyle and findbugs is enabled by default. Please check [checkstyle.xml](config/checkstyle.xml) to learn detailed checkstyle configuration.
+- [ ] Documents are updated to align with code.
+- [ ] New starter must have sample folder containing sample code and corresponding readme file.
+- [ ] Code coverage for new code >= 65%. Code coverage check is enabled with 65% bar.
 
