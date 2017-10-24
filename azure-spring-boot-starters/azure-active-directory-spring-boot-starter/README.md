@@ -1,5 +1,5 @@
 ## Overview
-This is a pre-release package that enables Spring Security integration with Azure Active Directory for authentication and integration scenarios via OpenID Connect/OAuth 2.0 protocols. Currently it supports the implicit authorization grant, making it ideal for enabling authenticaton and authorization for Single Page Application (SPA) web apps.
+This is a pre-release package that enables Spring Security integration with Azure Active Directory for authentication and integration scenarios via OpenID Connect/OAuth 2.0 protocols. Currently it supports the implicit authorization grant, making it ideal for enabling authentication and authorization for Single Page Application (SPA) web apps.
 
 ### Implementation summary
 This package provides a Spring Security filter to validate the Jwt token from Azure AD. The Jwt token is also used to acquire a On-Behalf-Of token for Azure AD Graph API so that authenticated user's membership information is available for authorization of access of API resources. Below is a diagram that shows the layers and typical flow for Single Page Application with Spring Boot web API backend that uses the filter for Authentication and Authorization.
@@ -19,7 +19,7 @@ If you are using Maven, add the following dependency.
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-active-directory-spring-boot-starter</artifactId>
-    <version>0.1.9</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 

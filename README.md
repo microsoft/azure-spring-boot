@@ -9,7 +9,7 @@
 
 This repo is for Spring Boot Starters of Azure services. It helps Spring Boot developers to adopt Azure services.
 
-### Prequisite
+### Prerequisites
 - JDK 1.8 and above
 - [Maven](http://maven.apache.org/) 3.0 and above
 
@@ -28,7 +28,7 @@ Starter Name | Version
 
 
 ### How to Build and Contribute
-Please follow [instruction here](./HowToContribute.md) to build from source or contribute.
+Please follow [instructions here](./HowToContribute.md) to build from source or contribute.
 
 ### Other articles
 You could check below articles to learn more on usage of specific starters.

@@ -1,7 +1,7 @@
 # Azure Key Vault Secrets Spring Boot Starter Sample
 This sample illustrates how to use [Azure Key Vault Secrets Spring Boot Starter](../../azure-spring-boot-starters/azure-keyvault-secrets-spring-boot-starter/README.md).
 
-In this sample, a secret named `spring-datasource-url` is stored into an Azure Key Vault, and a sample Spring application will use its value as a configuraiton property value.
+In this sample, a secret named `spring-datasource-url` is stored into an Azure Key Vault, and a sample Spring application will use its value as a configuration property value.
 
 ## Setup Azure Key Vault
 First, we need to store secret `spring-datasource-url` into Azure Key Vault.
@@ -26,7 +26,7 @@ az keyvault set-policy --name <your_keyvault_name> --secret-permission all --obj
 ```
 Save the displayed Key Vault uri for later use.
 
-- Set secret in Azure KeyVault by using Azure CLI or via Azure Portal. 
+- Set secret in Azure Key Vault by using Azure CLI or via Azure Portal. 
 You can use the following az cli commands:
 ```bash
 az keyvault secret set --name spring-datasource-url --value jdbc:mysql://localhost:3306/moviedb --vault-name <your_keyvault_name>
@@ -44,12 +44,12 @@ If you are using Maven, add the following dependency.
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
-    <version>0.1.9</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
 ## Add the property setting
-Open `application.properties` file and add below properties to specify your Azure KeyVault url, Azure service principle client id and client key.
+Open `application.properties` file and add below properties to specify your Azure Key Vault url, Azure service principle client id and client key.
 
 ```
 azure.keyvault.uri=put-your-azure-keyvault-uri-here

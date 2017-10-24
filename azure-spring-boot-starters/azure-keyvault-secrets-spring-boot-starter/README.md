@@ -1,8 +1,8 @@
 ## Azure Key Vault Secrets Spring boot starter
-Azure Key Vault Secrets Spring boot starter is Spring starter for [Azure Key Vault Secrets](https://docs.microsoft.com/en-us/rest/api/keyvault/about-keys--secrets-and-certificates#BKMK_WorkingWithSecrets). With this starter, Azure Key Vault is added as one of Spring PropertySource, so secrets stored in Azure Key Vault could be used easily and conviniently accessed like other externalized configuration property, e.g. properties in files.
+Azure Key Vault Secrets Spring boot starter is Spring starter for [Azure Key Vault Secrets](https://docs.microsoft.com/en-us/rest/api/keyvault/about-keys--secrets-and-certificates#BKMK_WorkingWithSecrets). With this starter, Azure Key Vault is added as one of Spring PropertySource, so secrets stored in Azure Key Vault could be easily used and conveniently accessed like other externalized configuration property, e.g. properties in files.
 
 ## Sample Code
-Pls refer to [sample project here](../../azure-spring-boot-samples/azure-keyvault-secrets-spring-boot-sample).
+Please refer to [sample project here](../../azure-spring-boot-samples/azure-keyvault-secrets-spring-boot-sample).
 
 ## Quick Start
 
@@ -15,7 +15,7 @@ If you are using Maven, add the following dependency.
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
-    <version>0.1.9</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
