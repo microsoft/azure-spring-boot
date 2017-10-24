@@ -1,7 +1,7 @@
 # How to Build and Contribute
-This instruction is guideline for building and code contribution.
+Below are guidelines for building and code contribution.
 
-## Prequisites
+## Prerequisites
 - JDK 1.8 and above
 - [Maven](http://maven.apache.org/) 3.0 and above
 
