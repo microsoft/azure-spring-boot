@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-bom</artifactId>
-        <version>0.1.10-SNAPSHOT</version>
+        <version>0.2.0-SNAPSHOT</version>
         <relativePath>../azure-spring-boot-bom/pom.xml</relativePath>
     </parent>
 
