@@ -5,11 +5,20 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import javafx.print.Collation;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.properties.bind.validation.BindValidationException;
+import org.springframework.boot.context.properties.bind.validation.ValidationErrors;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.ObjectError;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -57,15 +66,19 @@ public class AADAuthenticationFilterPropertiesTest {
 
             assertThat(exception).isNotNull();
             assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
-            assertThat(exception.getCause().getMessage()).contains(
-                    "Field error in object " +
-                            "'azure.activedirectory' on field 'clientId': rejected value []");
-            assertThat(exception.getCause().getMessage()).contains(
-                    "Field error in object " +
-                            "'azure.activedirectory' on field 'clientSecret': rejected value []");
-            assertThat(exception.getCause().getMessage()).contains(
-                    "Field error in object " +
-                            "'azure.activedirectory' on field 'activeDirectoryGroups': rejected value [null]");
+            final BindValidationException bindValidationException =
+                    (BindValidationException) exception.getCause().getCause();
+            final List<ObjectError> errors = bindValidationException.getValidationErrors().getAllErrors();
+            assertThat(errors.size()).isEqualTo(3);
+            final List<String> errorStrings = errors.stream().map(e -> e.toString()).collect(Collectors.toList());
+            Collections.sort(errorStrings);
+            assertThat(errorStrings.get(2)).contains(
+                    "Field error in object 'azure.activedirectory' on field 'clientSecret': rejected value [];");
+            assertThat(errorStrings.get(1)).contains(
+                    "Field error in object 'azure.activedirectory' on field 'clientId': rejected value [];");
+            assertThat(errorStrings.get(0)).contains(
+                    "Field error in object 'azure.activedirectory' on field 'activeDirectoryGroups': " +
+                            "rejected value [null];");
         }
 
         System.clearProperty(Constants.CLIENT_ID_PROPERTY);

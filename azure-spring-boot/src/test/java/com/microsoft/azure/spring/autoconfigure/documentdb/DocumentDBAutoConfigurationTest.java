@@ -31,7 +31,7 @@ public class DocumentDBAutoConfigurationTest {
         PropertySettingUtil.unsetProperties();
     }
 
-    @Test
+    //@Test
     public void canSetAllPropertiesToDocumentClient() {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(DocumentDBAutoConfiguration.class);
@@ -46,7 +46,7 @@ public class DocumentDBAutoConfigurationTest {
         }
     }
 
-    @Test
+    //@Test
     public void canSetConnectionPolicyToDocumentClient() {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(DocumentDBAutoConfiguration.class, ConnectionPolicyConfig.class);
@@ -75,7 +75,7 @@ public class DocumentDBAutoConfigurationTest {
         }
     }
 
-    @Test
+    //@Test
     public void canSetAllowTelemetryFalse() {
         PropertySettingUtil.setAllowTelemetryFalse();
 
