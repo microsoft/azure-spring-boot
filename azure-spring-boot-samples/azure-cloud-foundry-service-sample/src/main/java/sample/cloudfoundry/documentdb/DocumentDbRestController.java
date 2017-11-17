@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 @RestController
 public class DocumentDbRestController {
@@ -41,13 +42,16 @@ public class DocumentDbRestController {
         repository.save(testUser);
 
         LOG.debug("Retrieving User object...");
-        final User user = repository.findOne(testUser.getId());
+        final Optional<User> user = repository.findById(testUser.getId());
 
-        Assert.state(user.getFirstName().equals(testUser.getFirstName()), "query result firstName doesn't match!");
-        Assert.state(user.getLastName().equals(testUser.getLastName()), "query result lastName doesn't match!");
+        Assert.state(user.isPresent(), "User should be found.");
+        Assert.state(user.get().getFirstName().equals(testUser.getFirstName()),
+                "query result firstName doesn't match!");
+        Assert.state(user.get().getLastName().equals(testUser.getLastName()),
+                "query result lastName doesn't match!");
 
-        LOG.debug("UserRepository.findOne() result: {}", user.toString());
-        result.append("UserRepository.findOne() result: " + user.toString() + CR);
+        LOG.debug("UserRepository.findOne() result: {}", user.get().toString());
+        result.append("UserRepository.findOne() result: " + user.get().toString() + CR);
 
         return result.toString();
     }
