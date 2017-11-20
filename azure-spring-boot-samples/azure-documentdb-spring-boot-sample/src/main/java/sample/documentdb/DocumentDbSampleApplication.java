@@ -32,7 +32,7 @@ public class DocumentDbSampleApplication implements CommandLineRunner {
         repository.deleteAll();
         repository.save(testUser);
 
-        final User result = repository.findOne(testUser.getId());
+        final User result = repository.findById(testUser.getId()).get();
 
         Assert.state(result.getFirstName().equals(testUser.getFirstName()), "query result firstName doesn't match!");
         Assert.state(result.getLastName().equals(testUser.getLastName()), "query result lastName doesn't match!");

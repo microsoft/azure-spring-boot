@@ -8,8 +8,12 @@ package com.microsoft.azure.spring.autoconfigure.storage;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.properties.bind.validation.BindValidationException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.ObjectError;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -47,7 +51,13 @@ public class StoragePropertiesTest {
 
             assertThat(exception).isNotNull();
             assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
-            assertThat(exception.getCause().getMessage()).contains(
+
+            final BindValidationException bindValidationException =
+                    (BindValidationException) exception.getCause().getCause();
+            final List<ObjectError> errors = bindValidationException.getValidationErrors().getAllErrors();
+            assertThat(errors.size()).isEqualTo(1);
+
+            assertThat(errors.get(0).toString()).contains(
                     "Field error in object 'azure.storage' on field 'connectionString': " +
                             "rejected value [null];");
         }

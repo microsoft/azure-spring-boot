@@ -9,8 +9,14 @@ package com.microsoft.azure.spring.autoconfigure.documentdb;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.properties.bind.validation.BindValidationException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.ObjectError;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -62,9 +68,15 @@ public class DocumentDBPropertiesTest {
 
             assertThat(exception).isNotNull();
             assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
-            assertThat(exception.getCause().getMessage()).contains(
+            final BindValidationException bindValidationException =
+                    (BindValidationException) exception.getCause().getCause();
+            final List<ObjectError> errors = bindValidationException.getValidationErrors().getAllErrors();
+            assertThat(errors.size()).isEqualTo(2);
+            final List<String> errorStrings = errors.stream().map(e -> e.toString()).collect(Collectors.toList());
+            Collections.sort(errorStrings);
+            assertThat(errorStrings.get(1)).contains(
                     "Field error in object 'azure.documentdb' on field 'uri': rejected value [null];");
-            assertThat(exception.getCause().getMessage()).contains(
+            assertThat(errorStrings.get(0)).contains(
                     "Field error in object 'azure.documentdb' on field 'key': rejected value [null];");
         }
     }

@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Scope;
 
 @Configuration
 @ConditionalOnWebApplication
-@ConditionalOnProperty(prefix = "azure.activedirectory", value = {"client-id", "client-secret"})
+@ConditionalOnProperty(prefix = "azure.activedirectory", value = {"clientId", "clientSecret"})
 @EnableConfigurationProperties(AADAuthenticationFilterProperties.class)
 public class AADAuthenticationFilterAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationFilterProperties.class);
