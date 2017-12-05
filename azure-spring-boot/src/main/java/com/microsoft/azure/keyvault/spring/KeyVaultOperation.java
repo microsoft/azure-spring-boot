@@ -85,6 +85,7 @@ public class KeyVaultOperation {
             for (final SecretItem secret : secrets) {
                 propertyNamesHashMap.putIfAbsent(secret.id().replaceFirst(vaultUri + "/secrets/", "")
                         .replaceAll("-", "."), secret.id());
+                propertyNamesHashMap.putIfAbsent(secret.id().replaceFirst(vaultUri + "/secrets/", ""), secret.id());
             }
             lastUpdateTime.set(System.currentTimeMillis());
         } finally {
