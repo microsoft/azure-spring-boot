@@ -22,7 +22,7 @@ Save the service principal id and password contained in the output from above co
 You can use the following az cli commands:
 ```bash
 az keyvault create --name <your_keyvault_name> --resource-group <your_resource_group> --location <location> --enabled-for-deployment true --enabled-for-disk-encryption true --enabled-for-template-deployment true --sku standard
-az keyvault set-policy --name <your_keyvault_name> --secret-permission all --object-id <your_sp_id_create_in_step1>
+az keyvault set-policy --name <your_keyvault_name> --secret-permission all --spn <your_sp_id_create_in_step1>
 ```
 Save the displayed Key Vault uri for later use.
 
@@ -33,7 +33,6 @@ az keyvault secret set --name spring-datasource-url --value jdbc:mysql://localho
 az keyvault secret set --name <yourSecretPropertyName> --value <yourSecretPropertyVaule> --vault-name <your_keyvault_name>
 ```
 
-> NOTE. For Windows user, you could directly run provision.bat file under root folder to save effort of typing those az commands. Usage: `provision.bat <location of resource group>` 
  
 ## Add Dependency
 
