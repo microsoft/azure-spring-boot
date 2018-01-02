@@ -25,7 +25,7 @@ public class PropertySettingUtil {
     public static final int MAX_POOL_SIZE = 1;
     public static final int IDLE_CONNECTION_TIMEOUT = 2;
     public static final String USER_AGENT_SUFFIX = "suffix";
-    public static final String DEFAULT_USER_AGENT_SUFFIX = "spring-boot-starter/0.2.1";
+    public static final String DEFAULT_USER_AGENT_SUFFIX = "spring-boot-starter/0.2.2-SNAPSHOT";
     public static final int RETRY_OPTIONS_MAX_RETRY_ATTEMPTS_ON_THROTTLED_REQUESTS = 5;
     public static final int RETRY_OPTIONS_MAX_RETRY_WAIT_TIME_IN_SECONDS = 6;
     public static final boolean ENABLE_ENDPOINT_DISCOVERY = false;
