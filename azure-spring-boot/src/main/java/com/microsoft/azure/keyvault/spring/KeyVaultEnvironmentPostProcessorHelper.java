@@ -6,11 +6,22 @@
 
 package com.microsoft.azure.keyvault.spring;
 
+import com.microsoft.azure.AzureResponseBuilder;
 import com.microsoft.azure.keyvault.KeyVaultClient;
+import com.microsoft.azure.serializer.AzureJacksonAdapter;
+import com.microsoft.azure.spring.support.GetHashMac;
+import com.microsoft.azure.spring.support.UserAgent;
+import com.microsoft.rest.LogLevel;
+import com.microsoft.rest.RestClient;
+import com.microsoft.rest.credentials.ServiceClientCredentials;
+import org.springframework.boot.bind.PropertiesConfigurationFactory;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.util.Assert;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 class KeyVaultEnvironmentPostProcessorHelper {
 
@@ -28,8 +39,17 @@ class KeyVaultEnvironmentPostProcessorHelper {
         final long timeAcquiringTimeoutInSeconds = environment.getProperty(
                 Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, Long.class, 60L);
 
-        final KeyVaultClient kvClient = new KeyVaultClient(
-                new AzureKeyVaultCredential(clientId, clientKey, timeAcquiringTimeoutInSeconds));
+        final ServiceClientCredentials credentials =
+                new AzureKeyVaultCredential(clientId, clientKey, timeAcquiringTimeoutInSeconds);
+        final RestClient restClient = new RestClient.Builder().withBaseUrl(vaultUri)
+                            .withCredentials(credentials)
+                            .withSerializerAdapter(new AzureJacksonAdapter())
+                            .withResponseBuilderFactory(new AzureResponseBuilder.Factory())
+                            .withUserAgent(UserAgent.getUserAgent(Constants.AZURE_KEYVAULT_SPRING_NAME,
+                                    allowTelemetry(environment)))
+                            .build();
+
+        final KeyVaultClient kvClient = new KeyVaultClient(restClient);
 
         try {
             final MutablePropertySources sources = environment.getPropertySources();
@@ -57,5 +77,11 @@ class KeyVaultEnvironmentPostProcessorHelper {
             throw new IllegalArgumentException("property " + propertyName + " must not be null");
         }
         return property;
+    }
+
+    private boolean allowTelemetry(ConfigurableEnvironment env) {
+        Assert.notNull(env, "env must not be null!");
+
+        return env.getProperty(Constants.AZURE_KEYVAULT_ALLOW_TELEMETRY, Boolean.class, true);
     }
 }
