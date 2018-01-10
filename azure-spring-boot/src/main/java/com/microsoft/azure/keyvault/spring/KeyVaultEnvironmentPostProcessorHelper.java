@@ -9,19 +9,14 @@ package com.microsoft.azure.keyvault.spring;
 import com.microsoft.azure.AzureResponseBuilder;
 import com.microsoft.azure.keyvault.KeyVaultClient;
 import com.microsoft.azure.serializer.AzureJacksonAdapter;
-import com.microsoft.azure.spring.support.GetHashMac;
 import com.microsoft.azure.spring.support.UserAgent;
 import com.microsoft.rest.LogLevel;
 import com.microsoft.rest.RestClient;
 import com.microsoft.rest.credentials.ServiceClientCredentials;
-import org.springframework.boot.bind.PropertiesConfigurationFactory;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.util.Assert;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 class KeyVaultEnvironmentPostProcessorHelper {
 
