@@ -40,7 +40,7 @@ class KeyVaultEnvironmentPostProcessorHelper {
                             .withCredentials(credentials)
                             .withSerializerAdapter(new AzureJacksonAdapter())
                             .withResponseBuilderFactory(new AzureResponseBuilder.Factory())
-                            .withUserAgent(UserAgent.getUserAgent(Constants.AZURE_KEYVAULT_SPRING_NAME,
+                            .withUserAgent(UserAgent.getUserAgent(Constants.AZURE_KEYVAULT_USER_AGENT,
                                     allowTelemetry(environment)))
                             .build();
 

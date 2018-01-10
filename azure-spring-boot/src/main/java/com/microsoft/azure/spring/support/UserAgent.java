@@ -15,15 +15,11 @@ public class UserAgent {
      * @return generated UserAgent string
      */
     public static String getUserAgent(String serviceName, boolean allowTelemetry) {
-        final String os = System.getProperty("os.name") + "/" + System.getProperty("os.version");
-
         String macAddress = "Not Collected";
         if (allowTelemetry) {
             macAddress = GetHashMac.getHashMac();
         }
 
-        final String javaVersion = System.getProperty("java.version");
-
-        return String.format(serviceName + " OS:%s MacAddressHash:%s Java:%s", os, macAddress, javaVersion);
+        return String.format(serviceName + " MacAddressHash:%s", macAddress);
     }
 }
