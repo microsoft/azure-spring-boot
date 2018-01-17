@@ -46,8 +46,8 @@ import static java.util.stream.Collectors.toList;
 public class UserPrincipal {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserPrincipal.class);
-    private static final String KEY_DISCOVERY_URI = "https://login.microsoftonline.com/common/discovery/keys";
-    private static final JWKSet jwsKeySet = loadAadPublicKeys();
+    private ServiceEndpoints serviceEndpoints;
+    private JWKSet jwsKeySet;
     private JWSObject jwsObject;
     private JWTClaimsSet jwtClaimsSet;
     private List<UserGroup> userGroups;
@@ -56,10 +56,13 @@ public class UserPrincipal {
         jwsObject = null;
         jwtClaimsSet = null;
         userGroups = null;
+        serviceEndpoints = new ServiceEndpoints();
     }
 
-    public UserPrincipal(String idToken) throws MalformedURLException, ParseException,
-            BadJOSEException, JOSEException {
+    public UserPrincipal(String idToken, ServiceEndpoints serviceEndpoints)
+            throws MalformedURLException, ParseException, BadJOSEException, JOSEException {
+        this.serviceEndpoints = serviceEndpoints;
+        this.jwsKeySet = loadAadPublicKeys();
         final ConfigurableJWTProcessor<SecurityContext> validator = getAadJwtTokenValidator();
         jwtClaimsSet = validator.process(idToken, null);
         final JWTClaimsSetVerifier<SecurityContext> verifier = validator
@@ -69,10 +72,9 @@ public class UserPrincipal {
         userGroups = null;
     }
 
-    private static JWKSet loadAadPublicKeys() {
+    private JWKSet loadAadPublicKeys() {
         try {
-            return JWKSet.load(
-                    new URL(KEY_DISCOVERY_URI));
+            return JWKSet.load(new URL(serviceEndpoints.getAadKeyDiscoveryUri()));
         } catch (IOException | ParseException e) {
             LOG.error("Error loading AAD public keys: {}", e.getMessage());
         }
@@ -141,8 +143,8 @@ public class UserPrincipal {
     private ConfigurableJWTProcessor<SecurityContext> getAadJwtTokenValidator()
             throws MalformedURLException {
         final ConfigurableJWTProcessor<SecurityContext> jwtProcessor = new DefaultJWTProcessor<>();
-        final JWKSource<SecurityContext> keySource = new RemoteJWKSet<>(
-                new URL(KEY_DISCOVERY_URI));
+        final JWKSource<SecurityContext> keySource =
+                new RemoteJWKSet<>(new URL(serviceEndpoints.getAadKeyDiscoveryUri()));
         final JWSAlgorithm expectedJWSAlg = JWSAlgorithm.RS256;
         final JWSKeySelector<SecurityContext> keySelector = new JWSVerificationKeySelector<>(expectedJWSAlg, keySource);
         jwtProcessor.setJWSKeySelector(keySelector);
@@ -152,7 +154,8 @@ public class UserPrincipal {
             public void verify(JWTClaimsSet claimsSet, SecurityContext ctx) throws BadJWTException {
                 super.verify(claimsSet, ctx);
                 final String issuer = claimsSet.getIssuer();
-                if (issuer == null || !issuer.contains("https://sts.windows.net/")) {
+                if (issuer == null || !issuer.contains("https://sts.windows.net/")
+                        && !issuer.contains("https://sts.chinacloudapi.cn/")) {
                     throw new BadJWTException("Invalid token issuer");
                 }
             }
@@ -161,7 +164,8 @@ public class UserPrincipal {
     }
 
     private List<UserGroup> loadUserGroups(String graphApiToken) throws Exception {
-        final String responseInJson = AzureADGraphClient.getUserMembershipsV1(graphApiToken);
+        final String responseInJson =
+                AzureADGraphClient.getUserMembershipsV1(graphApiToken, serviceEndpoints.getAadMembershipRestUri());
         final List<UserGroup> lUserGroups = new ArrayList<>();
         final ObjectMapper objectMapper = JacksonObjectMapperFactory.getInstance();
         final JsonNode rootNode = objectMapper.readValue(responseInJson, JsonNode.class);

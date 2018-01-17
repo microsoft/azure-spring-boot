@@ -14,8 +14,6 @@ import java.util.List;
 @Validated
 @ConfigurationProperties("azure.activedirectory")
 public class AADAuthenticationFilterProperties {
-    private static final String AAD_SIGNIN_URI = "https://login.microsoftonline.com/";
-    private static final String AAD_GRAPHAPI_URI = "https://graph.windows.net/";
     /**
      * Registered application ID in Azure AD.
      */
@@ -48,14 +46,6 @@ public class AADAuthenticationFilterProperties {
         this.clientSecret = clientSecret;
     }
 
-    public String getAadSignInUri() {
-        return AAD_SIGNIN_URI;
-    }
-
-    public String getAadGraphAPIUri() {
-        return AAD_GRAPHAPI_URI;
-    }
-
     public List<String> getActiveDirectoryGroups() {
         return activeDirectoryGroups;
     }
@@ -63,5 +53,4 @@ public class AADAuthenticationFilterProperties {
     public void setactiveDirectoryGroups(List<String> activeDirectoryGroups) {
         this.activeDirectoryGroups = activeDirectoryGroups;
     }
-
 }
