@@ -44,3 +44,6 @@ target
 
 # Release automation
 __pycache__
+
+# dll files
+*.dll

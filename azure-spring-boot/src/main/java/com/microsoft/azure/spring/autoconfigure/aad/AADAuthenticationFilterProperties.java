@@ -5,6 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
@@ -14,8 +15,12 @@ import java.util.List;
 @Validated
 @ConfigurationProperties("azure.activedirectory")
 public class AADAuthenticationFilterProperties {
-    private static final String AAD_SIGNIN_URI = "https://login.microsoftonline.com/";
-    private static final String AAD_GRAPHAPI_URI = "https://graph.windows.net/";
+    private static final String DEFAULT_SERVICE_ENVIRONMENT = "global";
+
+    /**
+     * Azure service environment/region name, e.g., cn, global
+     */
+    private String environment;
     /**
      * Registered application ID in Azure AD.
      */
@@ -31,6 +36,14 @@ public class AADAuthenticationFilterProperties {
      */
     @NotEmpty
     private List<String> activeDirectoryGroups;
+
+    public String getEnvironment() {
+        return StringUtils.isEmpty(environment) ? DEFAULT_SERVICE_ENVIRONMENT : environment;
+    }
+
+    public void setEnvironment(String environment) {
+        this.environment = environment;
+    }
 
     public String getClientId() {
         return clientId;
@@ -48,14 +61,6 @@ public class AADAuthenticationFilterProperties {
         this.clientSecret = clientSecret;
     }
 
-    public String getAadSignInUri() {
-        return AAD_SIGNIN_URI;
-    }
-
-    public String getAadGraphAPIUri() {
-        return AAD_GRAPHAPI_URI;
-    }
-
     public List<String> getActiveDirectoryGroups() {
         return activeDirectoryGroups;
     }
@@ -63,5 +68,4 @@ public class AADAuthenticationFilterProperties {
     public void setactiveDirectoryGroups(List<String> activeDirectoryGroups) {
         this.activeDirectoryGroups = activeDirectoryGroups;
     }
-
 }

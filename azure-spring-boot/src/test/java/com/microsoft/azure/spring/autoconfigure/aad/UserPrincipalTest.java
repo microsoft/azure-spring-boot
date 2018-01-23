@@ -39,7 +39,7 @@ public class UserPrincipalTest {
     @Test
     public void getGroups() throws Exception {
         PowerMockito.mockStatic(AzureADGraphClient.class);
-        Mockito.when(AzureADGraphClient.getUserMembershipsV1(Constants.BEARER_TOKEN))
+        Mockito.when(AzureADGraphClient.getUserMembershipsV1(Mockito.eq(Constants.BEARER_TOKEN), Mockito.any()))
                 .thenReturn(Constants.USERGROUPS_JSON);
 
         final UserPrincipal principal = new UserPrincipal();
@@ -52,5 +52,4 @@ public class UserPrincipalTest {
 
         Assert.assertThat(groups, IsIterableContainingInAnyOrder.containsInAnyOrder(groups.toArray()));
     }
-
 }
