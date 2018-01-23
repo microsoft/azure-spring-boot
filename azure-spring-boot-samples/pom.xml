@@ -70,11 +70,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>2.3</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 

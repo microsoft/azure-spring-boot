@@ -46,6 +46,13 @@
     </scm>
 
     <properties>
+        <azure.starter.version>0.2.2-SNAPSHOT</azure.starter.version>
+        <azure.aad.starter.version>0.2.2-SNAPSHOT</azure.aad.starter.version>
+        <azure.documentdb.starter.version>0.2.2-SNAPSHOT</azure.documentdb.starter.version>
+        <azure.storage.starter.version>0.2.2-SNAPSHOT</azure.storage.starter.version>
+        <azure.servicebus.starter.version>0.2.2-SNAPSHOT</azure.servicebus.starter.version>
+        <azure.keyvault.starter.version>0.2.2-SNAPSHOT</azure.keyvault.starter.version>
+        <azure.mediaservices.starter.version>0.2.2-SNAPSHOT</azure.mediaservices.starter.version>
         <azure.adal4j.version>1.3.0</azure.adal4j.version>
         <azure.documentdb.version>1.13.0</azure.documentdb.version>
         <azure.storage.version>5.5.0</azure.storage.version>
@@ -55,6 +62,13 @@
         <spring.data.documentdb.version>0.1.3</spring.data.documentdb.version>
         <microsoft.client-runtime.version>1.0.0</microsoft.client-runtime.version>
         <lombok.version>1.16.20</lombok.version>
+        <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
+        <google.findbugs.annotations.version>2.0.1</google.findbugs.annotations.version>
+        <nimbusds.jwt.version>4.39.2</nimbusds.jwt.version>
+        <mockito.core.version>2.8.9</mockito.core.version>
+        <powermock.junit4.version>1.7.0</powermock.junit4.version>
+        <powermock.mockito2.version>1.7.0</powermock.mockito2.version>
+        <commons.io.version>2.3</commons.io.version>
     </properties>
 
     <dependencyManagement>
@@ -62,42 +76,37 @@
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-spring-boot-starter</artifactId>
-                <version>0.2.2-SNAPSHOT</version>
+                <version>${azure.starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-active-directory-spring-boot-starter</artifactId>
-                <version>0.2.2-SNAPSHOT</version>
+                <version>${azure.aad.starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-documentdb-spring-boot-starter</artifactId>
-                <version>0.2.2-SNAPSHOT</version>
+                <version>${azure.documentdb.starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-storage-spring-boot-starter</artifactId>
-                <version>0.2.2-SNAPSHOT</version>
+                <version>${azure.storage.starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-servicebus-spring-boot-starter</artifactId>
-                <version>0.2.2-SNAPSHOT</version>
+                <version>${azure.servicebus.starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
-                <version>0.2.2-SNAPSHOT</version>
+                <version>${azure.keyvault.starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-mediaservices-spring-boot-starter</artifactId>
-                <version>0.2.2-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-spring-boot</artifactId>
-                <version>0.2.2-SNAPSHOT</version>
+                <version>${azure.mediaservices.starter.version}</version>
             </dependency>
 
             <!-- Spring Data Cosmos DB library -->
@@ -148,7 +157,44 @@
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
-
+            <dependency>
+                <!-- Import dependency management from Spring Boot -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>annotations</artifactId>
+                <version>${google.findbugs.annotations.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${nimbusds.jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-module-junit4</artifactId>
+                <version>${powermock.junit4.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.powermock</groupId>
+                <artifactId>powermock-api-mockito2</artifactId>
+                <version>${powermock.mockito2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons.io.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>
