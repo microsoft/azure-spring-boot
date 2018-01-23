@@ -15,27 +15,26 @@ import java.util.Map;
 @Configuration
 @ConfigurationProperties("azureService")
 public class ServiceEndpointsProperties {
-    private static final String AZURE_AUTH_DOMAIN_CN = "login.partner.microsoftonline.cn";
-    private static final String YML_ENDPOINTS_KEY_CN = "cn";
-    private static final String YML_ENDPOINTS_KEY_GLOBAL = "global";
-
     private Map<String, ServiceEndpoints> endpoints = new HashMap<>();
 
     public Map<String, ServiceEndpoints> getEndpoints() {
         return endpoints;
     }
 
-    public ServiceEndpoints getServiceEndpoints(String authUrl) {
+    /**
+     * Get ServiceEndpoints data for the given environment.
+     *
+     * @param environment the environment of the cloud service
+     * @return The ServiceEndpoints data for the given azure service <code>environment</code>
+     */
+    public ServiceEndpoints getServiceEndpoints(String environment) {
         Assert.notEmpty(endpoints, "No service endpoints found");
 
-        if (isAzureCN(authUrl)) {
-            return endpoints.get(YML_ENDPOINTS_KEY_CN);
+        if (!endpoints.containsKey(environment)) {
+            throw new IllegalArgumentException(environment + " is not found in the configuration," +
+                    " only following environments are supported: " + endpoints.keySet());
         }
 
-        return endpoints.get(YML_ENDPOINTS_KEY_GLOBAL);
-    }
-
-    private boolean isAzureCN(String authUrl) {
-        return authUrl != null && authUrl.contains(AZURE_AUTH_DOMAIN_CN);
+        return endpoints.get(environment);
     }
 }

@@ -36,7 +36,6 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String TOKEN_HEADER = "Authorization";
     private static final String TOKEN_TYPE = "Bearer ";
-    private static final String AUTH_URL_HEADER = "AuthUrl";
 
     private AADAuthenticationFilterProperties aadAuthFilterProp;
     private ServiceEndpointsProperties serviceEndpointsProp;
@@ -50,7 +49,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
     private AuthenticationResult acquireTokenForGraphApi(
             String idToken,
             String tenantId,
-            String authUrl) throws Throwable {
+            ServiceEndpoints serviceEndpoints) throws Throwable {
         final ClientCredential credential = new ClientCredential(
                 aadAuthFilterProp.getClientId(), aadAuthFilterProp.getClientSecret());
         final UserAssertion assertion = new UserAssertion(idToken);
@@ -60,12 +59,9 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
         try {
             service = Executors.newFixedThreadPool(1);
             final AuthenticationContext context = new AuthenticationContext(
-                    serviceEndpointsProp.getServiceEndpoints(authUrl).getAadSigninUri() + tenantId + "/",
-                    true,
-                    service);
+                    serviceEndpoints.getAadSigninUri() + tenantId + "/", true, service);
             final Future<AuthenticationResult> future = context
-                    .acquireToken(serviceEndpointsProp.getServiceEndpoints(authUrl).getAadGraphApiUri(),
-                            assertion, credential, null);
+                    .acquireToken(serviceEndpoints.getAadGraphApiUri(), assertion, credential, null);
             result = future.get();
         } catch (ExecutionException e) {
             throw e.getCause();
@@ -89,7 +85,6 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader(TOKEN_HEADER);
-        final String authUrl = request.getHeader(AUTH_URL_HEADER);
 
         if (authHeader != null && authHeader.startsWith(TOKEN_TYPE)) {
             try {
@@ -99,10 +94,13 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                 String graphApiToken = (String) request
                         .getSession().getAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN);
 
+                final ServiceEndpoints serviceEndpoints =
+                        serviceEndpointsProp.getServiceEndpoints(aadAuthFilterProp.getEnvironment());
+
                 if (principal == null || graphApiToken == null || graphApiToken.isEmpty()) {
-                    principal = new UserPrincipal(idToken, serviceEndpointsProp.getServiceEndpoints(authUrl));
+                    principal = new UserPrincipal(idToken, serviceEndpoints);
                     graphApiToken = acquireTokenForGraphApi(
-                            idToken, principal.getClaim().toString(), authUrl).getAccessToken();
+                            idToken, principal.getClaim().toString(), serviceEndpoints).getAccessToken();
                     request.getSession().setAttribute(CURRENT_USER_PRINCIPAL, principal);
                     request.getSession().setAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN, graphApiToken);
                 }

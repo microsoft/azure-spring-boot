@@ -6,6 +6,7 @@ The sample is composed of two layers: Angular JS client and Spring Boot RESTful 
 
 #### Application.properties
 You need to have an registered app in your Azure AD tenant and create a security key.
+If your azure account follows format xxx@xxx.partner.onmschina.cn, configure property `azure.activedirectory.environment=cn` to use [Azure China](https://docs.microsoft.com/en-us/azure/china/china-welcome), the default value is `global`.
 Put Application ID and Key in `clientId` and `clientSecret` respectively e.g.
 `azure.activedirectory.clientId=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
 `azure.activedirectory.clientSecret=ABCDEFGHIJKLMNOOPQRSTUVWXYZABCDEFGHIJKLMNOPQ`

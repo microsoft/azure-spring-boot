@@ -212,9 +212,6 @@ if (typeof module !== 'undefined' && module.exports) {
                     getCachedToken: function (resource) {
                         return _adal.getCachedToken(resource);
                     },
-                    getInstance:function (resource) {
-                        return _adal.getInstance(resource);
-                    },
                     userInfo: _oauthData,
                     acquireToken: function (resource) {
                         // automated token request call
@@ -274,7 +271,6 @@ if (typeof module !== 'undefined' && module.exports) {
                         if (tokenStored) {
                             // check endpoint mapping if provided
                             config.headers.Authorization = 'Bearer ' + tokenStored;
-                            config.headers.AuthUrl = authService.getInstance(resource);
                             return config;
                         } else {
 
@@ -295,7 +291,6 @@ if (typeof module !== 'undefined' && module.exports) {
                                 var delayedRequest = $q.defer();
                                 authService.acquireToken(resource).then(function (token) {
                                     config.headers.Authorization = 'Bearer ' + token;
-                                    config.headers.AuthUrl = authService.getInstance(resource);
                                     delayedRequest.resolve(config);
                                 }, function (err) {
                                     delayedRequest.reject(err);

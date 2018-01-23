@@ -209,13 +209,6 @@ AuthenticationContext.prototype.getCachedToken = function (resource) {
     }
 };
 
-AuthenticationContext.prototype.getInstance = function (resource) {
-    if (!this._hasResource(resource)) {
-        return null;
-    }
-    return this.config.instance;
-};
-
 /**
  * Retrieves and parse idToken from localstorage
  * @returns {User} user object
@@ -739,7 +732,7 @@ AuthenticationContext.prototype.handleWindowCallback = function () {
         this.saveTokenFromHash(requestInfo);
         var callback = null;
         if ((requestInfo.requestType === this.REQUEST_TYPE.RENEW_TOKEN ||
-                requestInfo.requestType === this.REQUEST_TYPE.ID_TOKEN) &&
+            requestInfo.requestType === this.REQUEST_TYPE.ID_TOKEN) &&
             window.parent) {
             // iframe call but same single page
             console.log('Window is in iframe');
