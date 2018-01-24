@@ -18,14 +18,17 @@ import org.springframework.context.annotation.Scope;
 @Configuration
 @ConditionalOnWebApplication
 @ConditionalOnProperty(prefix = "azure.activedirectory", value = {"client-id", "client-secret"})
-@EnableConfigurationProperties(AADAuthenticationFilterProperties.class)
+@EnableConfigurationProperties({AADAuthenticationFilterProperties.class, ServiceEndpointsProperties.class})
 public class AADAuthenticationFilterAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationFilterProperties.class);
 
     private final AADAuthenticationFilterProperties aadAuthFilterProperties;
+    private final ServiceEndpointsProperties serviceEndpointsProperties;
 
-    public AADAuthenticationFilterAutoConfiguration(AADAuthenticationFilterProperties aadAuthFilterProperties) {
+    public AADAuthenticationFilterAutoConfiguration(AADAuthenticationFilterProperties aadAuthFilterProperties,
+                                                    ServiceEndpointsProperties serviceEndpointsProperties) {
         this.aadAuthFilterProperties = aadAuthFilterProperties;
+        this.serviceEndpointsProperties = serviceEndpointsProperties;
     }
 
     /**
@@ -38,6 +41,6 @@ public class AADAuthenticationFilterAutoConfiguration {
     @ConditionalOnMissingBean(AADAuthenticationFilter.class)
     public AADAuthenticationFilter azureADJwtTokenFilter() {
         LOG.info("AzureADJwtTokenFilter Constructor.");
-        return new AADAuthenticationFilter(aadAuthFilterProperties);
+        return new AADAuthenticationFilter(aadAuthFilterProperties, serviceEndpointsProperties);
     }
 }

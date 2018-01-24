@@ -38,14 +38,18 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
     private static final String TOKEN_TYPE = "Bearer ";
 
     private AADAuthenticationFilterProperties aadAuthFilterProp;
+    private ServiceEndpointsProperties serviceEndpointsProp;
 
-    public AADAuthenticationFilter(AADAuthenticationFilterProperties aadAuthFilterProp) {
+    public AADAuthenticationFilter(AADAuthenticationFilterProperties aadAuthFilterProp,
+                                   ServiceEndpointsProperties serviceEndpointsProp) {
         this.aadAuthFilterProp = aadAuthFilterProp;
+        this.serviceEndpointsProp = serviceEndpointsProp;
     }
 
     private AuthenticationResult acquireTokenForGraphApi(
             String idToken,
-            String tenantId) throws Throwable {
+            String tenantId,
+            ServiceEndpoints serviceEndpoints) throws Throwable {
         final ClientCredential credential = new ClientCredential(
                 aadAuthFilterProp.getClientId(), aadAuthFilterProp.getClientSecret());
         final UserAssertion assertion = new UserAssertion(idToken);
@@ -55,11 +59,9 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
         try {
             service = Executors.newFixedThreadPool(1);
             final AuthenticationContext context = new AuthenticationContext(
-                    aadAuthFilterProp.getAadSignInUri() + tenantId + "/",
-                    true,
-                    service);
+                    serviceEndpoints.getAadSigninUri() + tenantId + "/", true, service);
             final Future<AuthenticationResult> future = context
-                    .acquireToken(aadAuthFilterProp.getAadGraphAPIUri(), assertion, credential, null);
+                    .acquireToken(serviceEndpoints.getAadGraphApiUri(), assertion, credential, null);
             result = future.get();
         } catch (ExecutionException e) {
             throw e.getCause();
@@ -91,10 +93,14 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                         .getSession().getAttribute(CURRENT_USER_PRINCIPAL);
                 String graphApiToken = (String) request
                         .getSession().getAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN);
+
+                final ServiceEndpoints serviceEndpoints =
+                        serviceEndpointsProp.getServiceEndpoints(aadAuthFilterProp.getEnvironment());
+
                 if (principal == null || graphApiToken == null || graphApiToken.isEmpty()) {
-                    principal = new UserPrincipal(idToken);
+                    principal = new UserPrincipal(idToken, serviceEndpoints);
                     graphApiToken = acquireTokenForGraphApi(
-                            idToken, principal.getClaim().toString()).getAccessToken();
+                            idToken, principal.getClaim().toString(), serviceEndpoints).getAccessToken();
                     request.getSession().setAttribute(CURRENT_USER_PRINCIPAL, principal);
                     request.getSession().setAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN, graphApiToken);
                 }
@@ -106,7 +112,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                                 principal.getGroups(graphApiToken),
                                 aadAuthFilterProp.getActiveDirectoryGroups()));
                 authentication.setAuthenticated(true);
-                log.info("Request token verification success. {0}", authentication);
+                log.info("Request token verification success. {}", authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Throwable throwable) {
                 throw new RuntimeException(throwable);

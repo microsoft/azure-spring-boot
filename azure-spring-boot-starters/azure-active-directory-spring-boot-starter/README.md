@@ -28,6 +28,9 @@ If you are using Maven, add the following dependency.
 Open `application.properties` file and add below properties.
 
 ```
+By default, property azure.activedirectory.environment is set to global. While if you're using [Azure China](https://docs.microsoft.com/en-us/azure/china/china-welcome), please set property value to cn.
+# Currently only one of following values are supported:[global, cn]
+azure.activedirectory.environment=${azure-service-environment} 
 azure.activedirectory.clientId=Application-ID-in-AAD-App-registrations
 azure.activedirectory.clientSecret=Key-in-AAD-API-ACCESS
 azure.activedirectory.ActiveDirectoryGroups=Aad-groups e.g. group1,group2,group3

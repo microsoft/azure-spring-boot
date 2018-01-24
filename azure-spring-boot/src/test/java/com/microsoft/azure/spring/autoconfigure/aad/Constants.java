@@ -9,9 +9,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Constants {
+    public static final String SERVICE_ENVIRONMENT_PROPERTY = "azure.activedirectory.environment";
     public static final String CLIENT_ID_PROPERTY = "azure.activedirectory.clientId";
     public static final String CLIENT_SECRET_PROPERTY = "azure.activedirectory.clientSecret";
     public static final String TARGETED_GROUPS_PROPERTY = "azure.activedirectory.ActiveDirectoryGroups";
+
+    public static final String DEFAULT_ENVIRONMENT = "global";
     public static final String CLIENT_ID = "real_client_id";
     public static final String CLIENT_SECRET = "real_client_secret";
     public static final List<String> TARGETED_GROUPS = Arrays.asList("group1", "group2",
