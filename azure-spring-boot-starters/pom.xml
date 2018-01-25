@@ -4,14 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.microsoft.azure</groupId>
-        <artifactId>azure-spring-boot-parent</artifactId>
-        <version>0.2.2-SNAPSHOT</version>
-        <relativePath>../azure-spring-boot-parent/pom.xml</relativePath>
-    </parent>
-
+    <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-spring-boot-starters</artifactId>
+    <version>0.2.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Azure Spring Boot Starers</name>
