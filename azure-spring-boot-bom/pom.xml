@@ -46,6 +46,8 @@
     </scm>
 
     <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <azure.starter.version>0.2.2-SNAPSHOT</azure.starter.version>
         <azure.springboot.version>0.2.2-SNAPSHOT</azure.springboot.version>
         <azure.aad.starter.version>0.2.2-SNAPSHOT</azure.aad.starter.version>
@@ -64,6 +66,7 @@
         <microsoft.client-runtime.version>1.0.0</microsoft.client-runtime.version>
         <lombok.version>1.16.20</lombok.version>
         <spring.boot.version>1.5.4.RELEASE</spring.boot.version>
+        <spring.security.version>5.0.0.RELEASE</spring.security.version>
         <google.findbugs.annotations.version>2.0.1</google.findbugs.annotations.version>
         <nimbusds.jwt.version>4.39.2</nimbusds.jwt.version>
         <mockito.core.version>2.8.9</mockito.core.version>
@@ -171,6 +174,22 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-web</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+            
             <dependency>
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>annotations</artifactId>
