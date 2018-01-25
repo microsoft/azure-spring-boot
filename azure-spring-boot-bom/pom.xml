@@ -47,6 +47,7 @@
 
     <properties>
         <azure.starter.version>0.2.2-SNAPSHOT</azure.starter.version>
+        <azure.springboot.version>0.2.2-SNAPSHOT</azure.springboot.version>
         <azure.aad.starter.version>0.2.2-SNAPSHOT</azure.aad.starter.version>
         <azure.documentdb.starter.version>0.2.2-SNAPSHOT</azure.documentdb.starter.version>
         <azure.storage.starter.version>0.2.2-SNAPSHOT</azure.storage.starter.version>
@@ -77,6 +78,11 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-spring-boot-starter</artifactId>
                 <version>${azure.starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-spring-boot</artifactId>
+                <version>${azure.springboot.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
