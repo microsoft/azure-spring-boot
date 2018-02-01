@@ -9,11 +9,14 @@ package com.microsoft.azure.spring.autoconfigure.documentdb;
 import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.autoconfigure.documentdb.domain.Person;
 import com.microsoft.azure.spring.autoconfigure.documentdb.domain.PersonRepository;
+import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
 import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
+import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
 import com.microsoft.azure.spring.data.documentdb.repository.config.EnableDocumentDbRepositories;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -27,8 +30,14 @@ public class DocumentDbRepositoriesAutoConfigurationUnitTest {
 
     private AnnotationConfigApplicationContext context;
 
-    @Mock
+    @InjectMocks
     private DocumentDbTemplate dbOperations;
+
+    @Mock
+    private DocumentDbFactory documentDbFactory;
+
+    @Mock
+    private MappingDocumentDbConverter mappingDocumentDbConverter;
 
     @Mock
     private DocumentClient documentClient;

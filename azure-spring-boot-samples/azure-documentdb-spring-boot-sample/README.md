@@ -33,8 +33,7 @@ java -jar target/azure-ducumentdb-spring-boot-sample-0.0.1-SNAPSHOT.jar
 ```
 ### Known issue
 
-Directly running the sample app from IDE IntelliJ or Eclipse has below security exception if using the *released* starter. The root cause
- is that the release `spring-data-azure-documentdb` jar is code-signed by us. We're working actively to resolve this issue. 
+Directly running the sample app from IDE IntelliJ or Eclipse has below security exception if using the *released* starter. The root cause is that the release `spring-data-azure-documentdb` jar is code-signed by us. We're working actively to resolve this issue. 
 
 ```
 Caused by: java.lang.SecurityException: class "com.microsoft.azure.sample.User_Accessor_yhb3bq"'s signer information does not match signer information of other classes in the same package
@@ -42,6 +41,8 @@ Caused by: java.lang.SecurityException: class "com.microsoft.azure.sample.User_A
 	at java.lang.ClassLoader.preDefineClass(ClassLoader.java:668) ~[na:1.8.0_131]
 	at java.lang.ClassLoader.defineClass(ClassLoader.java:761) ~[na:1.8.0_131]
 ```
+
+If `com.fasterxml.jackson.databind.JsonMappingException` is thrown during deserialization, with error message `Can not construct instance of {your.pojo.class}: no suitable constructor found, can not deserialize from Object value (missing default constructor...`, add [Lombok annotatations](https://projectlombok.org/features/all) `@Data` and `@AllArgsConstructor` for your POJO class, or use [Jackson annotations](https://github.com/FasterXML/jackson-annotations#using-constructors-or-factory-methods) `@JsonCreator` and `@JsonProperty` for the full argument constructor.
 
 ### More details
 
