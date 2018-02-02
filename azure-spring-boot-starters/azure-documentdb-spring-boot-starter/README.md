@@ -1,5 +1,12 @@
-## Azure Cosmos DB DocumentDB API Spring boot starter
-[Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/introduction) is a globally-distributed database service that allows developers to work with data using a variety of standard APIs, such as DocumentDB, MongoDB, Graph, and Table APIs. Azure Cosmos DB DocumentDB API Spring boot starter is Spring starter for [Azure Cosmos DB Document API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) based on Spring Data framework. The other 3 APIs are not supported in this starter. Key functionality supports so far including save, delete and find.
+## Azure DocumentDB Spring Boot Starter
+
+[Azure DocumentDB](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) helps manage JSON data through well-defined database resources. It is a key part of [Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction), which is a globally-distributed database service that allows developers to work with data using a variety of standard APIs, such as DocumentDB, MongoDB, Graph, and Table. 
+
+## TOC
+
+* [Feature List](#feature-list)
+* [Sample Code](#sample-codes)
+* [Quick Start](#quick-start)
 
 ## Feature List
 - Spring Data CRUDRepository basic CRUD functionality
@@ -17,6 +24,9 @@
 - Custom collection Name.
    By default, collection name will be class name of user domain class. To customize it, add annotation `@Document(collection="myCustomCollectionName")` to your domain class, that's all.
 - Supports [Azure Cosmos DB partition](https://docs.microsoft.com/en-us/azure/cosmos-db/partition-data). To specify a field of your domain class to be partition key field, just annotate it with `@PartitionKey`. When you do CRUD operation, please specify your partition value. For more sample on partition CRUD, please refer to [test here](./test/java/com/microsoft/azure/spring/data/documentdb/repository/AddressRepositoryIT.java)   
+- Supports [Spring Data custom query](https://docs.spring.io/spring-data/commons/docs/current/reference/html/#repositories.query-methods.details) find operation.
+- Supports [spring-boot-starter-data-rest](https://projects.spring.io/spring-data-rest/).
+- Supports List and nested type in domain class.
 
 ## Sample Code
 Please refer to [sample project here](../../azure-spring-boot-samples/azure-documentdb-spring-boot-sample).
@@ -130,6 +140,6 @@ Find more information about Azure Service Privacy Statement, please check [Micro
 
 ### Further info
 
-Besides using this Azure DocumentDB Spring Boot Starter, you can directly use Azure DocumentDB API Spring Data package for more complex scenarios. Please refer to [Spring Data for Azure Cosmos DB DocumentDB API](https://github.com/Microsoft/spring-data-documentdb) for more details.
+Besides using this Azure DocumentDB Spring Boot Starter, you can directly use Spring Data for Azure DocumentDB package for more complex scenarios. Please refer to [Spring Data for Azure DocumentDB](https://github.com/Microsoft/spring-data-documentdb) for more details.
 
 
