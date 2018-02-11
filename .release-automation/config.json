@@ -1,5 +1,5 @@
 {
-  "releaseVersion": "0.2.1",
+  "releaseVersion": "0.2.3",
   "moduleNames": [
     "azure-spring-boot-parent",
     "azure-spring-boot-bom",
