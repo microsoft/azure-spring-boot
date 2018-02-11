@@ -14,6 +14,7 @@ import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
 import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbMappingContext;
 import com.microsoft.azure.spring.support.GetHashMac;
+import com.microsoft.azure.utils.PropertyLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -34,7 +35,7 @@ import org.springframework.data.annotation.Persistent;
 @EnableConfigurationProperties(DocumentDBProperties.class)
 public class DocumentDBAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(DocumentDBAutoConfiguration.class);
-    private static final String USER_AGENT_SUFFIX = "spring-boot-starter/0.2.2-SNAPSHOT";
+    private static final String USER_AGENT_SUFFIX = "spring-boot-starter/" + PropertyLoader.getProjectVersion();
 
     private final DocumentDBProperties properties;
     private final ConnectionPolicy connectionPolicy;
