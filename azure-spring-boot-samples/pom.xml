@@ -66,7 +66,7 @@
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-spring-boot-bom</artifactId>
-                <version>0.2.2-SNAPSHOT</version>
+                <version>0.2.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
