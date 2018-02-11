@@ -20,7 +20,12 @@ This sample project demonstrates how to use Azure DocumentDB via Spring Boot Sta
 ### Config the sample
 
 1. Navigate to `src/main/resources` and open `application.properties`.
-2. Replace the `DNS URI`, `Access Key` and `Name` with information of your database 
+2. replace below properties in `application.properties` with information of your database.
+   ```properties
+   azure.documentdb.uri=your-documentdb-uri
+   azure.documentdb.key=your-documentdb-key
+   azure.documentdb.database=your-documentdb-databasename
+   ```
 
 ### Run the sample
 
