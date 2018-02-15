@@ -13,6 +13,13 @@ git clone https://github.com/Microsoft/azure-spring-boot.git
 cd azure-spring-boot
 mvn clean install
 ```
+== Cloning the git repository on Windows
+Some files in the git repository may exceed the Windows maximum file path (260 characters), depending on where you clone the repository. If you get `Filename too long` errors, set the `core.longPaths=true` git option:
+```
+git clone -c core.longPaths=true https://github.com/Microsoft/azure-spring-boot.git
+cd azure-spring-boot
+mvn clean install
+```
 
 ## Test
 
