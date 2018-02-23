@@ -11,7 +11,9 @@
         <relativePath>../azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
+    <groupId>com.fragmadata.azure</groupId>
     <artifactId>azure-spring-boot</artifactId>
+    <version>0.2.4-FRAGMA_PATCH_ASYMMETRIC_AUTH-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Azure Spring Boot AutoConfigure</name>

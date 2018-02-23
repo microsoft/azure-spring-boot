@@ -28,14 +28,30 @@ class KeyVaultEnvironmentPostProcessorHelper {
 
     public void addKeyVaultPropertySource() {
         final String clientId = getProperty(environment, Constants.AZURE_CLIENTID);
-        final String clientKey = getProperty(environment, Constants.AZURE_CLIENTKEY);
         final String vaultUri = getProperty(environment, Constants.AZURE_KEYVAULT_VAULT_URI);
+
+        final String clientKey = environment.getProperty(
+                Constants.AZURE_CLIENTKEY, String.class, null);
+        final String pfxPath = environment.getProperty(
+                Constants.AZURE_KEYVAULT_PFX_CERTIFICAT_PATH, String.class, null);
+        final String pfxPassword = environment.getProperty(
+                Constants.AZURE_KEYVAULT_PFX_CERTIFICAT_PASSWORD, String.class, "");
 
         final long timeAcquiringTimeoutInSeconds = environment.getProperty(
                 Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, Long.class, 60L);
 
-        final ServiceClientCredentials credentials =
-                new AzureKeyVaultCredential(clientId, clientKey, timeAcquiringTimeoutInSeconds);
+        final ServiceClientCredentials credentials;
+
+        if (pfxPath != null && clientKey != null){
+            throw new IllegalArgumentException("Either client-key or pfx-certificate-path can be set. Both at the same time are not allowed");
+        }else if (pfxPath !=null){
+            credentials = new AzureKeyVaultCredentialViaCertificate(clientId,pfxPath,pfxPassword,timeAcquiringTimeoutInSeconds);
+        }else if (clientKey != null){
+            credentials = new AzureKeyVaultCredential(clientId,clientKey,timeAcquiringTimeoutInSeconds);
+        }else{
+            throw new IllegalArgumentException("Both properties client-key and pfx-certificate-path are null");
+        }
+
         final RestClient restClient = new RestClient.Builder().withBaseUrl(vaultUri)
                             .withCredentials(credentials)
                             .withSerializerAdapter(new AzureJacksonAdapter())
