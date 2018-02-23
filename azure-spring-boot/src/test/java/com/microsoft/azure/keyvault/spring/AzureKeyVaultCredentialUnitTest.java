@@ -18,7 +18,8 @@ public class AzureKeyVaultCredentialUnitTest {
     @Before
     public void setup() {
         keyVaultCredential = new AzureKeyVaultCredential("fakeClientId", "fakeClientKey", 30);
-        keyVaultCredentialViaCertificate = new AzureKeyVaultCredentialViaCertificate("fakeClientId", "fakePfxPath", "", 30);
+        keyVaultCredentialViaCertificate = new AzureKeyVaultCredentialViaCertificate(
+                "fakeClientId", "fakePfxPath", "", 30);
     }
 
     @Test(expected = RuntimeException.class)

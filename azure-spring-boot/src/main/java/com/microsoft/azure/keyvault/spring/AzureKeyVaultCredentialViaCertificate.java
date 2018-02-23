@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See LICENSE in the project root for
+ * license information.
+ */
+
 package com.microsoft.azure.keyvault.spring;
 
 import com.microsoft.aad.adal4j.AsymmetricKeyCredential;
@@ -6,9 +12,7 @@ import com.microsoft.aad.adal4j.AuthenticationResult;
 import com.microsoft.azure.keyvault.authentication.KeyVaultCredentials;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -26,44 +30,56 @@ public class AzureKeyVaultCredentialViaCertificate extends KeyVaultCredentials {
     private final String pfxPassword;
     private long timeoutInSeconds;
 
-    public AzureKeyVaultCredentialViaCertificate(String clientId, String pfxPath,String pfxPassword, long timeoutInSeconds) {
+    public AzureKeyVaultCredentialViaCertificate(String clientId, String pfxPath,
+                                                 String pfxPassword, long timeoutInSeconds) {
         this.clientId = clientId;
         this.pfxPath = pfxPath;
         this.pfxPassword = pfxPassword;
         this.timeoutInSeconds = timeoutInSeconds;
     }
 
-    public AzureKeyVaultCredentialViaCertificate(String clientId, String pfxPath,String pfxPassword) {
-        this(clientId,pfxPath,pfxPassword, DEFAULT_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS);
+    public AzureKeyVaultCredentialViaCertificate(String clientId, String pfxPath, String pfxPassword) {
+        this(clientId, pfxPath, pfxPassword, DEFAULT_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS);
     }
     @Override
     public String doAuthenticate(String authorization, String resource, String scope) {
         try {
-            KeyCert certificateKey = readPfx(pfxPath, pfxPassword);
-            PrivateKey privateKey = certificateKey.getKey();
-            AuthenticationContext context = new AuthenticationContext(authorization, false, Executors.newSingleThreadExecutor());
-            AsymmetricKeyCredential asymmetricKeyCredential = AsymmetricKeyCredential.create(clientId, privateKey, certificateKey.getCertificate());
-            final Future<AuthenticationResult> future = context.acquireToken(resource, asymmetricKeyCredential, null);
-            AuthenticationResult result = future.get(timeoutInSeconds, TimeUnit.SECONDS);
+            final KeyCert certificateKey = readPfx(pfxPath, pfxPassword);
+            final PrivateKey privateKey = certificateKey.getKey();
+
+            final AuthenticationContext context = new AuthenticationContext(
+                    authorization, false, Executors.newSingleThreadExecutor());
+
+            final AsymmetricKeyCredential asymmetricKeyCredential = AsymmetricKeyCredential
+                    .create(clientId, privateKey, certificateKey.getCertificate());
+
+            final Future<AuthenticationResult> future = context
+                    .acquireToken(resource, asymmetricKeyCredential, null);
+
+            final AuthenticationResult result = future
+                    .get(timeoutInSeconds, TimeUnit.SECONDS);
             return result.getAccessToken();
-        } catch (InterruptedException|ExecutionException|IOException|CertificateException|NoSuchAlgorithmException|
-                UnrecoverableKeyException|NoSuchProviderException|KeyStoreException|TimeoutException e) {
-            throw new RuntimeException("KeyVault Authentication Failed: "+e.getMessage());
+        } catch (InterruptedException | ExecutionException | IOException | CertificateException |
+                NoSuchAlgorithmException | UnrecoverableKeyException | NoSuchProviderException |
+                KeyStoreException | TimeoutException e) {
+            throw new RuntimeException("KeyVault Authentication Failed: " + e.getMessage());
         }
     }
 
-    public KeyCert readPfx(String path,String password) throws NoSuchProviderException, KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
+    public KeyCert readPfx(String path, String password)
+            throws NoSuchProviderException, KeyStoreException, IOException,
+            NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
 
-        try(FileInputStream stream = new FileInputStream(path)){
+        try (FileInputStream stream = new FileInputStream(path)){
             final KeyStore store = KeyStore.getInstance("pkcs12", "SunJSSE");
             store.load(stream, password.toCharArray());
-            KeyCert keyCert = new KeyCert();
-            Enumeration<String> aliases = store.aliases();
+            final KeyCert keyCert = new KeyCert();
+            final Enumeration<String> aliases = store.aliases();
 
-            while(aliases.hasMoreElements()){
-                String alias = aliases.nextElement();
-                X509Certificate certificate = (X509Certificate) store.getCertificate(alias);
-                PrivateKey key = (PrivateKey)store.getKey(alias,password.toCharArray());
+            while (aliases.hasMoreElements()){
+                final String alias = aliases.nextElement();
+                final X509Certificate certificate = (X509Certificate) store.getCertificate(alias);
+                final PrivateKey key = (PrivateKey) store.getKey(alias, password.toCharArray());
                 keyCert.setCertificate(certificate);
                 keyCert.setKey(key);
             }
@@ -71,7 +87,7 @@ public class AzureKeyVaultCredentialViaCertificate extends KeyVaultCredentials {
         }
     }
 
-    public class KeyCert {
+    public static class KeyCert {
 
         private X509Certificate certificate;
         private PrivateKey key;

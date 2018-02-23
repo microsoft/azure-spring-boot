@@ -43,13 +43,16 @@ class KeyVaultEnvironmentPostProcessorHelper {
         final ServiceClientCredentials credentials;
 
         if (pfxPath != null && clientKey != null){
-            throw new IllegalArgumentException("Either client-key or pfx-certificate-path can be set. Both at the same time are not allowed");
-        }else if (pfxPath !=null){
-            credentials = new AzureKeyVaultCredentialViaCertificate(clientId,pfxPath,pfxPassword,timeAcquiringTimeoutInSeconds);
-        }else if (clientKey != null){
-            credentials = new AzureKeyVaultCredential(clientId,clientKey,timeAcquiringTimeoutInSeconds);
-        }else{
-            throw new IllegalArgumentException("Both properties client-key and pfx-certificate-path are null");
+            throw new IllegalArgumentException(
+                    "Either client-key or pfx-certificate-path can be set. Both at the same time are not allowed");
+        } else if (pfxPath != null){
+            credentials = new AzureKeyVaultCredentialViaCertificate(clientId, pfxPath,
+                    pfxPassword, timeAcquiringTimeoutInSeconds);
+        } else if (clientKey != null){
+            credentials = new AzureKeyVaultCredential(clientId, clientKey, timeAcquiringTimeoutInSeconds);
+        } else {
+            throw new IllegalArgumentException(
+                    "Both properties client-key and pfx-certificate-path are null");
         }
 
         final RestClient restClient = new RestClient.Builder().withBaseUrl(vaultUri)
