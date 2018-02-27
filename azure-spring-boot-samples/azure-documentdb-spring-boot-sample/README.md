@@ -31,11 +31,21 @@ This sample project demonstrates how to use Azure DocumentDB via Spring Boot Sta
 
 1. Change directory to folder `azure-documentdb-spring-boot-sample`.
 2. Run below commands. 
+ 
+   - Use Maven 
 
-```
-mvn package
-java -jar target/azure-ducumentdb-spring-boot-sample-0.0.1-SNAPSHOT.jar
-```
+     ```
+     mvn package
+     java -jar target/azure-ducumentdb-spring-boot-sample-0.0.1-SNAPSHOT.jar
+     ```
+
+   - Use Gradle 
+   
+     ```
+     gradle bootRepackage
+     java -jar build/libs/azure-ducumentdb-spring-boot-sample-0.0.1-SNAPSHOT.jar
+     ```
+
 ### Known issue
 
 Directly running the sample app from IDE IntelliJ or Eclipse has below security exception if using the *released* starter. The root cause is that the release `spring-data-azure-documentdb` jar is code-signed by us. We're working actively to resolve this issue. 

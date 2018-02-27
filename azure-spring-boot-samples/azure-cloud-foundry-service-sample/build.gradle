@@ -1,0 +1,10 @@
+
+description = 'Azure Cloud Foundry Service Sample'
+dependencies {
+    compile group: 'com.microsoft.azure', name: 'azure-storage-spring-boot-starter', version:'0.2.3'
+    compile group: 'com.microsoft.azure', name: 'azure-documentdb-spring-boot-starter', version:'0.2.3'
+    compile group: 'com.microsoft.azure', name: 'azure-servicebus-spring-boot-starter', version:'0.2.3'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'1.5.4.RELEASE'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-jersey', version:'1.5.4.RELEASE'
+    compile group: 'commons-io', name: 'commons-io', version:'2.3'
+}
