@@ -18,6 +18,7 @@ allprojects {
 
     ext {
         azureSpringBootStartersVersion = '0.2.3'
+        commonsioVersion = '2.3'
     }
 }
 
