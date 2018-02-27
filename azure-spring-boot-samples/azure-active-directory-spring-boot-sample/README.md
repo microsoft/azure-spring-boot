@@ -35,8 +35,21 @@ In `app.js`, make following changes. The client leverages Azure AD library for J
 ```
 
 ### Give it a run
-* `mvn clean install`.
-* `cd azure-active-directory-spring-boot-sample`
-* `mvn spring-boot:run`
+
+   - Use Maven 
+
+     ```
+     mvn clean install
+     cd azure-active-directory-spring-boot-sample
+     mvn spring-boot:run
+     ```
+
+   - Use Gradle 
+   
+     ```
+     gradle clean bootRepackage
+     java -jar build/libs/azure-active-directory-spring-boot-sample-0.0.1-SNAPSHOT.jar
+     ```
+
 * If running locally, browse to `http://localhost:8080` and click `Login` or `Todo List`, your browser will be redirected to `https://login.microsoftonline.com/` for authentication.
 * Upon successful login, `Todo List` will give you a default item and you can perform add, update or delete operation. The backend RESTful API will accept or deny your request based on authenticated user roles.

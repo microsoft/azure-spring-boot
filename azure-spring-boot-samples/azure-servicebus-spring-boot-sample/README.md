@@ -28,10 +28,19 @@ This sample project demonstrates how to use Service Bus via Spring Boot Starter 
 1. Change directory to folder `azure-servicebus-spring-boot-sample`.
 2. Run below commands. 
 
-```
-mvn package
-java -jar target/azure-servicebus-spring-boot-sample-0.0.1-SNAPSHOT.jar
-```
+   - Use Maven 
+
+     ```
+     mvn package
+     java -jar target/azure-servicebus-spring-boot-sample-0.0.1-SNAPSHOT.jar
+     ```
+
+   - Use Gradle 
+   
+     ```
+     gradle bootRepackage
+     java -jar build/libs/azure-servicebus-spring-boot-sample-0.0.1-SNAPSHOT.jar
+     ```
 
 ### More usage
 

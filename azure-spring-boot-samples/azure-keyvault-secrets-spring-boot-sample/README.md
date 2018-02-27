@@ -80,3 +80,19 @@ public class SampleApplication implements CommandLineRunner {
 
 }
 ```
+
+
+## Run the sample
+   - Use Maven 
+
+     ```
+     mvn package
+     java -jar target/azure-keyvault-secrets-spring-boot-sample-0.0.1-SNAPSHOT.jar
+     ```
+
+   - Use Gradle 
+   
+     ```
+     gradle bootRepackage
+     java -jar build/libs/azure-keyvault-secrets-spring-boot-sample-0.0.1-SNAPSHOT.jar
+     ```

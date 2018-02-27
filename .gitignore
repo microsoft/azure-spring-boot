@@ -47,3 +47,10 @@ __pycache__
 
 # dll files
 *.dll
+
+# gradle
+.gradle
+/build/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
