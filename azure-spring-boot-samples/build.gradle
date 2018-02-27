@@ -1,5 +1,7 @@
 buildscript {
-    ext { springBootVersion = '1.5.10.RELEASE'}
+    ext {
+        springBootVersion = '1.5.10.RELEASE'
+    }
     repositories {
         mavenCentral()
     }
@@ -13,6 +15,10 @@ allprojects {
 
     group = 'com.microsoft.azure'
     version = '0.0.1-SNAPSHOT'
+
+    ext {
+        azureSpringBootStartersVersion = '0.2.3'
+    }
 }
 
 subprojects {

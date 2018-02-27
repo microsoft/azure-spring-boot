@@ -1,5 +1,5 @@
 
 description = 'Azure Storage Spring Boot Starter Sample'
 dependencies {
-    compile group: 'com.microsoft.azure', name: 'azure-storage-spring-boot-starter', version:'0.2.3'
+    compile group: 'com.microsoft.azure', name: 'azure-storage-spring-boot-starter', version:"${azureSpringBootStartersVersion}"
 }
