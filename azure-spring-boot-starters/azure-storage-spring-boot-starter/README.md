@@ -15,14 +15,14 @@ If you are using Maven, add the following dependency.
 
 ### Add the property setting
 This starter supports 2 ways of authentication.
-1. Connection string. 
+1. Connection string.   
    Open `application.properties` file and add below property with your Azure Storage connection string.
 
    ```
    azure.storage.connection-string=DefaultEndpointsProtocol=[http|https];AccountName=myAccountName;AccountKey=myAccountKey
    ```
 
-2. [Shared access signature](https://docs.microsoft.com/en-us/azure/storage/common/storage-dotnet-shared-access-signature-part-1). 
+2. [Shared access signature](https://docs.microsoft.com/en-us/azure/storage/common/storage-dotnet-shared-access-signature-part-1).  
    Open `application.properties` file and add below property with your Azure Storage connection string.
 
    ```

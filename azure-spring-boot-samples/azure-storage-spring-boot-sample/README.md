@@ -20,7 +20,7 @@ This sample project demonstrates how to use Azure Storage via Spring Boot Starte
 
 1. Navigate to `src/main/resources` and open `application.properties`.
 2. Fill in the `connection-string` to access with Azure Storage Account connection string. 
-   Or Fill in `shared-access-signature` and `account-name` to access with Azure Storage Account Shared Access Signature. 
+   Or fill in `shared-access-signature` and `account-name` to access with Azure Storage Account Shared Access Signature. 
 
 ### Run the sample
 
