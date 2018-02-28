@@ -23,7 +23,7 @@ This starter supports 2 ways of authentication.
    ```
 
 2. [Shared access signature](https://docs.microsoft.com/en-us/azure/storage/common/storage-dotnet-shared-access-signature-part-1).  
-   Open `application.properties` file and add below property with your Azure Storage connection string.
+   Open `application.properties` file and add below property with your Azure Storage Account shared access signature and account name.
 
    ```
    azure.storage.shared-access-signature=?sv=signedversion&ss=signed_services&srt=signed_resource_types&sp=signed_permission&se=start_date&st=effective_date&spr=https&sig=signature_string
