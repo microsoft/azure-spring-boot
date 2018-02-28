@@ -7,8 +7,10 @@
 package com.microsoft.azure.spring.autoconfigure.storage;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.storage.StorageCredentialsSharedAccessSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -22,7 +24,8 @@ import java.security.InvalidKeyException;
 @Configuration
 @ConditionalOnMissingBean(CloudStorageAccount.class)
 @EnableConfigurationProperties(StorageProperties.class)
-@ConditionalOnProperty(prefix = "azure.storage", value = "connection-string")
+@ConditionalOnExpression("'${azure.storage.connection-string}' != null " +
+        "|| '${azure.storage.shared-access-signature}' != null")
 public class StorageAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(StorageAutoConfiguration.class);
 
@@ -39,18 +42,20 @@ public class StorageAutoConfiguration {
      */
     @Bean
     @Scope("prototype")
+    @ConditionalOnProperty(prefix = "azure.storage", value = "connection-string")
     public CloudStorageAccount cloudStorageAccount() throws URISyntaxException, InvalidKeyException {
-        LOG.debug("cloudStorageAccount called");
-        return createCloudStorageAccount();
-    }
-
-    /**
-     * Helper function for creating CloudStorageAccount instance from storage connection string.
-     *
-     * @return CloudStorageAccount object
-     */
-    private CloudStorageAccount createCloudStorageAccount() throws URISyntaxException, InvalidKeyException {
-        LOG.debug("createCloudStorageAccount called");
+        LOG.debug("cloudStorageAccount with connection-string called");
         return CloudStorageAccount.parse(properties.getConnectionString());
     }
+
+    @Bean
+    @Scope("prototype")
+    @ConditionalOnProperty(prefix = "azure.storage", value = {"shared-access-signature", "account-name"})
+    public CloudStorageAccount cloudStorageAccountSas() throws URISyntaxException, InvalidKeyException {
+        LOG.debug("createCloudStorageAccount with sas called");
+        final StorageCredentialsSharedAccessSignature sasToken =
+                new StorageCredentialsSharedAccessSignature(properties.getSharedAccessSignature());
+        return new CloudStorageAccount(sasToken, true, null, properties.getAccountName());
+    }
+
 }

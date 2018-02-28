@@ -33,26 +33,6 @@ public class StoragePropertiesTest {
         System.clearProperty(CONNECTION_STRING_PROPERTY);
     }
 
-    @Test
-    public void emptySettingNotAllowed() {
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(Config.class);
-
-            Exception exception = null;
-            try {
-                context.refresh();
-            } catch (Exception e) {
-                exception = e;
-            }
-
-            assertThat(exception).isNotNull();
-            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
-            assertThat(exception.getCause().getMessage()).contains(
-                    "Field error in object 'azure.storage' on field 'connectionString': " +
-                            "rejected value [null];");
-        }
-    }
-
     @Configuration
     @EnableConfigurationProperties(StorageProperties.class)
     static class Config {

@@ -6,7 +6,6 @@
 
 package com.microsoft.azure.spring.autoconfigure.storage;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -17,8 +16,17 @@ public class StorageProperties {
     /**
      * Azure Storage connection string.
      */
-    @NotEmpty
     private String connectionString;
+
+    /**
+     * Azure Storage SharedAccessSignature.
+     */
+    private String sharedAccessSignature;
+
+    /**
+     * Azure Storage account name.
+     */
+    private String accountName;
 
     /**
      * Get storage account connection string.
@@ -36,5 +44,41 @@ public class StorageProperties {
      */
     public void setConnectionString(String connectionString) {
         this.connectionString = connectionString;
+    }
+
+    /**
+     * Get storage account sharedAccessSignature.
+     *
+     * @return storage account sharedAccessSignature
+     */
+    public String getSharedAccessSignature() {
+        return sharedAccessSignature;
+    }
+
+    /**
+     * Set storage account sharedAccessSignature.
+     *
+     * @param sharedAccessSignature
+     */
+    public void setSharedAccessSignature(String sharedAccessSignature) {
+        this.sharedAccessSignature = sharedAccessSignature;
+    }
+
+    /**
+     * Get storage account name.
+     *
+     * @return
+     */
+    public String getAccountName() {
+        return accountName;
+    }
+
+    /**
+     * Set storage account name.
+     *
+     * @param accountName
+     */
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 }
