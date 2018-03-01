@@ -13,15 +13,19 @@ cf marketplace
 If installed, you should see something like this:
 
 ```
-service              plans                                                                                                                                                            description
-azure-cosmosdb       standard*                                                                                                                                                        Azure CosmosDb Service
-azure-documentdb     standard*                                                                                                                                                        Azure DocumentDb Service
-azure-mysqldb        basic50*, basic100*, standard100*, standard200*, standard400*, standard800*                                                                                      Azure Database for MySQL Service
-azure-postgresqldb   basic50*, basic100*, standard100*, standard200*, standard400*, standard800*                                                                                      Azure Database for PostgreSQL Service
-azure-rediscache     basic*, standard*, premium*                                                                                                                                      Azure Redis Cache Service
-azure-servicebus     standard*                                                                                                                                                        Azure Service Bus Service
-azure-sqldb          basic*, StandardS0*, StandardS1*, StandardS2*, StandardS3*, PremiumP1*, PremiumP2*, PremiumP4*, PremiumP6*, PremiumP11*, DataWarehouse100*, DataWarehouse1200*   Azure SQL Database Service
-azure-storage        standard*                                                                                                                                                        Azure Storage Service
+service              plans                                                          description
+azure-cosmosdb       standard*                                                      Azure CosmosDb Service
+azure-documentdb     standard*                                                      Azure DocumentDb Service
+azure-mysqldb        basic50*, basic100*, standard100*, standard200*, standard400*,
+                     standard800*                                                   Azure Database for MySQL Service
+azure-postgresqldb   basic50*, basic100*, standard100*, standard200*, standard400*,
+                     standard800*                                                   Azure Database for PostgreSQL Service
+azure-rediscache     basic*, standard*, premium*                                    Azure Redis Cache Service
+azure-servicebus     standard*                                                      Azure Service Bus Service
+azure-sqldb          basic*, StandardS0*, StandardS1*, StandardS2*, StandardS3*,
+                     PremiumP1*, PremiumP2*, PremiumP4*, PremiumP6*, PremiumP11*,
+                     DataWarehouse100*, DataWarehouse1200*                          Azure SQL Database Service
+azure-storage        standard*                                                      Azure Storage Service
 
 * These service plans have an associated cost. Creating a service instance will incur this cost.
 

@@ -21,16 +21,28 @@ Save the service principal id and password contained in the output from above co
 - Create Azure Key Vault by using Azure CLI or via [Azure Portal](https://portal.azure.com). You also need to grant appropriate permissions to the service principal created.
 You can use the following az cli commands:
 ```bash
-az keyvault create --name <your_keyvault_name> --resource-group <your_resource_group> --location <location> --enabled-for-deployment true --enabled-for-disk-encryption true --enabled-for-template-deployment true --sku standard
-az keyvault set-policy --name <your_keyvault_name> --secret-permission all --spn <your_sp_id_create_in_step1>
+az keyvault create --name <your_keyvault_name>            \
+                   --resource-group <your_resource_group> \
+                   --location <location>                  \
+                   --enabled-for-deployment true          \
+                   --enabled-for-disk-encryption true     \
+                   --enabled-for-template-deployment true \
+                   --sku standard
+az keyvault set-policy --name <your_keyvault_name> \
+                       --secret-permission all     \
+                       --spn <your_sp_id_create_in_step1>
 ```
 Save the displayed Key Vault uri for later use.
 
 - Set secret in Azure Key Vault by using Azure CLI or via Azure Portal. 
 You can use the following az cli commands:
 ```bash
-az keyvault secret set --name spring-datasource-url --value jdbc:mysql://localhost:3306/moviedb --vault-name <your_keyvault_name>
-az keyvault secret set --name <yourSecretPropertyName> --value <yourSecretPropertyVaule> --vault-name <your_keyvault_name>
+az keyvault secret set --name spring-datasource-url                \
+                       --value jdbc:mysql://localhost:3306/moviedb \
+                       --vault-name <your_keyvault_name>
+az keyvault secret set --name <yourSecretPropertyName>   \
+                       --value <yourSecretPropertyVaule> \
+                       --vault-name <your_keyvault_name>
 ```
 
  
