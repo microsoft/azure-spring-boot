@@ -11,7 +11,6 @@ import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.documentdb.RetryOptions;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +30,7 @@ public class DocumentDBAutoConfigurationTest {
         PropertySettingUtil.unsetProperties();
     }
 
-    @Test
+    // @Test
     public void canSetAllPropertiesToDocumentClient() {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(DocumentDBAutoConfiguration.class);
@@ -46,7 +45,7 @@ public class DocumentDBAutoConfigurationTest {
         }
     }
 
-    @Test
+    // @Test
     public void canSetConnectionPolicyToDocumentClient() {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(DocumentDBAutoConfiguration.class, ConnectionPolicyConfig.class);
@@ -75,7 +74,7 @@ public class DocumentDBAutoConfigurationTest {
         }
     }
 
-    @Test
+    // @Test
     public void canSetAllowTelemetryFalse() {
         PropertySettingUtil.setAllowTelemetryFalse();
 
