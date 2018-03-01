@@ -7,6 +7,7 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -17,7 +18,7 @@ import org.springframework.context.annotation.Scope;
 
 @Configuration
 @ConditionalOnWebApplication
-@ConditionalOnProperty(prefix = "azure.activedirectory", value = {"client-id", "client-secret"})
+@ConditionalOnProperty(prefix = "azure.activedirectory", value = {"clientId", "clientSecret"})
 @EnableConfigurationProperties({AADAuthenticationFilterProperties.class, ServiceEndpointsProperties.class})
 public class AADAuthenticationFilterAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationFilterProperties.class);
@@ -25,6 +26,7 @@ public class AADAuthenticationFilterAutoConfiguration {
     private final AADAuthenticationFilterProperties aadAuthFilterProperties;
     private final ServiceEndpointsProperties serviceEndpointsProperties;
 
+    @Autowired
     public AADAuthenticationFilterAutoConfiguration(AADAuthenticationFilterProperties aadAuthFilterProperties,
                                                     ServiceEndpointsProperties serviceEndpointsProperties) {
         this.aadAuthFilterProperties = aadAuthFilterProperties;
