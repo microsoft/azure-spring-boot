@@ -7,10 +7,17 @@ package com.microsoft.azure.spring.autoconfigure.documentdb;
 
 
 import org.junit.Test;
-import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.boot.context.properties.ConfigurationPropertiesBindException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.properties.bind.validation.BindValidationException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.ObjectError;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -51,9 +58,10 @@ public class DocumentDBPropertiesTest {
     @Test
     public void emptySettingNotAllowed() {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            Exception exception = null;
+
             context.register(Config.class);
 
-            Exception exception = null;
             try {
                 context.refresh();
             } catch (Exception e) {
@@ -61,11 +69,24 @@ public class DocumentDBPropertiesTest {
             }
 
             assertThat(exception).isNotNull();
-            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
-            assertThat(exception.getCause().getMessage()).contains(
-                    "Field error in object 'azure.documentdb' on field 'uri': rejected value [null];");
-            assertThat(exception.getCause().getMessage()).contains(
-                    "Field error in object 'azure.documentdb' on field 'key': rejected value [null];");
+            assertThat(exception).isExactlyInstanceOf(ConfigurationPropertiesBindException.class);
+
+            final BindValidationException bindException = (BindValidationException) exception.getCause().getCause();
+            final List<ObjectError> errors = bindException.getValidationErrors().getAllErrors();
+            final List<String> errorStrings = errors.stream().map(e -> e.toString()).collect(Collectors.toList());
+
+            Collections.sort(errorStrings);
+
+            final List<String> errorStringsExpected = Arrays.asList(
+                    "Field error in object 'azure.documentdb' on field 'key': rejected value [null];",
+                    "Field error in object 'azure.documentdb' on field 'uri': rejected value [null];"
+            );
+
+            assertThat(errorStrings.size()).isEqualTo(errorStringsExpected.size());
+
+            for (int i = 0; i < errorStrings.size(); i++) {
+                assertThat(errorStrings.get(i)).contains(errorStringsExpected.get(i));
+            }
         }
     }
 
@@ -74,3 +95,4 @@ public class DocumentDBPropertiesTest {
     static class Config {
     }
 }
+

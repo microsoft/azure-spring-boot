@@ -1,4 +1,4 @@
-azureService:
+azureservice:
   endpoints:
     cn:
       aadSigninUri:  https://login.partner.microsoftonline.cn/

@@ -23,7 +23,7 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
         }
     }
 
-    private boolean isKeyVaultEnabled(ConfigurableEnvironment environment){
+    private boolean isKeyVaultEnabled(ConfigurableEnvironment environment) {
         if (environment.getProperty(Constants.AZURE_CLIENTID) == null) {
             // User doesn't want to enable Key Vault property initializer.
             return false;
@@ -32,7 +32,7 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
                 && isKeyVaultClientAvailable();
     }
 
-    private boolean isKeyVaultClientAvailable(){
+    private boolean isKeyVaultClientAvailable() {
         return ClassUtils.isPresent("com.microsoft.azure.keyvault.KeyVaultClient",
                 KeyVaultEnvironmentPostProcessor.class.getClassLoader());
     }

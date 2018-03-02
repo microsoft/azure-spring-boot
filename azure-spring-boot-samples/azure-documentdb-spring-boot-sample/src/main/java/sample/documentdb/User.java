@@ -19,6 +19,10 @@ public class User {
     private String lastName;
     private String address;
 
+    public User() {
+
+    }
+
     @Override
     public String toString() {
         return String.format("%s %s, %s", firstName, lastName, address);
