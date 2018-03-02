@@ -12,6 +12,7 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Yaml file initializer to load the specified yaml configuration file,
@@ -25,15 +26,29 @@ public class YamlFileApplicationContextInitializer
 
     private static final String SERVICE_ENDPOINTS_YAML = "classpath:serviceEndpoints.yml";
 
-    @Override
-    public void initialize(ConfigurableApplicationContext applicationContext) {
+    private List<PropertySource<?>> yamlPropertySourceLoad(ConfigurableApplicationContext context) {
+        final List<PropertySource<?>> serviceEndpoints;
+        final Resource resource = context.getResource(SERVICE_ENDPOINTS_YAML);
+        final YamlPropertySourceLoader sourceLoader = new YamlPropertySourceLoader();
+
         try {
-            final Resource resource = applicationContext.getResource(SERVICE_ENDPOINTS_YAML);
-            final YamlPropertySourceLoader sourceLoader = new YamlPropertySourceLoader();
-            final PropertySource<?> serviceEndpoints = sourceLoader.load("serviceEndpoints", resource, null);
-            applicationContext.getEnvironment().getPropertySources().addFirst(serviceEndpoints);
+            serviceEndpoints = sourceLoader.load("serviceEndpoints", resource);
         } catch (IOException e) {
             throw new IllegalStateException("Cannot load the azure service endpoints configuration", e);
         }
+
+        if (serviceEndpoints.size() != 1) {
+            throw new IllegalStateException("There must be only 1 azure service endpoints configuration in classpath");
+        }
+
+        return serviceEndpoints;
+    }
+
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        final List<PropertySource<?>> serviceEndpoints = yamlPropertySourceLoad(applicationContext);
+
+        applicationContext.getEnvironment().getPropertySources().addFirst(serviceEndpoints.get(0));
     }
 }
+

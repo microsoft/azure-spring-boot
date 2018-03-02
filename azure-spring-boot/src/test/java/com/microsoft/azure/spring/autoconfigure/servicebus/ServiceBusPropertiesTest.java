@@ -6,7 +6,7 @@
 package com.microsoft.azure.spring.autoconfigure.servicebus;
 
 import org.junit.Test;
-import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.boot.context.properties.ConfigurationPropertiesBindException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.bind.validation.BindValidationException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -65,7 +65,7 @@ public class ServiceBusPropertiesTest {
             }
 
             assertThat(exception).isNotNull();
-            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
+            assertThat(exception).isExactlyInstanceOf(ConfigurationPropertiesBindException.class);
 
             final BindValidationException bindException = (BindValidationException) exception.getCause().getCause();
             final List<ObjectError> errors = bindException.getValidationErrors().getAllErrors();
