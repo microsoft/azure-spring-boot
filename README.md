@@ -9,6 +9,11 @@
 
 This repo is for Spring Boot Starters of Azure services. It helps Spring Boot developers to adopt Azure services.
 
+### Support Spring Boot 1.5
+
+- Branch [`1.5.x`](https://github.com/Microsoft/azure-spring-boot/tree/1.5.x) supports Spring Boot 1.5
+- You can switch to [`master`](https://github.com/Microsoft/azure-spring-boot/tree/master) branch for Spring Boot 2.0 usage 
+
 ### Prerequisites
 - JDK 1.8 and above
 - [Maven](http://maven.apache.org/) 3.0 and above
