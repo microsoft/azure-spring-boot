@@ -75,6 +75,11 @@
                 <artifactId>powermock-api-mockito2</artifactId>
                 <version>1.7.0</version>
             </dependency>
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>20171018</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
