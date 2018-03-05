@@ -9,10 +9,8 @@
 
 This repo is for Spring Boot Starters of Azure services. It helps Spring Boot developers to adopt Azure services.
 
-### Support Spring Boot 2.0
-
-- [`master`](https://github.com/Microsoft/azure-spring-boot/tree/master) branch supports Spring Boot 2.0
-- You can switch to branch [`1.5.x`](https://github.com/Microsoft/azure-spring-boot/tree/1.5.x) for Spring Boot 1.5.x usage 
+### Support Spring Boot
+This repository supports both Spring Boot 1.5.x and 2.0.x. Please read [this document](https://github.com/Microsoft/azure-spring-boot/wiki/Spring-Boot-dependency-version-management) for branch mapping.
 
 ### Prerequisites
 - JDK 1.8 and above
@@ -36,10 +34,6 @@ Starter Name | Version
 
 ### How to Build and Contribute
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit https://cla.microsoft.com.
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
 Please follow [instructions here](./HowToContribute.md) to build from source or contribute.
 
