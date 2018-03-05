@@ -11,9 +11,9 @@ The authorization flow is composed of 3 phrases:
 * Evaluate the permission based on membership info to grant or deny access
 
 ### Register the Application in Azure AD
-* **Register a new application**: Go to Azure Portal - Azure Active Directory - App registrations - New application registration to register the application in Azure Active Directory.  `Application ID` is `clientId` in `application.properties`.
+* **Register a new application**: Go to Azure Portal - Azure Active Directory - App registrations - New application registration to register the application in Azure Active Directory.  `Application ID` is `client-id` in `application.properties`.
 * **Grant permissions to the application**: After application registration succeeded, go to API ACCESS - Required permissions - DELEGATED PERMISSIONS, tick `Access the directory as the signed-in user` and `Sign in and read user profile`. Click `Grant Permissions` (Note: you will need administrator privilege to grant permission).
-* **Create a client secret key for the application**: Go to API ACCESS - Keys to create a secret key (`clientSecret`).
+* **Create a client secret key for the application**: Go to API ACCESS - Keys to create a secret key (`client-secret`).
 
 ### Add Maven Dependency
 
@@ -33,8 +33,8 @@ If you are using Maven, add the following dependency.
 Open `application.properties` file and add following properties.
 
 ```
-azure.activedirectory.clientId=Application-ID-in-AAD-App-registrations
-azure.activedirectory.clientSecret=Key-in-AAD-API-ACCESS
+azure.activedirectory.client-id=Application-ID-in-AAD-App-registrations
+azure.activedirectory.client-secret=Key-in-AAD-API-ACCESS
 azure.activedirectory.ActiveDirectoryGroups=Aad-groups e.g. group1,group2,group3
 ```
 
