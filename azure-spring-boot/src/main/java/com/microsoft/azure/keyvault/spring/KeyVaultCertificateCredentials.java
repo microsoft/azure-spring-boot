@@ -19,28 +19,28 @@ import java.security.cert.X509Certificate;
 import java.util.Enumeration;
 import java.util.concurrent.*;
 
-/**
- * Created by umar on 23/2/18.
- */
-public class AzureKeyVaultCredentialViaCertificate extends KeyVaultCredentials {
+
+public class KeyVaultCertificateCredentials extends KeyVaultCredentials {
 
     private static final long DEFAULT_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS = 60L;
-    private String clientId;
+    private final String clientId;
     private final String pfxPath;
     private final String pfxPassword;
-    private long timeoutInSeconds;
+    private final long timeoutInSeconds;
 
-    public AzureKeyVaultCredentialViaCertificate(String clientId, String pfxPath,
-                                                 String pfxPassword, long timeoutInSeconds) {
+    public KeyVaultCertificateCredentials(String clientId, String pfxPath,
+                                          String pfxPassword, long timeoutInSeconds) {
         this.clientId = clientId;
         this.pfxPath = pfxPath;
         this.pfxPassword = pfxPassword;
         this.timeoutInSeconds = timeoutInSeconds;
     }
 
-    public AzureKeyVaultCredentialViaCertificate(String clientId, String pfxPath, String pfxPassword) {
+    public KeyVaultCertificateCredentials(String clientId, String pfxPath, String pfxPassword) {
+
         this(clientId, pfxPath, pfxPassword, DEFAULT_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS);
     }
+
     @Override
     public String doAuthenticate(String authorization, String resource, String scope) {
         try {
@@ -71,18 +71,15 @@ public class AzureKeyVaultCredentialViaCertificate extends KeyVaultCredentials {
             NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
 
         try (FileInputStream stream = new FileInputStream(path)){
-            final KeyStore store = KeyStore.getInstance("pkcs12", "SunJSSE");
+            final KeyStore store = KeyStore.getInstance(KeyStore.getDefaultType());
             store.load(stream, password.toCharArray());
             final KeyCert keyCert = new KeyCert();
             final Enumeration<String> aliases = store.aliases();
-
-            while (aliases.hasMoreElements()){
-                final String alias = aliases.nextElement();
-                final X509Certificate certificate = (X509Certificate) store.getCertificate(alias);
-                final PrivateKey key = (PrivateKey) store.getKey(alias, password.toCharArray());
-                keyCert.setCertificate(certificate);
-                keyCert.setKey(key);
-            }
+            final String alias = aliases.nextElement();
+            final X509Certificate certificate = (X509Certificate) store.getCertificate(alias);
+            final PrivateKey key = (PrivateKey) store.getKey(alias, password.toCharArray());
+            keyCert.setCertificate(certificate);
+            keyCert.setKey(key);
             return keyCert;
         }
     }

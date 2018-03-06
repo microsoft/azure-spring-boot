@@ -8,17 +8,15 @@ package com.microsoft.azure.keyvault.spring;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
-
 public class AzureKeyVaultCredentialUnitTest {
 
     private AzureKeyVaultCredential keyVaultCredential;
-    private AzureKeyVaultCredentialViaCertificate keyVaultCredentialViaCertificate;
+    private KeyVaultCertificateCredentials keyVaultCredentialViaCertificate;
 
     @Before
     public void setup() {
         keyVaultCredential = new AzureKeyVaultCredential("fakeClientId", "fakeClientKey", 30);
-        keyVaultCredentialViaCertificate = new AzureKeyVaultCredentialViaCertificate(
+        keyVaultCredentialViaCertificate = new KeyVaultCertificateCredentials(
                 "fakeClientId", "fakePfxPath", "", 30);
     }
 

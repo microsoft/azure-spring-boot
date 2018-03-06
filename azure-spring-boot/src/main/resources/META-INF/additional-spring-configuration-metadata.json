@@ -31,6 +31,16 @@
       "name": "azure.keyvault.token-acquire-timeout-seconds",
       "type": "java.lang.String",
       "description": "Azure access token acquiring timeout in seconds"
+    },
+    {
+      "name": "azure.keyvault.pfx-certificate-path",
+      "type": "java.lang.String",
+      "description": "Local PFX Certificate Path"
+    },
+    {
+      "name": "azure.keyvault.pfx-certificate-password",
+      "type": "java.lang.String",
+      "description": "PFX Certificate Password(optional)"
     }
   ]
 }
