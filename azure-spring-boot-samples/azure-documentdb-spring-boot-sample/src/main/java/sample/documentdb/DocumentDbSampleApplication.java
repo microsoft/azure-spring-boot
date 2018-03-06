@@ -13,6 +13,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.util.Assert;
 
+import java.util.Optional;
+
 @SpringBootApplication
 public class DocumentDbSampleApplication implements CommandLineRunner {
 
@@ -31,8 +33,10 @@ public class DocumentDbSampleApplication implements CommandLineRunner {
         repository.deleteAll();
         repository.save(testUser);
 
-        final User result = repository.findById(testUser.getId()).get();
+        final Optional<User> opResult = repository.findById(testUser.getId());
+        Assert.isTrue(opResult.isPresent(), "Cannot find user.");
 
+        final User result = opResult.get();
         Assert.state(result.getFirstName().equals(testUser.getFirstName()), "query result firstName doesn't match!");
         Assert.state(result.getLastName().equals(testUser.getLastName()), "query result lastName doesn't match!");
 
