@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-@ConfigurationProperties("azureservice")
+@ConfigurationProperties("azure.service")
 public class ServiceEndpointsProperties {
     private Map<String, ServiceEndpoints> endpoints = new HashMap<>();
 

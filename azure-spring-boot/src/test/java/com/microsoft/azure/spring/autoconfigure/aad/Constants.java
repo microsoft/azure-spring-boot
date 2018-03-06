@@ -10,8 +10,8 @@ import java.util.List;
 
 public class Constants {
     public static final String SERVICE_ENVIRONMENT_PROPERTY = "azure.activedirectory.environment";
-    public static final String CLIENT_ID_PROPERTY = "azure.activedirectory.clientId";
-    public static final String CLIENT_SECRET_PROPERTY = "azure.activedirectory.clientSecret";
+    public static final String CLIENT_ID_PROPERTY = "azure.activedirectory.client-id";
+    public static final String CLIENT_SECRET_PROPERTY = "azure.activedirectory.client-secret";
     public static final String TARGETED_GROUPS_PROPERTY = "azure.activedirectory.ActiveDirectoryGroups";
 
     public static final String DEFAULT_ENVIRONMENT = "global";
