@@ -41,11 +41,12 @@ public class DocumentDbRestController {
         repository.save(testUser);
 
         LOG.debug("Retrieving User object...");
-        final Optional<User> user = repository.findById(testUser.getId());
+        final Optional<User> opUser = repository.findById(testUser.getId());
+        Assert.state(opUser.isPresent(), "Can not find User.");
 
-        Assert.state(user.isPresent(), "Can not find User.");
-        Assert.state(user.get().getFirstName().equals(testUser.getFirstName()), "query FirstName unmatched!");
-        Assert.state(user.get().getLastName().equals(testUser.getLastName()), "query LastName unmatched!");
+        final User user = opUser.get();
+        Assert.state(user.getFirstName().equals(testUser.getFirstName()), "query FirstName unmatched!");
+        Assert.state(user.getLastName().equals(testUser.getLastName()), "query LastName unmatched!");
 
         LOG.debug("UserRepository.findById() result: {}", user.toString());
         result.append("UserRepository.findById() result: " + user.toString() + CR);
