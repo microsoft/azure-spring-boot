@@ -32,6 +32,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -43,7 +44,7 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
-public class UserPrincipal {
+public class UserPrincipal implements Serializable{
 
     private static final Logger LOG = LoggerFactory.getLogger(UserPrincipal.class);
     private ServiceEndpoints serviceEndpoints;
