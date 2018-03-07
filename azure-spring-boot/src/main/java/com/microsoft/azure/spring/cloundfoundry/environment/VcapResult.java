@@ -71,6 +71,11 @@ public class VcapResult {
     }
 
     private VcapPojo findPojoForServiceType(VcapServiceType serviceType) {
+        if(serviceType == null) {
+            log("VcapResult.findPojoForServiceType: ServiceType is null, no service found.");
+            return null;
+        }
+
         VcapPojo pojo = null;
 
         switch (findCountByServiceType(serviceType)) {
