@@ -2,6 +2,7 @@
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/af0qeprdv3g9ox07/branch/master?svg=true)](https://ci.appveyor.com/project/yungez/azure-spring-boot)
 [![codecov](https://codecov.io/gh/Microsoft/azure-spring-boot/branch/master/graph/badge.svg)](https://codecov.io/gh/Microsoft/azure-spring-boot)
 [![MIT License](http://img.shields.io/badge/license-MIT-green.svg) ](https://github.com/Microsoft/azure-spring-boot/blob/master/LICENSE)
+[![Gitter](https://badges.gitter.im/Microsoft/spring-on-azure.svg)](https://gitter.im/Microsoft/spring-on-azure)
 
 # Azure Spring Boot
 
@@ -47,6 +48,8 @@ You could check below articles to learn more on usage of specific starters.
 If you encounter any bug, please file an issue [here](https://github.com/Microsoft/azure-spring-boot/issues/new).
 
 To suggest a new feature or changes that could be made, file an issue the same way you would for a bug.
+
+You can participate community driven [![Gitter](https://badges.gitter.im/Microsoft/spring-on-azure.svg)](https://gitter.im/Microsoft/spring-on-azure)
 
 ### Pull Requests
 
