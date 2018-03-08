@@ -70,15 +70,18 @@ public class VcapProcessor implements EnvironmentPostProcessor {
             try {
                 final JSONObject json = new JSONObject(vcapServices);
                 final JSONArray names = json.names();
-                for (int i = 0; i < names.length(); i++) {
-                    final String name = (String) names.get(i);
-                    if (name.startsWith(AZURE)) {
-                        final JSONArray azureService = json.getJSONArray(name);
-                        final int numElements = azureService.length();
-                        for (int index = 0; index < numElements; index++) {
-                            final VcapPojo pojo = parseService(name, azureService,
-                                    vcapServices, index);
-                            results.add(pojo);
+
+                if (names != null) {
+                    for (int i = 0; i < names.length(); i++) {
+                        final String name = (String) names.get(i);
+                        if (name.startsWith(AZURE)) {
+                            final JSONArray azureService = json.getJSONArray(name);
+                            final int numElements = azureService.length();
+                            for (int index = 0; index < numElements; index++) {
+                                final VcapPojo pojo = parseService(name, azureService,
+                                        vcapServices, index);
+                                results.add(pojo);
+                            }
                         }
                     }
                 }
