@@ -98,7 +98,7 @@ public class DocumentDBAutoConfiguration {
 
             return documentDbMappingContext;
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new IllegalStateException(e);
         }
     }
 

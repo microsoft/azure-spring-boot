@@ -43,7 +43,7 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
-public class UserPrincipal {
+public class UserPrincipal{
 
     private static final Logger LOG = LoggerFactory.getLogger(UserPrincipal.class);
     private ServiceEndpoints serviceEndpoints;
@@ -108,7 +108,7 @@ public class UserPrincipal {
         return jwsKeySet == null ? null : jwsKeySet.getKeyByKeyId(kid);
     }
 
-    public List<UserGroup> getGroups(String graphApiToken) throws Exception {
+    public List<UserGroup> getGroups(String graphApiToken) throws IOException {
         if (userGroups == null) {
             userGroups = loadUserGroups(graphApiToken);
         }
@@ -163,7 +163,7 @@ public class UserPrincipal {
         return jwtProcessor;
     }
 
-    private List<UserGroup> loadUserGroups(String graphApiToken) throws Exception {
+    private List<UserGroup> loadUserGroups(String graphApiToken) throws IOException{
         final String responseInJson =
                 AzureADGraphClient.getUserMembershipsV1(graphApiToken, serviceEndpoints.getAadMembershipRestUri());
         final List<UserGroup> lUserGroups = new ArrayList<>();

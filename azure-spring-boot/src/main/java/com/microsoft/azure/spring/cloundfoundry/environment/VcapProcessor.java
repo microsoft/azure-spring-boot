@@ -8,6 +8,8 @@ package com.microsoft.azure.spring.cloundfoundry.environment;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +29,8 @@ import java.util.Map;
 @Service
 @Configuration
 public class VcapProcessor implements EnvironmentPostProcessor {
+    private static final Logger LOGGER = LoggerFactory.getLogger(VcapProcessor.class);
+
     public static final String VCAP_SERVICES = "VCAP_SERVICES";
     public static final String LOG_VARIABLE = "COM_MICROSOFT_AZURE_CLOUDFOUNDRY_SERVICE_LOG";
     private static final String AZURE = "azure-";
@@ -86,8 +90,7 @@ public class VcapProcessor implements EnvironmentPostProcessor {
                     }
                 }
             } catch (JSONException e) {
-                System.err.println("Error parsing " + vcapServices);
-                e.printStackTrace(System.err);
+                LOGGER.error("Error parsing " + vcapServices, e);
             }
         }
 
@@ -116,9 +119,8 @@ public class VcapProcessor implements EnvironmentPostProcessor {
                 parseMap(credObject, result.getCredentials());
             }
         } catch (JSONException e) {
-            System.err.println("Found " + serviceBrokerName + ", but missing "
-                    + CREDENTIALS + " : " + vCapServices);
-            e.printStackTrace(System.err);
+            LOGGER.error("Found " + serviceBrokerName + ", but missing "
+                    + CREDENTIALS + " : " + vCapServices, e);
         }
         return result;
     }
@@ -130,8 +132,7 @@ public class VcapProcessor implements EnvironmentPostProcessor {
             try {
                 results.add((String) strings.get(i));
             } catch (JSONException e) {
-                System.err.println("Error parsing " + strings);
-                e.printStackTrace(System.err);
+                LOGGER.error("Error parsing " + strings, e);
             }
         }
 
@@ -146,8 +147,7 @@ public class VcapProcessor implements EnvironmentPostProcessor {
                 final String value = mapObject.getString(key);
                 target.put(key, value);
             } catch (JSONException e) {
-                System.err.println("Error parsing " + mapObject);
-                e.printStackTrace(System.err);
+                LOGGER.error("Error parsing " + mapObject, e);
             }
         }
     }
@@ -160,8 +160,7 @@ public class VcapProcessor implements EnvironmentPostProcessor {
                 result = service.getString(key);
             }
         } catch (JSONException e) {
-            System.err.println("Error parsing " + service);
-            e.printStackTrace(System.err);
+            LOGGER.error("Error parsing " + service, e);
         }
 
         return result;
@@ -169,7 +168,7 @@ public class VcapProcessor implements EnvironmentPostProcessor {
 
     private void log(String msg) {
         if (logFlag) {
-            System.out.println(msg);
+            LOGGER.info(msg);
         }
     }
 }

@@ -6,6 +6,8 @@
 package com.microsoft.azure.spring.cloundfoundry.environment;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.MutablePropertySources;
@@ -16,6 +18,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class VcapResult {
+    private static final Logger LOGGER = LoggerFactory.getLogger(VcapResult.class);
+
     private static final String AZURE_SERVICE_BUS_DOMAIN = "servicebus.windows.net";
 
     private static final String PROPERTY_SOURCE_NAME = "defaultProperties";
@@ -71,6 +75,11 @@ public class VcapResult {
     }
 
     private VcapPojo findPojoForServiceType(VcapServiceType serviceType) {
+        if (serviceType == null) {
+            log("VcapResult.findPojoForServiceType: ServiceType is null, no service found.");
+            return null;
+        }
+
         VcapPojo pojo = null;
 
         switch (findCountByServiceType(serviceType)) {
@@ -223,7 +232,7 @@ public class VcapResult {
 
     private void log(String msg) {
         if (logFlag) {
-            System.out.println(msg);
+            LOGGER.info(msg);
         }
     }
 
