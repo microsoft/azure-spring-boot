@@ -10,6 +10,8 @@ import com.microsoft.aad.adal4j.AuthenticationResult;
 import com.microsoft.aad.adal4j.ClientCredential;
 import com.microsoft.aad.adal4j.UserAssertion;
 
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.proc.BadJOSEException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -23,6 +25,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.text.ParseException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -49,7 +53,9 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
     private AuthenticationResult acquireTokenForGraphApi(
             String idToken,
             String tenantId,
-            ServiceEndpoints serviceEndpoints) throws Throwable {
+            ServiceEndpoints serviceEndpoints)
+            throws MalformedURLException, ServiceUnavailableException, InterruptedException, ExecutionException {
+
         final ClientCredential credential = new ClientCredential(
                 aadAuthFilterProp.getClientId(), aadAuthFilterProp.getClientSecret());
         final UserAssertion assertion = new UserAssertion(idToken);
@@ -63,8 +69,6 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
             final Future<AuthenticationResult> future = context
                     .acquireToken(serviceEndpoints.getAadGraphApiUri(), assertion, credential, null);
             result = future.get();
-        } catch (ExecutionException e) {
-            throw e.getCause();
         } finally {
             if (service != null) {
                 service.shutdown();
@@ -114,8 +118,12 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setAuthenticated(true);
                 log.info("Request token verification success. {}", authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            } catch (Throwable throwable) {
-                throw new RuntimeException(throwable);
+            } catch (MalformedURLException | ParseException | BadJOSEException | JOSEException ex) {
+                log.error("Failed to initialize UserPrincipal.", ex);
+                throw new ServletException(ex);
+            } catch (ServiceUnavailableException | InterruptedException | ExecutionException ex) {
+                log.error("Failed to acquire graph api token.", ex);
+                throw new ServletException(ex);
             }
         }
 
