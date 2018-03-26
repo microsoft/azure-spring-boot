@@ -62,7 +62,7 @@ public class KeyVaultCertificateCredentials extends KeyVaultCredentials {
         } catch (InterruptedException | ExecutionException | IOException | CertificateException |
                 NoSuchAlgorithmException | UnrecoverableKeyException | NoSuchProviderException |
                 KeyStoreException | TimeoutException e) {
-            throw new RuntimeException("KeyVault Authentication Failed: " + e.getMessage());
+            throw new RuntimeException("KeyVault Authentication by certificate failed: " + e.getMessage());
         }
     }
 
