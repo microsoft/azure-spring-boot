@@ -80,6 +80,16 @@
                 <artifactId>json</artifactId>
                 <version>20171018</version>
             </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>1.17</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
