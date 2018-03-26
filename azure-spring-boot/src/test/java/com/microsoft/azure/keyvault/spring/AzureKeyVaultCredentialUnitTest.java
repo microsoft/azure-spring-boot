@@ -11,14 +11,23 @@ import org.junit.Test;
 public class AzureKeyVaultCredentialUnitTest {
 
     private AzureKeyVaultCredential keyVaultCredential;
+    private KeyVaultCertificateCredentials keyVaultCredentialViaCertificate;
 
     @Before
     public void setup() {
         keyVaultCredential = new AzureKeyVaultCredential("fakeClientId", "fakeClientKey", 30);
+        keyVaultCredentialViaCertificate = new KeyVaultCertificateCredentials(
+                "fakeClientId", "fakePfxPath", "", 30);
     }
 
     @Test(expected = RuntimeException.class)
     public void testDoAuthenticationRejctIfInvalidCredential() {
         keyVaultCredential.doAuthenticate("https://fakeauthorizationurl.com", "keyvault", "scope");
     }
+
+    @Test(expected = RuntimeException.class)
+    public void testDoAuthenticationRejctIfInvalidCredentialViaCertificate(){
+        keyVaultCredentialViaCertificate.doAuthenticate("https://fakeauthorizationurl.com", "keyvault", "scope");
+    }
+
 }
