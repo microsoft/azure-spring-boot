@@ -29,7 +29,12 @@ azure.keyvault.client-id=put-your-azure-client-id-here
 azure.keyvault.client-key=put-your-azure-client-key-here
 azure.keyvault.token-acquire-timeout-seconds=60
 ```
+Or else if you want to use Certificate based authentication then add the below two properties instead of `azure.keyvault.client-key`
 
+```
+azure.keyvault.pfx-certificate-path=put-your-certificate-path-here
+azure.keyvault.pfx-certificate-password=put-your-certificate-password-here-if-required
+```
 
 ### Save secrets in Azure Key Vault
 Save secrets in Azure Key Vault through [Azure Portal](https://blogs.technet.microsoft.com/kv/2016/09/12/manage-your-key-vaults-from-new-azure-portal/) or [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/keyvault/secret).
