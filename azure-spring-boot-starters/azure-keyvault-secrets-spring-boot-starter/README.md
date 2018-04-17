@@ -20,6 +20,7 @@ If you are using Maven, add the following dependency.
 ```
 
 ### Add the property setting
+####Using Service Principal
 
 Open `application.properties` file and add below properties to specify your Azure Key Vault url, Azure service principal client id and client key. `azure.keyvault.enabled` is used to turn on/off Azure Key Vault Secret property source, default is true. `azure.keyvault.token-acquiring-timeout-seconds` is used to specify the timeout in seconds when acquiring token from Azure AAD. Default value is 60 seconds. This property is optional.
 ```
@@ -34,6 +35,16 @@ Or else if you want to use Certificate based authentication then add the below t
 ```
 azure.keyvault.pfx-certificate-path=put-your-certificate-path-here
 azure.keyvault.pfx-certificate-password=put-your-certificate-password-here-if-required
+```
+####Using Managed Service Identity (MSI)
+If you want the authentication to be done using Azure MSI then you only have to specify the following properties in the `application.properties` file
+, the `azure.keyvault.msi-port` is optional property, if not specified then by default port `50342` will be used.<br>
+>NOTE By default MSI is not enabled since it can only run on a VM with MSI Extension enabled.
+```
+azure.keyvault.enabled=true
+azure.keyvault.uri=put-your-azure-keyvault-uri-here
+azure.keyvault.msi-enabled=true
+azure.keyvault.msi-port=port-if-required
 ```
 
 ### Save secrets in Azure Key Vault

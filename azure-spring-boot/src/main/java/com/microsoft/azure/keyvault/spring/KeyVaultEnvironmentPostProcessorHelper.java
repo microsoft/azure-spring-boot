@@ -12,6 +12,7 @@ import com.microsoft.azure.serializer.AzureJacksonAdapter;
 import com.microsoft.azure.spring.support.UserAgent;
 import com.microsoft.rest.RestClient;
 import com.microsoft.rest.credentials.ServiceClientCredentials;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.StandardEnvironment;
@@ -26,21 +27,24 @@ class KeyVaultEnvironmentPostProcessorHelper {
     }
 
     public void addKeyVaultPropertySource() {
-        final String clientId = getProperty(environment, Constants.AZURE_CLIENTID);
         final String vaultUri = getProperty(environment, Constants.AZURE_KEYVAULT_VAULT_URI);
-
+        final String clientId = environment.getProperty(
+                Constants.AZURE_CLIENTID, String.class, null);
         final String clientKey = environment.getProperty(
                 Constants.AZURE_CLIENTKEY, String.class, null);
         final String pfxPath = environment.getProperty(
                 Constants.AZURE_KEYVAULT_PFX_CERTIFICAT_PATH, String.class, null);
         final String pfxPassword = environment.getProperty(
                 Constants.AZURE_KEYVAULT_PFX_CERTIFICAT_PASSWORD, String.class, "");
-
+        final Boolean msiEnabled = environment.getProperty(
+                Constants.AZURE_KEYVAULT_MSI_ENABLED, Boolean.class, false);
+        final Integer msiPort = environment.getProperty(
+                Constants.AZURE_KEYVAULT_MSI_PORT, Integer.class, 50342);
         final long timeAcquiringTimeoutInSeconds = environment.getProperty(
                 Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, Long.class, 60L);
 
         final ServiceClientCredentials credentials = getCredentials(clientId, clientKey,
-                pfxPath, pfxPassword, timeAcquiringTimeoutInSeconds);
+                pfxPath, pfxPassword, msiEnabled, msiPort, timeAcquiringTimeoutInSeconds);
 
         final RestClient restClient = new RestClient.Builder().withBaseUrl(vaultUri)
                             .withCredentials(credentials)
@@ -70,19 +74,28 @@ class KeyVaultEnvironmentPostProcessorHelper {
 
     private ServiceClientCredentials getCredentials(String clientId, String clientKey,
                                                     String pfxPath, String pfxPassword,
+                                                    Boolean msiEnabled, Integer msiPort,
                                                     long timeAcquiringTimeoutInSeconds) {
         final ServiceClientCredentials credentials;
-        if (pfxPath != null && clientKey != null){
-            throw new IllegalArgumentException(
-                    "Either client-key or pfx-certificate-path can be set. Both at the same time are not allowed");
-        } else if (pfxPath != null){
-            credentials = new KeyVaultCertificateCredentials(clientId, pfxPath,
-                    pfxPassword, timeAcquiringTimeoutInSeconds);
-        } else if (clientKey != null){
-            credentials = new AzureKeyVaultCredential(clientId, clientKey, timeAcquiringTimeoutInSeconds);
+        if (msiEnabled) {
+            credentials = new KeyVaultMsiCredentials(msiPort);
         } else {
-            throw new IllegalArgumentException(
-                    "Both properties client-key and pfx-certificate-path are null");
+            if (clientId == null || clientId.isEmpty()){
+                throw new IllegalArgumentException("property " + Constants.AZURE_CLIENTID +
+                        " must not be null if " + Constants.AZURE_KEYVAULT_MSI_ENABLED + "is not set to true");
+            }
+            if (pfxPath != null && clientKey != null) {
+                throw new IllegalArgumentException(
+                        "Either client-key or pfx-certificate-path can be set. Both at the same time are not allowed");
+            } else if (pfxPath != null) {
+                credentials = new KeyVaultCertificateCredentials(clientId, pfxPath,
+                        pfxPassword, timeAcquiringTimeoutInSeconds);
+            } else if (clientKey != null) {
+                credentials = new AzureKeyVaultCredential(clientId, clientKey, timeAcquiringTimeoutInSeconds);
+            } else {
+                throw new IllegalArgumentException(
+                        "Both properties client-key and pfx-certificate-path are null");
+            }
         }
         return credentials;
     }

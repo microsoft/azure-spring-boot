@@ -19,6 +19,7 @@ public class AzureKeyVaultCredentialUnitTest {
     public ExpectedException expectedEx = ExpectedException.none();
     private AzureKeyVaultCredential keyVaultCredential;
     private KeyVaultCertificateCredentials keyVaultCredentialViaCertificate;
+    private KeyVaultMsiCredentials keyVaultMsiCredentials;
 
 
     @Before
@@ -60,5 +61,11 @@ public class AzureKeyVaultCredentialUnitTest {
         keyVaultCredentialViaCertificate.doAuthenticate("https://fakeauthorizationurl.com", "keyvault", "scope");
     }
 
-
+    @Test
+    public void testMsiDoAuthentication() {
+        expectedEx.expect(RuntimeException.class);
+        expectedEx.expectMessage("Unable to get Token from MSI: Failed to connect to localhost");
+        keyVaultMsiCredentials = new KeyVaultMsiCredentials();
+        keyVaultMsiCredentials.doAuthenticate("https://fakeauthorizationurl.com", "https://vault.azure.net", "scope");
+    }
 }

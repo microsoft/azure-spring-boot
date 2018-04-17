@@ -24,7 +24,8 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
     }
 
     private boolean isKeyVaultEnabled(ConfigurableEnvironment environment){
-        if (environment.getProperty(Constants.AZURE_CLIENTID) == null) {
+        if ((environment.getProperty(Constants.AZURE_CLIENTID) == null) &&
+                !(environment.getProperty(Constants.AZURE_KEYVAULT_MSI_ENABLED, Boolean.class, false))) {
             // User doesn't want to enable Key Vault property initializer.
             return false;
         }
