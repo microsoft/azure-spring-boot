@@ -10,7 +10,6 @@ import com.microsoft.azure.AzureResponseBuilder;
 import com.microsoft.azure.keyvault.KeyVaultClient;
 import com.microsoft.azure.serializer.AzureJacksonAdapter;
 import com.microsoft.azure.spring.support.UserAgent;
-import com.microsoft.rest.LogLevel;
 import com.microsoft.rest.RestClient;
 import com.microsoft.rest.credentials.ServiceClientCredentials;
 import org.springframework.core.env.ConfigurableEnvironment;

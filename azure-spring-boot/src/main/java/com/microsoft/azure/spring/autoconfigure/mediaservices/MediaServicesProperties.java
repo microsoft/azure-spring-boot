@@ -6,7 +6,8 @@
 
 package com.microsoft.azure.spring.autoconfigure.mediaservices;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotEmpty;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
