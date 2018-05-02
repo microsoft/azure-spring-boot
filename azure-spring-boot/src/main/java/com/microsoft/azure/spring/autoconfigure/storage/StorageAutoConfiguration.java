@@ -7,6 +7,7 @@
 package com.microsoft.azure.spring.autoconfigure.storage;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.telemetry.TelemetryProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -15,6 +16,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.util.ClassUtils;
 
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
@@ -27,9 +29,11 @@ public class StorageAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(StorageAutoConfiguration.class);
 
     private final StorageProperties properties;
+    private final TelemetryProxy telemetryProxy;
 
     public StorageAutoConfiguration(StorageProperties properties) {
         this.properties = properties;
+        this.telemetryProxy = new TelemetryProxy(properties.isAllowTelemetry());
     }
 
     /**
@@ -41,6 +45,7 @@ public class StorageAutoConfiguration {
     @Scope("prototype")
     public CloudStorageAccount cloudStorageAccount() throws URISyntaxException, InvalidKeyException {
         LOG.debug("cloudStorageAccount called");
+        trackCustomEvent();
         return createCloudStorageAccount();
     }
 
@@ -52,5 +57,9 @@ public class StorageAutoConfiguration {
     private CloudStorageAccount createCloudStorageAccount() throws URISyntaxException, InvalidKeyException {
         LOG.debug("createCloudStorageAccount called");
         return CloudStorageAccount.parse(properties.getConnectionString());
+    }
+
+    private void trackCustomEvent() {
+        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName());
     }
 }

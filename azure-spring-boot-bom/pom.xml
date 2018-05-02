@@ -53,6 +53,7 @@
         <azure.media.version>0.9.7</azure.media.version>
         <azure.servicebus.version>1.0.0</azure.servicebus.version>
         <azure.spring.boot.version>2.0.2-SNAPSHOT</azure.spring.boot.version>
+        <azure.applicationinsights.version>1.0.9</azure.applicationinsights.version>
         <spring.data.documentdb.version>2.0.1</spring.data.documentdb.version>
         <microsoft.client-runtime.version>1.0.0</microsoft.client-runtime.version>
     </properties>
@@ -141,6 +142,11 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-servicebus</artifactId>
                 <version>${azure.servicebus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>applicationinsights-core</artifactId>
+                <version>${azure.applicationinsights.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

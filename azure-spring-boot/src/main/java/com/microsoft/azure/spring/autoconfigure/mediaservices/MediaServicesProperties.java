@@ -49,6 +49,29 @@ public class MediaServicesProperties {
     private String proxyScheme = "http";
 
     /**
+     * Weather allow telemetry collecting.
+     */
+    private boolean allowTelemetry = true;
+
+    /**
+     * return allow telemery or not
+     *
+     * @return
+     */
+    public boolean isAllowTelemetry() {
+        return allowTelemetry;
+    }
+
+    /**
+     * Set allowTelemetry
+     *
+     * @param allowTelemetry
+     */
+    public void setAllowTelemetry(boolean allowTelemetry) {
+        this.allowTelemetry = allowTelemetry;
+    }
+
+    /**
      * @return the accountName
      */
     public String getAccountName() {

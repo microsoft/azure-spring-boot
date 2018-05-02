@@ -19,8 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class AADAuthenticationFilterPropertiesTest {
     @After
     public void clearAllProperties() {
@@ -64,7 +62,7 @@ public class AADAuthenticationFilterPropertiesTest {
         }
     }
 
-    private void configureAllRequiredProperties(){
+    private void configureAllRequiredProperties() {
         System.setProperty(Constants.CLIENT_ID_PROPERTY, Constants.CLIENT_ID);
         System.setProperty(Constants.CLIENT_SECRET_PROPERTY, Constants.CLIENT_SECRET);
         System.setProperty(Constants.TARGETED_GROUPS_PROPERTY,

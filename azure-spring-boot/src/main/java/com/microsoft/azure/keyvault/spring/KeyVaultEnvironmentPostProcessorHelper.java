@@ -10,20 +10,23 @@ import com.microsoft.azure.AzureResponseBuilder;
 import com.microsoft.azure.keyvault.KeyVaultClient;
 import com.microsoft.azure.serializer.AzureJacksonAdapter;
 import com.microsoft.azure.spring.support.UserAgent;
-import com.microsoft.rest.LogLevel;
+import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.microsoft.rest.RestClient;
 import com.microsoft.rest.credentials.ServiceClientCredentials;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 
 class KeyVaultEnvironmentPostProcessorHelper {
 
     private final ConfigurableEnvironment environment;
+    private final TelemetryProxy telemetryProxy;
 
     public KeyVaultEnvironmentPostProcessorHelper(ConfigurableEnvironment environment) {
         this.environment = environment;
+        this.telemetryProxy = new TelemetryProxy(this.allowTelemetry(environment));
     }
 
     public void addKeyVaultPropertySource() {
@@ -37,14 +40,16 @@ class KeyVaultEnvironmentPostProcessorHelper {
         final ServiceClientCredentials credentials =
                 new AzureKeyVaultCredential(clientId, clientKey, timeAcquiringTimeoutInSeconds);
         final RestClient restClient = new RestClient.Builder().withBaseUrl(vaultUri)
-                            .withCredentials(credentials)
-                            .withSerializerAdapter(new AzureJacksonAdapter())
-                            .withResponseBuilderFactory(new AzureResponseBuilder.Factory())
-                            .withUserAgent(UserAgent.getUserAgent(Constants.AZURE_KEYVAULT_USER_AGENT,
-                                    allowTelemetry(environment)))
-                            .build();
+                .withCredentials(credentials)
+                .withSerializerAdapter(new AzureJacksonAdapter())
+                .withResponseBuilderFactory(new AzureResponseBuilder.Factory())
+                .withUserAgent(UserAgent.getUserAgent(Constants.AZURE_KEYVAULT_USER_AGENT,
+                        allowTelemetry(environment)))
+                .build();
 
         final KeyVaultClient kvClient = new KeyVaultClient(restClient);
+
+        this.trackCustomEvent();
 
         try {
             final MutablePropertySources sources = environment.getPropertySources();
@@ -78,5 +83,9 @@ class KeyVaultEnvironmentPostProcessorHelper {
         Assert.notNull(env, "env must not be null!");
 
         return env.getProperty(Constants.AZURE_KEYVAULT_ALLOW_TELEMETRY, Boolean.class, true);
+    }
+
+    private void trackCustomEvent() {
+        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName());
     }
 }

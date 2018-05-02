@@ -8,8 +8,6 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 import org.junit.Test;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class AADAuthenticationFilterAutoConfigurationTest {
     @Test
     public void createAADAuthenticationFilter() throws Exception {

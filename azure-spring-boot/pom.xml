@@ -18,6 +18,10 @@
     <description>Azure Spring Boot AutoConfigure</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
+    <properties>
+        <azure.ai.key>f972f3bc-8ce9-4e73-a86f-e0d5715e3db4</azure.ai.key>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -123,7 +127,10 @@
             <artifactId>adal4j</artifactId>
             <optional>true</optional>
         </dependency>
-
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>applicationinsights-core</artifactId>
+        </dependency>
         <!-- Annotation processor -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -158,4 +165,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
 </project>

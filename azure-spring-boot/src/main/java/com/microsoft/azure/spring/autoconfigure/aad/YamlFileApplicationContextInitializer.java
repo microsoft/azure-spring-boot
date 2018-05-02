@@ -17,9 +17,8 @@ import java.util.List;
 /**
  * Yaml file initializer to load the specified yaml configuration file,
  * by default the Spring will load the application.yml file.
- *
+ * <p>
  * In order to avoid possible overwritten by users' default yaml configuration file.
- *
  */
 public class YamlFileApplicationContextInitializer
         implements ApplicationContextInitializer<ConfigurableApplicationContext> {

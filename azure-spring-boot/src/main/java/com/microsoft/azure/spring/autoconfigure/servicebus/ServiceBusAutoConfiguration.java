@@ -11,12 +11,14 @@ import com.microsoft.azure.servicebus.SubscriptionClient;
 import com.microsoft.azure.servicebus.TopicClient;
 import com.microsoft.azure.servicebus.primitives.ConnectionStringBuilder;
 import com.microsoft.azure.servicebus.primitives.ServiceBusException;
+import com.microsoft.azure.telemetry.TelemetryProxy;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.util.ClassUtils;
 
 @Lazy
 @Configuration
@@ -25,15 +27,18 @@ import org.springframework.context.annotation.Lazy;
 public class ServiceBusAutoConfiguration {
 
     private final ServiceBusProperties properties;
+    private final TelemetryProxy telemetryProxy;
 
     public ServiceBusAutoConfiguration(ServiceBusProperties properties) {
         this.properties = properties;
+        this.telemetryProxy = new TelemetryProxy(properties.isAllowTelemetry());
     }
 
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = "azure.servicebus", value = {"queue-name", "queue-receive-mode"})
     public QueueClient queueClient() throws InterruptedException, ServiceBusException {
+        trackCustomEvent();
         return new QueueClient(new ConnectionStringBuilder(properties.getConnectionString(),
                 properties.getQueueName()), properties.getQueueReceiveMode());
     }
@@ -42,6 +47,7 @@ public class ServiceBusAutoConfiguration {
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = "azure.servicebus", value = "topic-name")
     public TopicClient topicClient() throws InterruptedException, ServiceBusException {
+        trackCustomEvent();
         return new TopicClient(new ConnectionStringBuilder(properties.getConnectionString(),
                 properties.getTopicName()));
     }
@@ -51,8 +57,13 @@ public class ServiceBusAutoConfiguration {
     @ConditionalOnProperty(prefix = "azure.servicebus",
             value = {"topic-name", "subscription-name", "subscription-receive-mode"})
     public SubscriptionClient subscriptionClient() throws ServiceBusException, InterruptedException {
+        trackCustomEvent();
         return new SubscriptionClient(new ConnectionStringBuilder(properties.getConnectionString(),
                 properties.getTopicName() + "/subscriptions/" + properties.getSubscriptionName()),
                 properties.getSubscriptionReceiveMode());
+    }
+
+    private void trackCustomEvent() {
+        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName());
     }
 }
