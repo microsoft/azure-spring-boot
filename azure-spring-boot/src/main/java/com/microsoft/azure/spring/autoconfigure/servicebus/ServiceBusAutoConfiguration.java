@@ -11,6 +11,7 @@ import com.microsoft.azure.servicebus.SubscriptionClient;
 import com.microsoft.azure.servicebus.TopicClient;
 import com.microsoft.azure.servicebus.primitives.ConnectionStringBuilder;
 import com.microsoft.azure.servicebus.primitives.ServiceBusException;
+import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -19,6 +20,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.util.ClassUtils;
+
+import java.util.HashMap;
 
 @Lazy
 @Configuration
@@ -64,6 +67,12 @@ public class ServiceBusAutoConfiguration {
     }
 
     private void trackCustomEvent() {
-        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName());
+        final HashMap<String, String> customTelemetryProperties = new HashMap<>();
+        final String[] packageNames = this.getClass().getPackage().getName().split("\\.");
+
+        if (packageNames.length > 1) {
+            customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
+        }
+        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
 }

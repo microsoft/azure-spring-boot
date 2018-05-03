@@ -4,6 +4,7 @@
    Following [this instruction](http://blog.sonatype.com/2010/01/how-to-generate-pgp-signatures-with-maven/ ) to setup gpg key and publish it. save your passphrase.
 1. python version >=3.5.
 1. install necessary python packages: requests, xmltodict, jenkinsapi
+1. run maven install locally. **Important** when do build please use profile `release` which will contains ai PROD instrument key. 
 1. setup configuration in config.json 
     ```
    "targetFolder": "//path-to-your-local-to-copy-signed-jars",

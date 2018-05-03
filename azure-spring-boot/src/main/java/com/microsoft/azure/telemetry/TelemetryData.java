@@ -6,7 +6,8 @@
 package com.microsoft.azure.telemetry;
 
 public class TelemetryData {
-    public static final String TELEMETRY_NOT_ALLOWED = "TelemetryNotAllowed";
-    public static final String HASHED_MAC = "HashMac";
-    public static final String PROJECT_VERSION = "Version";
+    public static final String TELEMETRY_NOT_ALLOWED = "telemetryNotAllowed";
+    public static final String INSTALLATION_ID = "installationId";
+    public static final String PROJECT_VERSION = "version";
+    public static final String SERVICE_NAME = "serviceName";
 }

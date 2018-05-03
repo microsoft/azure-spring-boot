@@ -10,6 +10,7 @@ import com.microsoft.azure.AzureResponseBuilder;
 import com.microsoft.azure.keyvault.KeyVaultClient;
 import com.microsoft.azure.serializer.AzureJacksonAdapter;
 import com.microsoft.azure.spring.support.UserAgent;
+import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.microsoft.rest.RestClient;
 import com.microsoft.rest.credentials.ServiceClientCredentials;
@@ -18,6 +19,8 @@ import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+
+import java.util.HashMap;
 
 class KeyVaultEnvironmentPostProcessorHelper {
 
@@ -86,6 +89,9 @@ class KeyVaultEnvironmentPostProcessorHelper {
     }
 
     private void trackCustomEvent() {
-        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName());
+        final HashMap<String, String> customTelemetryProperties = new HashMap<>();
+        customTelemetryProperties.put(TelemetryData.SERVICE_NAME, "keyvault");
+
+        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
 }

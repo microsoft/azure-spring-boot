@@ -7,6 +7,7 @@
 package com.microsoft.azure.spring.autoconfigure.storage;
 
 import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ import org.springframework.util.ClassUtils;
 
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
+import java.util.HashMap;
 
 @Configuration
 @ConditionalOnMissingBean(CloudStorageAccount.class)
@@ -60,6 +62,12 @@ public class StorageAutoConfiguration {
     }
 
     private void trackCustomEvent() {
-        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName());
+        final HashMap<String, String> customTelemetryProperties = new HashMap<>();
+        final String[] packageNames = this.getClass().getPackage().getName().split("\\.");
+
+        if (packageNames.length > 1) {
+            customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
+        }
+        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
 }

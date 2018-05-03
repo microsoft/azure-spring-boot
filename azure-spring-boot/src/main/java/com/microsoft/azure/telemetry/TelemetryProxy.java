@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class TelemetryProxy {
+    private static final String PROJECT_INFO = "spring-boot-starter/" + PropertyLoader.getProjectVersion();
+
     protected TelemetryClient client;
     private boolean isAllowTelemetry;
 
@@ -76,14 +78,12 @@ public class TelemetryProxy {
         final Map<String, String> properties = new HashMap<>();
 
         if (this.isAllowTelemetry) {
-            properties.put(TelemetryData.HASHED_MAC, GetHashMac.getHashMac());
-            properties.put(TelemetryData.PROJECT_VERSION,
-                    "spring-boot-starter/" + PropertyLoader.getProjectVersion());
+            properties.put(TelemetryData.INSTALLATION_ID, GetHashMac.getHashMac());
+            properties.put(TelemetryData.PROJECT_VERSION, PROJECT_INFO);
         } else {
             properties.put(TelemetryData.TELEMETRY_NOT_ALLOWED, "true");
         }
         return properties;
-
     }
 }
 

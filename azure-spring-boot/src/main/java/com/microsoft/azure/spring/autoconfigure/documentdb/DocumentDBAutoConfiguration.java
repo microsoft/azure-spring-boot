@@ -14,6 +14,7 @@ import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
 import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbMappingContext;
 import com.microsoft.azure.spring.support.GetHashMac;
+import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.microsoft.azure.utils.PropertyLoader;
 import org.slf4j.Logger;
@@ -30,6 +31,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.annotation.Persistent;
 import org.springframework.util.ClassUtils;
+
+import java.util.HashMap;
 
 @Configuration
 @ConditionalOnClass({DocumentClient.class, DocumentDbTemplate.class})
@@ -82,7 +85,14 @@ public class DocumentDBAutoConfiguration {
     }
 
     private void trackCustomEvent() {
-        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName());
+        final HashMap<String, String> customTelemetryProperties = new HashMap<>();
+
+        final String[] packageNames = this.getClass().getPackage().getName().split("\\.");
+
+        if (packageNames.length > 1) {
+            customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
+        }
+        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
 
     @Bean

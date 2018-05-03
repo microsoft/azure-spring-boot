@@ -6,6 +6,7 @@
 
 package com.microsoft.azure.spring.autoconfigure.mediaservices;
 
+import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.microsoft.windowsazure.exception.ServiceException;
 import com.microsoft.windowsazure.services.media.MediaConfiguration;
@@ -19,6 +20,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ClassUtils;
+
+import java.util.HashMap;
 
 import static com.microsoft.windowsazure.Configuration.*;
 import static java.util.Objects.isNull;
@@ -77,6 +80,12 @@ public class MediaServicesAutoConfiguration {
     }
 
     private void trackCustomEvent() {
-        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName());
+        final HashMap<String, String> customTelemetryProperties = new HashMap<>();
+        final String[] packageNames = this.getClass().getPackage().getName().split("\\.");
+
+        if (packageNames.length > 1) {
+            customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
+        }
+        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
 }
