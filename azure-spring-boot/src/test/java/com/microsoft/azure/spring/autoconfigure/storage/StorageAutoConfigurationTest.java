@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class StorageAutoConfigurationTest {
     private static final String CONNECTION_STRING_PROPERTY = "azure.storage.connection-string";
     private static final String INVALID_CONNECTION_STRING = "invalid connection string";

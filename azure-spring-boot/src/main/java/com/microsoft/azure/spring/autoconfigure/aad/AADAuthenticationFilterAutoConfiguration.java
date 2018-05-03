@@ -24,7 +24,6 @@ import org.springframework.util.ClassUtils;
 @EnableConfigurationProperties({AADAuthenticationFilterProperties.class, ServiceEndpointsProperties.class})
 public class AADAuthenticationFilterAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationFilterProperties.class);
-    private static final String USER_AGENT_SUFFIX = "spring-boot-starter/" + PropertyLoader.getProjectVersion();
 
     private final AADAuthenticationFilterProperties aadAuthFilterProperties;
     private final ServiceEndpointsProperties serviceEndpointsProperties;

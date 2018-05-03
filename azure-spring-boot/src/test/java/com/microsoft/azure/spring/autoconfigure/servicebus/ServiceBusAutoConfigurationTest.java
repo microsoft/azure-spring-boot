@@ -13,6 +13,8 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class ServiceBusAutoConfigurationTest {
     @Test
     public void returnNullIfSetConnectionStringOnly() {
