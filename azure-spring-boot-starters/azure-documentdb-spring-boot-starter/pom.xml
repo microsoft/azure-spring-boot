@@ -31,4 +31,5 @@
             <artifactId>spring-data-documentdb</artifactId>
         </dependency>
     </dependencies>
+
 </project>

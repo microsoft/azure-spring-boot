@@ -6,6 +6,8 @@
 
 package com.microsoft.azure.spring.autoconfigure.mediaservices;
 
+import com.microsoft.azure.telemetry.TelemetryData;
+import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.microsoft.windowsazure.exception.ServiceException;
 import com.microsoft.windowsazure.services.media.MediaConfiguration;
 import com.microsoft.windowsazure.services.media.MediaContract;
@@ -17,10 +19,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.ClassUtils;
 
-import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_HOST;
-import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_PORT;
-import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_SCHEME;
+import java.util.HashMap;
+
+import static com.microsoft.windowsazure.Configuration.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -33,9 +36,11 @@ public class MediaServicesAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(MediaServicesAutoConfiguration.class);
 
     private final MediaServicesProperties mediaServicesProperties;
+    private final TelemetryProxy telemetryProxy;
 
     public MediaServicesAutoConfiguration(MediaServicesProperties mediaServicesProperties) {
         this.mediaServicesProperties = mediaServicesProperties;
+        this.telemetryProxy = new TelemetryProxy(mediaServicesProperties.isAllowTelemetry());
     }
 
     /**
@@ -47,6 +52,7 @@ public class MediaServicesAutoConfiguration {
     @Bean
     public MediaContract mediaContract() throws ServiceException {
         LOG.debug("mediaContract called");
+        trackCustomEvent();
         return createMediaContract();
     }
 
@@ -71,5 +77,15 @@ public class MediaServicesAutoConfiguration {
             throw new ServiceException("Please Set Network Proxy host in application.properties");
         }
         return MediaService.create(configuration);
+    }
+
+    private void trackCustomEvent() {
+        final HashMap<String, String> customTelemetryProperties = new HashMap<>();
+        final String[] packageNames = this.getClass().getPackage().getName().split("\\.");
+
+        if (packageNames.length > 1) {
+            customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
+        }
+        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
 }

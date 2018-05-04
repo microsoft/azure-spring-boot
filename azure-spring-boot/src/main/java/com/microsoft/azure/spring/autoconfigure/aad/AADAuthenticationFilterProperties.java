@@ -38,6 +38,16 @@ public class AADAuthenticationFilterProperties {
     @NotEmpty
     private List<String> activeDirectoryGroups;
 
+    private boolean allowTelemetry = true;
+
+    public boolean isAllowTelemetry() {
+        return allowTelemetry;
+    }
+
+    public void setAllowTelemetry(boolean allowTelemetry) {
+        this.allowTelemetry = allowTelemetry;
+    }
+
     public String getEnvironment() {
         return StringUtils.isEmpty(environment) ? DEFAULT_SERVICE_ENVIRONMENT : environment;
     }

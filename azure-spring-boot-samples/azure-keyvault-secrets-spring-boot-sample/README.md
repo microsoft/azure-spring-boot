@@ -28,8 +28,8 @@ az keyvault create --name <your_keyvault_name>            \
                    --enabled-for-disk-encryption true     \
                    --enabled-for-template-deployment true \
                    --sku standard
-az keyvault set-policy --name <your_keyvault_name> \
-                       --secret-permission all     \
+az keyvault set-policy --name <your_keyvault_name>   \
+                       --secret-permission get list  \
                        --spn <your_sp_id_create_in_step1>
 ```
 Save the displayed Key Vault uri for later use.
