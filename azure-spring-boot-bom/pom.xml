@@ -51,7 +51,7 @@
         <azure.storage.version>5.5.0</azure.storage.version>
         <azure.keyvault.version>1.0.0</azure.keyvault.version>
         <azure.media.version>0.9.7</azure.media.version>
-        <azure.servicebus.version>1.0.0</azure.servicebus.version>
+        <azure.servicebus.version>1.2.5</azure.servicebus.version>
         <azure.spring.boot.version>2.0.2-SNAPSHOT</azure.spring.boot.version>
         <spring.data.documentdb.version>2.0.1</spring.data.documentdb.version>
         <microsoft.client-runtime.version>1.0.0</microsoft.client-runtime.version>
