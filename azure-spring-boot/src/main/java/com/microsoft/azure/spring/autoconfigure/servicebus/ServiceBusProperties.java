@@ -7,7 +7,9 @@
 package com.microsoft.azure.spring.autoconfigure.servicebus;
 
 import com.microsoft.azure.servicebus.ReceiveMode;
-import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotEmpty;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
