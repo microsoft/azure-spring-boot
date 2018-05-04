@@ -18,10 +18,6 @@
     <description>Azure Spring Boot AutoConfigure</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
-    <properties>
-        <azure.ai.key>f972f3bc-8ce9-4e73-a86f-e0d5715e3db4</azure.ai.key>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

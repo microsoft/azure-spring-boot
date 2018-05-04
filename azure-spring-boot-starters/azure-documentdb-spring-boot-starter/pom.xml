@@ -19,7 +19,6 @@
 
     <properties>
         <project.rootdir>${project.basedir}/../..</project.rootdir>
-        <azure.ai.key>f972f3bc-8ce9-4e73-a86f-e0d5715e3db4</azure.ai.key>
     </properties>
 
     <dependencies>
