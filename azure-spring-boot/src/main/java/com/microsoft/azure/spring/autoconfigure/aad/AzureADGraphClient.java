@@ -29,7 +29,7 @@ public class AzureADGraphClient {
         if (responseCode == HTTPResponse.SC_OK) {
             return responseInJson;
         } else {
-            throw new IllegalStateException("Response is not " + HTTPResponse.SC_OK  +
+            throw new IllegalStateException("Response is not " + HTTPResponse.SC_OK +
                     ", response json: " + responseInJson);
         }
     }
