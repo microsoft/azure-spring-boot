@@ -17,6 +17,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,9 @@ public class VcapProcessor implements EnvironmentPostProcessor {
     public static final String VCAP_SERVICES = "VCAP_SERVICES";
     public static final String LOG_VARIABLE = "COM_MICROSOFT_AZURE_CLOUDFOUNDRY_SERVICE_LOG";
     private static final String AZURE = "azure-";
+    private static final String USER_PROVIDED = "user-provided";
+    private static final String AZURE_SERVICE_BROKER_NAME = "azure-service-broker-name";
+    private static final String AZURE_SERVICE_PLAN = "azure-service-plan";
     private static final String CREDENTIALS = "credentials";
     private static final String LABEL = "label";
     private static final String NAME = "name";
@@ -78,13 +82,16 @@ public class VcapProcessor implements EnvironmentPostProcessor {
                 if (names != null) {
                     for (int i = 0; i < names.length(); i++) {
                         final String name = (String) names.get(i);
-                        if (name.startsWith(AZURE)) {
+                        if (name.startsWith(AZURE) || USER_PROVIDED.equals(name)) {
                             final JSONArray azureService = json.getJSONArray(name);
                             final int numElements = azureService.length();
                             for (int index = 0; index < numElements; index++) {
                                 final VcapPojo pojo = parseService(name, azureService,
                                         vcapServices, index);
-                                results.add(pojo);
+                                
+                                if (pojo != null) {
+                                  results.add(pojo);
+                                }
                             }
                         }
                     }
@@ -101,23 +108,47 @@ public class VcapProcessor implements EnvironmentPostProcessor {
     private VcapPojo parseService(String serviceBrokerName,
                                   JSONArray azureService, String vCapServices, int index) {
         final VcapPojo result = new VcapPojo();
-        result.setServiceBrokerName(serviceBrokerName);
 
         try {
             final JSONObject service = azureService.getJSONObject(index);
             result.setLabel(parseString(service, LABEL));
             result.setProvider(parseString(service, PROVIDER));
             result.setServiceInstanceName(parseString(service, NAME));
-            result.setServicePlan(parseString(service, PLAN));
             result.setSyslogDrainUrl(parseString(service, SYSLOG_DRAIN_URL));
             result.setTags(parseStringArray(service.getJSONArray(TAGS)));
             result.setVolumeMounts(parseStringArray(service
                     .getJSONArray(VOLUME_MOUNTS)));
 
             final JSONObject credObject = service.getJSONObject(CREDENTIALS);
-            if (credObject != null) {
-                parseMap(credObject, result.getCredentials());
+
+            if (USER_PROVIDED.equals(serviceBrokerName)) {
+                if (credObject == null) {
+                    return null;
+                }
+                
+                final HashMap<String, String> credentials = new HashMap<>();
+                parseMap(credObject, credentials);
+                
+                final String userServiceBrokerName = credentials.remove(AZURE_SERVICE_BROKER_NAME);
+                if (userServiceBrokerName == null) {
+                    return null;
+                }
+                
+                result.setServiceBrokerName(userServiceBrokerName);
+                final String userServicePlan = credentials.remove(AZURE_SERVICE_PLAN);
+                result.setServicePlan(userServicePlan);
+                result.setCredentials(credentials);
+            } else {
+                result.setServiceBrokerName(serviceBrokerName);
+                result.setServicePlan(parseString(service, PLAN));
+                if (credObject == null) {
+                    LOGGER.error("Found " + serviceBrokerName + ", but missing "
+                            + CREDENTIALS + " : " + vCapServices);
+                } else {
+                    parseMap(credObject, result.getCredentials());
+                }
             }
+
         } catch (JSONException e) {
             LOGGER.error("Found " + serviceBrokerName + ", but missing "
                     + CREDENTIALS + " : " + vCapServices, e);
