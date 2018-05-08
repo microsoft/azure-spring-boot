@@ -38,7 +38,7 @@ public class AzureCloudFoundryServiceApplicationTest {
 
     @Test
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
-    public void testVcapSingleService() {
+    public void testVcapSingleService() throws IOException {
         final Resource resource = new ClassPathResource("/vcap1.json");
         final String content;
         try {
@@ -71,12 +71,13 @@ public class AzureCloudFoundryServiceApplicationTest {
                     pojo.getCredentials().get("storage_account_name"));
         } catch (IOException e) {
             LOG.error("Error reading json file", e);
+            throw e;
         }
     }
 
     @Test
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
-    public void testVcapSingleServiceWithNulls() {
+    public void testVcapSingleServiceWithNulls() throws IOException {
         final Resource resource = new ClassPathResource("/vcap2.json");
         final String content;
         try {
@@ -110,12 +111,13 @@ public class AzureCloudFoundryServiceApplicationTest {
                     pojo.getCredentials().get("documentdb_master_key"));
         } catch (IOException e) {
             LOG.error("Error reading json file", e);
+            throw e;
         }
     }
 
     @Test
     @SuppressFBWarnings("DM_DEFAULT_ENCODING")
-    public void testVcapUserProvidedService() {
+    public void testVcapUserProvidedService() throws IOException {
         final Resource resource = new ClassPathResource("/vcap3.json");
         final String content;
         try {
@@ -149,6 +151,7 @@ public class AzureCloudFoundryServiceApplicationTest {
                     pojo.getCredentials().get("documentdb_master_key"));
         } catch (IOException e) {
             LOG.error("Error reading json file", e);
+            throw e;
         }
     }
 
