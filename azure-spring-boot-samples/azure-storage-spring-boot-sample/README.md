@@ -14,7 +14,7 @@ This sample project demonstrates how to use Azure Storage via Spring Boot Starte
 ### Create storage account on Azure
 
 1. Go to [Azure portal](https://portal.azure.com/) and create the account by following this [link](https://docs.microsoft.com/en-us/azure/storage/storage-create-storage-account). 
-2. In the `Acces keys` blade, mark down the `CONNECTION STRING`.
+2. In the `Access keys` blade, mark down the `CONNECTION STRING`.
                                                                                                                                   
 ### Config the sample
 
