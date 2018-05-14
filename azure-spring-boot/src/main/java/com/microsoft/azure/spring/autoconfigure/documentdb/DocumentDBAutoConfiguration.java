@@ -14,6 +14,8 @@ import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
 import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbMappingContext;
 import com.microsoft.azure.spring.support.GetHashMac;
+import com.microsoft.azure.telemetry.TelemetryData;
+import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.microsoft.azure.utils.PropertyLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.annotation.Persistent;
+import org.springframework.util.ClassUtils;
+
+import java.util.HashMap;
 
 @Configuration
 @ConditionalOnClass({DocumentClient.class, DocumentDbTemplate.class})
@@ -40,6 +45,8 @@ public class DocumentDBAutoConfiguration {
     private final DocumentDBProperties properties;
     private final ConnectionPolicy connectionPolicy;
     private final ApplicationContext applicationContext;
+    private final TelemetryProxy telemetryProxy;
+
 
     public DocumentDBAutoConfiguration(DocumentDBProperties properties,
                                        ObjectProvider<ConnectionPolicy> connectionPolicyObjectProvider,
@@ -47,6 +54,8 @@ public class DocumentDBAutoConfiguration {
         this.properties = properties;
         this.connectionPolicy = connectionPolicyObjectProvider.getIfAvailable();
         this.applicationContext = applicationContext;
+        this.telemetryProxy = new TelemetryProxy(properties.isAllowTelemetry());
+
     }
 
     @Bean
@@ -68,9 +77,22 @@ public class DocumentDBAutoConfiguration {
         }
         policy.setUserAgentSuffix(userAgent);
 
+        trackCustomEvent();
+
         return new DocumentClient(properties.getUri(), properties.getKey(), policy,
                 properties.getConsistencyLevel() == null ?
                         ConsistencyLevel.Session : properties.getConsistencyLevel());
+    }
+
+    private void trackCustomEvent() {
+        final HashMap<String, String> customTelemetryProperties = new HashMap<>();
+
+        final String[] packageNames = this.getClass().getPackage().getName().split("\\.");
+
+        if (packageNames.length > 1) {
+            customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
+        }
+        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
 
     @Bean
