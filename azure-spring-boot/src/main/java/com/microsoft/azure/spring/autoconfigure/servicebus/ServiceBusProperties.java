@@ -45,6 +45,26 @@ public class ServiceBusProperties {
      */
     private ReceiveMode subscriptionReceiveMode;
 
+    private boolean allowTelemetry = true;
+
+    /**
+     * return allow telemery or not
+     *
+     * @return
+     */
+    public boolean isAllowTelemetry() {
+        return allowTelemetry;
+    }
+
+    /**
+     * Set allowTelemetry
+     *
+     * @param allowTelemetry
+     */
+    public void setAllowTelemetry(boolean allowTelemetry) {
+        this.allowTelemetry = allowTelemetry;
+    }
+
     public String getConnectionString() {
         return connectionString;
     }

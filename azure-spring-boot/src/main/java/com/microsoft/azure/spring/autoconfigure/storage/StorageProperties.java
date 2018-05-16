@@ -20,6 +20,26 @@ public class StorageProperties {
     @NotEmpty
     private String connectionString;
 
+    private boolean allowTelemetry = true;
+
+    /**
+     * return allow telemery or not
+     *
+     * @return
+     */
+    public boolean isAllowTelemetry() {
+        return allowTelemetry;
+    }
+
+    /**
+     * Set allowTelemetry
+     *
+     * @param allowTelemetry
+     */
+    public void setAllowTelemetry(boolean allowTelemetry) {
+        this.allowTelemetry = allowTelemetry;
+    }
+
     /**
      * Get storage account connection string.
      *
