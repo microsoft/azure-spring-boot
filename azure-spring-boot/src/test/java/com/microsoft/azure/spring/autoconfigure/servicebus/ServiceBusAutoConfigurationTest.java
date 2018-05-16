@@ -138,11 +138,8 @@ public class ServiceBusAutoConfigurationTest {
         System.setProperty(Constants.SUBSCRIPTION_NAME_PROPERTY, Constants.SUBSCRIPTION_NAME);
         System.setProperty(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY, Constants.SUBSCRIPTION_RECEIVE_MODE.name());
 
-        verifyBeanCreationException("Failed to instantiate [com.microsoft.azure.servicebus.SubscriptionClient]: " +
-                "Factory method 'subscriptionClient' threw exception; nested exception is " +
-                "com.microsoft.azure.servicebus.primitives.CommunicationException: " +
-                "java.nio.channels.UnresolvedAddressException. This is usually caused by incorrect hostname" +
-                " or network configuration.", SubscriptionClient.class);
+        final String subscriptionClientClz = SubscriptionClient.class.getName();
+        verifyBeanCreationException("Failed to instantiate [" + subscriptionClientClz + "]", SubscriptionClient.class);
 
         System.clearProperty(Constants.CONNECTION_STRING_PROPERTY);
         System.clearProperty(Constants.TOPIC_NAME_PROPERTY);
