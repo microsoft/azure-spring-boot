@@ -7,9 +7,7 @@
 package com.microsoft.azure.spring.autoconfigure.documentdb;
 
 import com.microsoft.azure.documentdb.ConsistencyLevel;
-
-import javax.validation.constraints.NotEmpty;
-
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
