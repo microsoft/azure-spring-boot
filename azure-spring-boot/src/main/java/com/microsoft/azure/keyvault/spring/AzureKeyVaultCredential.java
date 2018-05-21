@@ -45,7 +45,7 @@ public class AzureKeyVaultCredential extends KeyVaultCredentials {
             result = future.get(timeoutInSeconds, TimeUnit.SECONDS);
             token = result.getAccessToken();
         } catch (MalformedURLException | TimeoutException | InterruptedException | ExecutionException ex) {
-            throw new RuntimeException(ex.getMessage());
+            throw new IllegalStateException("Failed to do authentication.", ex);
         } finally {
             executorService.shutdown();
         }

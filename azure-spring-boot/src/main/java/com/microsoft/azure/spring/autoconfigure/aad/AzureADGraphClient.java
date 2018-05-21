@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets;
 
 public class AzureADGraphClient {
 
-    public static String getUserMembershipsV1(String accessToken, String aadMembershipRestAPI) throws Exception {
+    public static String getUserMembershipsV1(String accessToken, String aadMembershipRestAPI) throws IOException {
         final URL url = new URL(aadMembershipRestAPI);
 
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -29,7 +29,8 @@ public class AzureADGraphClient {
         if (responseCode == HTTPResponse.SC_OK) {
             return responseInJson;
         } else {
-            throw new Exception(responseInJson);
+            throw new IllegalStateException("Response is not " + HTTPResponse.SC_OK  +
+                    ", response json: " + responseInJson);
         }
     }
 

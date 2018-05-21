@@ -39,6 +39,8 @@ public class StorageRestController {
     @RequestMapping(value = "/blob", method = RequestMethod.GET)
     @ResponseBody
     public void showBlob(HttpServletResponse response) {
+        InputStream is = null;
+
         try {
             LOG.info("showBlob start");
             if (account == null) {
@@ -47,7 +49,7 @@ public class StorageRestController {
             }
 
             final URL u = new URL(IMAGE_PATH);
-            final InputStream is = u.openStream();
+            is = u.openStream();
             response.setContentType(MediaType.IMAGE_JPEG_VALUE);
             final int imageSize = IOUtils.copy(is, response.getOutputStream());
 
@@ -71,6 +73,14 @@ public class StorageRestController {
             LOG.error("Error retrieving image", e);
         } catch (URISyntaxException | StorageException e) {
             LOG.error("Error accessing azure storage container", e);
+        } finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    LOG.warn("Failed to close the InputStream.", e);
+                }
+            }
         }
     }
 }
