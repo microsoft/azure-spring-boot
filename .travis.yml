@@ -11,7 +11,10 @@ before_install:
 
 install: "./mvnw -B install -DskipTests=true"
 
-script: "./mvnw -B verify cobertura:cobertura"
+script:
+  - ./mvnw -B verify cobertura:cobertura
+  - cd azure-spring-boot-samples && ./gradlew  build
+
 
 env:
   global:
