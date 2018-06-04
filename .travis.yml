@@ -13,7 +13,7 @@ install: "./mvnw -B install -DskipTests=true"
 
 script:
   - ./mvnw -B verify cobertura:cobertura
-  - cd azure-spring-boot-samples && ./gradlew  build
+  - cd azure-spring-boot-samples && chmod +x gradlew && ./gradlew build
 
 
 env:
