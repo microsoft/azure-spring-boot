@@ -7,7 +7,6 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 
 import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
-import com.microsoft.azure.utils.PropertyLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -24,16 +23,16 @@ import java.util.HashMap;
 @Configuration
 @ConditionalOnWebApplication
 @ConditionalOnProperty(prefix = "azure.activedirectory", value = {"client-id", "client-secret"})
-@EnableConfigurationProperties({AADAuthenticationFilterProperties.class, ServiceEndpointsProperties.class})
+@EnableConfigurationProperties({AADAuthenticationProperties.class, ServiceEndpointsProperties.class})
 public class AADAuthenticationFilterAutoConfiguration {
-    private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationFilterProperties.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationProperties.class);
 
-    private final AADAuthenticationFilterProperties aadAuthFilterProperties;
+    private final AADAuthenticationProperties aadAuthFilterProperties;
     private final ServiceEndpointsProperties serviceEndpointsProperties;
 
     private final TelemetryProxy telemetryProxy;
 
-    public AADAuthenticationFilterAutoConfiguration(AADAuthenticationFilterProperties aadAuthFilterProperties,
+    public AADAuthenticationFilterAutoConfiguration(AADAuthenticationProperties aadAuthFilterProperties,
                                                     ServiceEndpointsProperties serviceEndpointsProperties) {
         this.aadAuthFilterProperties = aadAuthFilterProperties;
         this.serviceEndpointsProperties = serviceEndpointsProperties;
@@ -49,7 +48,7 @@ public class AADAuthenticationFilterAutoConfiguration {
     @Scope("singleton")
     @ConditionalOnMissingBean(AADAuthenticationFilter.class)
     public AADAuthenticationFilter azureADJwtTokenFilter() {
-        LOG.info("AzureADJwtTokenFilter Constructor.");
+        LOG.info("AADAuthenticationFilter initialized.");
         trackCustomEvent();
         return new AADAuthenticationFilter(aadAuthFilterProperties, serviceEndpointsProperties);
     }
