@@ -80,22 +80,15 @@ public class TodolistController {
     /**
      * HTTP DELETE
      */
+    @PreAuthorize("hasRole('ROLE_delete')")
     @RequestMapping(value = "/api/todolist/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteTodoItem(@PathVariable("id") int id,
-                                                 PreAuthenticatedAuthenticationToken authToken) {
-        final UserPrincipal current = (UserPrincipal) authToken.getPrincipal();
-
-        if (current.isMemberOf(
-                new UserGroup("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx", "group1"))) {
-            final List<TodoItem> find = todoList.stream().filter(i -> i.getID() == id).collect(Collectors.toList());
-            if (!find.isEmpty()) {
-                todoList.remove(todoList.indexOf(find.get(0)));
-                return new ResponseEntity<>("OK", HttpStatus.OK);
-            }
-            return new ResponseEntity<>("Entity not found", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Access is denied", HttpStatus.OK);
+    public ResponseEntity<String> deleteTodoItem(@PathVariable("id") int id) {
+        final List<TodoItem> find = todoList.stream().filter(i -> i.getID() == id).collect(Collectors.toList());
+        if (!find.isEmpty()) {
+            todoList.remove(todoList.indexOf(find.get(0)));
+            return new ResponseEntity<>("OK", HttpStatus.OK);
         }
 
+        return new ResponseEntity<>("Entity not found", HttpStatus.OK);
     }
 }

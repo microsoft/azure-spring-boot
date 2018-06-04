@@ -15,7 +15,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Validated
 @ConfigurationProperties("azure.activedirectory")
-public class AADAuthenticationFilterProperties {
+public class AADAuthenticationProperties {
     private static final String DEFAULT_SERVICE_ENVIRONMENT = "global";
 
     /**
@@ -37,6 +37,8 @@ public class AADAuthenticationFilterProperties {
      */
     @NotEmpty
     private List<String> activeDirectoryGroups;
+
+    private String tenantId;
 
     private boolean allowTelemetry = true;
 
@@ -78,5 +80,13 @@ public class AADAuthenticationFilterProperties {
 
     public void setactiveDirectoryGroups(List<String> activeDirectoryGroups) {
         this.activeDirectoryGroups = activeDirectoryGroups;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 }

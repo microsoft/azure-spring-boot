@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(AzureADGraphClient.class)
+@PrepareForTest(AzureADHelper.class)
 public class UserPrincipalTest {
     @Test
     public void getAuthoritiesByUserGroups() throws Exception {
@@ -30,7 +30,7 @@ public class UserPrincipalTest {
         userGroups.add(new UserGroup("this is group1", "group1"));
 
         final Collection<? extends GrantedAuthority> authorities =
-                principal.getAuthoritiesByUserGroups(userGroups, Constants.TARGETED_GROUPS);
+                AzureADHelper.getAuthoritiesByUserGroups(userGroups, Constants.TARGETED_GROUPS);
         Assert.assertTrue(authorities.contains(new SimpleGrantedAuthority("ROLE_group1")));
         Assert.assertFalse(authorities.contains(new SimpleGrantedAuthority("ROLE_group2")));
         Assert.assertFalse(authorities.contains(new SimpleGrantedAuthority("ROLE_group3")));
@@ -38,8 +38,8 @@ public class UserPrincipalTest {
 
     @Test
     public void getGroups() throws Exception {
-        PowerMockito.mockStatic(AzureADGraphClient.class);
-        Mockito.when(AzureADGraphClient.getUserMembershipsV1(Mockito.eq(Constants.BEARER_TOKEN), Mockito.any()))
+        PowerMockito.mockStatic(AzureADHelper.class);
+        Mockito.when(AzureADHelper.getUserMembershipsV1(Mockito.eq(Constants.BEARER_TOKEN), Mockito.any()))
                 .thenReturn(Constants.USERGROUPS_JSON);
 
         final UserPrincipal principal = new UserPrincipal();
