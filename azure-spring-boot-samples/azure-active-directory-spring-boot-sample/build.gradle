@@ -4,5 +4,4 @@ dependencies {
     compile group: 'com.microsoft.azure', name: 'azure-active-directory-spring-boot-starter', version:"${azureSpringBootStartersVersion}"
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
-    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2'
 }

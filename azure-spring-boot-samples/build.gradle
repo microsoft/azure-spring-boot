@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.5.10.RELEASE'
+        springBootVersion = '2.0.1.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -12,12 +12,13 @@ buildscript {
 
 allprojects {
     apply plugin: 'maven'
+    apply plugin: 'io.spring.dependency-management'
 
     group = 'com.microsoft.azure'
     version = '0.0.1-SNAPSHOT'
 
     ext {
-        azureSpringBootStartersVersion = '0.2.3'
+        azureSpringBootStartersVersion = '2.0.2'
         commonsioVersion = '2.3'
     }
 }
