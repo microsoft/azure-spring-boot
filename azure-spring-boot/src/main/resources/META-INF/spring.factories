@@ -7,4 +7,5 @@ com.microsoft.azure.spring.autoconfigure.documentdb.DocumentDbRepositoriesAutoCo
 com.microsoft.azure.spring.autoconfigure.mediaservices.MediaServicesAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.servicebus.ServiceBusAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.storage.StorageAutoConfiguration,\
-com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationFilterAutoConfiguration
+com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationFilterAutoConfiguration,\
+com.microsoft.azure.spring.autoconfigure.aad.AADOAuth2AutoConfiguration
