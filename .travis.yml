@@ -5,13 +5,16 @@ jdk:
 before_install:
   - sudo apt-get -y install python3-pip python-dev
   - echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ wheezy main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
-  - sudo apt-key adv --keyserver packages.microsoft.com --recv-keys 417A0893
+  - curl -L https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
   - sudo apt-get install apt-transport-https
   - sudo apt-get update && sudo apt-get install azure-cli
 
 install: "./mvnw -B install -DskipTests=true"
 
-script: "./mvnw -B verify cobertura:cobertura"
+script:
+  - ./mvnw -B verify cobertura:cobertura
+  - cd azure-spring-boot-samples && chmod +x gradlew && ./gradlew build
+
 
 env:
   global:
