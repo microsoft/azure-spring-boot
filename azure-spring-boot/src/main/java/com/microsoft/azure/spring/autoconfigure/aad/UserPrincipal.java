@@ -5,8 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSObject;
@@ -22,18 +20,12 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.proc.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.*;
-
-import static java.util.stream.Collectors.toList;
 
 public class UserPrincipal {
 
@@ -100,36 +92,16 @@ public class UserPrincipal {
         return jwsKeySet == null ? null : jwsKeySet.getKeyByKeyId(kid);
     }
 
-    public List<UserGroup> getGroups(String graphApiToken) throws IOException {
-        if (userGroups == null) {
-            userGroups = loadUserGroups(graphApiToken);
-        }
-        return userGroups;
+    public void setUserGroups(List<UserGroup> groups) {
+        this.userGroups = groups;
+    }
+
+    public List<UserGroup> getUserGroups(List<UserGroup> groups) {
+        return this.userGroups;
     }
 
     public boolean isMemberOf(UserGroup group) {
         return !(userGroups == null || userGroups.isEmpty()) && userGroups.contains(group);
-    }
-
-    public List<GrantedAuthority> getAuthoritiesByUserGroups(List<UserGroup> userGroups,
-                                                             List<String> targetdGroupNames) {
-        if (userGroups == null || targetdGroupNames == null || userGroups.isEmpty()
-                || targetdGroupNames.isEmpty()) {
-            return Collections.<GrantedAuthority>emptyList();
-        }
-        return userGroups.stream()
-                .filter(usergroup -> targetdGroupNames
-                        .contains(usergroup.getDisplayName()))
-                .map(usergroup -> "ROLE_" + usergroup.getDisplayName())
-                .map(SimpleGrantedAuthority::new).collect(toList());
-    }
-
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-    }
-
-    public Authentication getAuthentication() {
-        return SecurityContextHolder.getContext().getAuthentication();
     }
 
     private ConfigurableJWTProcessor<SecurityContext> getAadJwtTokenValidator()
@@ -153,26 +125,6 @@ public class UserPrincipal {
             }
         });
         return jwtProcessor;
-    }
-
-    private List<UserGroup> loadUserGroups(String graphApiToken) throws IOException {
-        final String responseInJson =
-                AzureADGraphClient.getUserMembershipsV1(graphApiToken, serviceEndpoints.getAadMembershipRestUri());
-        final List<UserGroup> lUserGroups = new ArrayList<>();
-        final ObjectMapper objectMapper = JacksonObjectMapperFactory.getInstance();
-        final JsonNode rootNode = objectMapper.readValue(responseInJson, JsonNode.class);
-        final JsonNode valuesNode = rootNode.get("value");
-        int i = 0;
-        while (valuesNode != null
-                && valuesNode.get(i) != null) {
-            if (valuesNode.get(i).get("objectType").asText().equals("Group")) {
-                lUserGroups.add(new UserGroup(
-                        valuesNode.get(i).get("objectId").asText(),
-                        valuesNode.get(i).get("displayName").asText()));
-            }
-            i++;
-        }
-        return lUserGroups;
     }
 }
 
