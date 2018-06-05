@@ -39,7 +39,6 @@ public class AzureADGraphClient {
 
     private String clientId;
     private String clientSecret;
-    private String tenantId;
     private List<String> aadTargetGroups;
     private ServiceEndpoints serviceEndpoints;
 
@@ -47,7 +46,6 @@ public class AzureADGraphClient {
                               ServiceEndpointsProperties endpointsProperties) {
         this.clientId = properties.getClientId();
         this.clientSecret = properties.getClientSecret();
-        this.tenantId = properties.getTenantId();
         this.aadTargetGroups = properties.getActiveDirectoryGroups();
         this.serviceEndpoints = endpointsProperties.getServiceEndpoints(properties.getEnvironment());
     }
@@ -123,7 +121,7 @@ public class AzureADGraphClient {
         return mappedAuthorities;
     }
 
-    public AuthenticationResult acquireTokenForGraphApi(String idToken)
+    public AuthenticationResult acquireTokenForGraphApi(String idToken, String tenantId)
             throws MalformedURLException, ServiceUnavailableException, InterruptedException, ExecutionException {
 
         final ClientCredential credential = new ClientCredential(clientId, clientSecret);

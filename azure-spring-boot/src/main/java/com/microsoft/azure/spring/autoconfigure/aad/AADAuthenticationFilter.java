@@ -64,7 +64,8 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
 
                 if (principal == null || graphApiToken == null || graphApiToken.isEmpty()) {
                     principal = new UserPrincipal(idToken, serviceEndpoints);
-                    graphApiToken = client.acquireTokenForGraphApi(idToken).getAccessToken();
+                    graphApiToken =
+                            client.acquireTokenForGraphApi(idToken, principal.getClaim().toString()).getAccessToken();
                     principal.setUserGroups(client.getGroups(graphApiToken));
 
                     request.getSession().setAttribute(CURRENT_USER_PRINCIPAL, principal);
