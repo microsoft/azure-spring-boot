@@ -91,16 +91,17 @@ public class AzureADGraphClient {
         final ObjectMapper objectMapper = JacksonObjectMapperFactory.getInstance();
         final JsonNode rootNode = objectMapper.readValue(responseInJson, JsonNode.class);
         final JsonNode valuesNode = rootNode.get("value");
-        int i = 0;
-        while (valuesNode != null
-                && valuesNode.get(i) != null) {
-            if (valuesNode.get(i).get("objectType").asText().equals("Group")) {
-                lUserGroups.add(new UserGroup(
-                        valuesNode.get(i).get("objectId").asText(),
-                        valuesNode.get(i).get("displayName").asText()));
-            }
-            i++;
+
+        if (valuesNode != null) {
+            valuesNode.forEach(valueNode -> {
+                if(valueNode != null && valueNode.get("objectType").asText().equals("Group")) {
+                    final String objectID = valueNode.get("objectId").asText();
+                    final String displayName = valueNode.get("displayName").asText();
+                    lUserGroups.add(new UserGroup(objectID, displayName));
+                }
+            });
         }
+
         return lUserGroups;
     }
 
@@ -132,8 +133,7 @@ public class AzureADGraphClient {
         try {
             service = Executors.newFixedThreadPool(1);
             final AuthenticationContext context = new AuthenticationContext(
-                    serviceEndpoints.getAadSigninUri() + tenantId + "/",
-                    true, service);
+                    serviceEndpoints.getAadSigninUri() + tenantId + "/",true, service);
             final Future<AuthenticationResult> future = context
                     .acquireToken(serviceEndpoints.getAadGraphApiUri(), assertion, credential, null);
             result = future.get();
