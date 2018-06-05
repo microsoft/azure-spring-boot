@@ -23,16 +23,16 @@ import java.util.HashMap;
 @Configuration
 @ConditionalOnWebApplication
 @ConditionalOnProperty(prefix = "azure.activedirectory", value = {"client-id", "client-secret"})
-@EnableConfigurationProperties({AADAuthenticationFilterProperties.class, ServiceEndpointsProperties.class})
+@EnableConfigurationProperties({AADAuthenticationProperties.class, ServiceEndpointsProperties.class})
 public class AADAuthenticationFilterAutoConfiguration {
-    private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationFilterProperties.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationProperties.class);
 
-    private final AADAuthenticationFilterProperties aadAuthFilterProperties;
+    private final AADAuthenticationProperties aadAuthFilterProperties;
     private final ServiceEndpointsProperties serviceEndpointsProperties;
 
     private final TelemetryProxy telemetryProxy;
 
-    public AADAuthenticationFilterAutoConfiguration(AADAuthenticationFilterProperties aadAuthFilterProperties,
+    public AADAuthenticationFilterAutoConfiguration(AADAuthenticationProperties aadAuthFilterProperties,
                                                     ServiceEndpointsProperties serviceEndpointsProperties) {
         this.aadAuthFilterProperties = aadAuthFilterProperties;
         this.serviceEndpointsProperties = serviceEndpointsProperties;

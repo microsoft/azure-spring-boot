@@ -33,10 +33,10 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
     private static final String TOKEN_HEADER = "Authorization";
     private static final String TOKEN_TYPE = "Bearer ";
 
-    private AADAuthenticationFilterProperties aadAuthFilterProp;
+    private AADAuthenticationProperties aadAuthFilterProp;
     private ServiceEndpointsProperties serviceEndpointsProp;
 
-    public AADAuthenticationFilter(AADAuthenticationFilterProperties aadAuthFilterProp,
+    public AADAuthenticationFilter(AADAuthenticationProperties aadAuthFilterProp,
                                    ServiceEndpointsProperties serviceEndpointsProp) {
         this.aadAuthFilterProp = aadAuthFilterProp;
         this.serviceEndpointsProp = serviceEndpointsProp;

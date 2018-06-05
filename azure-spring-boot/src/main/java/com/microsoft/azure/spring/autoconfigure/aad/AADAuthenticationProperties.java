@@ -15,7 +15,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Validated
 @ConfigurationProperties("azure.activedirectory")
-public class AADAuthenticationFilterProperties {
+public class AADAuthenticationProperties {
     private static final String DEFAULT_SERVICE_ENVIRONMENT = "global";
 
     /**

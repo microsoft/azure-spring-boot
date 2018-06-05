@@ -42,7 +42,7 @@ public class AzureADGraphClient {
     private List<String> aadTargetGroups;
     private ServiceEndpoints serviceEndpoints;
 
-    public AzureADGraphClient(AADAuthenticationFilterProperties properties,
+    public AzureADGraphClient(AADAuthenticationProperties properties,
                               ServiceEndpointsProperties endpointsProperties) {
         this.clientId = properties.getClientId();
         this.clientSecret = properties.getClientSecret();
