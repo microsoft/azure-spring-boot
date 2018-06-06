@@ -5,10 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.microsoft.aad.adal4j.AuthenticationContext;
-import com.microsoft.aad.adal4j.AuthenticationResult;
-import com.microsoft.aad.adal4j.ClientCredential;
-import com.microsoft.aad.adal4j.UserAssertion;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.proc.BadJOSEException;
 import org.slf4j.Logger;
@@ -27,9 +23,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class AADAuthenticationFilter extends OncePerRequestFilter {
     private static final Logger log = LoggerFactory.getLogger(AADAuthenticationFilter.class);
@@ -47,38 +40,6 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                                    ServiceEndpointsProperties serviceEndpointsProp) {
         this.aadAuthFilterProp = aadAuthFilterProp;
         this.serviceEndpointsProp = serviceEndpointsProp;
-    }
-
-    private AuthenticationResult acquireTokenForGraphApi(
-            String idToken,
-            String tenantId,
-            ServiceEndpoints serviceEndpoints)
-            throws MalformedURLException, ServiceUnavailableException, InterruptedException, ExecutionException {
-
-        final ClientCredential credential = new ClientCredential(
-                aadAuthFilterProp.getClientId(), aadAuthFilterProp.getClientSecret());
-        final UserAssertion assertion = new UserAssertion(idToken);
-
-        AuthenticationResult result = null;
-        ExecutorService service = null;
-        try {
-            service = Executors.newFixedThreadPool(1);
-            final AuthenticationContext context = new AuthenticationContext(
-                    serviceEndpoints.getAadSigninUri() + tenantId + "/", true, service);
-            final Future<AuthenticationResult> future = context
-                    .acquireToken(serviceEndpoints.getAadGraphApiUri(), assertion, credential, null);
-            result = future.get();
-        } finally {
-            if (service != null) {
-                service.shutdown();
-            }
-        }
-
-        if (result == null) {
-            throw new ServiceUnavailableException(
-                    "unable to acquire on-behalf-of token for client " + aadAuthFilterProp.getClientId());
-        }
-        return result;
     }
 
     @Override
@@ -99,21 +60,23 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
 
                 final ServiceEndpoints serviceEndpoints =
                         serviceEndpointsProp.getServiceEndpoints(aadAuthFilterProp.getEnvironment());
+                final AzureADGraphClient client = new AzureADGraphClient(aadAuthFilterProp, serviceEndpointsProp);
 
                 if (principal == null || graphApiToken == null || graphApiToken.isEmpty()) {
                     principal = new UserPrincipal(idToken, serviceEndpoints);
-                    graphApiToken = acquireTokenForGraphApi(
-                            idToken, principal.getClaim().toString(), serviceEndpoints).getAccessToken();
+
+                    final String tenantId = principal.getClaim().toString();
+                    graphApiToken = client.acquireTokenForGraphApi(idToken, tenantId).getAccessToken();
+
+                    principal.setUserGroups(client.getGroups(graphApiToken));
+
                     request.getSession().setAttribute(CURRENT_USER_PRINCIPAL, principal);
                     request.getSession().setAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN, graphApiToken);
                 }
 
-                final Authentication authentication = new
-                        PreAuthenticatedAuthenticationToken(
-                        principal, null,
-                        principal.getAuthoritiesByUserGroups(
-                                principal.getGroups(graphApiToken),
-                                aadAuthFilterProp.getActiveDirectoryGroups()));
+                final Authentication authentication = new PreAuthenticatedAuthenticationToken(
+                            principal, null, client.getGrantedAuthorities(graphApiToken));
+
                 authentication.setAuthenticated(true);
                 log.info("Request token verification success. {}", authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);

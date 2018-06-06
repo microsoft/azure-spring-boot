@@ -7,12 +7,14 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 
 import org.hamcrest.collection.IsIterableContainingInAnyOrder;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -20,17 +22,37 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static org.powermock.api.mockito.PowerMockito.doReturn;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(AzureADGraphClient.class)
 public class UserPrincipalTest {
+    private AzureADGraphClient graphClientMock;
+
+    @Mock
+    private AADAuthenticationFilterProperties aadAuthFilterProps;
+
+    @Mock
+    private ServiceEndpointsProperties endpointsProps;
+
+    @Before
+    public void setup() {
+        this.graphClientMock = PowerMockito.spy(new AzureADGraphClient(aadAuthFilterProps, endpointsProps));
+    }
+
     @Test
     public void getAuthoritiesByUserGroups() throws Exception {
-        final UserPrincipal principal = new UserPrincipal();
         final List<UserGroup> userGroups = new ArrayList<UserGroup>();
         userGroups.add(new UserGroup("this is group1", "group1"));
 
+        doReturn(Constants.USERGROUPS_JSON)
+                .when(graphClientMock, "getUserMembershipsV1", Constants.BEARER_TOKEN);
+        PowerMockito.when(graphClientMock.getGroups(Constants.BEARER_TOKEN)).thenReturn(userGroups);
+        Whitebox.setInternalState(graphClientMock, "aadTargetGroups", Constants.TARGETED_GROUPS);
+
         final Collection<? extends GrantedAuthority> authorities =
-                principal.getAuthoritiesByUserGroups(userGroups, Constants.TARGETED_GROUPS);
+                graphClientMock.getGrantedAuthorities(Constants.BEARER_TOKEN);
+
         Assert.assertTrue(authorities.contains(new SimpleGrantedAuthority("ROLE_group1")));
         Assert.assertFalse(authorities.contains(new SimpleGrantedAuthority("ROLE_group2")));
         Assert.assertFalse(authorities.contains(new SimpleGrantedAuthority("ROLE_group3")));
@@ -38,13 +60,10 @@ public class UserPrincipalTest {
 
     @Test
     public void getGroups() throws Exception {
-        PowerMockito.mockStatic(AzureADGraphClient.class);
-        Mockito.when(AzureADGraphClient.getUserMembershipsV1(Mockito.eq(Constants.BEARER_TOKEN), Mockito.any()))
-                .thenReturn(Constants.USERGROUPS_JSON);
+        doReturn(Constants.USERGROUPS_JSON)
+                .when(graphClientMock, "getUserMembershipsV1", Constants.BEARER_TOKEN);
 
-        final UserPrincipal principal = new UserPrincipal();
-
-        final List<UserGroup> groups = principal.getGroups(Constants.BEARER_TOKEN);
+        final List<UserGroup> groups = graphClientMock.getGroups(Constants.BEARER_TOKEN);
         final List<UserGroup> targetedGroups = new ArrayList<UserGroup>();
         targetedGroups.add(new UserGroup("12345678-7baf-48ce-96f4-a2d60c26391e", "group1"));
         targetedGroups.add(new UserGroup("12345678-e757-4474-b9c4-3f00a9ac17a0", "group2"));

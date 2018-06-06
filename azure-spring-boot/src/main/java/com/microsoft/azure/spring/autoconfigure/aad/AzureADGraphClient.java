@@ -5,19 +5,53 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microsoft.aad.adal4j.AuthenticationContext;
+import com.microsoft.aad.adal4j.AuthenticationResult;
+import com.microsoft.aad.adal4j.ClientCredential;
+import com.microsoft.aad.adal4j.UserAssertion;
 import com.nimbusds.oauth2.sdk.http.HTTPResponse;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import javax.naming.ServiceUnavailableException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 public class AzureADGraphClient {
+    private static final SimpleGrantedAuthority DEFAULT_AUTHORITY = new SimpleGrantedAuthority("ROLE_USER");
+    private static final String DEFAULE_ROLE_PREFIX = "ROLE_";
 
-    public static String getUserMembershipsV1(String accessToken, String aadMembershipRestAPI) throws IOException {
-        final URL url = new URL(aadMembershipRestAPI);
+    private String clientId;
+    private String clientSecret;
+    private List<String> aadTargetGroups;
+    private ServiceEndpoints serviceEndpoints;
+
+    public AzureADGraphClient(AADAuthenticationFilterProperties properties,
+                              ServiceEndpointsProperties endpointsProperties) {
+        this.clientId = properties.getClientId();
+        this.clientSecret = properties.getClientSecret();
+        this.aadTargetGroups = properties.getActiveDirectoryGroups();
+        this.serviceEndpoints = endpointsProperties.getServiceEndpoints(properties.getEnvironment());
+    }
+
+    private String getUserMembershipsV1(String accessToken) throws IOException {
+        final URL url = new URL(serviceEndpoints.getAadMembershipRestUri());
 
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         // Set the appropriate header fields in the request header.
@@ -45,5 +79,74 @@ public class AzureADGraphClient {
             }
             return stringBuffer.toString();
         }
+    }
+
+    public List<UserGroup> getGroups(String graphApiToken) throws IOException {
+        return loadUserGroups(graphApiToken);
+    }
+
+    private List<UserGroup> loadUserGroups(String graphApiToken) throws IOException {
+        final String responseInJson = getUserMembershipsV1(graphApiToken);
+        final List<UserGroup> lUserGroups = new ArrayList<>();
+        final ObjectMapper objectMapper = JacksonObjectMapperFactory.getInstance();
+        final JsonNode rootNode = objectMapper.readValue(responseInJson, JsonNode.class);
+        final JsonNode valuesNode = rootNode.get("value");
+
+        if (valuesNode != null) {
+            valuesNode.forEach(valueNode -> {
+                if (valueNode != null && valueNode.get("objectType").asText().equals("Group")) {
+                    final String objectID = valueNode.get("objectId").asText();
+                    final String displayName = valueNode.get("displayName").asText();
+                    lUserGroups.add(new UserGroup(objectID, displayName));
+                }
+            });
+        }
+
+        return lUserGroups;
+    }
+
+    public Set<GrantedAuthority> getGrantedAuthorities(String graphApiToken) throws IOException {
+        // Fetch the authority information from the protected resource using accessToken
+        final List<UserGroup> groups = getGroups(graphApiToken);
+
+        // Map the authority information to one or more GrantedAuthority's and add it to mappedAuthorities
+        final Set<GrantedAuthority> mappedAuthorities = groups.stream()
+                .filter(group -> aadTargetGroups.contains(group.getDisplayName()))
+                .map(userGroup -> new SimpleGrantedAuthority(DEFAULE_ROLE_PREFIX + userGroup.getDisplayName()))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+
+        if (mappedAuthorities.isEmpty()) {
+            mappedAuthorities.add(DEFAULT_AUTHORITY);
+        }
+
+        return mappedAuthorities;
+    }
+
+    public AuthenticationResult acquireTokenForGraphApi(String idToken, String tenantId)
+            throws MalformedURLException, ServiceUnavailableException, InterruptedException, ExecutionException {
+
+        final ClientCredential credential = new ClientCredential(clientId, clientSecret);
+        final UserAssertion assertion = new UserAssertion(idToken);
+
+        AuthenticationResult result = null;
+        ExecutorService service = null;
+        try {
+            service = Executors.newFixedThreadPool(1);
+            final AuthenticationContext context = new AuthenticationContext(
+                    serviceEndpoints.getAadSigninUri() + tenantId + "/", true, service);
+            final Future<AuthenticationResult> future = context
+                    .acquireToken(serviceEndpoints.getAadGraphApiUri(), assertion, credential, null);
+            result = future.get();
+        } finally {
+            if (service != null) {
+                service.shutdown();
+            }
+        }
+
+        if (result == null) {
+            throw new ServiceUnavailableException(
+                    "unable to acquire on-behalf-of token for client " + clientId);
+        }
+        return result;
     }
 }

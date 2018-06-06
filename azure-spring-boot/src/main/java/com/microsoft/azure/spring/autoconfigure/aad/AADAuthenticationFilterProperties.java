@@ -38,6 +38,8 @@ public class AADAuthenticationFilterProperties {
     @NotEmpty
     private List<String> activeDirectoryGroups;
 
+    private String tenantId;
+
     private boolean allowTelemetry = true;
 
     public boolean isAllowTelemetry() {
@@ -78,5 +80,13 @@ public class AADAuthenticationFilterProperties {
 
     public void setactiveDirectoryGroups(List<String> activeDirectoryGroups) {
         this.activeDirectoryGroups = activeDirectoryGroups;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 }
