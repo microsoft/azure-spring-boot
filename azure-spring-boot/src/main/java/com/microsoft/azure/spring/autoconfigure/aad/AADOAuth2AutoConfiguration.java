@@ -5,6 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import com.microsoft.aad.adal4j.ClientCredential;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -26,7 +28,7 @@ import java.util.concurrent.ExecutionException;
 
 @Configuration
 @ConditionalOnWebApplication
-@ConditionalOnProperty(prefix = "azure.activedirectory", value = {"client-id", "client-secret", "tenant-id"})
+@ConditionalOnProperty(prefix = "azure.activedirectory", value = {"tenant-id"})
 @EnableConfigurationProperties({AADAuthenticationProperties.class, ServiceEndpointsProperties.class})
 public class AADOAuth2AutoConfiguration {
     private AADAuthenticationProperties aadAuthProps;
@@ -58,7 +60,13 @@ public class AADOAuth2AutoConfiguration {
             try {
                 // https://github.com/MicrosoftDocs/azure-docs/issues/8121#issuecomment-387090099
                 // In AAD App Registration configure oauth2AllowImplicitFlow to true
-                final AzureADGraphClient graphClient = new AzureADGraphClient(aadAuthProps, serviceEndpointsProps);
+                final ClientRegistration registration = userRequest.getClientRegistration();
+                final ClientCredential credential =
+                        new ClientCredential(registration.getClientId(), registration.getClientSecret());
+
+                final AzureADGraphClient graphClient =
+                        new AzureADGraphClient(credential, aadAuthProps, serviceEndpointsProps);
+
                 graphApiToken = graphClient.acquireTokenForGraphApi(idToken.getTokenValue().toString(),
                         aadAuthProps.getTenantId()).getAccessToken();
 

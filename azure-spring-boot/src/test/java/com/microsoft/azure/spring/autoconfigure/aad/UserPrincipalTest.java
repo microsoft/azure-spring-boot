@@ -5,6 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import com.microsoft.aad.adal4j.ClientCredential;
 import org.hamcrest.collection.IsIterableContainingInAnyOrder;
 import org.junit.Assert;
 import org.junit.Before;
@@ -30,6 +31,9 @@ public class UserPrincipalTest {
     private AzureADGraphClient graphClientMock;
 
     @Mock
+    private ClientCredential credential;
+
+    @Mock
     private AADAuthenticationProperties aadAuthProps;
 
     @Mock
@@ -37,7 +41,7 @@ public class UserPrincipalTest {
 
     @Before
     public void setup() {
-        this.graphClientMock = PowerMockito.spy(new AzureADGraphClient(aadAuthProps, endpointsProps));
+        this.graphClientMock = PowerMockito.spy(new AzureADGraphClient(credential, aadAuthProps, endpointsProps));
     }
 
     @Test
