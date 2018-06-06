@@ -38,8 +38,7 @@ public class AADAuthenticationFilterPropertiesTest {
             context.register(Config.class);
             context.refresh();
 
-            final AADAuthenticationFilterProperties properties =
-                    context.getBean(AADAuthenticationFilterProperties.class);
+            final AADAuthenticationProperties properties = context.getBean(AADAuthenticationProperties.class);
 
             assertThat(properties.getClientId()).isEqualTo(Constants.CLIENT_ID);
             assertThat(properties.getClientSecret()).isEqualTo(Constants.CLIENT_SECRET);
@@ -57,8 +56,7 @@ public class AADAuthenticationFilterPropertiesTest {
             context.register(Config.class);
             context.refresh();
 
-            final AADAuthenticationFilterProperties properties =
-                    context.getBean(AADAuthenticationFilterProperties.class);
+            final AADAuthenticationProperties properties = context.getBean(AADAuthenticationProperties.class);
 
             assertThat(properties.getEnvironment()).isEqualTo(Constants.DEFAULT_ENVIRONMENT);
         }
@@ -113,7 +111,7 @@ public class AADAuthenticationFilterPropertiesTest {
     }
 
     @Configuration
-    @EnableConfigurationProperties(AADAuthenticationFilterProperties.class)
+    @EnableConfigurationProperties(AADAuthenticationProperties.class)
     static class Config {
     }
 }

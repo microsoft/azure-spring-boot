@@ -30,14 +30,14 @@ public class UserPrincipalTest {
     private AzureADGraphClient graphClientMock;
 
     @Mock
-    private AADAuthenticationFilterProperties aadAuthFilterProps;
+    private AADAuthenticationProperties aadAuthProps;
 
     @Mock
     private ServiceEndpointsProperties endpointsProps;
 
     @Before
     public void setup() {
-        this.graphClientMock = PowerMockito.spy(new AzureADGraphClient(aadAuthFilterProps, endpointsProps));
+        this.graphClientMock = PowerMockito.spy(new AzureADGraphClient(aadAuthProps, endpointsProps));
     }
 
     @Test
