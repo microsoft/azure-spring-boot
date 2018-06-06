@@ -13,6 +13,7 @@ public class Constants {
     public static final String CLIENT_ID_PROPERTY = "azure.activedirectory.client-id";
     public static final String CLIENT_SECRET_PROPERTY = "azure.activedirectory.client-secret";
     public static final String TARGETED_GROUPS_PROPERTY = "azure.activedirectory.ActiveDirectoryGroups";
+    public static final String TENANT_ID_PROPERTY = "azure.activedirectory.tenant-id";
 
     public static final String DEFAULT_ENVIRONMENT = "global";
     public static final String CLIENT_ID = "real_client_id";

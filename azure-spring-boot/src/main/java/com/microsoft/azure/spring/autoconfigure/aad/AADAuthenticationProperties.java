@@ -24,13 +24,13 @@ public class AADAuthenticationProperties {
     private String environment;
     /**
      * Registered application ID in Azure AD.
+     * @NotEmpty only for SPA implicit mode
      */
-    @NotEmpty
     private String clientId;
     /**
      * API Access Key of the registered application.
+     * @NotEmpty only for SPA implicit mode
      */
-    @NotEmpty
     private String clientSecret;
     /**
      * Azure AD groups.
