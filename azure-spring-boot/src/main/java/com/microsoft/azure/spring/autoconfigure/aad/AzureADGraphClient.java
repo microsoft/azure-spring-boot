@@ -94,7 +94,7 @@ public class AzureADGraphClient {
 
         if (valuesNode != null) {
             valuesNode.forEach(valueNode -> {
-                if(valueNode != null && valueNode.get("objectType").asText().equals("Group")) {
+                if (valueNode != null && valueNode.get("objectType").asText().equals("Group")) {
                     final String objectID = valueNode.get("objectId").asText();
                     final String displayName = valueNode.get("displayName").asText();
                     lUserGroups.add(new UserGroup(objectID, displayName));
@@ -105,7 +105,7 @@ public class AzureADGraphClient {
         return lUserGroups;
     }
 
-    public Set<GrantedAuthority> getGrantedAuthorities(String graphApiToken) throws IOException{
+    public Set<GrantedAuthority> getGrantedAuthorities(String graphApiToken) throws IOException {
         // Fetch the authority information from the protected resource using accessToken
         final List<UserGroup> groups = getGroups(graphApiToken);
 
@@ -133,7 +133,7 @@ public class AzureADGraphClient {
         try {
             service = Executors.newFixedThreadPool(1);
             final AuthenticationContext context = new AuthenticationContext(
-                    serviceEndpoints.getAadSigninUri() + tenantId + "/",true, service);
+                    serviceEndpoints.getAadSigninUri() + tenantId + "/", true, service);
             final Future<AuthenticationResult> future = context
                     .acquireToken(serviceEndpoints.getAadGraphApiUri(), assertion, credential, null);
             result = future.get();
