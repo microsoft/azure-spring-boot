@@ -27,16 +27,16 @@ import java.util.HashMap;
 public class AADAuthenticationFilterAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationProperties.class);
 
-    private final AADAuthenticationProperties aadAuthFilterProperties;
-    private final ServiceEndpointsProperties serviceEndpointsProperties;
+    private final AADAuthenticationProperties aadAuthProps;
+    private final ServiceEndpointsProperties serviceEndpointsProps;
 
     private final TelemetryProxy telemetryProxy;
 
-    public AADAuthenticationFilterAutoConfiguration(AADAuthenticationProperties aadAuthFilterProperties,
-                                                    ServiceEndpointsProperties serviceEndpointsProperties) {
-        this.aadAuthFilterProperties = aadAuthFilterProperties;
-        this.serviceEndpointsProperties = serviceEndpointsProperties;
-        this.telemetryProxy = new TelemetryProxy(aadAuthFilterProperties.isAllowTelemetry());
+    public AADAuthenticationFilterAutoConfiguration(AADAuthenticationProperties aadAuthFilterProps,
+                                                    ServiceEndpointsProperties serviceEndpointsProps) {
+        this.aadAuthProps = aadAuthFilterProps;
+        this.serviceEndpointsProps = serviceEndpointsProps;
+        this.telemetryProxy = new TelemetryProxy(aadAuthFilterProps.isAllowTelemetry());
     }
 
     /**
@@ -50,7 +50,7 @@ public class AADAuthenticationFilterAutoConfiguration {
     public AADAuthenticationFilter azureADJwtTokenFilter() {
         LOG.info("AzureADJwtTokenFilter Constructor.");
         trackCustomEvent();
-        return new AADAuthenticationFilter(aadAuthFilterProperties, serviceEndpointsProperties);
+        return new AADAuthenticationFilter(aadAuthProps, serviceEndpointsProps);
     }
 
     private void trackCustomEvent() {

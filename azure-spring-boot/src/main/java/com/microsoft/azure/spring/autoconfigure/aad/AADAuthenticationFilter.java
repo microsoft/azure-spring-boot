@@ -38,9 +38,9 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
     private ServiceEndpointsProperties serviceEndpointsProps;
 
     public AADAuthenticationFilter(AADAuthenticationProperties aadAuthProps,
-                                   ServiceEndpointsProperties serviceEndpointsProp) {
+                                   ServiceEndpointsProperties serviceEndpointsProps) {
         this.aadAuthProps = aadAuthProps;
-        this.serviceEndpointsProps = serviceEndpointsProp;
+        this.serviceEndpointsProps = serviceEndpointsProps;
     }
 
     @Override
