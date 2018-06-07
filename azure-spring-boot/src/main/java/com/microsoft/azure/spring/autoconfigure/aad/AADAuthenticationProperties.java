@@ -24,12 +24,12 @@ public class AADAuthenticationProperties {
     private String environment;
     /**
      * Registered application ID in Azure AD.
-     * @NotEmpty only for SPA implicit mode
+     * @NotEmpty only required when OAuth2 authentication is done in front end
      */
     private String clientId;
     /**
      * API Access Key of the registered application.
-     * @NotEmpty only for SPA implicit mode
+     * @NotEmpty only required when OAuth2 authentication is done in front end
      */
     private String clientSecret;
     /**
