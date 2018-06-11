@@ -19,25 +19,25 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 public class AADOAuth2ConfigTest {
-    private static final String AAD_OAUTH2_FULL_PROPS = "aad-oauth2-complete.properties";
+    private static final String AAD_OAUTH2_MINIMUM_PROPS = "aad-backend-oauth2-minimum.properties";
     private Resource testResource;
     private ResourcePropertySource testPropResource;
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    private AnnotationConfigWebApplicationContext fullContext;
+    private AnnotationConfigWebApplicationContext testContext;
 
     @Before
     public void setup() throws Exception {
-        testResource = new ClassPathResource(AAD_OAUTH2_FULL_PROPS);
+        testResource = new ClassPathResource(AAD_OAUTH2_MINIMUM_PROPS);
         testPropResource = new ResourcePropertySource("test", testResource);
     }
 
     @After
     public void clear() {
-        if (fullContext != null) {
-            fullContext.close();
+        if (testContext != null) {
+            testContext.close();
         }
     }
 
@@ -53,20 +53,20 @@ public class AADOAuth2ConfigTest {
 
     @Test
     public void testOAuth2UserServiceBeanCreatedIfPropsConfigured() {
-        fullContext = initFullContext();
-        Assert.notNull(fullContext.getBean(OAuth2UserService.class));
+        testContext = initTestContext();
+        Assert.notNull(testContext.getBean(OAuth2UserService.class));
     }
 
     @Test
     public void noOAuth2UserServiceBeanCreatedIfTenantIdNotConfigured() {
         testPropResource.getSource().remove(Constants.TENANT_ID_PROPERTY);
-        fullContext = initFullContext();
+        testContext = initTestContext();
 
         exception.expect(NoSuchBeanDefinitionException.class);
-        fullContext.getBean(OAuth2UserService.class);
+        testContext.getBean(OAuth2UserService.class);
     }
 
-    private AnnotationConfigWebApplicationContext initFullContext() {
+    private AnnotationConfigWebApplicationContext initTestContext() {
         final AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
 
         context.getEnvironment().getPropertySources().addLast(testPropResource);

@@ -14,7 +14,7 @@ In order to try the authorization action with this sample with minimum effort, [
 ```properties
 spring.security.oauth2.client.registration.azure.client-id=xxxxxx-your-client-id-xxxxxx
 spring.security.oauth2.client.registration.azure.client-secret=xxxxxx-your-client-secret-xxxxxx
-# The azure provider must be azure to take advantage of the auto-configuration
+# The client registration provider must be azure to take advantage of the auto-configuration
 spring.security.oauth2.client.registration.azure.provider=azure
 
 azure.activedirectory.tenant-id=xxxxxx-your-tenant-id-xxxxxx
