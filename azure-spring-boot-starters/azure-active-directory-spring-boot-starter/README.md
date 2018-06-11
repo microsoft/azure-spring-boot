@@ -43,7 +43,6 @@ Configure application.properties:
 ```properties
 spring.security.oauth2.client.registration.azure.client-id=xxxxxx-your-client-id-xxxxxx
 spring.security.oauth2.client.registration.azure.client-secret=xxxxxx-your-client-secret-xxxxxx
-spring.security.oauth2.client.registration.azure.provider=azure
 
 azure.activedirectory.tenant-id=xxxxxx-your-tenant-id-xxxxxx
 azure.activedirectory.active-directory-groups=group1, group2
