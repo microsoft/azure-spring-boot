@@ -23,20 +23,20 @@ import java.util.HashMap;
 @Configuration
 @ConditionalOnWebApplication
 @ConditionalOnProperty(prefix = "azure.activedirectory", value = {"client-id", "client-secret"})
-@EnableConfigurationProperties({AADAuthenticationFilterProperties.class, ServiceEndpointsProperties.class})
+@EnableConfigurationProperties({AADAuthenticationProperties.class, ServiceEndpointsProperties.class})
 public class AADAuthenticationFilterAutoConfiguration {
-    private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationFilterProperties.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationProperties.class);
 
-    private final AADAuthenticationFilterProperties aadAuthFilterProperties;
-    private final ServiceEndpointsProperties serviceEndpointsProperties;
+    private final AADAuthenticationProperties aadAuthProps;
+    private final ServiceEndpointsProperties serviceEndpointsProps;
 
     private final TelemetryProxy telemetryProxy;
 
-    public AADAuthenticationFilterAutoConfiguration(AADAuthenticationFilterProperties aadAuthFilterProperties,
-                                                    ServiceEndpointsProperties serviceEndpointsProperties) {
-        this.aadAuthFilterProperties = aadAuthFilterProperties;
-        this.serviceEndpointsProperties = serviceEndpointsProperties;
-        this.telemetryProxy = new TelemetryProxy(aadAuthFilterProperties.isAllowTelemetry());
+    public AADAuthenticationFilterAutoConfiguration(AADAuthenticationProperties aadAuthFilterProps,
+                                                    ServiceEndpointsProperties serviceEndpointsProps) {
+        this.aadAuthProps = aadAuthFilterProps;
+        this.serviceEndpointsProps = serviceEndpointsProps;
+        this.telemetryProxy = new TelemetryProxy(aadAuthFilterProps.isAllowTelemetry());
     }
 
     /**
@@ -50,7 +50,7 @@ public class AADAuthenticationFilterAutoConfiguration {
     public AADAuthenticationFilter azureADJwtTokenFilter() {
         LOG.info("AzureADJwtTokenFilter Constructor.");
         trackCustomEvent();
-        return new AADAuthenticationFilter(aadAuthFilterProperties, serviceEndpointsProperties);
+        return new AADAuthenticationFilter(aadAuthProps, serviceEndpointsProps);
     }
 
     private void trackCustomEvent() {

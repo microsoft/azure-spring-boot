@@ -42,12 +42,12 @@ public class AzureADGraphClient {
     private List<String> aadTargetGroups;
     private ServiceEndpoints serviceEndpoints;
 
-    public AzureADGraphClient(AADAuthenticationFilterProperties properties,
-                              ServiceEndpointsProperties endpointsProperties) {
-        this.clientId = properties.getClientId();
-        this.clientSecret = properties.getClientSecret();
-        this.aadTargetGroups = properties.getActiveDirectoryGroups();
-        this.serviceEndpoints = endpointsProperties.getServiceEndpoints(properties.getEnvironment());
+    public AzureADGraphClient(ClientCredential clientCredential, AADAuthenticationProperties aadAuthProps,
+                              ServiceEndpointsProperties serviceEndpointsProps) {
+        this.clientId = clientCredential.getClientId();
+        this.clientSecret = clientCredential.getClientSecret();
+        this.aadTargetGroups = aadAuthProps.getActiveDirectoryGroups();
+        this.serviceEndpoints = serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment());
     }
 
     private String getUserMembershipsV1(String accessToken) throws IOException {

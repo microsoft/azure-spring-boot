@@ -15,7 +15,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Validated
 @ConfigurationProperties("azure.activedirectory")
-public class AADAuthenticationFilterProperties {
+public class AADAuthenticationProperties {
     private static final String DEFAULT_SERVICE_ENVIRONMENT = "global";
 
     /**
@@ -24,13 +24,13 @@ public class AADAuthenticationFilterProperties {
     private String environment;
     /**
      * Registered application ID in Azure AD.
+     * Must be configured when OAuth2 authentication is done in front end
      */
-    @NotEmpty
     private String clientId;
     /**
      * API Access Key of the registered application.
+     * Must be configured when OAuth2 authentication is done in front end
      */
-    @NotEmpty
     private String clientSecret;
     /**
      * Azure AD groups.

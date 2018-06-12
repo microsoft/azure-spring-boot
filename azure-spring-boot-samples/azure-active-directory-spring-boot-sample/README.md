@@ -11,7 +11,7 @@ Put Application ID and Key in `client-id` and `client-secret` respectively e.g.
 `azure.activedirectory.client-id=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`
 `azure.activedirectory.client-secret=ABCDEFGHIJKLMNOOPQRSTUVWXYZABCDEFGHIJKLMNOPQ`
 List all the AAD groups `ActiveDirectoryGroups` that you want to have a Spring Security role object mapping to it. The role objects can then be used to manage access to resources that is behind Spring Security. e.g.
-`azure.activedirectory.ActiveDirectoryGroups=group1,group2`
+`azure.activedirectory.active-directory-groups=group1,group2`
 You can use `@PreAuthorize` annotation or `UserPrincipal` to manage access to web API based on user's group membership. You will need to change `ROLE_group1` to groups you want to allow to access the API or you will get "Access is denied".
 
 ##### Note: 

@@ -5,6 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import com.microsoft.aad.adal4j.ClientCredential;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.proc.BadJOSEException;
 import org.slf4j.Logger;
@@ -33,13 +34,13 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
     private static final String TOKEN_HEADER = "Authorization";
     private static final String TOKEN_TYPE = "Bearer ";
 
-    private AADAuthenticationFilterProperties aadAuthFilterProp;
-    private ServiceEndpointsProperties serviceEndpointsProp;
+    private AADAuthenticationProperties aadAuthProps;
+    private ServiceEndpointsProperties serviceEndpointsProps;
 
-    public AADAuthenticationFilter(AADAuthenticationFilterProperties aadAuthFilterProp,
-                                   ServiceEndpointsProperties serviceEndpointsProp) {
-        this.aadAuthFilterProp = aadAuthFilterProp;
-        this.serviceEndpointsProp = serviceEndpointsProp;
+    public AADAuthenticationFilter(AADAuthenticationProperties aadAuthProps,
+                                   ServiceEndpointsProperties serviceEndpointsProps) {
+        this.aadAuthProps = aadAuthProps;
+        this.serviceEndpointsProps = serviceEndpointsProps;
     }
 
     @Override
@@ -59,8 +60,13 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                         .getSession().getAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN);
 
                 final ServiceEndpoints serviceEndpoints =
-                        serviceEndpointsProp.getServiceEndpoints(aadAuthFilterProp.getEnvironment());
-                final AzureADGraphClient client = new AzureADGraphClient(aadAuthFilterProp, serviceEndpointsProp);
+                        serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment());
+
+                final ClientCredential credential =
+                        new ClientCredential(aadAuthProps.getClientId(), aadAuthProps.getClientSecret());
+
+                final AzureADGraphClient client =
+                        new AzureADGraphClient(credential, aadAuthProps, serviceEndpointsProps);
 
                 if (principal == null || graphApiToken == null || graphApiToken.isEmpty()) {
                     principal = new UserPrincipal(idToken, serviceEndpoints);

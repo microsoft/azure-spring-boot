@@ -10,7 +10,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AADAuthenticationFilterAutoConfigurationTest {
+public class AADAuthenticationAutoConfigurationTest {
     @Test
     public void createAADAuthenticationFilter() throws Exception {
         System.setProperty(Constants.CLIENT_ID_PROPERTY, Constants.CLIENT_ID);
