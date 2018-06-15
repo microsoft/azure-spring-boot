@@ -54,7 +54,7 @@
         <azure.servicebus.version>1.2.5</azure.servicebus.version>
         <azure.spring.boot.version>2.0.2-SNAPSHOT</azure.spring.boot.version>
         <azure.applicationinsights.version>1.0.9</azure.applicationinsights.version>
-        <spring.data.documentdb.version>2.0.1</spring.data.documentdb.version>
+        <spring.data.cosmosdb.version>2.0.3</spring.data.cosmosdb.version>
         <microsoft.client-runtime.version>1.0.0</microsoft.client-runtime.version>
     </properties>
 
@@ -104,8 +104,8 @@
             <!-- Spring Data Cosmos DB library -->
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
-                <artifactId>spring-data-documentdb</artifactId>
-                <version>${spring.data.documentdb.version}</version>
+                <artifactId>spring-data-cosmosdb</artifactId>
+                <version>${spring.data.cosmosdb.version}</version>
             </dependency>
             <!-- Azure related libraries-->
             <dependency>

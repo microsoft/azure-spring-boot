@@ -98,7 +98,7 @@
         <!-- Spring Data -->
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>spring-data-documentdb</artifactId>
+            <artifactId>spring-data-cosmosdb</artifactId>
             <optional>true</optional>
         </dependency>
 
