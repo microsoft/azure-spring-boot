@@ -18,15 +18,20 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class KeyVaultOperation {
-    private static final long CACHE_REFRESH_INTERVAL_IN_MS = 1800000L; // 30 minutes
+    private final long cacheRefreshIntervalInMs;
     private final Object refreshLock = new Object();
-    private KeyVaultClient keyVaultClient;
-    private String vaultUri;
+    private final KeyVaultClient keyVaultClient;
+    private final String vaultUri;
     private ConcurrentHashMap<String, Object> propertyNamesHashMap;
-    private AtomicLong lastUpdateTime = new AtomicLong();
-    private ReadWriteLock rwLock = new ReentrantReadWriteLock();
+    private final AtomicLong lastUpdateTime = new AtomicLong();
+    private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
 
-    public KeyVaultOperation(KeyVaultClient keyVaultClient, String vaultUri) {
+    public KeyVaultOperation(final KeyVaultClient keyVaultClient, final String vaultUri) {
+        this(keyVaultClient, vaultUri, 1800000L);
+    }
+
+    public KeyVaultOperation(final KeyVaultClient keyVaultClient, String vaultUri, final long refreshInterval) {
+        this.cacheRefreshIntervalInMs = refreshInterval;
         this.keyVaultClient = keyVaultClient;
 
         vaultUri = vaultUri.trim();
@@ -40,29 +45,32 @@ public class KeyVaultOperation {
 
     public String[] list() {
         try {
-            rwLock.readLock().lock();
-            return Collections.list(propertyNamesHashMap.keys()).toArray(new String[propertyNamesHashMap.size()]);
+            this.rwLock.readLock()
+                    .lock();
+            return Collections.list(this.propertyNamesHashMap.keys())
+                    .toArray(new String[this.propertyNamesHashMap.size()]);
         } finally {
-            rwLock.readLock().unlock();
+            this.rwLock.readLock()
+                    .unlock();
         }
     }
 
-    public Object get(String secretName) {
+    public Object get(final String secretName) {
         // NOTE: azure keyvault secret name convention: ^[0-9a-zA-Z-]+$ "." is not allowed
         final String localSecretName = secretName.replace(".", "-");
 
         // refresh periodically
-        if (System.currentTimeMillis() - lastUpdateTime.get() > CACHE_REFRESH_INTERVAL_IN_MS) {
-            synchronized (refreshLock) {
-                if (System.currentTimeMillis() - lastUpdateTime.get() > CACHE_REFRESH_INTERVAL_IN_MS) {
-                    lastUpdateTime.set(System.currentTimeMillis());
+        if (System.currentTimeMillis() - this.lastUpdateTime.get() > this.cacheRefreshIntervalInMs) {
+            synchronized (this.refreshLock) {
+                if (System.currentTimeMillis() - this.lastUpdateTime.get() > this.cacheRefreshIntervalInMs) {
+                    this.lastUpdateTime.set(System.currentTimeMillis());
                     createOrUpdateHashMap();
                 }
             }
         }
 
-        if (propertyNamesHashMap.containsKey(secretName)) {
-            final SecretBundle secretBundle = keyVaultClient.getSecret(vaultUri, localSecretName);
+        if (this.propertyNamesHashMap.containsKey(secretName)) {
+            final SecretBundle secretBundle = this.keyVaultClient.getSecret(this.vaultUri, localSecretName);
             return secretBundle.value();
 
         } else {
@@ -71,25 +79,28 @@ public class KeyVaultOperation {
     }
 
     private void createOrUpdateHashMap() {
-        if (propertyNamesHashMap == null) {
-            propertyNamesHashMap = new ConcurrentHashMap<String, Object>();
+        if (this.propertyNamesHashMap == null) {
+            this.propertyNamesHashMap = new ConcurrentHashMap<>();
         }
 
         try {
-            rwLock.writeLock().lock();
-            propertyNamesHashMap.clear();
+            this.rwLock.writeLock()
+                    .lock();
+            this.propertyNamesHashMap.clear();
 
-
-            final PagedList<SecretItem> secrets = keyVaultClient.listSecrets(vaultUri);
+            final PagedList<SecretItem> secrets = this.keyVaultClient.listSecrets(this.vaultUri);
             secrets.loadAll();
             for (final SecretItem secret : secrets) {
-                propertyNamesHashMap.putIfAbsent(secret.id().replaceFirst(vaultUri + "/secrets/", "")
+                this.propertyNamesHashMap.putIfAbsent(secret.id()
+                        .replaceFirst(this.vaultUri + "/secrets/", "")
                         .replaceAll("-", "."), secret.id());
-                propertyNamesHashMap.putIfAbsent(secret.id().replaceFirst(vaultUri + "/secrets/", ""), secret.id());
+                this.propertyNamesHashMap.putIfAbsent(secret.id()
+                        .replaceFirst(this.vaultUri + "/secrets/", ""), secret.id());
             }
-            lastUpdateTime.set(System.currentTimeMillis());
+            this.lastUpdateTime.set(System.currentTimeMillis());
         } finally {
-            rwLock.writeLock().unlock();
+            this.rwLock.writeLock()
+                    .unlock();
         }
     }
 }
