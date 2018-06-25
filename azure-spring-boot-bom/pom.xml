@@ -55,6 +55,7 @@
         <azure.spring.boot.version>2.0.4-SNAPSHOT</azure.spring.boot.version>
         <azure.applicationinsights.version>1.0.9</azure.applicationinsights.version>
         <spring.data.cosmosdb.version>2.0.3</spring.data.cosmosdb.version>
+        <spring.data.gremlin.version>2.0.0</spring.data.gremlin.version>
         <microsoft.client-runtime.version>1.0.0</microsoft.client-runtime.version>
     </properties>
 
@@ -107,6 +108,14 @@
                 <artifactId>spring-data-cosmosdb</artifactId>
                 <version>${spring.data.cosmosdb.version}</version>
             </dependency>
+
+            <!-- Spring Data Gremlin library -->
+            <dependency>
+                <groupId>com.microsoft.spring.data.gremlin</groupId>
+                <artifactId>spring-data-gremlin</artifactId>
+                <version>${spring.data.gremlin.version}</version>
+            </dependency>
+
             <!-- Azure related libraries-->
             <dependency>
                 <groupId>com.microsoft.azure</groupId>

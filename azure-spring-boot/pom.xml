@@ -102,6 +102,12 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.microsoft.spring.data.gremlin</groupId>
+            <artifactId>spring-data-gremlin</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!-- Azure libraries-->
         <dependency>
             <groupId>com.microsoft.azure</groupId>

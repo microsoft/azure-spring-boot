@@ -7,6 +7,12 @@
       "defaultValue": true
     },
     {
+      "name": "spring.data.gremlin.repositories.enabled",
+      "type": "java.lang.Boolean",
+      "description": "Enable Spring Data Gremlin repositories.",
+      "defaultValue": true
+    },
+    {
       "name": "azure.keyvault.enabled",
       "type": "java.lang.Boolean",
       "description": "Enable Azure Key Vault.",
