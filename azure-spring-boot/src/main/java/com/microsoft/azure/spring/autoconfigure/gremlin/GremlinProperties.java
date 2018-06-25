@@ -30,5 +30,5 @@ public class GremlinProperties {
     @NotEmpty
     private String password;
 
-    private boolean telemetryAllowed;
+    private boolean telemetryAllowed = true;
 }
