@@ -5,7 +5,7 @@
 
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-spring-boot-bom</artifactId>
-    <version>0.2.4-SNAPSHOT</version>
+    <version>0.2.4</version>
     <packaging>pom</packaging>
 
     <name>Azure Spring Boot BOM</name>
@@ -52,7 +52,7 @@
         <azure.keyvault.version>1.0.0</azure.keyvault.version>
         <azure.media.version>0.9.7</azure.media.version>
         <azure.servicebus.version>1.2.5</azure.servicebus.version>
-        <azure.spring.boot.version>0.2.4-SNAPSHOT</azure.spring.boot.version>
+        <azure.spring.boot.version>0.2.4</azure.spring.boot.version>
         <spring.data.documentdb.version>0.1.4</spring.data.documentdb.version>
         <azure.applicationinsights.version>1.0.9</azure.applicationinsights.version>
         <microsoft.client-runtime.version>1.0.0</microsoft.client-runtime.version>
