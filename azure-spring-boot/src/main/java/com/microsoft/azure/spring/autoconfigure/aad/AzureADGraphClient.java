@@ -23,10 +23,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -36,6 +33,7 @@ import java.util.stream.Collectors;
 public class AzureADGraphClient {
     private static final SimpleGrantedAuthority DEFAULT_AUTHORITY = new SimpleGrantedAuthority("ROLE_USER");
     private static final String DEFAULE_ROLE_PREFIX = "ROLE_";
+    private static final String REQUEST_ID_SUFFIX = "aadfeed5";
 
     private String clientId;
     private String clientSecret;
@@ -134,6 +132,7 @@ public class AzureADGraphClient {
             service = Executors.newFixedThreadPool(1);
             final AuthenticationContext context = new AuthenticationContext(
                     serviceEndpoints.getAadSigninUri() + tenantId + "/", true, service);
+            context.setCorrelationId(getCorrelationId());
             final Future<AuthenticationResult> future = context
                     .acquireToken(serviceEndpoints.getAadGraphApiUri(), assertion, credential, null);
             result = future.get();
@@ -148,5 +147,10 @@ public class AzureADGraphClient {
                     "unable to acquire on-behalf-of token for client " + clientId);
         }
         return result;
+    }
+
+    private static String getCorrelationId() {
+        final String uuid = UUID.randomUUID().toString();
+        return uuid.substring(0, uuid.length() - REQUEST_ID_SUFFIX.length()) + REQUEST_ID_SUFFIX;
     }
 }
