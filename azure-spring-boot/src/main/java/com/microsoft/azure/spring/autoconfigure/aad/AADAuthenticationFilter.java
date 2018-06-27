@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.ParseException;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -40,6 +41,8 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String TOKEN_HEADER = "Authorization";
     private static final String TOKEN_TYPE = "Bearer ";
+
+    private static final String REQUEST_ID_SUFFIX = "aadfeed5";
 
     private AADAuthenticationFilterProperties aadAuthFilterProp;
     private ServiceEndpointsProperties serviceEndpointsProp;
@@ -66,6 +69,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
             service = Executors.newFixedThreadPool(1);
             final AuthenticationContext context = new AuthenticationContext(
                     serviceEndpoints.getAadSigninUri() + tenantId + "/", true, service);
+            context.setCorrelationId(getCorrelationId());
             final Future<AuthenticationResult> future = context
                     .acquireToken(serviceEndpoints.getAadGraphApiUri(), assertion, credential, null);
             result = future.get();
@@ -128,5 +132,10 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private static String getCorrelationId() {
+        final String uuid = UUID.randomUUID().toString();
+        return uuid.substring(0, uuid.length() - REQUEST_ID_SUFFIX.length()) + REQUEST_ID_SUFFIX;
     }
 }
