@@ -5,6 +5,7 @@
  */
 package sample.gremlin;
 
+import com.microsoft.spring.data.gremlin.common.GremlinFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,10 +19,21 @@ import java.util.Optional;
 public class GremlinApplication implements CommandLineRunner {
 
     @Autowired
+    private GremlinFactory factory;
+
+    @Autowired
     private PersonRepository repository;
 
     public static void main(String[] args) {
         SpringApplication.run(GremlinApplication.class, args);
+    }
+
+    private void closeClusterConnection() {
+        if (this.factory.getGremlinCluster().isClosed() || this.factory.getGremlinCluster().isClosing()) {
+            return;
+        }
+
+        this.factory.getGremlinCluster().closeAsync();
     }
 
     public void run(String... vars) {
@@ -37,5 +49,7 @@ public class GremlinApplication implements CommandLineRunner {
         final List<Person> foundPersons = this.repository.findByNameAndLevel(person.getName(), person.getLevel());
         Assert.isTrue(foundPersons.size() == 1, "should be only one element");
         Assert.state(foundPersons.get(0).getId().equals(person.getId()), "should be the same id");
+
+        this.closeClusterConnection();
     }
 }
