@@ -21,6 +21,7 @@ angular.module('todoApp', ['ngRoute', 'AdalAngular'])
                 clientId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
                 extraQueryParameter: 'nux=1',
                 cacheLocation: 'localStorage',
+                postLogoutRedirectUri: 'http://localhost:8080/logout',
             },
             $httpProvider
         );
