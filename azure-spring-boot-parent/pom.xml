@@ -27,7 +27,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring.boot.version>2.0.1.RELEASE</spring.boot.version>
+        <spring.boot.version>2.0.3.RELEASE</spring.boot.version>
         <findbugs.annotations.version>2.0.1</findbugs.annotations.version>
         <nimbus.jose.jwt.version>4.39.2</nimbus.jose.jwt.version>
         <mockito.core.version>2.8.9</mockito.core.version>
