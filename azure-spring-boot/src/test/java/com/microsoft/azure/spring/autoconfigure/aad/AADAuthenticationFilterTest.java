@@ -42,7 +42,7 @@ public class AADAuthenticationFilterTest {
                         Constants.TARGETED_GROUPS.toString()
                                 .replace("[", "").replace("]", ""));
 
-        this.contextRunner.run((context -> {
+        this.contextRunner.run(context -> {
             final HttpServletRequest request = mock(HttpServletRequest.class);
             when(request.getHeader(Constants.TOKEN_HEADER)).thenReturn(Constants.BEARER_TOKEN);
 
@@ -74,7 +74,7 @@ public class AADAuthenticationFilterTest {
             final Map<String, Object> claims = principal.getClaims();
             assertThat(claims.get("iss")).isEqualTo(principal.getIssuer());
             assertThat(claims.get("sub")).isEqualTo(principal.getSubject());
-        }));
+        });
     }
 
 }
