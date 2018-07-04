@@ -49,9 +49,7 @@ public class ServiceBusAutoConfigurationTest {
                 .withPropertyValues(Constants.QUEUE_NAME_PROPERTY, Constants.QUEUE_NAME)
                 .withPropertyValues(Constants.QUEUE_RECEIVE_MODE_PROPERTY, Constants.QUEUE_RECEIVE_MODE.name());
 
-        this.contextRunner.run((context) -> {
-            assertThat(context).doesNotHaveBean(QueueClient.class);
-        });
+        this.contextRunner.run((context) -> assertThat(context).doesNotHaveBean(QueueClient.class));
     }
 
     @Test
@@ -59,9 +57,7 @@ public class ServiceBusAutoConfigurationTest {
         this.contextRunner.withPropertyValues(Constants.CONNECTION_STRING_PROPERTY, Constants.INVALID_CONNECTION_STRING)
                 .withPropertyValues(Constants.TOPIC_NAME_PROPERTY, Constants.TOPIC_NAME);
 
-        this.contextRunner.run((context) -> {
-            assertThat(context).doesNotHaveBean(TopicClient.class);
-        });
+        this.contextRunner.run((context) -> assertThat(context).doesNotHaveBean(TopicClient.class));
     }
 
     @Test
@@ -72,9 +68,7 @@ public class ServiceBusAutoConfigurationTest {
                 .withPropertyValues(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY,
                         Constants.SUBSCRIPTION_RECEIVE_MODE.name());
 
-        this.contextRunner.run((context) -> {
-            assertThat(context).doesNotHaveBean(SubscriptionClient.class);
-        });
+        this.contextRunner.run((context) -> assertThat(context).doesNotHaveBean(SubscriptionClient.class));
     }
 
     @Test
@@ -85,8 +79,6 @@ public class ServiceBusAutoConfigurationTest {
                 .withPropertyValues(Constants.SUBSCRIPTION_RECEIVE_MODE_PROPERTY,
                         Constants.SUBSCRIPTION_RECEIVE_MODE.name());
 
-        this.contextRunner.run((context) -> {
-            assertThat(context).doesNotHaveBean(SubscriptionClient.class);
-        });
+        this.contextRunner.run((context) -> assertThat(context).doesNotHaveBean(SubscriptionClient.class));
     }
 }
