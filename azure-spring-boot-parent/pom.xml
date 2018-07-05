@@ -35,7 +35,6 @@
         <powermock.api.mockito2.version>1.7.0</powermock.api.mockito2.version>
         <org.json.version>20171018</org.json.version>
         <commons.logging.version>1.2</commons.logging.version>
-        <snakeyaml.version>1.17</snakeyaml.version>
     </properties>
 
     <profiles>
@@ -94,11 +93,6 @@
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
                 <version>${commons.logging.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.yaml</groupId>
-                <artifactId>snakeyaml</artifactId>
-                <version>${snakeyaml.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
