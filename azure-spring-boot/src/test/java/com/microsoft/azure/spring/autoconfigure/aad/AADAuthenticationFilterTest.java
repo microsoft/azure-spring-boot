@@ -8,7 +8,8 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class AADAuthenticationFilterTest {
+    private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
+            .withConfiguration(AutoConfigurations.of(AADAuthenticationFilterAutoConfiguration.class));
 
     @Before
     public void beforeEveryMethod() {
@@ -32,21 +35,20 @@ public class AADAuthenticationFilterTest {
     }
 
     @Test
-    public void doFilterInternal() throws Exception {
-        System.setProperty(Constants.CLIENT_ID_PROPERTY, Constants.CLIENT_ID);
-        System.setProperty(Constants.CLIENT_SECRET_PROPERTY, Constants.CLIENT_SECRET);
-        System.setProperty(Constants.TARGETED_GROUPS_PROPERTY,
-                Constants.TARGETED_GROUPS.toString().replace("[", "").replace("]", ""));
+    public void doFilterInternal() {
+        this.contextRunner.withPropertyValues(Constants.CLIENT_ID_PROPERTY, Constants.CLIENT_ID)
+                .withPropertyValues(Constants.CLIENT_SECRET_PROPERTY, Constants.CLIENT_SECRET)
+                .withPropertyValues(Constants.TARGETED_GROUPS_PROPERTY,
+                        Constants.TARGETED_GROUPS.toString()
+                                .replace("[", "").replace("]", ""));
 
-        final HttpServletRequest request = mock(HttpServletRequest.class);
-        when(request.getHeader(Constants.TOKEN_HEADER)).thenReturn(Constants.BEARER_TOKEN);
+        this.contextRunner.run(context -> {
+            final HttpServletRequest request = mock(HttpServletRequest.class);
+            when(request.getHeader(Constants.TOKEN_HEADER)).thenReturn(Constants.BEARER_TOKEN);
 
-        final HttpServletResponse response = mock(HttpServletResponse.class);
-        final FilterChain filterChain = mock(FilterChain.class);
+            final HttpServletResponse response = mock(HttpServletResponse.class);
+            final FilterChain filterChain = mock(FilterChain.class);
 
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(AADAuthenticationFilterAutoConfiguration.class);
-            context.refresh();
 
             final AADAuthenticationFilter azureADJwtTokenFilter = context.getBean(AADAuthenticationFilter.class);
             assertThat(azureADJwtTokenFilter).isNotNull();
@@ -72,11 +74,7 @@ public class AADAuthenticationFilterTest {
             final Map<String, Object> claims = principal.getClaims();
             assertThat(claims.get("iss")).isEqualTo(principal.getIssuer());
             assertThat(claims.get("sub")).isEqualTo(principal.getSubject());
-        }
-
-        System.clearProperty(Constants.CLIENT_ID_PROPERTY);
-        System.clearProperty(Constants.CLIENT_SECRET_PROPERTY);
-        System.clearProperty(Constants.TARGETED_GROUPS_PROPERTY);
+        });
     }
 
 }
