@@ -43,7 +43,7 @@ public class GremlinApplication implements CommandLineRunner {
         this.repository.save(person);
 
         final Optional<Person> foundPerson = this.repository.findById(person.getId());
-        Assert.isTrue(foundPerson.isPresent(), "optional should not be null");
+        Assert.isTrue(foundPerson.isPresent(), "optional of Person should be present");
         Assert.state(foundPerson.get().equals(person), "should be the equals");
 
         final List<Person> foundPersons = this.repository.findByNameAndLevel(person.getName(), person.getLevel());
