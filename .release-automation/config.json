@@ -10,7 +10,8 @@
     "azure-storage-spring-boot-starter",
     "azure-keyvault-secrets-spring-boot-starter",
     "azure-mediaservices-spring-boot-starter",
-    "azure-servicebus-spring-boot-starter"
+    "azure-servicebus-spring-boot-starter",
+    "spring-data-gremlin-boot-starter"
   ],
   "groupId": "com.microsoft.azure",
   "targetFolder": "D:/Signed",
