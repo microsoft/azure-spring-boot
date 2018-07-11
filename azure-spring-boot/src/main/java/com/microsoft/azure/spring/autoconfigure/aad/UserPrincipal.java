@@ -96,7 +96,7 @@ public class UserPrincipal {
         this.userGroups = groups;
     }
 
-    public List<UserGroup> getUserGroups(List<UserGroup> groups) {
+    public List<UserGroup> getUserGroups() {
         return this.userGroups;
     }
 

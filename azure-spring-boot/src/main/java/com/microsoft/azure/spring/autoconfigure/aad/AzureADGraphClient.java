@@ -108,6 +108,19 @@ public class AzureADGraphClient {
         final List<UserGroup> groups = getGroups(graphApiToken);
 
         // Map the authority information to one or more GrantedAuthority's and add it to mappedAuthorities
+        final Set<GrantedAuthority> mappedAuthorities = convetGroupToGrantedAuthorities(groups);
+
+        return mappedAuthorities;
+    }
+    
+    
+    /**
+     * Converts UserGroup list to Set of GrantedAutorities
+     * @param groups
+     * @return
+     */
+    public Set<GrantedAuthority> convetGroupToGrantedAuthorities(final List<UserGroup> groups) {
+        // Map the authority information to one or more GrantedAuthority's and add it to mappedAuthorities
         final Set<GrantedAuthority> mappedAuthorities = groups.stream()
                 .filter(group -> aadTargetGroups.contains(group.getDisplayName()))
                 .map(userGroup -> new SimpleGrantedAuthority(DEFAULE_ROLE_PREFIX + userGroup.getDisplayName()))
