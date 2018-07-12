@@ -81,7 +81,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                 }
 
                 final Authentication authentication = new PreAuthenticatedAuthenticationToken(
-                            principal, null, client.convetGroupToGrantedAuthorities(principal.getUserGroups()));
+                            principal, null, client.convertGroupsToGrantedAuthorities(principal.getUserGroups()));
 
                 authentication.setAuthenticated(true);
                 log.info("Request token verification success. {}", authentication);
