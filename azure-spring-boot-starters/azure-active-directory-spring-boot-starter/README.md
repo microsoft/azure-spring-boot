@@ -27,7 +27,7 @@ If you are using Maven, add the following dependency.
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-active-directory-spring-boot-starter</artifactId>
-    <version>2.0.2</version>
+    <version>2.0.4</version>
 </dependency>
 ```
 
