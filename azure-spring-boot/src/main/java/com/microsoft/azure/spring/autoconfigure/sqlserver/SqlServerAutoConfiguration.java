@@ -5,6 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.sqlserver;
 
+import com.microsoft.azure.spring.autoconfigure.documentdb.DocumentDBProperties;
 import com.microsoft.sqlserver.jdbc.SQLServerColumnEncryptionAzureKeyVaultProvider;
 import com.microsoft.sqlserver.jdbc.SQLServerColumnEncryptionKeyStoreProvider;
 import com.microsoft.sqlserver.jdbc.SQLServerConnection;
@@ -33,7 +34,7 @@ import java.util.Map;
 
 @Configuration
 @ConditionalOnClass({DataSource.class, SQLServerDriver.class})
-@EnableConfigurationProperties({DataSourceProperties.class})
+@EnableConfigurationProperties({DataSourceProperties.class, KeyVaultProperties.class})
 @ConditionalOnProperty(name = "spring.datasource.dataSourceProperties.ColumnEncryptionSetting",
                        havingValue = "Enabled",
                        matchIfMissing = false)

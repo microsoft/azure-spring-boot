@@ -14,7 +14,7 @@ import javax.annotation.PostConstruct;
 
 @Getter
 @Setter
-@ConfigurationProperties("azure.keyvault")
+@ConfigurationProperties("azure.sqlserver.keyvault")
 public class KeyVaultProperties {
     private String clientId;
     private String clientSecret;
@@ -22,8 +22,8 @@ public class KeyVaultProperties {
 
     @PostConstruct
     public void validate() {
-        Assert.hasText(clientId, "azure.keyvault.client-id must be provided");
-        Assert.hasText(clientSecret, "azure.keyvault.client-secret must be provided");
+        Assert.hasText(clientId, "azure.sqlserver.keyvault.client-id must be provided");
+        Assert.hasText(clientSecret, "azure.sqlserver.keyvault.client-secret must be provided");
 
     }
 }
