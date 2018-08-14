@@ -1,9 +1,12 @@
 package com.microsoft.azure.spring.autoconfigure.sqlserver;
 
 import com.microsoft.azure.spring.autoconfigure.aad.Constants;
+import com.microsoft.azure.spring.autoconfigure.documentdb.DocumentDBProperties;
 import com.microsoft.azure.spring.autoconfigure.documentdb.DocumentDBPropertiesTest;
+import com.microsoft.azure.spring.autoconfigure.documentdb.PropertySettingUtil;
 import org.junit.After;
 import org.junit.Test;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBindException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.bind.validation.BindValidationException;
@@ -19,14 +22,29 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class KeyVaultPropertiesTest {
-    private static final String CLIENT_SECRET_PROPERTY = "azure.sqlserver.vault.client-secret";
-    private static final String CLIENT_ID_PROPERTY = "azure.sqlserver.vault.client-id";
+    private static final String CLIENT_SECRET_PROPERTY = "azure.sqlserver.keyvault.client-secret";
+    private static final String CLIENT_ID_PROPERTY = "azure.sqlserver.keyvault.client-id";
 
 
     @After
     public void clearAllProperties() {
-        System.clearProperty(Constants.CLIENT_SECRET_PROPERTY);
-        System.clearProperty(Constants.CLIENT_ID_PROPERTY);
+        System.clearProperty(CLIENT_SECRET_PROPERTY);
+        System.clearProperty(CLIENT_ID_PROPERTY);
+    }
+
+    @Test
+    public void canSetAllProperties() {
+        System.setProperty(CLIENT_SECRET_PROPERTY,"secret");
+        System.setProperty(CLIENT_ID_PROPERTY,"id");
+
+        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
+            context.register(KeyVaultPropertiesTest.Config.class);
+            context.refresh();
+            final KeyVaultProperties properties = context.getBean(KeyVaultProperties.class);
+
+            assertThat(properties.getClientId()).isEqualTo(System.getProperty(CLIENT_ID_PROPERTY));
+            assertThat(properties.getClientSecret()).isEqualTo(System.getProperty(CLIENT_SECRET_PROPERTY));
+         }
     }
 
     @Test
@@ -43,24 +61,12 @@ public class KeyVaultPropertiesTest {
             }
 
             assertThat(exception).isNotNull();
-            assertThat(exception).isExactlyInstanceOf(ConfigurationPropertiesBindException.class);
+            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
 
-            final BindValidationException bindException = (BindValidationException) exception.getCause().getCause();
-            final List<ObjectError> errors = bindException.getValidationErrors().getAllErrors();
-            final List<String> errorStrings = errors.stream().map(e -> e.toString()).collect(Collectors.toList());
 
-            Collections.sort(errorStrings);
+            final String errorStringExpected = "azure.sqlserver.keyvault.client-id must be provided";
+            assertThat(exception.getMessage().contains(errorStringExpected));
 
-            final List<String> errorStringsExpected = Arrays.asList(
-                    "Field error in object 'azure.documentdb' on field 'key': rejected value [null];",
-                    "Field error in object 'azure.documentdb' on field 'uri': rejected value [null];"
-            );
-
-            assertThat(errorStrings.size()).isEqualTo(errorStringsExpected.size());
-
-            for (int i = 0; i < errorStrings.size(); i++) {
-                assertThat(errorStrings.get(i)).contains(errorStringsExpected.get(i));
-            }
         }
     }
 

@@ -38,8 +38,8 @@ import java.util.Map;
 @ConditionalOnProperty(name = "spring.datasource.dataSourceProperties.ColumnEncryptionSetting",
                        havingValue = "Enabled",
                        matchIfMissing = false)
-@AutoConfigureAfter({DataSourceAutoConfiguration.class,
-                    JndiDataSourceAutoConfiguration.class, XADataSourceAutoConfiguration.class})
+@AutoConfigureAfter({DataSourceAutoConfiguration.class, JndiDataSourceAutoConfiguration.class, XADataSourceAutoConfiguration.class})
+
 public class SqlServerAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(SqlServerAutoConfiguration.class);
 
@@ -51,8 +51,8 @@ public class SqlServerAutoConfiguration {
 
     @ConditionalOnClass(com.microsoft.sqlserver.jdbc.SQLServerDriver.class)
     @ConditionalOnBean(DataSource.class)
-    @Bean
-    public BeanPostProcessor dataSourcelBeanPostProcessor() {
+    @Bean(name = "dataSourceBeanPostProcessor")
+    public BeanPostProcessor dataSourceBeanPostProcessor() {
         return new BeanPostProcessor() {
             @Override
             public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
