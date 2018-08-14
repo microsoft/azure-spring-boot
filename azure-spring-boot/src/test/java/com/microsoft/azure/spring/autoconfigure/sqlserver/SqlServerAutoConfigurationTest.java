@@ -1,21 +1,18 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See LICENSE in the project root for
+ * license information.
+ */
+
 package com.microsoft.azure.spring.autoconfigure.sqlserver;
 
-import com.microsoft.sqlserver.jdbc.SQLServerConnection;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.beans.FatalBeanException;
-import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.UnsatisfiedDependencyException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import javax.sql.DataSource;
-
-import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -43,7 +40,7 @@ public class SqlServerAutoConfigurationTest {
             BeanPostProcessor beanPostProcessor = null;
             try {
                 beanPostProcessor = context.getBean("dataSourceBeanPostProcessor",
-                                                     BeanPostProcessor.class );
+                                                     BeanPostProcessor.class);
             } catch (Exception e) {
                 assertThat(e).isExactlyInstanceOf(NoSuchBeanDefinitionException.class);
             }
@@ -55,8 +52,8 @@ public class SqlServerAutoConfigurationTest {
     @Test
     public void setDataEncryptionEnabled() {
         System.setProperty(ENCRYPTION_PROPERTY, "Enabled");
-        System.setProperty(CLIENT_SECRET_PROPERTY,"secret");
-        System.setProperty(CLIENT_ID_PROPERTY,"id");
+        System.setProperty(CLIENT_SECRET_PROPERTY, "secret");
+        System.setProperty(CLIENT_ID_PROPERTY, "id");
 
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
@@ -65,7 +62,7 @@ public class SqlServerAutoConfigurationTest {
             context.refresh();
 
             final BeanPostProcessor beanPostProcessor = context.getBean("dataSourceBeanPostProcessor",
-                                                                      BeanPostProcessor.class );
+                                                                      BeanPostProcessor.class);
             assertThat(beanPostProcessor).isNotNull();
         }
     }
@@ -73,7 +70,7 @@ public class SqlServerAutoConfigurationTest {
     @Test
     public void setDataEncryptionEnabledMissingConfig() {
         System.setProperty(ENCRYPTION_PROPERTY, "Enabled");
-        System.setProperty(CLIENT_ID_PROPERTY,"id");
+        System.setProperty(CLIENT_ID_PROPERTY, "id");
 
         final String errorStringExpected = "azure.sqlserver.keyvault.client-secret must be provided";
 

@@ -1,23 +1,17 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See LICENSE in the project root for
+ * license information.
+ */
+
 package com.microsoft.azure.spring.autoconfigure.sqlserver;
 
-import com.microsoft.azure.spring.autoconfigure.aad.Constants;
-import com.microsoft.azure.spring.autoconfigure.documentdb.DocumentDBProperties;
-import com.microsoft.azure.spring.autoconfigure.documentdb.DocumentDBPropertiesTest;
-import com.microsoft.azure.spring.autoconfigure.documentdb.PropertySettingUtil;
 import org.junit.After;
 import org.junit.Test;
 import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.boot.context.properties.ConfigurationPropertiesBindException;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.context.properties.bind.validation.BindValidationException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.validation.ObjectError;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -34,8 +28,8 @@ public class KeyVaultPropertiesTest {
 
     @Test
     public void canSetAllProperties() {
-        System.setProperty(CLIENT_SECRET_PROPERTY,"secret");
-        System.setProperty(CLIENT_ID_PROPERTY,"id");
+        System.setProperty(CLIENT_SECRET_PROPERTY, "secret");
+        System.setProperty(CLIENT_ID_PROPERTY, "id");
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(KeyVaultPropertiesTest.Config.class);
