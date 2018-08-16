@@ -3,15 +3,19 @@
 ### Add the dependency
 
 `azure-servicebus-spring-boot-starter` is published on Maven Central Repository.  
-If you are using Maven, add the following dependency.  
+Add the following dependency to your project:
 
+*Maven*
 ```xml
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-servicebus-spring-boot-starter</artifactId>
-    <version>0.2.3</version>
+    <version>2.0.4</version>
 </dependency>
 ```
+
+*Gradle*<br>
+```compile 'com.microsoft.azure:azure-servicebus-spring-boot-starter:2.0.4'```
 
 ### Add the property setting
 
