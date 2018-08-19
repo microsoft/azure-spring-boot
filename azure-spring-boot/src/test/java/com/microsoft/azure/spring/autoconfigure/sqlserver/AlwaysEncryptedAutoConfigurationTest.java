@@ -16,8 +16,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SqlServerAutoConfigurationTest {
-    private static final String ENCRYPTION_PROPERTY = "spring.datasource.dataSourceProperties.ColumnEncryptionSetting";
+public class AlwaysEncryptedAutoConfigurationTest {
+    private static final String ENCRYPTION_PROPERTY = "spring.datasource.alwaysencrypted";
     private static final String CLIENT_SECRET_PROPERTY = "azure.sqlserver.keyvault.client-secret";
     private static final String CLIENT_ID_PROPERTY = "azure.sqlserver.keyvault.client-id";
 
@@ -30,10 +30,10 @@ public class SqlServerAutoConfigurationTest {
 
     @Test
     public void setDataEncryptionDisabled() {
-        System.setProperty(ENCRYPTION_PROPERTY, "Disabled");
+        System.setProperty(ENCRYPTION_PROPERTY, "false");
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(SqlServerAutoConfiguration.class);
+            context.register(AlwaysEncryptedAutoConfiguration.class);
             context.register(SQLServerDataSource.class);
             context.refresh();
 
@@ -51,15 +51,16 @@ public class SqlServerAutoConfigurationTest {
 
     @Test
     public void setDataEncryptionEnabled() {
-        System.setProperty(ENCRYPTION_PROPERTY, "Enabled");
+        System.setProperty(ENCRYPTION_PROPERTY, "true");
         System.setProperty(CLIENT_SECRET_PROPERTY, "secret");
         System.setProperty(CLIENT_ID_PROPERTY, "id");
 
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(SqlServerAutoConfiguration.class);
+            context.register(AlwaysEncryptedAutoConfiguration.class);
             context.register(SQLServerDataSource.class);
             context.refresh();
+
 
             final BeanPostProcessor beanPostProcessor = context.getBean("dataSourceBeanPostProcessor",
                                                                       BeanPostProcessor.class);
@@ -69,14 +70,14 @@ public class SqlServerAutoConfigurationTest {
 
     @Test
     public void setDataEncryptionEnabledMissingConfig() {
-        System.setProperty(ENCRYPTION_PROPERTY, "Enabled");
+        System.setProperty(ENCRYPTION_PROPERTY, "true");
         System.setProperty(CLIENT_ID_PROPERTY, "id");
 
         final String errorStringExpected = "azure.sqlserver.keyvault.client-secret must be provided";
 
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(SqlServerAutoConfiguration.class);
+            context.register(AlwaysEncryptedAutoConfiguration.class);
             context.register(SQLServerDataSource.class);
             try {
                 context.refresh();

@@ -20,6 +20,7 @@ import javax.validation.constraints.NotEmpty;
 @ConfigurationProperties("azure.sqlserver.keyvault")
 public class KeyVaultProperties {
 
+
     private String clientId;
     private String clientSecret;
 
