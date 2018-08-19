@@ -6,4 +6,5 @@ description = 'Azure Document DB Spring Boot Starter Sample'
 
 dependencies {
     compile group: 'com.microsoft.azure', name: 'azure-sqlserver-spring-boot-starter', version:"${azureSpringBootStartersVersion}"
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
 }

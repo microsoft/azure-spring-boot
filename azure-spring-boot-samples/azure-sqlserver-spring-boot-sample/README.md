@@ -1,5 +1,5 @@
 ## Overview
-This sample project demonstrates how to use Azure DocumentDB via Spring Boot Starter `azure-documentdb-spring-boot-starter` to store data in and retrieve data from your Azure Cosmos DB by using the DocumentDB API.
+This sample project demonstrates how to use Azure SQL Server AlwaysEncrypted via Spring Boot Starter `azure-sqlserver-spring-boot-starter` to store data in and retrieve data from Azure SQL Server with AlwaysEncrypted enabled.
 
 ## Prerequisites
 
@@ -11,55 +11,49 @@ This sample project demonstrates how to use Azure DocumentDB via Spring Boot Sta
 
 ## Quick Start
 
-### Create an Azure Cosmos DB on Azure
+### Create an Azure SQL DB on Azure
 
 1. Go to [Azure portal](https://portal.azure.com/) and click +New .
-2. Click Databases, and then click Azure Cosmos DB to create your database. 
-3. Navigate to the database you have created, and click Access keys and copy your URI and access keys for your database.
+2. Click Databases, and then click Azure SQL DB to create your database.
+3. Navigate to the database you have created, and click copy JDBC Connection String.
+4. Create Azure KeyVault and Service Principal with access to the keys in the Vault
                                                                                                                                   
 ### Config the sample
 
 1. Navigate to `src/main/resources` and open `application.properties`.
 2. replace below properties in `application.properties` with information of your database.
-   ```properties
-   azure.documentdb.uri=your-documentdb-uri
-   azure.documentdb.key=your-documentdb-key
-   azure.documentdb.database=your-documentdb-databasename
-   ```
+
+  ```properties
+ spring.datasource.jdbc-url=jdbc:sqlserver://<server>.database.windows.net:1433;database=<db>;Encrypt=true;TrustServerCertificate=false;HostNameInCertificate=*.database.windows.net;loginTimeout=30
+ spring.datasource.username=
+ spring.datasource.password=
+ ```
+3. To enable always enctyption set the following
+
+```properties
+ spring.datasource.alwaysencrypted=true
+ azure.sqlserver.keyvault.client-id=
+ azure.sqlserver.keyvault.client-secret=
+```
+
 
 ### Run the sample
 
-1. Change directory to folder `azure-documentdb-spring-boot-sample`.
+1. Change directory to folder `azure-sqlserver-spring-boot-sample`.
 2. Run below commands. 
  
    - Use Maven 
 
      ```
      mvn package
-     java -jar target/azure-ducumentdb-spring-boot-sample-0.0.1-SNAPSHOT.jar
+     java -jar target/azure-sqlserver-spring-boot-sample-0.0.1-SNAPSHOT.jar
      ```
 
    - Use Gradle 
    
      ```
      gradle bootRepackage
-     java -jar build/libs/azure-ducumentdb-spring-boot-sample-0.0.1-SNAPSHOT.jar
+     java -jar build/libs/azure-sqlserver-spring-boot-sample-0.0.1-SNAPSHOT.jar
      ```
 
-### Known issue
-
-Directly running the sample app from IDE IntelliJ or Eclipse has below security exception if using the *released* starter. The root cause is that the release `spring-data-azure-documentdb` jar is code-signed by us. We're working actively to resolve this issue. 
-
-```
-Caused by: java.lang.SecurityException: class "com.microsoft.azure.sample.User_Accessor_yhb3bq"'s signer information does not match signer information of other classes in the same package
-	at java.lang.ClassLoader.checkCerts(ClassLoader.java:898) ~[na:1.8.0_131]
-	at java.lang.ClassLoader.preDefineClass(ClassLoader.java:668) ~[na:1.8.0_131]
-	at java.lang.ClassLoader.defineClass(ClassLoader.java:761) ~[na:1.8.0_131]
-```
-
-If `com.fasterxml.jackson.databind.JsonMappingException` is thrown during deserialization, with error message `Can not construct instance of {your.pojo.class}: no suitable constructor found, can not deserialize from Object value (missing default constructor...`, add [Lombok annotatations](https://projectlombok.org/features/all) `@Data` and `@AllArgsConstructor` for your POJO class, or use [Jackson annotations](https://github.com/FasterXML/jackson-annotations#using-constructors-or-factory-methods) `@JsonCreator` and `@JsonProperty` for the full argument constructor.
-
-### More details
-
-Please refer to [this article](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-java-spring-boot-starter-with-cosmos-db) for the tutorial about how to use the Spring Boot Starter with Azure Cosmos DB DocumentDB API.
 

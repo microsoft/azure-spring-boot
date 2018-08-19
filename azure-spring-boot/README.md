@@ -7,6 +7,7 @@ This project provides auto-configuration for the following Azure services:
 - [Media Service](../azure-spring-boot-starters/azure-mediaservices-spring-boot-starter)
 - [Service Bus](../azure-spring-boot-starters/azure-servicebus-spring-boot-starter)
 - [Storage](../azure-spring-boot-starters/azure-storage-spring-boot-starter)
+- [SQLServer](../azure-spring-boot-starters/azure-sqlserver-spring-boot-starter)
 
 This module also provides the ability to automatically inject credentials from Cloud Foundry into your
 applications consuming Azure services. It does this by reading the `VCAP_SERVICES` environment
