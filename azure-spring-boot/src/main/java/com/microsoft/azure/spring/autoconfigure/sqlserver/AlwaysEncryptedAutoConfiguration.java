@@ -5,6 +5,8 @@
  */
 package com.microsoft.azure.spring.autoconfigure.sqlserver;
 
+import com.microsoft.azure.telemetry.TelemetryData;
+import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.microsoft.sqlserver.jdbc.SQLServerColumnEncryptionAzureKeyVaultProvider;
 import com.microsoft.sqlserver.jdbc.SQLServerColumnEncryptionKeyStoreProvider;
 import com.microsoft.sqlserver.jdbc.SQLServerConnection;
@@ -32,6 +34,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.util.ClassUtils;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -46,10 +49,23 @@ public class AlwaysEncryptedAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AlwaysEncryptedAutoConfiguration.class);
 
     private final KeyVaultProperties properties;
+    private final TelemetryProxy telemetryProxy;
 
     public AlwaysEncryptedAutoConfiguration(KeyVaultProperties properties) {
         this.properties = properties;
+        this.telemetryProxy = new TelemetryProxy(properties.isAllowTelemetry());
 
+    }
+
+    private void trackCustomEvent() {
+        final HashMap<String, String> customTelemetryProperties = new HashMap<>();
+
+        final String[] packageNames = this.getClass().getPackage().getName().split("\\.");
+
+        if (packageNames.length > 1) {
+            customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
+        }
+        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
 
     @Bean(name = "dataSourceBeanPostProcessor")
@@ -80,6 +96,7 @@ public class AlwaysEncryptedAutoConfiguration {
 
                         SQLServerConnection.registerColumnEncryptionKeyStoreProviders(keyStoreMap);
 
+                        trackCustomEvent();
                     } catch (SQLException ex) {
                         LOG.error(ex.getMessage());
                         throw new FatalBeanException(ex.getMessage());
