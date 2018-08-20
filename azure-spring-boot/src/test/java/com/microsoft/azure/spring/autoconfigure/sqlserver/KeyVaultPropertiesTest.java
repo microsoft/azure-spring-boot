@@ -16,8 +16,8 @@ import org.springframework.context.annotation.Configuration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class KeyVaultPropertiesTest {
-    private static final String CLIENT_SECRET_PROPERTY = "azure.sqlserver.keyvault.client-secret";
-    private static final String CLIENT_ID_PROPERTY = "azure.sqlserver.keyvault.client-id";
+    public static final String CLIENT_SECRET_PROPERTY = "azure.sqlserver.keyvault.client-secret";
+    public static final String CLIENT_ID_PROPERTY = "azure.sqlserver.keyvault.client-id";
 
 
     @After

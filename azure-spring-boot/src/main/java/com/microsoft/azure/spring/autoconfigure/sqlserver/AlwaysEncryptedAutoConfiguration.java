@@ -44,7 +44,7 @@ import java.util.Map;
 @Configuration
 @ConditionalOnClass({DataSource.class, EmbeddedDatabaseType.class})
 @EnableConfigurationProperties({DataSourceProperties.class, KeyVaultProperties.class})
-@ConditionalOnProperty(name = "spring.datasource.alwaysencrypted", matchIfMissing = false)
+@ConditionalOnProperty(name = AEConstants.PROPERTY_AE_ENABLED, matchIfMissing = false)
 public class AlwaysEncryptedAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AlwaysEncryptedAutoConfiguration.class);
 

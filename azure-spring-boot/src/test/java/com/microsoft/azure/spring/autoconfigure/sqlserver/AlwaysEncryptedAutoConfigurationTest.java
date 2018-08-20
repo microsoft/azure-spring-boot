@@ -17,20 +17,17 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AlwaysEncryptedAutoConfigurationTest {
-    private static final String ENCRYPTION_PROPERTY = "spring.datasource.alwaysencrypted";
-    private static final String CLIENT_SECRET_PROPERTY = "azure.sqlserver.keyvault.client-secret";
-    private static final String CLIENT_ID_PROPERTY = "azure.sqlserver.keyvault.client-id";
 
     @After
     public void clearAllProperties() {
-        System.clearProperty(CLIENT_SECRET_PROPERTY);
-        System.clearProperty(CLIENT_ID_PROPERTY);
-        System.clearProperty(ENCRYPTION_PROPERTY);
+        System.clearProperty(KeyVaultPropertiesTest.CLIENT_SECRET_PROPERTY);
+        System.clearProperty(KeyVaultPropertiesTest.CLIENT_ID_PROPERTY);
+        System.clearProperty(AEConstants.PROPERTY_AE_ENABLED);
     }
 
     @Test
     public void setDataEncryptionDisabled() {
-        System.setProperty(ENCRYPTION_PROPERTY, "false");
+        System.setProperty(AEConstants.PROPERTY_AE_ENABLED, "false");
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(AlwaysEncryptedAutoConfiguration.class);
@@ -51,9 +48,9 @@ public class AlwaysEncryptedAutoConfigurationTest {
 
     @Test
     public void setDataEncryptionEnabled() {
-        System.setProperty(ENCRYPTION_PROPERTY, "true");
-        System.setProperty(CLIENT_SECRET_PROPERTY, "secret");
-        System.setProperty(CLIENT_ID_PROPERTY, "id");
+        System.setProperty(AEConstants.PROPERTY_AE_ENABLED, "true");
+        System.setProperty(KeyVaultPropertiesTest.CLIENT_SECRET_PROPERTY, "secret");
+        System.setProperty(KeyVaultPropertiesTest.CLIENT_ID_PROPERTY, "id");
 
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
@@ -70,8 +67,8 @@ public class AlwaysEncryptedAutoConfigurationTest {
 
     @Test
     public void setDataEncryptionEnabledMissingConfig() {
-        System.setProperty(ENCRYPTION_PROPERTY, "true");
-        System.setProperty(CLIENT_ID_PROPERTY, "id");
+        System.setProperty(AEConstants.PROPERTY_AE_ENABLED, "true");
+        System.setProperty(KeyVaultPropertiesTest.CLIENT_ID_PROPERTY, "id");
 
         final String errorStringExpected = "azure.sqlserver.keyvault.client-secret must be provided";
 

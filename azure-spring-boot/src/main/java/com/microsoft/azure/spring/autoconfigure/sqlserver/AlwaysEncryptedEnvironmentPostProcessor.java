@@ -23,42 +23,37 @@ import java.util.Map;
 
 @ConditionalOnClass({DataSource.class, EmbeddedDatabaseType.class})
 @EnableConfigurationProperties({DataSourceProperties.class, KeyVaultProperties.class})
-@ConditionalOnProperty(name = "spring.datasource.alwaysencrypted", matchIfMissing = false)
+@ConditionalOnProperty(name = AEConstants.PROPERTY_AE_ENABLED, matchIfMissing = false)
 public class AlwaysEncryptedEnvironmentPostProcessor implements EnvironmentPostProcessor {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(AlwaysEncryptedEnvironmentPostProcessor.class);
-
     private static final String PROPERTY_SOURCE_NAME = "aeProperties";
-    private static final String PROPERTY_AE_ENABLED = "spring.datasource.alwaysencrypted";
-    private static final String PROPERTY_COL_ENCRYPT = "spring.datasource.dataSourceProperties.ColumnEncryptionSetting";
-    private static final String PROPERTY_CONNECTION = "spring.datasource.connectionProperties";
-
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
 
-        if (!environment.getProperty(PROPERTY_AE_ENABLED, Boolean.class, false)) {
+        if (!environment.getProperty(AEConstants.PROPERTY_AE_ENABLED, Boolean.class, false)) {
             return;
         }
-
         LOGGER.debug("Setting AlwaysEncrypted settings");
+
+        final MapPropertySource target = new MapPropertySource(PROPERTY_SOURCE_NAME, getSettingsMap(environment));
+        environment.getPropertySources().addFirst(target);
+    }
+
+    public static  Map<String, Object>  getSettingsMap(ConfigurableEnvironment environment) {
         final Map<String, Object> map = new HashMap<String, Object>();
 
         // Set Property for HikariCP
-        if (environment.getProperty(PROPERTY_COL_ENCRYPT) == null) {
-            map.put(PROPERTY_COL_ENCRYPT, "Enabled");
+        if (environment.getProperty(AEConstants.PROPERTY_DATASOURCE_COL_ENCRYPT) == null) {
+            map.put(AEConstants.PROPERTY_DATASOURCE_COL_ENCRYPT, "Enabled");
         }
         // Attach property if Tomcat Pool
-        final String connectionProps = environment.getProperty(PROPERTY_CONNECTION);
+        final String connectionProps = environment.getProperty(AEConstants.PROPERTY_CONNECTION_COL_ENCRYPT);
         if (connectionProps == null) {
-            map.put(PROPERTY_CONNECTION, "ColumnEncryptionSetting=Enabled");
+            map.put(AEConstants.PROPERTY_CONNECTION_COL_ENCRYPT, "ColumnEncryptionSetting=Enabled");
         } else {
-            map.put(PROPERTY_CONNECTION, connectionProps + ", ColumnEncryptionSetting=Enabled");
+            map.put(AEConstants.PROPERTY_CONNECTION_COL_ENCRYPT, connectionProps + ", ColumnEncryptionSetting=Enabled");
         }
-        final MapPropertySource target = new MapPropertySource(PROPERTY_SOURCE_NAME, map);
-        environment.getPropertySources().addFirst(target);
-
+        return map;
     }
-
-
 }
