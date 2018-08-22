@@ -18,7 +18,6 @@ public class AlwaysEncryptedPostProcessorTest {
 
     @Mock ConfigurableEnvironment environment;
 
-
     @Test
     public void dataSourcePropertiesEncryptionEnabled() {
         environment = mock (ConfigurableEnvironment.class);
@@ -42,7 +41,7 @@ public class AlwaysEncryptedPostProcessorTest {
         assertThat(map.entrySet().size()).isEqualTo(2);
         assertThat((String) map.get(AEConstants.PROPERTY_DATASOURCE_COL_ENCRYPT)).contains("Enabled");
         assertThat((String) map.get(AEConstants.PROPERTY_CONNECTION_COL_ENCRYPT))
-                .contains("ColumnEncryptionSetting=Enabled");
+                .contains(AEConstants.PROPERTY_ENCRYPTION_ENABLED_VALUE);
         assertThat((String) map.get(AEConstants.PROPERTY_CONNECTION_COL_ENCRYPT)).contains("idleTime=10");
     }
 }

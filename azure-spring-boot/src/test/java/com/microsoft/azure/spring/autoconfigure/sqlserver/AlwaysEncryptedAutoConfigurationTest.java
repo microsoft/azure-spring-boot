@@ -52,12 +52,10 @@ public class AlwaysEncryptedAutoConfigurationTest {
         System.setProperty(KeyVaultPropertiesTest.CLIENT_SECRET_PROPERTY, "secret");
         System.setProperty(KeyVaultPropertiesTest.CLIENT_ID_PROPERTY, "id");
 
-
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(AlwaysEncryptedAutoConfiguration.class);
             context.register(SQLServerDataSource.class);
             context.refresh();
-
 
             final BeanPostProcessor beanPostProcessor = context.getBean("dataSourceBeanPostProcessor",
                                                                       BeanPostProcessor.class);
@@ -70,8 +68,7 @@ public class AlwaysEncryptedAutoConfigurationTest {
         System.setProperty(AEConstants.PROPERTY_AE_ENABLED, "true");
         System.setProperty(KeyVaultPropertiesTest.CLIENT_ID_PROPERTY, "id");
 
-        final String errorStringExpected = "azure.sqlserver.keyvault.client-secret must be provided";
-
+        final String errorStringExpected = "spring.datasource.always-encrypted.keyvault.client-secret must be provided";
 
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(AlwaysEncryptedAutoConfiguration.class);
@@ -83,7 +80,5 @@ public class AlwaysEncryptedAutoConfigurationTest {
                 assertThat(e.getMessage().contains(errorStringExpected));
             }
         }
-
     }
-
 }

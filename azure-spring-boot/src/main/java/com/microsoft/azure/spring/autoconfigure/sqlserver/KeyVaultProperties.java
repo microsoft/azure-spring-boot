@@ -17,7 +17,7 @@ import javax.validation.constraints.NotEmpty;
 @Getter
 @Setter
 
-@ConfigurationProperties("azure.sqlserver.keyvault")
+@ConfigurationProperties("spring.datasource.always-encrypted.keyvault")
 public class KeyVaultProperties {
 
     private String clientId;
@@ -29,8 +29,8 @@ public class KeyVaultProperties {
 
     @PostConstruct
     public void validate() {
-        Assert.hasText(clientId, "azure.sqlserver.keyvault.client-id must be provided");
-        Assert.hasText(clientSecret, "azure.sqlserver.keyvault.client-secret must be provided");
+        Assert.hasText(clientId, "spring.datasource.always-encrypted.keyvault.client-id must be provided");
+        Assert.hasText(clientSecret, "spring.datasource.always-encrypted.keyvault.client-secret must be provided");
 
     }
 

@@ -31,9 +31,9 @@ This sample project demonstrates how to use Azure SQL Server AlwaysEncrypted via
 3. To enable always enctyption set the following
 
 ```properties
- spring.datasource.alwaysencrypted=true
- azure.sqlserver.keyvault.client-id=
- azure.sqlserver.keyvault.client-secret=
+ spring.datasource.always-encrypted.enabled=true
+ spring.datasource.always-encrypted.keyvault.client-id=
+ spring.datasource.always-encrypted.keyvault.client-secret=
 ```
 
 

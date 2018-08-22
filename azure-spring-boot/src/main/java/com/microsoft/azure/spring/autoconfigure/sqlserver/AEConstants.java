@@ -6,9 +6,9 @@
 package com.microsoft.azure.spring.autoconfigure.sqlserver;
 
 public class AEConstants {
-    public static final String PROPERTY_AE_ENABLED = "spring.datasource.alwaysencrypted";
+    public static final String PROPERTY_AE_ENABLED = "spring.datasource.always-encrypted.enabled";
     public static final String PROPERTY_DATASOURCE_COL_ENCRYPT =
-                       "spring.datasource.dataSourceProperties.ColumnEncryptionSetting";
-    public static final String PROPERTY_CONNECTION_COL_ENCRYPT = "spring.datasource.connectionProperties";
-
+                       "spring.datasource.data-source-properties.ColumnEncryptionSetting";
+    public static final String PROPERTY_CONNECTION_COL_ENCRYPT = "spring.datasource.connection-properties";
+    public static final String PROPERTY_ENCRYPTION_ENABLED_VALUE = "ColumnEncryptionSetting=Enabled";
 }

@@ -16,8 +16,8 @@ import org.springframework.context.annotation.Configuration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class KeyVaultPropertiesTest {
-    public static final String CLIENT_SECRET_PROPERTY = "azure.sqlserver.keyvault.client-secret";
-    public static final String CLIENT_ID_PROPERTY = "azure.sqlserver.keyvault.client-id";
+    public static final String CLIENT_SECRET_PROPERTY = "spring.datasource.always-encrypted.keyvault.client-secret";
+    public static final String CLIENT_ID_PROPERTY = "spring.datasource.always-encrypted.keyvault.client-id";
 
 
     @After
@@ -53,12 +53,10 @@ public class KeyVaultPropertiesTest {
             } catch (Exception e) {
                 exception = e;
             }
-
             assertThat(exception).isNotNull();
             assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
 
-
-            final String errorStringExpected = "azure.sqlserver.keyvault.client-id must be provided";
+            final String errorStringExpected = "spring.datasource.always-encrypted.keyvault.client-id must be provided";
             assertThat(exception.getMessage().contains(errorStringExpected));
 
         }

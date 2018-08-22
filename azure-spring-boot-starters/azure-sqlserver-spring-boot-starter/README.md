@@ -32,8 +32,8 @@ Open `application.properties` file and add below properties with your SQL DB cre
 
 ```properties
  spring.datasource.alwaysencrypted=true
- azure.sqlserver.keyvault.client-id=
- azure.sqlserver.keyvault.client-secret=
+ spring.datasource.always-encrypted.keyvault.client-id=
+ spring.datasource.always-encrypted.keyvault.client-secret=
 ```
 
 
@@ -43,9 +43,4 @@ Microsoft would like to collect data about how users use this Spring boot starte
 azure.sqlserver.allow-telemetry=false
 ```
 Find more information about Azure Service Privacy Statement, please check [Microsoft Online Services Privacy Statement](https://www.microsoft.com/en-us/privacystatement/OnlineServices/Default.aspx).
-
-### Further info
-
-Besides using this Azure DocumentDB Spring Boot Starter, you can directly use Spring Data for Azure DocumentDB package for more complex scenarios. Please refer to [Spring Data for Azure DocumentDB](https://github.com/Microsoft/spring-data-documentdb) for more details.
-
 

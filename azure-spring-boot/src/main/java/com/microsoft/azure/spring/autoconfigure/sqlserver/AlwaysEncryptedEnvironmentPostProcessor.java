@@ -40,7 +40,7 @@ public class AlwaysEncryptedEnvironmentPostProcessor implements EnvironmentPostP
         environment.getPropertySources().addFirst(target);
     }
 
-    public static  Map<String, Object>  getSettingsMap(ConfigurableEnvironment environment) {
+    public static Map<String, Object> getSettingsMap(ConfigurableEnvironment environment) {
         final Map<String, Object> map = new HashMap<String, Object>();
 
         // Set Property for HikariCP
@@ -50,9 +50,11 @@ public class AlwaysEncryptedEnvironmentPostProcessor implements EnvironmentPostP
         // Attach property if Tomcat Pool
         final String connectionProps = environment.getProperty(AEConstants.PROPERTY_CONNECTION_COL_ENCRYPT);
         if (connectionProps == null) {
-            map.put(AEConstants.PROPERTY_CONNECTION_COL_ENCRYPT, "ColumnEncryptionSetting=Enabled");
+            map.put(AEConstants.PROPERTY_CONNECTION_COL_ENCRYPT,
+                    AEConstants.PROPERTY_ENCRYPTION_ENABLED_VALUE);
         } else {
-            map.put(AEConstants.PROPERTY_CONNECTION_COL_ENCRYPT, connectionProps + ", ColumnEncryptionSetting=Enabled");
+            map.put(AEConstants.PROPERTY_CONNECTION_COL_ENCRYPT, connectionProps + ", " +
+                    AEConstants.PROPERTY_ENCRYPTION_ENABLED_VALUE);
         }
         return map;
     }

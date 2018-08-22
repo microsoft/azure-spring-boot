@@ -54,7 +54,6 @@ public class AlwaysEncryptedAutoConfiguration {
     public AlwaysEncryptedAutoConfiguration(KeyVaultProperties properties) {
         this.properties = properties;
         this.telemetryProxy = new TelemetryProxy(properties.isAllowTelemetry());
-
     }
 
     private void trackCustomEvent() {
@@ -72,38 +71,7 @@ public class AlwaysEncryptedAutoConfiguration {
     @ConditionalOnClass(com.microsoft.sqlserver.jdbc.SQLServerDriver.class)
     @ConditionalOnBean(DataSource.class)
     public BeanPostProcessor dataSourceBeanPostProcessor() {
-        return new BeanPostProcessor() {
-            @Override
-            public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-
-                return bean;
-            }
-
-            @Override
-            public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-
-                if (bean instanceof DataSource) {
-                    try {
-
-                        LOG.info ("initializing DataSource AlwaysEncryption Vault provider");
-                        final SQLServerColumnEncryptionAzureKeyVaultProvider akvProvider =
-                                new SQLServerColumnEncryptionAzureKeyVaultProvider(properties.getClientId(),
-                                                                                   properties.getClientSecret());
-
-                        final Map<String, SQLServerColumnEncryptionKeyStoreProvider> keyStoreMap =
-                                                new HashMap<String, SQLServerColumnEncryptionKeyStoreProvider>();
-                        keyStoreMap.put(akvProvider.getName(), akvProvider);
-
-                        SQLServerConnection.registerColumnEncryptionKeyStoreProviders(keyStoreMap);
-
-                        trackCustomEvent();
-                    } catch (SQLException ex) {
-                        LOG.error(ex.getMessage());
-                        throw new FatalBeanException(ex.getMessage());
-                    }
-                }
-                return bean;
-            }
-        };
+        trackCustomEvent();
+        return new KeyVaultProviderPostProcesor();
     }
 }
