@@ -25,7 +25,7 @@ public class KeyVaultProperties {
     /**
      * Whether allow Microsoft to collect telemetry data.
      */
-    private boolean allowTelemetry = true;
+    private boolean allowTelemetry = false;
 
     @PostConstruct
     public void validate() {

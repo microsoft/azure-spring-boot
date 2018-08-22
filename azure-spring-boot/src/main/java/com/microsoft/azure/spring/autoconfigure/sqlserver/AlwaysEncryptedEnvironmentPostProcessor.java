@@ -44,7 +44,7 @@ public class AlwaysEncryptedEnvironmentPostProcessor implements EnvironmentPostP
         final Map<String, Object> map = new HashMap<String, Object>();
 
         // Set Property for HikariCP
-        if (environment.getProperty(AEConstants.PROPERTY_DATASOURCE_COL_ENCRYPT) == null) {
+        if (!environment.containsProperty(AEConstants.PROPERTY_DATASOURCE_COL_ENCRYPT)) {
             map.put(AEConstants.PROPERTY_DATASOURCE_COL_ENCRYPT, "Enabled");
         }
         // Attach property if Tomcat Pool
