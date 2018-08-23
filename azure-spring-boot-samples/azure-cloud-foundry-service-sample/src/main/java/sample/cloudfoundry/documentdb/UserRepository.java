@@ -6,7 +6,7 @@
 
 package sample.cloudfoundry.documentdb;
 
-import com.microsoft.azure.spring.data.documentdb.repository.DocumentDbRepository;
+import com.microsoft.azure.spring.data.cosmosdb.repository.DocumentDbRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
