@@ -6,13 +6,14 @@
 
 package com.microsoft.azure.spring.autoconfigure.documentdb;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 import com.microsoft.azure.documentdb.DocumentClient;
-import com.microsoft.azure.spring.data.documentdb.DocumentDbFactory;
-import com.microsoft.azure.spring.data.documentdb.core.DocumentDbTemplate;
-import com.microsoft.azure.spring.data.documentdb.core.convert.MappingDocumentDbConverter;
-import com.microsoft.azure.spring.data.documentdb.core.mapping.DocumentDbMappingContext;
+import com.microsoft.azure.spring.data.cosmosdb.DocumentDbFactory;
+import com.microsoft.azure.spring.data.cosmosdb.core.DocumentDbTemplate;
+import com.microsoft.azure.spring.data.cosmosdb.core.convert.MappingDocumentDbConverter;
+import com.microsoft.azure.spring.data.cosmosdb.core.mapping.DocumentDbMappingContext;
 import com.microsoft.azure.spring.support.GetHashMac;
 import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
@@ -20,6 +21,7 @@ import com.microsoft.azure.utils.PropertyLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -46,7 +48,7 @@ public class DocumentDBAutoConfiguration {
     private final ConnectionPolicy connectionPolicy;
     private final ApplicationContext applicationContext;
     private final TelemetryProxy telemetryProxy;
-
+    private ObjectMapper objectMapper;
 
     public DocumentDBAutoConfiguration(DocumentDBProperties properties,
                                        ObjectProvider<ConnectionPolicy> connectionPolicyObjectProvider,
@@ -55,7 +57,6 @@ public class DocumentDBAutoConfiguration {
         this.connectionPolicy = connectionPolicyObjectProvider.getIfAvailable();
         this.applicationContext = applicationContext;
         this.telemetryProxy = new TelemetryProxy(properties.isAllowTelemetry());
-
     }
 
     @Bean
@@ -63,6 +64,11 @@ public class DocumentDBAutoConfiguration {
     @ConditionalOnMissingBean
     public DocumentClient documentClient() {
         return createDocumentClient();
+    }
+
+    @Autowired(required = false)
+    public void setObjectMapper(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
     }
 
     private DocumentClient createDocumentClient() {
@@ -128,6 +134,6 @@ public class DocumentDBAutoConfiguration {
     @ConditionalOnMissingBean
     public MappingDocumentDbConverter mappingDocumentDbConverter(
             DocumentDbMappingContext documentDbMappingContext) {
-        return new MappingDocumentDbConverter(documentDbMappingContext);
+        return new MappingDocumentDbConverter(documentDbMappingContext, objectMapper);
     }
 }
