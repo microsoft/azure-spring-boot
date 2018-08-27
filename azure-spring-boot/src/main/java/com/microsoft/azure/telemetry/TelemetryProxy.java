@@ -8,7 +8,7 @@ package com.microsoft.azure.telemetry;
 import com.microsoft.applicationinsights.TelemetryClient;
 import com.microsoft.azure.spring.support.GetHashMac;
 import com.microsoft.azure.utils.PropertyLoader;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Iterator;
