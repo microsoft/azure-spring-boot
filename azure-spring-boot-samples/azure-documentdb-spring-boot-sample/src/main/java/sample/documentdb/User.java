@@ -6,7 +6,7 @@
 
 package sample.documentdb;
 
-import com.microsoft.azure.spring.data.documentdb.core.mapping.Document;
+import com.microsoft.azure.spring.data.cosmosdb.core.mapping.Document;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
