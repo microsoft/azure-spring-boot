@@ -21,33 +21,37 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 class KeyVaultEnvironmentPostProcessorHelper {
 
     private final ConfigurableEnvironment environment;
     private final TelemetryProxy telemetryProxy;
 
-    public KeyVaultEnvironmentPostProcessorHelper(ConfigurableEnvironment environment) {
+    public KeyVaultEnvironmentPostProcessorHelper(final ConfigurableEnvironment environment) {
         this.environment = environment;
         this.telemetryProxy = new TelemetryProxy(this.allowTelemetry(environment));
     }
 
     public void addKeyVaultPropertySource() {
-        final String clientId = getProperty(environment, Constants.AZURE_CLIENTID);
-        final String clientKey = getProperty(environment, Constants.AZURE_CLIENTKEY);
-        final String vaultUri = getProperty(environment, Constants.AZURE_KEYVAULT_VAULT_URI);
-
-        final long timeAcquiringTimeoutInSeconds = environment.getProperty(
+        final String clientId = getProperty(this.environment, Constants.AZURE_CLIENTID);
+        final String clientKey = getProperty(this.environment, Constants.AZURE_CLIENTKEY);
+        final String vaultUri = getProperty(this.environment, Constants.AZURE_KEYVAULT_VAULT_URI);
+        final Long refreshInterval = Optional.ofNullable(
+                this.environment.getProperty(Constants.AZURE_KEYVAULT_REFRESH_INTERVAL))
+                .map(Long::valueOf)
+                .orElse(1800000L);
+        final long timeAcquiringTimeoutInSeconds = this.environment.getProperty(
                 Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, Long.class, 60L);
 
-        final ServiceClientCredentials credentials =
-                new AzureKeyVaultCredential(clientId, clientKey, timeAcquiringTimeoutInSeconds);
+        final ServiceClientCredentials credentials = new AzureKeyVaultCredential(clientId, clientKey,
+                timeAcquiringTimeoutInSeconds);
         final RestClient restClient = new RestClient.Builder().withBaseUrl(vaultUri)
                 .withCredentials(credentials)
                 .withSerializerAdapter(new AzureJacksonAdapter())
                 .withResponseBuilderFactory(new AzureResponseBuilder.Factory())
                 .withUserAgent(UserAgent.getUserAgent(Constants.AZURE_KEYVAULT_USER_AGENT,
-                        allowTelemetry(environment)))
+                        allowTelemetry(this.environment)))
                 .build();
 
         final KeyVaultClient kvClient = new KeyVaultClient(restClient);
@@ -55,8 +59,8 @@ class KeyVaultEnvironmentPostProcessorHelper {
         this.trackCustomEvent();
 
         try {
-            final MutablePropertySources sources = environment.getPropertySources();
-            final KeyVaultOperation kvOperation = new KeyVaultOperation(kvClient, vaultUri);
+            final MutablePropertySources sources = this.environment.getPropertySources();
+            final KeyVaultOperation kvOperation = new KeyVaultOperation(kvClient, vaultUri, refreshInterval);
 
             if (sources.contains(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME)) {
                 sources.addAfter(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME,
@@ -65,12 +69,12 @@ class KeyVaultEnvironmentPostProcessorHelper {
                 sources.addFirst(new KeyVaultPropertySource(kvOperation));
             }
 
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new IllegalStateException("Failed to configure KeyVault property source", ex);
         }
     }
 
-    private String getProperty(ConfigurableEnvironment env, String propertyName) {
+    private String getProperty(final ConfigurableEnvironment env, final String propertyName) {
         Assert.notNull(env, "env must not be null!");
         Assert.notNull(propertyName, "propertyName must not be null!");
 
@@ -82,7 +86,7 @@ class KeyVaultEnvironmentPostProcessorHelper {
         return property;
     }
 
-    private boolean allowTelemetry(ConfigurableEnvironment env) {
+    private boolean allowTelemetry(final ConfigurableEnvironment env) {
         Assert.notNull(env, "env must not be null!");
 
         return env.getProperty(Constants.AZURE_KEYVAULT_ALLOW_TELEMETRY, Boolean.class, true);
@@ -92,6 +96,7 @@ class KeyVaultEnvironmentPostProcessorHelper {
         final HashMap<String, String> customTelemetryProperties = new HashMap<>();
         customTelemetryProperties.put(TelemetryData.SERVICE_NAME, "keyvault");
 
-        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
+        this.telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass())
+                .getSimpleName(), customTelemetryProperties);
     }
 }
