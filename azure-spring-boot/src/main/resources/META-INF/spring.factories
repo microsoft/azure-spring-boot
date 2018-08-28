@@ -1,3 +1,5 @@
+org.springframework.boot.env.EnvironmentPostProcessor=com.microsoft.azure.spring.cloundfoundry.environment.VcapProcessor,\
+com.microsoft.azure.keyvault.spring.KeyVaultEnvironmentPostProcessor
 org.springframework.context.ApplicationContextInitializer=\
 com.microsoft.azure.spring.autoconfigure.aad.YamlFileApplicationContextInitializer
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.microsoft.azure.spring.autoconfigure.documentdb.DocumentDBAutoConfiguration,\
