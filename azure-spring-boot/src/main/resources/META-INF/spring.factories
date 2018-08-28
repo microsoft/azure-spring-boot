@@ -1,5 +1,3 @@
-org.springframework.boot.env.EnvironmentPostProcessor=com.microsoft.azure.spring.cloundfoundry.environment.VcapProcessor,\
-com.microsoft.azure.keyvault.spring.KeyVaultEnvironmentPostProcessor
 org.springframework.context.ApplicationContextInitializer=\
 com.microsoft.azure.spring.autoconfigure.aad.YamlFileApplicationContextInitializer
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.microsoft.azure.spring.autoconfigure.documentdb.DocumentDBAutoConfiguration,\
@@ -10,4 +8,5 @@ com.microsoft.azure.spring.autoconfigure.mediaservices.MediaServicesAutoConfigur
 com.microsoft.azure.spring.autoconfigure.servicebus.ServiceBusAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.storage.StorageAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationFilterAutoConfiguration,\
-com.microsoft.azure.spring.autoconfigure.aad.AADOAuth2AutoConfiguration
+com.microsoft.azure.spring.autoconfigure.aad.AADOAuth2AutoConfiguration,\
+com.microsoft.azure.keyvault.spring.KeyVaultAutoConfiguration

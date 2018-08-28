@@ -6,8 +6,11 @@
 
 package sample.keyvault;
 
+import com.microsoft.azure.keyvault.KeyVaultClient;
+import com.microsoft.azure.keyvault.spring.KeyVaultOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,14 +20,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SampleApplication implements CommandLineRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(SampleApplication.class);
 
-    @Value("${yourSecretPropertyName}")
-    private String mySecretProperty;
+    @Autowired
+    private KeyVaultClient keyVaultClient;
+
+    @Autowired
+    private KeyVaultOperation keyVaultOperation;
 
     public static void main(String[] args) {
         SpringApplication.run(SampleApplication.class, args);
     }
 
     public void run(String... varl) throws Exception {
+        final Object mySecretProperty = keyVaultOperation.get("yourSecretPropertyName");
+
         LOGGER.info("property yourSecretPropertyName in Azure Key Vault: {}", mySecretProperty);
 
         System.out.println("property yourSecretPropertyName in Azure Key Vault: " + mySecretProperty);
