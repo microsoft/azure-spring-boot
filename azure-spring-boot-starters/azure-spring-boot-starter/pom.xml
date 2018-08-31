@@ -69,7 +69,7 @@
                 </property>
             </activation>
             <properties>
-                <ai.instrumentkey>xxxxx-xxxx-xxxx-xxxx-xxxx-xxxxxxxxxx</ai.instrumentkey>
+                <ai.instrumentkey>${telemetry.instrumentationKey}</ai.instrumentkey>
             </properties>
         </profile>
     </profiles>
