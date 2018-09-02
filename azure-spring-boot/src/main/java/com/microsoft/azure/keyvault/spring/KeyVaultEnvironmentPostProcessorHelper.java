@@ -6,6 +6,7 @@
 
 package com.microsoft.azure.keyvault.spring;
 
+import com.microsoft.azure.AzureEnvironment;
 import com.microsoft.azure.AzureResponseBuilder;
 import com.microsoft.azure.keyvault.KeyVaultClient;
 import com.microsoft.azure.serializer.AzureJacksonAdapter;
@@ -13,6 +14,7 @@ import com.microsoft.azure.spring.support.UserAgent;
 import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.microsoft.rest.RestClient;
+import com.microsoft.azure.credentials.AppServiceMSICredentials;
 import com.microsoft.rest.credentials.ServiceClientCredentials;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
@@ -34,18 +36,25 @@ class KeyVaultEnvironmentPostProcessorHelper {
     }
 
     public void addKeyVaultPropertySource() {
-        final String clientId = getProperty(this.environment, Constants.AZURE_CLIENTID);
-        final String clientKey = getProperty(this.environment, Constants.AZURE_CLIENTKEY);
         final String vaultUri = getProperty(this.environment, Constants.AZURE_KEYVAULT_VAULT_URI);
         final Long refreshInterval = Optional.ofNullable(
                 this.environment.getProperty(Constants.AZURE_KEYVAULT_REFRESH_INTERVAL))
                 .map(Long::valueOf)
                 .orElse(1800000L);
         final long timeAcquiringTimeoutInSeconds = this.environment.getProperty(
-                Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, Long.class, 60L);
+            Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, Long.class, 60L);
+        final ServiceClientCredentials credentials;
 
-        final ServiceClientCredentials credentials = new AzureKeyVaultCredential(clientId, clientKey,
+        if (this.environment.containsProperty(Constants.AZURE_MSI_ENDPOINT)
+            && this.environment.containsProperty(Constants.AZURE_MSI_SECRET)) {
+            credentials = new AppServiceMSICredentials(AzureEnvironment.AZURE);
+        } else {
+            final String clientId = getProperty(this.environment, Constants.AZURE_CLIENTID);
+            final String clientKey = getProperty(this.environment, Constants.AZURE_CLIENTKEY);
+            credentials = new AzureKeyVaultCredential(clientId, clientKey,
                 timeAcquiringTimeoutInSeconds);
+        }
+        
         final RestClient restClient = new RestClient.Builder().withBaseUrl(vaultUri)
                 .withCredentials(credentials)
                 .withSerializerAdapter(new AzureJacksonAdapter())
