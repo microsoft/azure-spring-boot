@@ -39,10 +39,9 @@ class KeyVaultEnvironmentPostProcessorHelper {
         final String vaultUri = getProperty(this.environment, Constants.AZURE_KEYVAULT_VAULT_URI);
         final Long refreshInterval = Optional.ofNullable(
                 this.environment.getProperty(Constants.AZURE_KEYVAULT_REFRESH_INTERVAL))
-                .map(Long::valueOf)
-                .orElse(1800000L);
+                .map(Long::valueOf).orElse(Constants.DEFAULT_REFRESH_INTERVAL_MS);
         final long timeAcquiringTimeoutInSeconds = this.environment.getProperty(
-                Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, Long.class, 60L);
+                Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, Long.class, Constants.TOKEN_ACQUIRE_TIMEOUT_SECS);
 
         final ServiceClientCredentials credentials = new AzureKeyVaultCredential(clientId, clientKey,
                 timeAcquiringTimeoutInSeconds);
@@ -96,7 +95,7 @@ class KeyVaultEnvironmentPostProcessorHelper {
         final HashMap<String, String> customTelemetryProperties = new HashMap<>();
         customTelemetryProperties.put(TelemetryData.SERVICE_NAME, "keyvault");
 
-        this.telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass())
-                .getSimpleName(), customTelemetryProperties);
+        final String className = ClassUtils.getUserClass(this.getClass()).getSimpleName();
+        this.telemetryProxy.trackEvent(className, customTelemetryProperties);
     }
 }
