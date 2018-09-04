@@ -20,8 +20,8 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KeyVaultProviderPostProcesor implements BeanPostProcessor {
-    private static final Logger LOG = LoggerFactory.getLogger(KeyVaultProviderPostProcesor.class);
+public class KeyVaultProviderInitializer implements BeanPostProcessor {
+    private static final Logger LOG = LoggerFactory.getLogger(KeyVaultProviderInitializer.class);
 
     @Autowired
     private KeyVaultProperties properties;

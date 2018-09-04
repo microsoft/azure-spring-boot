@@ -7,18 +7,10 @@ package com.microsoft.azure.spring.autoconfigure.sqlserver;
 
 import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
-import com.microsoft.sqlserver.jdbc.SQLServerColumnEncryptionAzureKeyVaultProvider;
-import com.microsoft.sqlserver.jdbc.SQLServerColumnEncryptionKeyStoreProvider;
-import com.microsoft.sqlserver.jdbc.SQLServerConnection;
-import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.FatalBeanException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -28,23 +20,24 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.jdbc.JndiDataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.XADataSourceAutoConfiguration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @ConditionalOnClass({DataSource.class, EmbeddedDatabaseType.class})
 @EnableConfigurationProperties({DataSourceProperties.class, KeyVaultProperties.class})
 @ConditionalOnProperty(name = AEConstants.PROPERTY_AE_ENABLED)
+@AutoConfigureBefore({DataSourceAutoConfiguration.class, JndiDataSourceAutoConfiguration.class,
+        XADataSourceAutoConfiguration.class})
 public class AlwaysEncryptedAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AlwaysEncryptedAutoConfiguration.class);
 
@@ -67,11 +60,44 @@ public class AlwaysEncryptedAutoConfiguration {
         telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
 
-    @Bean(name = "dataSourceBeanPostProcessor")
+    /**
+     *
+     * @return post processor bean that initializes KeyVault ofr SQL Driver
+     */
+    @Bean(name = "dataSourceKeyVaultInitializer")
     @ConditionalOnClass(com.microsoft.sqlserver.jdbc.SQLServerDriver.class)
-    @ConditionalOnBean(DataSource.class)
-    public BeanPostProcessor dataSourceBeanPostProcessor() {
+    public BeanPostProcessor dataSourceKeyVaultInitializer() {
         trackCustomEvent();
-        return new KeyVaultProviderPostProcesor();
+        return new KeyVaultProviderInitializer();
     }
+
+
+    @ConditionalOnClass(com.microsoft.sqlserver.jdbc.SQLServerDriver.class)
+    @ConditionalOnMissingBean(JdbcDataSourcePropertiesUpdater.class)
+    static class SqlServerJdbcInfoProviderConfiguration {
+
+        @Bean
+        public JdbcDataSourcePropertiesUpdater defaultSqlServerJdbcInfoProvider() {
+            return new JdbcDataSourcePropertiesUpdater();
+        }
+    }
+
+    @Configuration
+    @Import({SqlServerJdbcInfoProviderConfiguration.class})
+    static class AlwaysEncryptedDataSourcePropertiesConfiguration {
+
+        @Bean
+        @Primary
+        @ConditionalOnBean(JdbcDataSourcePropertiesUpdater.class)
+        public DataSourceProperties dataSourceProperties(DataSourceProperties dataSourceProperties,
+                                                         JdbcDataSourcePropertiesUpdater updater) {
+            LOG.info("Setting AlwaysEncrypted url");
+            // Set Property to enable Encryption
+           updater.updateDataSourceProperties(dataSourceProperties);
+
+           return dataSourceProperties;
+        }
+    }
+
+
 }
