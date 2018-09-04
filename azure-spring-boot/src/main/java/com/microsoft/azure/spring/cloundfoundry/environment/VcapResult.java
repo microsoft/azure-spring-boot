@@ -135,12 +135,12 @@ public class VcapResult {
                 "DefaultEndpointsProtocol=http;"
                         +
                         "AccountName="
-                        + pojo.getCredentials().get(
+                        + pojo.getServiceConfig().getCredentials().get(
                         Constants.STORAGE_ACCOUNT_NAME)
                         + ";"
                         +
                         "AccountKey="
-                        + pojo.getCredentials().get(
+                        + pojo.getServiceConfig().getCredentials().get(
                         Constants.PRIMARY_ACCESS_KEY);
         log("storageConnectionString = " + storageConnectionString);
         return storageConnectionString;
@@ -160,16 +160,16 @@ public class VcapResult {
     private String buildServiceBusConnectString(VcapPojo pojo) {
         final String connectionString =
                 "Endpoint=sb://"
-                        + pojo.getCredentials().get(Constants.NAMESPACE_NAME)
+                        + pojo.getServiceConfig().getCredentials().get(Constants.NAMESPACE_NAME)
                         + "."
                         + AZURE_SERVICE_BUS_DOMAIN
                         + "/;"
                         + "SharedAccessKeyName="
-                        + pojo.getCredentials().get(
+                        + pojo.getServiceConfig().getCredentials().get(
                         Constants.SHARED_ACCESS_NAME)
                         + ";"
                         + "SharedAccessKey="
-                        + pojo.getCredentials().get(
+                        + pojo.getServiceConfig().getCredentials().get(
                         Constants.SHARED_ACCESS_KEY_VALUE);
         log("connectionString name = " + connectionString);
         return connectionString;
@@ -181,11 +181,11 @@ public class VcapResult {
         map.put(Constants.NAMESPACE_DOCUMENTDB + "." + RESULT, this);
         if (pojo != null) {
             map.put(Constants.NAMESPACE_DOCUMENTDB + "." + URI, pojo
-                    .getCredentials().get(Constants.HOST_ENDPOINT));
+                    .getServiceConfig().getCredentials().get(Constants.HOST_ENDPOINT));
             map.put(Constants.NAMESPACE_DOCUMENTDB + "." + KEY, pojo
-                    .getCredentials().get(Constants.MASTER_KEY));
+                    .getServiceConfig().getCredentials().get(Constants.MASTER_KEY));
             map.put(Constants.NAMESPACE_DOCUMENTDB + "." + DATABASE, pojo
-                    .getCredentials().get(Constants.DATABASE_ID));
+                    .getServiceConfig().getCredentials().get(Constants.DATABASE_ID));
             log("VcapResult.populateDefaultDocumentDBProperties: Updated DocumentDB properties");
         }
     }
