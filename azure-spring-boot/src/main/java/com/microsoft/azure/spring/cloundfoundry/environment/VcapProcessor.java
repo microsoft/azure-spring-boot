@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Parses VCAP_SERVICES environment variable and sets corresponding property values.
@@ -83,13 +84,10 @@ public class VcapProcessor implements EnvironmentPostProcessor {
 
                         if (name.startsWith(AZURE) || USER_PROVIDED.equals(name)) {
                             final List<VcapServiceConfig> azureServices = serviceEntry.getValue();
-                            for (final VcapServiceConfig azureService : azureServices) {
-                                final VcapPojo pojo = parseService(name, azureService, vcapServices);
 
-                                if (pojo != null) {
-                                    results.add(pojo);
-                                }
-                            }
+                            results.addAll(azureServices.stream()
+                                    .map(service -> parseService(name, service, vcapServices))
+                                    .filter(vcapPojo -> vcapPojo != null).collect(Collectors.toList()));
                         }
                     }
                 }
