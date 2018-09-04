@@ -5,7 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.gremlin;
 
-import com.microsoft.azure.spring.autoconfigure.documentdb.TestAutoConfigurationPackage;
+import com.microsoft.azure.spring.autoconfigure.cosmosdb.TestAutoConfigurationPackage;
 import com.microsoft.azure.spring.autoconfigure.gremlin.domain.User;
 import com.microsoft.azure.spring.autoconfigure.gremlin.domain.UserRepository;
 import com.microsoft.spring.data.gremlin.common.GremlinFactory;

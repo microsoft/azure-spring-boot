@@ -4,7 +4,7 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.autoconfigure.documentdb.domain;
+package com.microsoft.azure.spring.autoconfigure.cosmosdb.domain;
 
 
 public class Person {

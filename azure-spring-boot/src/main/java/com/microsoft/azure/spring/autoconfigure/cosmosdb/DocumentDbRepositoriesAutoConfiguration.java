@@ -4,7 +4,7 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.autoconfigure.documentdb;
+package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
 import com.microsoft.azure.spring.data.cosmosdb.repository.DocumentDbRepository;
 import com.microsoft.azure.spring.data.cosmosdb.repository.config.DocumentDbRepositoryConfigurationExtension;
@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @ConditionalOnClass({DocumentDbRepository.class})
 @ConditionalOnMissingBean({DocumentDbRepositoryFactoryBean.class, DocumentDbRepositoryConfigurationExtension.class})
-@ConditionalOnProperty(prefix = "azure.documentdb.repositories",
+@ConditionalOnProperty(prefix = "azure.cosmosdb.repositories",
         name = "enabled",
         havingValue = "true",
         matchIfMissing = true)

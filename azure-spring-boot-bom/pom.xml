@@ -82,7 +82,7 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-documentdb-spring-boot-starter</artifactId>
+                <artifactId>azure-cosmosdb-spring-boot-starter</artifactId>
                 <version>${azure.spring.boot.version}</version>
             </dependency>
             <dependency>
