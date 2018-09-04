@@ -29,7 +29,7 @@ public class VcapPojo {
     @Override
     public String toString() {
         return "VcapPojo [serviceBrokerName=" + serviceBrokerName
-                + ", serviceConfig=" + serviceConfig.toString() + "]";
+                + ", serviceConfig=" + serviceConfig + "]";
     }
 
 }

@@ -17,7 +17,7 @@ public class VcapServiceConfig {
     private Map<String, String> credentials = new HashMap<>();
     private String label;
     private String name;
-    @JsonIgnoreProperties(ignoreUnknown=true)
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private String plan;
     private String provider;
 
