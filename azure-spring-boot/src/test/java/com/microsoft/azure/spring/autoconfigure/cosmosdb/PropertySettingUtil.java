@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.spring.autoconfigure.documentdb;
+package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
 import com.microsoft.azure.documentdb.ConnectionMode;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
@@ -31,10 +31,10 @@ public class PropertySettingUtil {
     public static final int RETRY_OPTIONS_MAX_RETRY_WAIT_TIME_IN_SECONDS = 6;
     public static final boolean ENABLE_ENDPOINT_DISCOVERY = false;
     public static final List<String> PREFERRED_LOCATIONS = Arrays.asList("East US", "West US", "North Europe");
-    private static final String PROPERTY_URI = "azure.documentdb.uri";
-    private static final String PROPERTY_KEY = "azure.documentdb.key";
-    private static final String PROPERTY_CONSISTENCY_LEVEL = "azure.documentdb.consistency-level";
-    private static final String PROPERTY_ALLOW_TELEMETRY = "azure.documentdb.allow-telemetry";
+    private static final String PROPERTY_URI = "azure.cosmosdb.uri";
+    private static final String PROPERTY_KEY = "azure.cosmosdb.key";
+    private static final String PROPERTY_CONSISTENCY_LEVEL = "azure.cosmosdb.consistency-level";
+    private static final String PROPERTY_ALLOW_TELEMETRY = "azure.cosmosdb.allow-telemetry";
 
     public static void setProperties() {
         System.setProperty(PROPERTY_URI, URI);

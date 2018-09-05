@@ -2,7 +2,7 @@
 This project provides auto-configuration for the following Azure services:
 
 - [Azure Active Directory](../azure-spring-boot-starters/azure-active-directory-spring-boot-starter)
-- [Cosmos DB DocumentDB API](../azure-spring-boot-starters/azure-documentdb-spring-boot-starter)
+- [Cosmos DB SQL API](../azure-spring-boot-starters/azure-cosmosdb-spring-boot-starter)
 - [Key Vault](../azure-spring-boot-starters/azure-keyvault-secrets-spring-boot-starter)
 - [Media Service](../azure-spring-boot-starters/azure-mediaservices-spring-boot-starter)
 - [Service Bus](../azure-spring-boot-starters/azure-servicebus-spring-boot-starter)

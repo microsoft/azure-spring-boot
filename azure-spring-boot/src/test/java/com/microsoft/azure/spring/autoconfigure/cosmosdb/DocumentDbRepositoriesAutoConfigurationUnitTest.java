@@ -4,11 +4,11 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.autoconfigure.documentdb;
+package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
 import com.microsoft.azure.documentdb.DocumentClient;
-import com.microsoft.azure.spring.autoconfigure.documentdb.domain.Person;
-import com.microsoft.azure.spring.autoconfigure.documentdb.domain.PersonRepository;
+import com.microsoft.azure.spring.autoconfigure.cosmosdb.domain.Person;
+import com.microsoft.azure.spring.autoconfigure.cosmosdb.domain.PersonRepository;
 import com.microsoft.azure.spring.data.cosmosdb.DocumentDbFactory;
 import com.microsoft.azure.spring.data.cosmosdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.cosmosdb.core.convert.MappingDocumentDbConverter;

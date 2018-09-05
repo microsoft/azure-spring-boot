@@ -4,7 +4,7 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.autoconfigure.documentdb;
+package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.documentdb.ConnectionPolicy;
@@ -38,7 +38,7 @@ import java.util.HashMap;
 
 @Configuration
 @ConditionalOnClass({DocumentClient.class, DocumentDbTemplate.class})
-@ConditionalOnProperty(prefix = "azure.documentdb", value = {"uri", "key"})
+@ConditionalOnProperty(prefix = "azure.cosmosdb", value = {"uri", "key"})
 @EnableConfigurationProperties(DocumentDBProperties.class)
 public class DocumentDBAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(DocumentDBAutoConfiguration.class);

@@ -23,13 +23,13 @@
     [Note] if both way applied,    
 - Custom collection Name.
    By default, collection name will be class name of user domain class. To customize it, add annotation `@Document(collection="myCustomCollectionName")` to your domain class, that's all.
-- Supports [Azure Cosmos DB partition](https://docs.microsoft.com/en-us/azure/cosmos-db/partition-data). To specify a field of your domain class to be partition key field, just annotate it with `@PartitionKey`. When you do CRUD operation, please specify your partition value. For more sample on partition CRUD, please refer to [test here](./test/java/com/microsoft/azure/spring/data/documentdb/repository/AddressRepositoryIT.java)   
+- Supports [Azure Cosmos DB partition](https://docs.microsoft.com/en-us/azure/cosmos-db/partition-data). To specify a field of your domain class to be partition key field, just annotate it with `@PartitionKey`. When you do CRUD operation, please specify your partition value. For more sample on partition CRUD, please refer to [test here](./test/java/com/microsoft/azure/spring/data/cosmosdb/repository/AddressRepositoryIT.java)   
 - Supports [Spring Data custom query](https://docs.spring.io/spring-data/commons/docs/current/reference/html/#repositories.query-methods.details) find operation.
 - Supports [spring-boot-starter-data-rest](https://projects.spring.io/spring-data-rest/).
 - Supports List and nested type in domain class.
 
 ## Sample Code
-Please refer to [sample project here](../../azure-spring-boot-samples/azure-documentdb-spring-boot-sample).
+Please refer to [sample project here](../../azure-spring-boot-samples/azure-cosmosdb-spring-boot-sample).
 
 ## Quick Start
 
@@ -42,7 +42,7 @@ If you are using Maven, add the following dependency.
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-documentdb-spring-boot-starter</artifactId>
-    <version>0.2.3</version>
+    <version>2.0.5</version>
 </dependency>
 ```
 
@@ -51,12 +51,12 @@ If you are using Maven, add the following dependency.
 Open `application.properties` file and add below properties with your Cosmos DB credentials.
 
 ```
-azure.documentdb.uri=your-documentdb-uri
-azure.documentdb.key=your-documentdb-key
-azure.documentdb.database=your-documentdb-databasename
+azure.cosmosdb.uri=your-documentdb-uri
+azure.cosmosdb.key=your-documentdb-key
+azure.cosmosdb.database=your-documentdb-databasename
 ```
 
-Property `azure.documentdb.consistency-level` is also supported.
+Property `azure.cosmosdb.consistency-level` is also supported.
 
 ### Define an entity
 Define a simple entity as Document in DocumentDB.
@@ -134,7 +134,7 @@ Autowired UserRepository interface, then can do save, delete and find operations
 ### Allow telemetry
 Microsoft would like to collect data about how users use this Spring boot starter. Microsoft uses this information to improve our tooling experience. Participation is voluntary. If you don't want to participate, just simply disable it by setting below configuration in `application.properties`.
 ```
-azure.documentdb.allow-telemetry=false
+azure.cosmosdb.allow-telemetry=false
 ```
 Find more information about Azure Service Privacy Statement, please check [Microsoft Online Services Privacy Statement](https://www.microsoft.com/en-us/privacystatement/OnlineServices/Default.aspx). 
 
