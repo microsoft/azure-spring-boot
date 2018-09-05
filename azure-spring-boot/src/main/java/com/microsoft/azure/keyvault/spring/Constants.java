@@ -10,15 +10,17 @@ import com.microsoft.azure.utils.PropertyLoader;
 
 public class Constants {
     public static final String AZURE_KEYVAULT_USER_AGENT = "spring-boot-starter/" + PropertyLoader.getProjectVersion();
-    public static final String AZURE_CLIENTID = "azure.keyvault.client-id";
-    public static final String AZURE_CLIENTKEY = "azure.keyvault.client-key";
-    public static final String AZURE_KEYVAULT_ENABLED = "azure.keyvault.enabled";
-    public static final String AZURE_KEYVAULT_VAULT_URI = "azure.keyvault.uri";
-    public static final String AZURE_KEYVAULT_REFRESH_INTERVAL = "azure.keyvault.refresh-interval";
     public static final String AZURE_KEYVAULT_PROPERTYSOURCE_NAME = "azurekv";
-    public static final String AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS = "azure.keyvault.token-acquire-timeout-seconds";
-    public static final String AZURE_KEYVAULT_ALLOW_TELEMETRY = "azure.keyvault.allow.telemetry";
 
-    public static final long DEFAULT_REFRESH_INTERVAL_MS = 1800000L;
-    public static final long TOKEN_ACQUIRE_TIMEOUT_SECS = 60L;
+    public static final String KEY_VALUE_PREFIX = "keyVault:";
+
+    public static final String AZURE_KEY_VAULT_ENABLED = "azure.keyvault.enabled";
+    public static final String AZURE_CLIENT_ID = "azure.keyvault.client-id";
+    public static final String AZURE_KEYVAULT_CLIENT_KEY = "azure.keyvault.client-key";
+    public static final String AZURE_KEYVAULT_NAME = "azure.keyvault.name";
+    public static final String AZURE_KEYVAULT_ALLOW_TELEMETRY = "azure.keyvault.allow-telemetry";
+    public static final String AZURE_KEYVAULT_REFRESH_INTERVAL_MS = "azure.keyvault.refresh-interval";
+    public static final String AZURE_KEYVAULT_USE_CACHE = "azure.keyvault.use-cache";
+
+    public static final long DEFAULT_REFRESH_INTERVAL_MS = -1L; // Refresh disabled
 }

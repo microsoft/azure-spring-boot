@@ -5,31 +5,39 @@
  */
 package com.microsoft.azure.keyvault.spring;
 
+import com.microsoft.azure.keyvault.spring.secrets.KeyVaultPropertySource;
+import com.microsoft.azure.keyvault.spring.secrets.KeyVaultSecretOperation;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static com.microsoft.azure.keyvault.spring.Constants.KEY_VALUE_PREFIX;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class KeyVaultPropertySourceUnitTest {
     private static final String testPropertyName1 = "testPropertyName1";
+    private static final String testKeyVaultName = "fakeKeyVaultName";
+
     @Mock
-    KeyVaultOperation keyVaultOperation;
+    KeyVaultSecretOperation secretOperation;
     KeyVaultPropertySource keyVaultPropertySource;
 
     @Before
     public void setup() {
-        final String[] propertyNameList = new String[]{testPropertyName1};
+        final List<String> propertyNameList = Arrays.asList(testPropertyName1);
 
-        when(keyVaultOperation.get(anyString())).thenReturn(testPropertyName1);
-        when(keyVaultOperation.list()).thenReturn(propertyNameList);
+        when(secretOperation.getSecret(anyString(), anyString())).thenReturn(testPropertyName1);
+        when(secretOperation.listSecrets(anyString())).thenReturn(propertyNameList);
 
-        keyVaultPropertySource = new KeyVaultPropertySource(keyVaultOperation);
+        keyVaultPropertySource = new KeyVaultPropertySource(secretOperation, testKeyVaultName);
     }
 
     @Test
@@ -42,7 +50,7 @@ public class KeyVaultPropertySourceUnitTest {
 
     @Test
     public void testGetProperty() {
-        final String result = (String) keyVaultPropertySource.getProperty(testPropertyName1);
+        final String result = (String) keyVaultPropertySource.getProperty(KEY_VALUE_PREFIX + testPropertyName1);
         assertThat(result).isEqualTo(testPropertyName1);
     }
 }

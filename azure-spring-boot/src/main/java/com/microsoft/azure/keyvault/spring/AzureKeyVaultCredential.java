@@ -3,52 +3,45 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-
 package com.microsoft.azure.keyvault.spring;
 
 import com.microsoft.aad.adal4j.AuthenticationContext;
 import com.microsoft.aad.adal4j.AuthenticationResult;
 import com.microsoft.aad.adal4j.ClientCredential;
 import com.microsoft.azure.keyvault.authentication.KeyVaultCredentials;
+import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-
+/**
+ * Credential used for Key Vault call. This class just fetch token by provided
+ * {@code clientId} and {@code clientSecret}. This should be provided by Azure SDK
+ *
+ * @author Warren Zhu
+ */
+@AllArgsConstructor
 public class AzureKeyVaultCredential extends KeyVaultCredentials {
-    private static final long DEFAULT_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS = 60L;
-    private String clientId;
-    private String clientKey;
-    private long timeoutInSeconds;
-
-    public AzureKeyVaultCredential(String clientId, String clientKey, long timeoutInSeconds) {
-        this.clientId = clientId;
-        this.clientKey = clientKey;
-        this.timeoutInSeconds = timeoutInSeconds;
-    }
-
-    public AzureKeyVaultCredential(String clientId, String clientKey) {
-        this(clientId, clientKey, DEFAULT_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS);
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(AzureKeyVaultCredential.class);
+    private final String clientId;
+    private final String clientSecret;
 
     @Override
     public String doAuthenticate(String authorization, String resource, String scope) {
-        AuthenticationContext context = null;
-        AuthenticationResult result = null;
-        String token = "";
-        final ExecutorService executorService = Executors.newSingleThreadExecutor();
         try {
-            context = new AuthenticationContext(authorization, false, executorService);
-            final ClientCredential credential = new ClientCredential(this.clientId, this.clientKey);
+            final AuthenticationContext context =
+                    new AuthenticationContext(authorization, false, Executors.newSingleThreadExecutor());
 
-            final Future<AuthenticationResult> future = context.acquireToken(resource, credential, null);
-            result = future.get(timeoutInSeconds, TimeUnit.SECONDS);
-            token = result.getAccessToken();
-        } catch (MalformedURLException | TimeoutException | InterruptedException | ExecutionException ex) {
-            throw new IllegalStateException("Failed to do authentication.", ex);
-        } finally {
-            executorService.shutdown();
+            final Future<AuthenticationResult> future =
+                    context.acquireToken(resource, new ClientCredential(this.clientId, this.clientSecret), null);
+            return future.get().getAccessToken();
+        } catch (MalformedURLException | InterruptedException | ExecutionException e) {
+            LOGGER.error("Failed to do Azure Key Vault authentication.", e);
+            throw new IllegalStateException("Failed to do Azure Key Vault authentication.", e);
         }
-        return token;
     }
 }

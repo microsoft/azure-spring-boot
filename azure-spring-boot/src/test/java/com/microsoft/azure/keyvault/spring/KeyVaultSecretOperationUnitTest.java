@@ -10,29 +10,38 @@ import com.microsoft.azure.PagedList;
 import com.microsoft.azure.keyvault.KeyVaultClient;
 import com.microsoft.azure.keyvault.models.SecretBundle;
 import com.microsoft.azure.keyvault.models.SecretItem;
+import com.microsoft.azure.keyvault.spring.secrets.KeyVaultSecretTemplate;
+import com.microsoft.rest.RestClient;
 import com.microsoft.rest.RestException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.api.support.membermodification.MemberMatcher;
+import org.powermock.api.support.membermodification.MemberModifier;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class KeyVaultOperationUnitTest {
-
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(AbstractKeyVaultTemplate.class)
+public class KeyVaultSecretOperationUnitTest {
     private static final String testPropertyName1 = "testPropertyName1";
-    private static final String fakeVaultUri = "https://fake.vault.com";
+
     @Mock
     KeyVaultClient keyVaultClient;
-    KeyVaultOperation keyVaultOperation;
+
+    KeyVaultSecretTemplate secretTemplate;
 
     @Before
     public void setup() {
@@ -53,26 +62,27 @@ public class KeyVaultOperationUnitTest {
         secretBundle.withValue(testPropertyName1);
         secretBundle.withId(testPropertyName1);
 
-
         when(keyVaultClient.listSecrets(anyString())).thenReturn(mockResult);
         when(keyVaultClient.getSecret(anyString(), anyString())).thenReturn(secretBundle);
 
-        keyVaultOperation = new KeyVaultOperation(keyVaultClient, fakeVaultUri);
+        secretTemplate = new KeyVaultSecretTemplate("clientId", "clientSecret");
+        MemberModifier.stub(MemberMatcher.method(AbstractKeyVaultTemplate.class, "buildKeyVaultClient"))
+                .toReturn(keyVaultClient);
     }
 
     @Test
     public void testGet() {
-        final String result = (String) keyVaultOperation.get(testPropertyName1);
+        final String result = secretTemplate.getSecret("fake", testPropertyName1);
 
         assertThat(result).isEqualTo(testPropertyName1);
     }
 
     @Test
     public void testList() {
-        final String[] result = keyVaultOperation.list();
+        final Collection<String> result = secretTemplate.listSecrets("fake");
 
-        assertThat(result.length).isEqualTo(1);
-        assertThat(result[0]).isEqualTo(testPropertyName1);
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.iterator().next()).isEqualTo(testPropertyName1);
     }
 
     class MockPage implements Page<SecretItem> {
