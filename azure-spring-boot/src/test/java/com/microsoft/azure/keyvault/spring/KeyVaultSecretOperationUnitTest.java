@@ -79,10 +79,10 @@ public class KeyVaultSecretOperationUnitTest {
 
     @Test
     public void testList() {
-        final Collection<String> result = secretTemplate.listSecrets("fake");
+        final List<String> result = secretTemplate.listSecrets("fake");
 
         assertThat(result.size()).isEqualTo(1);
-        assertThat(result.iterator().next()).isEqualTo(testPropertyName1);
+        assertThat(result.get(0)).isEqualTo(testPropertyName1);
     }
 
     class MockPage implements Page<SecretItem> {
