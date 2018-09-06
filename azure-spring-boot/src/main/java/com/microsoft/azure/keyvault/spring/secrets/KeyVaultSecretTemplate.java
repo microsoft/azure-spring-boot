@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * Default implementation of {@link KeyVaultOperation}
  *
  */
-public class KeyVaultSecretTemplate extends AbstractKeyVaultTemplate implements KeyVaultOperation {
+public class KeyVaultSecretTemplate extends AbstractKeyVaultTemplate {
     private Map<String, Set<String>> secretNamesByKeyVault = new ConcurrentHashMap<>();
     private Map<Pair<String, String>, String> secretsByKeyVault = new ConcurrentHashMap<>();
 
@@ -29,7 +29,7 @@ public class KeyVaultSecretTemplate extends AbstractKeyVaultTemplate implements 
     }
 
     public KeyVaultSecretTemplate(String clientId, String clientSecret, long refreshIntervalMS) {
-        super(clientId, clientSecret, refreshIntervalMS);
+        super(clientId, clientSecret);
         scheduleRefresh(refreshIntervalMS);
     }
 

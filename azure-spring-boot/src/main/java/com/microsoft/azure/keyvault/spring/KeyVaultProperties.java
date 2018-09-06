@@ -11,6 +11,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import javax.validation.constraints.NotEmpty;
 
+import static com.microsoft.azure.keyvault.spring.Constants.DEFAULT_REFRESH_INTERVAL_MS;
+
 @Getter
 @Setter
 @ConfigurationProperties("azure.keyvault")
@@ -28,7 +30,7 @@ public class KeyVaultProperties {
 
     private boolean allowTelemetry = true;
 
-    private long refreshInterval = -1;
+    private long refreshInterval = DEFAULT_REFRESH_INTERVAL_MS;
 
     private boolean useCache = true;
 }

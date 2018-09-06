@@ -22,15 +22,9 @@ public abstract class AbstractKeyVaultTemplate implements KeyVaultOperation {
     protected final AzureKeyVaultCredential credential;
     protected final Function<String, KeyVaultClient> keyVaultClientCreator = keyVaultClientCreator();
     private boolean allowTelemetry = false;
-    protected long refreshIntervalMS = DEFAULT_REFRESH_INTERVAL_MS;
 
     public AbstractKeyVaultTemplate(String clientId, String clientSecret) {
         this.credential = new AzureKeyVaultCredential(clientId, clientSecret);
-    }
-
-    public AbstractKeyVaultTemplate(String clientId, String clientSecret, long refreshIntervalMS) {
-        this(clientId, clientSecret);
-        this.refreshIntervalMS = refreshIntervalMS;
     }
 
     public void setAllowTelemetry(boolean allowTelemetry) {
