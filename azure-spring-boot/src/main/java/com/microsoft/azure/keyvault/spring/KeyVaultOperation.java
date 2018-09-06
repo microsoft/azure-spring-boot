@@ -5,13 +5,13 @@
  */
 package com.microsoft.azure.keyvault.spring;
 
+import java.util.List;
+
 /**
  * Azure Key Vault related operation
  */
 public interface KeyVaultOperation {
-    void setUseCache(boolean useCache);
+    String getSecret(String keyVaultName, String secretName);
 
-    void setRefreshInterval(long refreshIntervalMilliSecs);
-
-    void setAllowTelemetry(boolean allowTelemetry);
+    List<String> listSecrets(String keyVaultName);
 }

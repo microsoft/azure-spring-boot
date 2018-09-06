@@ -6,7 +6,6 @@
 package com.microsoft.azure.keyvault.spring;
 
 import com.microsoft.azure.keyvault.spring.secrets.KeyVaultPropertySource;
-import com.microsoft.azure.keyvault.spring.secrets.KeyVaultSecretOperation;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,17 +26,17 @@ public class KeyVaultPropertySourceUnitTest {
     private static final String testKeyVaultName = "fakeKeyVaultName";
 
     @Mock
-    KeyVaultSecretOperation secretOperation;
+    KeyVaultOperation keyVaultOperation;
     KeyVaultPropertySource keyVaultPropertySource;
 
     @Before
     public void setup() {
         final List<String> propertyNameList = Arrays.asList(testPropertyName1);
 
-        when(secretOperation.getSecret(anyString(), anyString())).thenReturn(testPropertyName1);
-        when(secretOperation.listSecrets(anyString())).thenReturn(propertyNameList);
+        when(keyVaultOperation.getSecret(anyString(), anyString())).thenReturn(testPropertyName1);
+        when(keyVaultOperation.listSecrets(anyString())).thenReturn(propertyNameList);
 
-        keyVaultPropertySource = new KeyVaultPropertySource(secretOperation, testKeyVaultName);
+        keyVaultPropertySource = new KeyVaultPropertySource(keyVaultOperation, testKeyVaultName);
     }
 
     @Test

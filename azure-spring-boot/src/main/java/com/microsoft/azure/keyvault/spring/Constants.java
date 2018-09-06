@@ -20,7 +20,6 @@ public class Constants {
     public static final String AZURE_KEYVAULT_NAME = "azure.keyvault.name";
     public static final String AZURE_KEYVAULT_ALLOW_TELEMETRY = "azure.keyvault.allow-telemetry";
     public static final String AZURE_KEYVAULT_REFRESH_INTERVAL_MS = "azure.keyvault.refresh-interval";
-    public static final String AZURE_KEYVAULT_USE_CACHE = "azure.keyvault.use-cache";
 
     public static final long DEFAULT_REFRESH_INTERVAL_MS = -1L; // Refresh disabled
 }

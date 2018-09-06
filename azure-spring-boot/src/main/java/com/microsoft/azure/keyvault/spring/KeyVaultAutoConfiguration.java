@@ -6,7 +6,6 @@
 package com.microsoft.azure.keyvault.spring;
 
 import com.microsoft.azure.keyvault.KeyVaultClient;
-import com.microsoft.azure.keyvault.spring.secrets.KeyVaultSecretOperation;
 import com.microsoft.azure.keyvault.spring.secrets.KeyVaultSecretTemplate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -26,7 +25,7 @@ public class KeyVaultAutoConfiguration {
     }
 
     @Bean
-    public KeyVaultSecretOperation getSecretOperation() {
+    public KeyVaultOperation getSecretOperation() {
         return new KeyVaultSecretTemplate(properties.getClientId(), properties.getClientKey(),
                 properties.getRefreshInterval());
     }

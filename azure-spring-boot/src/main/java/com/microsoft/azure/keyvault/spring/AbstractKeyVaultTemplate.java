@@ -20,10 +20,9 @@ public abstract class AbstractKeyVaultTemplate implements KeyVaultOperation {
     private static final String KEY_VAULT_URL = "https://%s.vault.azure.net/";
 
     protected final AzureKeyVaultCredential credential;
-    protected Function<String, KeyVaultClient> keyVaultClientCreator = keyVaultClientCreator();
+    protected final Function<String, KeyVaultClient> keyVaultClientCreator = keyVaultClientCreator();
     private boolean allowTelemetry = false;
     protected long refreshIntervalMS = DEFAULT_REFRESH_INTERVAL_MS;
-    protected boolean useCache = true;
 
     public AbstractKeyVaultTemplate(String clientId, String clientSecret) {
         this.credential = new AzureKeyVaultCredential(clientId, clientSecret);
@@ -34,17 +33,6 @@ public abstract class AbstractKeyVaultTemplate implements KeyVaultOperation {
         this.refreshIntervalMS = refreshIntervalMS;
     }
 
-    @Override
-    public void setUseCache(boolean useCache) {
-        this.useCache = useCache;
-    }
-
-    @Override
-    public void setRefreshInterval(long refreshIntervalMilliSecs) {
-        this.refreshIntervalMS = refreshIntervalMilliSecs;
-    }
-
-    @Override
     public void setAllowTelemetry(boolean allowTelemetry) {
         this.allowTelemetry = allowTelemetry;
     }

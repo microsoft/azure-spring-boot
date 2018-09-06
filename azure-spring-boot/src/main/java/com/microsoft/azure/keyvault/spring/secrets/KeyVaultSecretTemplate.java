@@ -9,21 +9,20 @@ import com.microsoft.azure.PagedList;
 import com.microsoft.azure.keyvault.models.SecretBundle;
 import com.microsoft.azure.keyvault.models.SecretItem;
 import com.microsoft.azure.keyvault.spring.AbstractKeyVaultTemplate;
+import com.microsoft.azure.keyvault.spring.KeyVaultOperation;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 /**
- * Default implementation of {@link KeyVaultSecretOperation}
+ * Default implementation of {@link KeyVaultOperation}
  *
  */
-public class KeyVaultSecretTemplate extends AbstractKeyVaultTemplate implements KeyVaultSecretOperation {
-    private final Map<String, Set<String>> secretNamesByKeyVault = new ConcurrentHashMap<>();
-    private final Map<Pair<String, String>, String> secretsByKeyVault = new ConcurrentHashMap<>();
-
-    private long lastUpdatedTime = System.currentTimeMillis();
+public class KeyVaultSecretTemplate extends AbstractKeyVaultTemplate implements KeyVaultOperation {
+    private Map<String, Set<String>> secretNamesByKeyVault = new ConcurrentHashMap<>();
+    private Map<Pair<String, String>, String> secretsByKeyVault = new ConcurrentHashMap<>();
 
     public KeyVaultSecretTemplate(String clientId, String clientSecret) {
         super(clientId, clientSecret);
@@ -31,29 +30,20 @@ public class KeyVaultSecretTemplate extends AbstractKeyVaultTemplate implements 
 
     public KeyVaultSecretTemplate(String clientId, String clientSecret, long refreshIntervalMS) {
         super(clientId, clientSecret, refreshIntervalMS);
+        scheduleRefresh(refreshIntervalMS);
     }
 
     @Override
     public String getSecret(String keyVaultName, String secretName) {
         final Pair<String, String> keyVaultAndSecret = Pair.of(keyVaultName, secretName);
-        if (useCache) {
-            clearCacheAfterInterval();
-            this.secretsByKeyVault.computeIfAbsent(keyVaultAndSecret, this::fetchSecret);
-        } else {
-            this.secretsByKeyVault.put(keyVaultAndSecret, fetchSecret(keyVaultAndSecret));
-        }
+        this.secretsByKeyVault.computeIfAbsent(keyVaultAndSecret, this::fetchSecret);
 
         return this.secretsByKeyVault.get(keyVaultAndSecret);
     }
 
     @Override
     public List<String> listSecrets(String keyVaultName) {
-        if (useCache) {
-            clearCacheAfterInterval();
-            this.secretNamesByKeyVault.computeIfAbsent(keyVaultName, this::fetchSecretNames);
-        } else {
-            this.secretNamesByKeyVault.put(keyVaultName, fetchSecretNames(keyVaultName));
-        }
+        this.secretNamesByKeyVault.computeIfAbsent(keyVaultName, this::fetchSecretNames);
 
         return new ArrayList<>(this.secretNamesByKeyVault.get(keyVaultName));
     }
@@ -77,18 +67,32 @@ public class KeyVaultSecretTemplate extends AbstractKeyVaultTemplate implements 
         return bundle == null ? null : bundle.value();
     }
 
-    private void clearCacheAfterInterval() {
+    private void scheduleRefresh(long refreshIntervalMS) {
         if (refreshIntervalMS <= 0) {
             // Do not refresh
             return;
         }
 
-        final long now = System.currentTimeMillis();
-        if (now - this.lastUpdatedTime > refreshIntervalMS) {
-            this.secretNamesByKeyVault.clear();
-            this.secretsByKeyVault.clear();
+        final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        final Runnable refresher = new Runnable() {
+            @Override
+            public void run() {
+                final Set<String> keyVaultNames = secretNamesByKeyVault.keySet();
+                secretsByKeyVault.clear();
 
-            this.lastUpdatedTime = System.currentTimeMillis();
-        }
+                keyVaultNames.stream().forEach(keyVaultName -> {
+                    final Set<String> secretNames = fetchSecretNames(keyVaultName);
+
+                    secretNames.stream().forEach(secretName -> {
+                        final Pair<String, String> keyVaultSecrect = Pair.of(keyVaultName, secretName);
+                        final String secretValue = fetchSecret(keyVaultSecrect);
+
+                        secretsByKeyVault.putIfAbsent(keyVaultSecrect, secretValue);
+                    });
+                });
+            }
+        };
+
+        scheduler.scheduleWithFixedDelay(refresher, refreshIntervalMS, refreshIntervalMS, TimeUnit.MILLISECONDS);
     }
 }

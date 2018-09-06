@@ -40,11 +40,10 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
         if (shouldAddKeyVaultPropertySource(environment)) {
             LOGGER.info("Azure Key Vault enabled.");
             final KeyVaultSecretTemplate operation = new KeyVaultSecretTemplate(
-                    environment.getProperty(AZURE_CLIENT_ID), environment.getProperty(AZURE_KEYVAULT_CLIENT_KEY));
+                    environment.getProperty(AZURE_CLIENT_ID), environment.getProperty(AZURE_KEYVAULT_CLIENT_KEY),
+                    getRefreshInterval(environment));
 
             operation.setAllowTelemetry(allowTelemetry(environment));
-            operation.setRefreshInterval(getRefreshInterval(environment));
-            operation.setUseCache(useCache(environment));
 
             environment.getPropertySources()
                     .addLast(new KeyVaultPropertySource(operation, environment.getProperty(AZURE_KEYVAULT_NAME)));
@@ -75,9 +74,5 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
 
     private static long getRefreshInterval(final ConfigurableEnvironment env) {
         return env.getProperty(AZURE_KEYVAULT_REFRESH_INTERVAL_MS, Long.class, DEFAULT_REFRESH_INTERVAL_MS);
-    }
-
-    private static boolean useCache(final ConfigurableEnvironment env) {
-        return env.getProperty(AZURE_KEYVAULT_USE_CACHE, Boolean.class, true);
     }
 }

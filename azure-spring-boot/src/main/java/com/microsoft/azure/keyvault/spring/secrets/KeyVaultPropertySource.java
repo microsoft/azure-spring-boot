@@ -18,11 +18,11 @@ import static com.microsoft.azure.keyvault.spring.Constants.KEY_VALUE_PREFIX;
  *
  * @author Warren Zhu
  */
-public class KeyVaultPropertySource extends EnumerablePropertySource<KeyVaultSecretOperation> {
-    private final KeyVaultSecretOperation operation;
+public class KeyVaultPropertySource extends EnumerablePropertySource<KeyVaultOperation> {
+    private final KeyVaultOperation operation;
     private final String keyVaultName;
 
-    public KeyVaultPropertySource(KeyVaultSecretOperation operation, String keyVaultName) {
+    public KeyVaultPropertySource(KeyVaultOperation operation, String keyVaultName) {
         super("KeyVault", operation);
         this.operation = operation;
         this.keyVaultName = keyVaultName;
