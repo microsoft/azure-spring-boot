@@ -12,8 +12,6 @@ public class Constants {
     public static final String AZURE_KEYVAULT_USER_AGENT = "spring-boot-starter/" + PropertyLoader.getProjectVersion();
     public static final String AZURE_CLIENTID = "azure.keyvault.client-id";
     public static final String AZURE_CLIENTKEY = "azure.keyvault.client-key";
-    public static final String AZURE_MSI_ENDPOINT = "MSI_ENDPOINT";
-    public static final String AZURE_MSI_SECRET = "MSI_SECRET";
     public static final String AZURE_KEYVAULT_ENABLED = "azure.keyvault.enabled";
     public static final String AZURE_KEYVAULT_VAULT_URI = "azure.keyvault.uri";
     public static final String AZURE_KEYVAULT_REFRESH_INTERVAL = "azure.keyvault.refresh-interval";

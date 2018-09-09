@@ -45,8 +45,8 @@ class KeyVaultEnvironmentPostProcessorHelper {
             Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, Long.class, 60L);
         final ServiceClientCredentials credentials;
 
-        if (this.environment.containsProperty(Constants.AZURE_MSI_ENDPOINT)
-            && this.environment.containsProperty(Constants.AZURE_MSI_SECRET)) {
+        if (this.environment.containsProperty("MSI_ENDPOINT")
+            && this.environment.containsProperty("MSI_SECRET")) {
             credentials = new AppServiceMSICredentials(AzureEnvironment.AZURE);
         } else {
             final String clientId = getProperty(this.environment, Constants.AZURE_CLIENTID);

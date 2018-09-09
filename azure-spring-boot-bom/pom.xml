@@ -53,6 +53,7 @@
         <azure.media.version>0.9.7</azure.media.version>
         <azure.servicebus.version>1.2.5</azure.servicebus.version>
         <azure.spring.boot.version>2.0.5-SNAPSHOT</azure.spring.boot.version>
+        <azure.client-authentication.version>1.6.1</azure.client-authentication.version>
         <azure.applicationinsights.version>2.1.2</azure.applicationinsights.version>
         <spring.data.cosmosdb.version>2.0.4</spring.data.cosmosdb.version>
         <spring.data.gremlin.version>2.0.0</spring.data.gremlin.version>
@@ -114,6 +115,11 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-spring-boot</artifactId>
                 <version>${azure.spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-client-authentication</artifactId>
+                <version>${azure.client-authentication.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
