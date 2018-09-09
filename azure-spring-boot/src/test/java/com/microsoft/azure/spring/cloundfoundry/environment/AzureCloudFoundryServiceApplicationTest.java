@@ -49,24 +49,25 @@ public class AzureCloudFoundryServiceApplicationTest {
             final VcapPojo pojo = pojos[0];
 
             LOG.debug("pojo = " + pojo);
-            assertEquals(3, pojo.getCredentials().size());
-            assertEquals(2, pojo.getTags().length);
-            assertEquals(0, pojo.getVolumeMounts().length);
-            assertEquals("azure-storage", pojo.getLabel());
-            assertEquals("provider", pojo.getProvider());
+            final VcapServiceConfig config = pojo.getServiceConfig();
+            assertEquals(3, config.getCredentials().size());
+            assertEquals(2, config.getTags().length);
+            assertEquals(0, config.getVolumeMounts().length);
+            assertEquals("azure-storage", config.getLabel());
+            assertEquals("provider", config.getProvider());
             assertEquals("azure-storage", pojo.getServiceBrokerName());
-            assertEquals("azure-storage-service", pojo.getServiceInstanceName());
-            assertEquals("standard", pojo.getServicePlan());
-            assertNull(pojo.getSyslogDrainUrl());
-            assertEquals("Azure", pojo.getTags()[0]);
-            assertEquals("Storage", pojo.getTags()[1]);
+            assertEquals("azure-storage-service", config.getName());
+            assertEquals("standard", config.getPlan());
+            assertNull(config.getSyslogDrainUrl());
+            assertEquals("Azure", config.getTags()[0]);
+            assertEquals("Storage", config.getTags()[1]);
 
             assertEquals("pak",
-                    pojo.getCredentials().get("primary_access_key"));
+                    config.getCredentials().get("primary_access_key"));
             assertEquals("sak",
-                    pojo.getCredentials().get("secondary_access_key"));
+                    config.getCredentials().get("secondary_access_key"));
             assertEquals("sam",
-                    pojo.getCredentials().get("storage_account_name"));
+                    config.getCredentials().get("storage_account_name"));
         } catch (IOException e) {
             LOG.error("Error reading json file", e);
             throw e;
@@ -88,25 +89,26 @@ public class AzureCloudFoundryServiceApplicationTest {
             final VcapPojo pojo = pojos[0];
 
             LOG.debug("pojo = " + pojo);
-            assertEquals(4, pojo.getCredentials().size());
-            assertEquals(0, pojo.getTags().length);
-            assertEquals(0, pojo.getVolumeMounts().length);
-            assertEquals("azure-documentdb", pojo.getLabel());
-            assertNull(pojo.getProvider());
+            final VcapServiceConfig config = pojo.getServiceConfig();
+            assertEquals(4, config.getCredentials().size());
+            assertEquals(0, config.getTags().length);
+            assertEquals(0, config.getVolumeMounts().length);
+            assertEquals("azure-documentdb", config.getLabel());
+            assertNull(config.getProvider());
             assertEquals("azure-documentdb", pojo.getServiceBrokerName());
-            assertEquals("mydocumentdb", pojo.getServiceInstanceName());
-            assertEquals("standard", pojo.getServicePlan());
-            assertNull(pojo.getSyslogDrainUrl());
+            assertEquals("mydocumentdb", config.getName());
+            assertEquals("standard", config.getPlan());
+            assertNull(config.getSyslogDrainUrl());
 
             assertEquals("docdb123mj",
-                    pojo.getCredentials().get("documentdb_database_id"));
+                    config.getCredentials().get("documentdb_database_id"));
             assertEquals("dbs/ZFxCAA==/",
-                    pojo.getCredentials().get("documentdb_database_link"));
+                    config.getCredentials().get("documentdb_database_link"));
             assertEquals("https://hostname:443/",
-                    pojo.getCredentials().get("documentdb_host_endpoint"));
+                    config.getCredentials().get("documentdb_host_endpoint"));
             assertEquals(
                     "3becR7JFnWamMvGwWYWWTV4WpeNhN8tOzJ74yjAxPKDpx65q2lYz60jt8WXU6HrIKrAIwhs0Hglf0123456789==",
-                    pojo.getCredentials().get("documentdb_master_key"));
+                    config.getCredentials().get("documentdb_master_key"));
         } catch (IOException e) {
             LOG.error("Error reading json file", e);
             throw e;
@@ -128,25 +130,26 @@ public class AzureCloudFoundryServiceApplicationTest {
             final VcapPojo pojo = pojos[0];
 
             LOG.debug("pojo = " + pojo);
-            assertEquals(4, pojo.getCredentials().size());
-            assertEquals(0, pojo.getTags().length);
-            assertEquals(0, pojo.getVolumeMounts().length);
-            assertEquals("user-provided", pojo.getLabel());
-            assertNull(pojo.getProvider());
+            final VcapServiceConfig config = pojo.getServiceConfig();
+            assertEquals(4, config.getCredentials().size());
+            assertEquals(0, config.getTags().length);
+            assertEquals(0, config.getVolumeMounts().length);
+            assertEquals("user-provided", config.getLabel());
+            assertNull(config.getProvider());
             assertEquals("azure-documentdb", pojo.getServiceBrokerName());
-            assertEquals("mydocumentdb", pojo.getServiceInstanceName());
-            assertEquals("standard", pojo.getServicePlan());
-            assertNull(pojo.getSyslogDrainUrl());
+            assertEquals("mydocumentdb", config.getName());
+            assertEquals("standard", config.getPlan());
+            assertNull(config.getSyslogDrainUrl());
 
             assertEquals("docdb123mj",
-                    pojo.getCredentials().get("documentdb_database_id"));
+                    config.getCredentials().get("documentdb_database_id"));
             assertEquals("dbs/ZFxCAA==/",
-                    pojo.getCredentials().get("documentdb_database_link"));
+                    config.getCredentials().get("documentdb_database_link"));
             assertEquals("https://hostname:443/",
-                    pojo.getCredentials().get("documentdb_host_endpoint"));
+                    config.getCredentials().get("documentdb_host_endpoint"));
             assertEquals(
                     "3becR7JFnWamMvGwWYWWTV4WpeNhN8tOzJ74yjAxPKDpx65q2lYz60jt8WXU6HrIKrAIwhs0Hglf0123456789==",
-                    pojo.getCredentials().get("documentdb_master_key"));
+                    config.getCredentials().get("documentdb_master_key"));
         } catch (IOException e) {
             LOG.error("Error reading json file", e);
             throw e;

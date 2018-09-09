@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.spring.autoconfigure.documentdb;
+package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
 
 import org.junit.Test;
@@ -78,8 +78,8 @@ public class DocumentDBPropertiesTest {
             Collections.sort(errorStrings);
 
             final List<String> errorStringsExpected = Arrays.asList(
-                    "Field error in object 'azure.documentdb' on field 'key': rejected value [null];",
-                    "Field error in object 'azure.documentdb' on field 'uri': rejected value [null];"
+                    "Field error in object 'azure.cosmosdb' on field 'key': rejected value [null];",
+                    "Field error in object 'azure.cosmosdb' on field 'uri': rejected value [null];"
             );
 
             assertThat(errorStrings.size()).isEqualTo(errorStringsExpected.size());

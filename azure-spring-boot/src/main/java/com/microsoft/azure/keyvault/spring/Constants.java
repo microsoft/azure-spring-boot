@@ -18,4 +18,7 @@ public class Constants {
     public static final String AZURE_KEYVAULT_PROPERTYSOURCE_NAME = "azurekv";
     public static final String AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS = "azure.keyvault.token-acquire-timeout-seconds";
     public static final String AZURE_KEYVAULT_ALLOW_TELEMETRY = "azure.keyvault.allow.telemetry";
+
+    public static final long DEFAULT_REFRESH_INTERVAL_MS = 1800000L;
+    public static final long TOKEN_ACQUIRE_TIMEOUT_SECS = 60L;
 }

@@ -27,7 +27,7 @@ public class KeyVaultOperation {
     private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
 
     public KeyVaultOperation(final KeyVaultClient keyVaultClient, final String vaultUri) {
-        this(keyVaultClient, vaultUri, 1800000L);
+        this(keyVaultClient, vaultUri, Constants.DEFAULT_REFRESH_INTERVAL_MS);
     }
 
     public KeyVaultOperation(final KeyVaultClient keyVaultClient, String vaultUri, final long refreshInterval) {
@@ -45,13 +45,11 @@ public class KeyVaultOperation {
 
     public String[] list() {
         try {
-            this.rwLock.readLock()
-                    .lock();
+            this.rwLock.readLock().lock();
             return Collections.list(this.propertyNamesHashMap.keys())
                     .toArray(new String[this.propertyNamesHashMap.size()]);
         } finally {
-            this.rwLock.readLock()
-                    .unlock();
+            this.rwLock.readLock().unlock();
         }
     }
 
@@ -84,12 +82,12 @@ public class KeyVaultOperation {
         }
 
         try {
-            this.rwLock.writeLock()
-                    .lock();
+            this.rwLock.writeLock().lock();
             this.propertyNamesHashMap.clear();
 
             final PagedList<SecretItem> secrets = this.keyVaultClient.listSecrets(this.vaultUri);
             secrets.loadAll();
+
             for (final SecretItem secret : secrets) {
                 this.propertyNamesHashMap.putIfAbsent(secret.id()
                         .replaceFirst(this.vaultUri + "/secrets/", "")
@@ -97,10 +95,10 @@ public class KeyVaultOperation {
                 this.propertyNamesHashMap.putIfAbsent(secret.id()
                         .replaceFirst(this.vaultUri + "/secrets/", ""), secret.id());
             }
+
             this.lastUpdateTime.set(System.currentTimeMillis());
         } finally {
-            this.rwLock.writeLock()
-                    .unlock();
+            this.rwLock.writeLock().unlock();
         }
     }
 }

@@ -4,7 +4,7 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.autoconfigure.documentdb;
+package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 
@@ -14,7 +14,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-@ConfigurationProperties("azure.documentdb")
+@ConfigurationProperties("azure.cosmosdb")
 public class DocumentDBProperties {
     /**
      * Document DB URI.

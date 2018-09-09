@@ -4,7 +4,7 @@
  * license information.
  */
 
-package com.microsoft.azure.spring.autoconfigure.documentdb;
+package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
 import org.springframework.context.annotation.Import;
 

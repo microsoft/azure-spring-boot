@@ -7,13 +7,13 @@
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-parent</artifactId>
-        <version>2.0.5-SNAPSHOT</version>
+        <version>2.0.6-SNAPSHOT</version>
         <relativePath>../../azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>azure-documentdb-spring-boot-starter</artifactId>
+    <artifactId>azure-cosmosdb-spring-boot-starter</artifactId>
 
-    <name>Azure Document DB Spring Boot Starter</name>
+    <name>Azure Cosmos DB Spring Boot Starter</name>
     <description>Spring Boot Starter for Azure Document DB service</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 

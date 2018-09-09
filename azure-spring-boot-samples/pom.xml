@@ -144,7 +144,7 @@
     <modules>
         <module>azure-active-directory-spring-boot-backend-sample</module>
         <module>azure-active-directory-spring-boot-sample</module>
-        <module>azure-documentdb-spring-boot-sample</module>
+        <module>azure-cosmosdb-spring-boot-sample</module>
         <module>azure-keyvault-secrets-spring-boot-sample</module>
         <module>azure-mediaservices-spring-boot-sample</module>
         <module>azure-servicebus-spring-boot-sample</module>
