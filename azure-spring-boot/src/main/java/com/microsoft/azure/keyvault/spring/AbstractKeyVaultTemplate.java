@@ -11,6 +11,7 @@ import com.microsoft.azure.serializer.AzureJacksonAdapter;
 import com.microsoft.azure.spring.support.UserAgent;
 import com.microsoft.azure.utils.Memoizer;
 import com.microsoft.rest.RestClient;
+import com.microsoft.rest.credentials.ServiceClientCredentials;
 
 import java.util.function.Function;
 
@@ -19,7 +20,7 @@ import static com.microsoft.azure.keyvault.spring.Constants.DEFAULT_REFRESH_INTE
 public abstract class AbstractKeyVaultTemplate implements KeyVaultOperation {
     private static final String KEY_VAULT_URL = "https://%s.vault.azure.net/";
 
-    protected final AzureKeyVaultCredential credential;
+    protected final ServiceClientCredentials credential;
     protected final Function<String, KeyVaultClient> keyVaultClientCreator = keyVaultClientCreator();
     private boolean allowTelemetry = false;
 
