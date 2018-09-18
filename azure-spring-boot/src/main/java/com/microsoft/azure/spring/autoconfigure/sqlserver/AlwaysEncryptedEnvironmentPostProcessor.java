@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ConditionalOnClass({DataSource.class, EmbeddedDatabaseType.class})
-@EnableConfigurationProperties({DataSourceProperties.class, KeyVaultProperties.class})
 @ConditionalOnProperty(name = AEConstants.PROPERTY_AE_ENABLED, matchIfMissing = false)
 public class AlwaysEncryptedEnvironmentPostProcessor implements EnvironmentPostProcessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlwaysEncryptedEnvironmentPostProcessor.class);

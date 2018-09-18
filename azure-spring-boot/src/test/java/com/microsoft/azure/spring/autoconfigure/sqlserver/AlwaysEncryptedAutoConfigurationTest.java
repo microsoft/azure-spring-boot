@@ -9,7 +9,10 @@ package com.microsoft.azure.spring.autoconfigure.sqlserver;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+
+import javax.sql.DataSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,7 +26,7 @@ public class AlwaysEncryptedAutoConfigurationTest {
         contextRunner.withPropertyValues(AEConstants.PROPERTY_AE_ENABLED + "=false")
                 .withUserConfiguration(SQLServerDataSource.class)
                 .run((context) ->  {
-                    assertThat(context).doesNotHaveBean(KeyVaultProviderPostProcesor.class);
+                    assertThat(context).doesNotHaveBean(KeyVaultProviderInitializer.class);
                 });
     }
 
@@ -31,14 +34,18 @@ public class AlwaysEncryptedAutoConfigurationTest {
     public void setDataEncryptionEnabled() {
         contextRunner.withPropertyValues(AEConstants.PROPERTY_AE_ENABLED + "=true",
                 KeyVaultPropertiesTest.CLIENT_ID_PROPERTY + "=id",
-                KeyVaultPropertiesTest.CLIENT_SECRET_PROPERTY + "=secret")
+                KeyVaultPropertiesTest.CLIENT_SECRET_PROPERTY + "=secret",
+                "spring.datasource.url=jdbc:sqlserver://xxx")
                 .withUserConfiguration(SQLServerDataSource.class)
                 .run((context) ->  {
-                    assertThat(context).hasSingleBean(KeyVaultProviderPostProcesor.class);
+                    assertThat(context).hasSingleBean(KeyVaultProviderInitializer.class);
                     assertThat(context).hasSingleBean(KeyVaultProperties.class);
+                    assertThat(context).hasBean("dataSourceProperties");
                     final KeyVaultProperties properties = context.getBean(KeyVaultProperties.class);
                     assertThat(properties.getClientId()).isEqualTo("id");
                     assertThat(properties.getClientSecret()).isEqualTo("secret");
+                    final DataSourceProperties dsproperties = context.getBean(DataSourceProperties.class);
+                    assertThat(dsproperties.getUrl().contains(AEConstants.PROPERTY_ENCRYPTION_ENABLED_VALUE));
                 });
      }
 

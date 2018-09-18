@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.Assert;
 
@@ -24,8 +25,9 @@ public class SqlServerSampleApplication implements CommandLineRunner {
 
     @Autowired
     private PersonRepository repository;
+
     @Autowired
-    private ApplicationContext context;
+    ApplicationContext context;
 
     public static void main(String[] args) {
         SpringApplication.run(SqlServerSampleApplication.class, args);
