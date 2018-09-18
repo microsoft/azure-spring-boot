@@ -20,6 +20,7 @@
 
     <modules>
         <module>azure-spring-boot-starter</module>
+        <module>azure-spring-boot-metrics-starter</module>
         <module>azure-active-directory-spring-boot-starter</module>
         <module>azure-cosmosdb-spring-boot-starter</module>
         <module>azure-keyvault-secrets-spring-boot-starter</module>

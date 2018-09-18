@@ -144,6 +144,29 @@
             <artifactId>applicationinsights-core</artifactId>
         </dependency>
 
+        <!-- Micrometer metrics -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-azure-monitor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-actuator-autoconfigure</artifactId>
+            <optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.micrometer</groupId>
+                    <artifactId>micrometer-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- Annotation processor -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -177,6 +200,7 @@
             <artifactId>powermock-api-mockito2</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
 </project>
