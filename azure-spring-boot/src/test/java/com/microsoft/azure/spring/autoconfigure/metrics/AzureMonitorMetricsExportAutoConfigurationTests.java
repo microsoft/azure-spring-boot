@@ -52,7 +52,7 @@ public class AzureMonitorMetricsExportAutoConfigurationTests {
     public void autoConfiguresConfigAndMeterRegistry() {
         this.contextRunner.withUserConfiguration(BaseConfiguration.class)
                 .withPropertyValues(
-                        "management.metrics.export.azure.azuremonitor.instrumentation-key=fakekey")
+                        "management.metrics.export.azuremonitor.instrumentation-key=fakekey")
                 .run((context) -> assertThat(context)
                         .hasSingleBean(AzureMonitorMeterRegistry.class)
                         .hasSingleBean(AzureMonitorConfig.class));
@@ -62,7 +62,7 @@ public class AzureMonitorMetricsExportAutoConfigurationTests {
     public void autoConfigurationCanBeDisabled() {
         this.contextRunner.withUserConfiguration(BaseConfiguration.class)
                 .withPropertyValues(
-                        "management.metrics.export.azure.azuremonitor.enabled=false")
+                        "management.metrics.export.azuremonitor.enabled=false")
                 .run((context) -> assertThat(context)
                         .doesNotHaveBean(AzureMonitorMeterRegistry.class)
                         .doesNotHaveBean(AzureMonitorConfig.class));
@@ -80,7 +80,7 @@ public class AzureMonitorMetricsExportAutoConfigurationTests {
     public void allowsCustomRegistryToBeUsed() {
         this.contextRunner.withUserConfiguration(CustomRegistryConfiguration.class)
                 .withPropertyValues(
-                        "management.metrics.export.azure.azuremonitor.instrumentation-key=fakekey")
+                        "management.metrics.export.azuremonitor.instrumentation-key=fakekey")
                 .run((context) -> assertThat(context)
                         .hasSingleBean(AzureMonitorMeterRegistry.class)
                         .hasBean("customRegistry")
@@ -91,7 +91,7 @@ public class AzureMonitorMetricsExportAutoConfigurationTests {
     public void stopsMeterRegistryWhenContextIsClosed() {
         this.contextRunner.withUserConfiguration(BaseConfiguration.class)
                 .withPropertyValues(
-                        "management.metrics.export.azure.azuremonitor.instrumentation-key=fakekey")
+                        "management.metrics.export.azuremonitor.instrumentation-key=fakekey")
                 .run((context) -> {
                     final AzureMonitorMeterRegistry registry = spyOnDisposableBean(
                             AzureMonitorMeterRegistry.class, context);
