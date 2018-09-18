@@ -16,13 +16,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "management.metrics.export.azuremonitor")
 public class AzureMonitorProperties extends StepRegistryProperties {
-  private String instrumentationKey;
+    private String instrumentationKey;
 
-  public String getInstrumentationKey() {
-    return this.instrumentationKey;
-  }
+    public String getInstrumentationKey() {
+        return this.instrumentationKey;
+    }
 
-  public void setInstrumentationKey(String instrumentationKey) {
-    this.instrumentationKey = instrumentationKey;
-  }
+    public void setInstrumentationKey(String instrumentationKey) {
+        this.instrumentationKey = instrumentationKey;
+    }
 }

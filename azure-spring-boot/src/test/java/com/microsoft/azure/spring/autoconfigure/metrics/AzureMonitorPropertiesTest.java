@@ -5,12 +5,12 @@
  */
 package com.microsoft.azure.spring.autoconfigure.metrics;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import io.micrometer.azuremonitor.AzureMonitorConfig;
 import io.micrometer.core.instrument.step.StepRegistryConfig;
 import org.junit.Test;
 import org.springframework.boot.actuate.autoconfigure.metrics.export.properties.StepRegistryProperties;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests for {@link AzureMonitorProperties}.
@@ -18,24 +18,24 @@ import org.springframework.boot.actuate.autoconfigure.metrics.export.properties.
  * @author Dhaval Doshi
  */
 
-public class AzureMonitorPropertiesTest  {
+public class AzureMonitorPropertiesTest {
 
-  private void assertStepRegistryDefaultValues(StepRegistryProperties properties,
-      StepRegistryConfig config) {
+    private void assertStepRegistryDefaultValues(StepRegistryProperties properties,
+                                                 StepRegistryConfig config) {
 
-    assertThat(properties.getStep()).isEqualTo(config.step());
-    assertThat(properties.isEnabled()).isEqualTo(config.enabled());
-    assertThat(properties.getConnectTimeout()).isEqualTo(config.connectTimeout());
-    assertThat(properties.getReadTimeout()).isEqualTo(config.readTimeout());
-    assertThat(properties.getNumThreads()).isEqualTo(config.numThreads());
-    assertThat(properties.getBatchSize()).isEqualTo(config.batchSize());
-  }
+        assertThat(properties.getStep()).isEqualTo(config.step());
+        assertThat(properties.isEnabled()).isEqualTo(config.enabled());
+        assertThat(properties.getConnectTimeout()).isEqualTo(config.connectTimeout());
+        assertThat(properties.getReadTimeout()).isEqualTo(config.readTimeout());
+        assertThat(properties.getNumThreads()).isEqualTo(config.numThreads());
+        assertThat(properties.getBatchSize()).isEqualTo(config.batchSize());
+    }
 
-  @Test
-  public void defaultValuesAreConsistent() {
-    final AzureMonitorProperties properties = new AzureMonitorProperties();
-    final AzureMonitorConfig config = AzureMonitorConfig.DEFAULT;
-    assertStepRegistryDefaultValues(properties, config);
-  }
+    @Test
+    public void defaultValuesAreConsistent() {
+        final AzureMonitorProperties properties = new AzureMonitorProperties();
+        final AzureMonitorConfig config = AzureMonitorConfig.DEFAULT;
+        assertStepRegistryDefaultValues(properties, config);
+    }
 
 }

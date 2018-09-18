@@ -30,44 +30,44 @@ import org.springframework.context.annotation.Configuration;
  * @author Dhaval Doshi
  */
 @Configuration
-@AutoConfigureBefore({ CompositeMeterRegistryAutoConfiguration.class,
-    SimpleMetricsExportAutoConfiguration.class })
+@AutoConfigureBefore({CompositeMeterRegistryAutoConfiguration.class,
+        SimpleMetricsExportAutoConfiguration.class})
 @AutoConfigureAfter(MetricsAutoConfiguration.class)
 @ConditionalOnBean(Clock.class)
 @ConditionalOnClass(AzureMonitorMeterRegistry.class)
 @ConditionalOnProperty(prefix = "management.metrics.export.azuremonitor",
-    name = "enabled", havingValue = "true", matchIfMissing = true)
+        name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(AzureMonitorProperties.class)
 public class AzureMonitorMetricsExportAutoConfiguration {
 
-  @Bean
-  @ConditionalOnMissingBean
-  public AzureMonitorConfig azureConfig(AzureMonitorProperties properties) {
-    return new AzureMonitorPropertiesConfigAdapter(properties);
-  }
-
-  /**
-   * This bean is already available when the
-   * {@see <a href="https://github.com/Microsoft/ApplicationInsights-Java/tree/master/
-   * azure-application-insights-spring-boot-starter">Azure Application Insights starter</a>}
-   * is present.
-   */
-  @Bean
-  @ConditionalOnMissingBean
-  public TelemetryConfiguration telemetryConfiguration(AzureMonitorConfig config) {
-    // Gets the active instance of TelemetryConfiguration either created by starter or xml
-    final TelemetryConfiguration telemetryConfiguration = TelemetryConfiguration.getActive();
-    if (StringUtils.isEmpty(telemetryConfiguration.getInstrumentationKey())) {
-      telemetryConfiguration.setInstrumentationKey(config.instrumentationKey());
+    @Bean
+    @ConditionalOnMissingBean
+    public AzureMonitorConfig azureConfig(AzureMonitorProperties properties) {
+        return new AzureMonitorPropertiesConfigAdapter(properties);
     }
-    return telemetryConfiguration;
-  }
 
-  @Bean
-  @ConditionalOnMissingBean
-  public AzureMonitorMeterRegistry azureMeterRegistry(AzureMonitorConfig config,
-      TelemetryConfiguration configuration, Clock clock) {
-    return new AzureMonitorMeterRegistry(config, clock, configuration);
-  }
+    /**
+     * This bean is already available when the
+     * {@see <a href="https://github.com/Microsoft/ApplicationInsights-Java/tree/master/
+     * azure-application-insights-spring-boot-starter">Azure Application Insights starter</a>}
+     * is present.
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public TelemetryConfiguration telemetryConfiguration(AzureMonitorConfig config) {
+        // Gets the active instance of TelemetryConfiguration either created by starter or xml
+        final TelemetryConfiguration telemetryConfiguration = TelemetryConfiguration.getActive();
+        if (StringUtils.isEmpty(telemetryConfiguration.getInstrumentationKey())) {
+            telemetryConfiguration.setInstrumentationKey(config.instrumentationKey());
+        }
+        return telemetryConfiguration;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public AzureMonitorMeterRegistry azureMeterRegistry(AzureMonitorConfig config,
+                                                        TelemetryConfiguration configuration, Clock clock) {
+        return new AzureMonitorMeterRegistry(config, clock, configuration);
+    }
 
 }
