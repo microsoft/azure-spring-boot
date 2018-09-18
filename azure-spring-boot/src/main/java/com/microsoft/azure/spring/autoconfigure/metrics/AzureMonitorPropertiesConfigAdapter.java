@@ -17,8 +17,7 @@ import org.springframework.boot.actuate.autoconfigure.metrics.export.properties.
 public class AzureMonitorPropertiesConfigAdapter extends StepRegistryPropertiesConfigAdapter<AzureMonitorProperties>
     implements AzureMonitorConfig {
 
-  AzureMonitorPropertiesConfigAdapter(
-      AzureMonitorProperties properties) {
+  AzureMonitorPropertiesConfigAdapter(AzureMonitorProperties properties) {
     super(properties);
   }
 

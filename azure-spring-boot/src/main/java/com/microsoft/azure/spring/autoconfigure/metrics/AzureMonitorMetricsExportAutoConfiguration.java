@@ -35,7 +35,7 @@ import org.springframework.context.annotation.Configuration;
 @AutoConfigureAfter(MetricsAutoConfiguration.class)
 @ConditionalOnBean(Clock.class)
 @ConditionalOnClass(AzureMonitorMeterRegistry.class)
-@ConditionalOnProperty(prefix = "management.metrics.export.azure.azuremonitor",
+@ConditionalOnProperty(prefix = "management.metrics.export.azuremonitor",
     name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(AzureMonitorProperties.class)
 public class AzureMonitorMetricsExportAutoConfiguration {
