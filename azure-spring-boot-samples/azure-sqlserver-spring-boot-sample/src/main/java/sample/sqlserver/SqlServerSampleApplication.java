@@ -35,8 +35,6 @@ public class SqlServerSampleApplication implements CommandLineRunner {
 
     public void run(String... var1) throws Exception {
 
-        DataSourceProperties dataSourceProperties = context.getBean("dataSourceProperties",DataSourceProperties.class);
-        LOGGER.info("... URL:" + dataSourceProperties.getUrl());
         final Person testUser = new Person(UUID.randomUUID().toString(), "testFirstName",
                                     "testLastName", "test address line one");
 
