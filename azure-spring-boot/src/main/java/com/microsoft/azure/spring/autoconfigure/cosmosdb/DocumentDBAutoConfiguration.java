@@ -11,8 +11,6 @@ import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.spring.data.cosmosdb.config.AbstractDocumentDbConfiguration;
 import com.microsoft.azure.spring.data.cosmosdb.config.DocumentDBConfig;
 import com.microsoft.azure.spring.data.cosmosdb.core.DocumentDbTemplate;
-import com.microsoft.azure.spring.support.GetHashMac;
-import com.microsoft.azure.utils.PropertyLoader;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
