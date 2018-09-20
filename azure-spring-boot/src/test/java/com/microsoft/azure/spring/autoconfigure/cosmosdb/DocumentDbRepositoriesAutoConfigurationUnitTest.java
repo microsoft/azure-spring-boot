@@ -14,6 +14,7 @@ import com.microsoft.azure.spring.data.cosmosdb.core.DocumentDbTemplate;
 import com.microsoft.azure.spring.data.cosmosdb.core.convert.MappingDocumentDbConverter;
 import com.microsoft.azure.spring.data.cosmosdb.repository.config.EnableDocumentDbRepositories;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -26,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
+@Ignore
 public class DocumentDbRepositoriesAutoConfigurationUnitTest {
 
     private AnnotationConfigApplicationContext context;
