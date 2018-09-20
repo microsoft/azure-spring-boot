@@ -6,6 +6,7 @@
 
 package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
+import com.microsoft.azure.documentdb.ConnectionPolicy;
 import com.microsoft.azure.documentdb.ConsistencyLevel;
 
 import javax.validation.constraints.NotEmpty;
@@ -42,6 +43,8 @@ public class DocumentDBProperties {
      * Whether allow Microsoft to collect telemetry data.
      */
     private boolean allowTelemetry = true;
+
+    private ConnectionPolicy connectionPolicy = ConnectionPolicy.GetDefault();
 
     public String getUri() {
         return uri;
@@ -81,5 +84,13 @@ public class DocumentDBProperties {
 
     public void setAllowTelemetry(boolean allowTelemetry) {
         this.allowTelemetry = allowTelemetry;
+    }
+
+    public ConnectionPolicy getConnectionPolicy() {
+        return connectionPolicy;
+    }
+
+    public void setConnectionPolicy(ConnectionPolicy connectionPolicy) {
+        this.connectionPolicy = connectionPolicy;
     }
 }
