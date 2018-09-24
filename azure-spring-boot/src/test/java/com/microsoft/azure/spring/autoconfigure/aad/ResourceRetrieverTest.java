@@ -28,7 +28,7 @@ public class ResourceRetrieverTest {
             final ResourceRetriever retriever = context.getBean(ResourceRetriever.class);
             assertThat(retriever).isInstanceOf(DefaultResourceRetriever.class);
 
-            final DefaultResourceRetriever defaultRetriever = (DefaultResourceRetriever)retriever;
+            final DefaultResourceRetriever defaultRetriever = (DefaultResourceRetriever) retriever;
             assertThat(defaultRetriever.getConnectTimeout()).isEqualTo(RemoteJWKSet.DEFAULT_HTTP_CONNECT_TIMEOUT);
             assertThat(defaultRetriever.getReadTimeout()).isEqualTo(RemoteJWKSet.DEFAULT_HTTP_READ_TIMEOUT);
             assertThat(defaultRetriever.getSizeLimit()).isEqualTo(RemoteJWKSet.DEFAULT_HTTP_SIZE_LIMIT);
@@ -45,7 +45,7 @@ public class ResourceRetrieverTest {
                     final ResourceRetriever retriever = context.getBean(ResourceRetriever.class);
                     assertThat(retriever).isInstanceOf(DefaultResourceRetriever.class);
 
-                    final DefaultResourceRetriever defaultRetriever = (DefaultResourceRetriever)retriever;
+                    final DefaultResourceRetriever defaultRetriever = (DefaultResourceRetriever) retriever;
                     assertThat(defaultRetriever.getConnectTimeout()).isEqualTo(1234);
                     assertThat(defaultRetriever.getReadTimeout()).isEqualTo(1234);
                     assertThat(defaultRetriever.getSizeLimit()).isEqualTo(123400);
