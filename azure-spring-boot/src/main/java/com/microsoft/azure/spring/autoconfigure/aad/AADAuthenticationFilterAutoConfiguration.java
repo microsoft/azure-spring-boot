@@ -52,13 +52,13 @@ public class AADAuthenticationFilterAutoConfiguration {
     public AADAuthenticationFilter azureADJwtTokenFilter() {
         LOG.info("AzureADJwtTokenFilter Constructor.");
         trackCustomEvent();
-        return new AADAuthenticationFilter(aadAuthProps, serviceEndpointsProps, getJWTResourceRetrever());
+        return new AADAuthenticationFilter(aadAuthProps, serviceEndpointsProps, getJWTResourceRetriever());
     }
 
     @Bean
     @Scope("singleton")
     @ConditionalOnMissingBean(ResourceRetriever.class)
-    public ResourceRetriever getJWTResourceRetrever() {
+    public ResourceRetriever getJWTResourceRetriever() {
         return new DefaultResourceRetriever(aadAuthProps.getJwtConnectTimeout(), aadAuthProps.getJwtReadTimeout(),
                 aadAuthProps.getJwtSizeLimit());
     }
