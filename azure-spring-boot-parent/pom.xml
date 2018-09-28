@@ -34,8 +34,8 @@
         <powermock.junit4.version>1.7.0</powermock.junit4.version>
         <powermock.api.mockito2.version>1.7.0</powermock.api.mockito2.version>
         <commons.logging.version>1.2</commons.logging.version>
-        <azuremonitor.micrometer.registry.version>1.1.0-SNAPSHOT</azuremonitor.micrometer.registry.version>
-        <micrometer.core.version>1.1.0-SNAPSHOT</micrometer.core.version>
+        <azuremonitor.micrometer.registry.version>1.1.0-m.1</azuremonitor.micrometer.registry.version>
+        <micrometer.core.version>1.1.0-m.1</micrometer.core.version>
         <spring-boot-actuator-autoconfigure.version>2.0.3.RELEASE</spring-boot-actuator-autoconfigure.version>
     </properties>
 
@@ -43,7 +43,7 @@
         <repository>
             <id>micrometer-snapshot</id>
             <name>micrometer-snapshot</name>
-            <url>https://repo.spring.io/libs-snapshot</url>
+            <url>https://repo.spring.io/libs-milestone</url>
         </repository>
     </repositories>
 
