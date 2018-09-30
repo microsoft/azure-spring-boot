@@ -8,21 +8,13 @@ package com.microsoft.azure.spring.autoconfigure.sqlserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
-import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
-@ConditionalOnClass({DataSource.class, EmbeddedDatabaseType.class})
-@ConditionalOnProperty(name = AEConstants.PROPERTY_AE_ENABLED, matchIfMissing = false)
 public class AlwaysEncryptedEnvironmentPostProcessor implements EnvironmentPostProcessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(AlwaysEncryptedEnvironmentPostProcessor.class);
     private static final String PROPERTY_SOURCE_NAME = "aeProperties";
@@ -33,7 +25,7 @@ public class AlwaysEncryptedEnvironmentPostProcessor implements EnvironmentPostP
         if (!environment.getProperty(AEConstants.PROPERTY_AE_ENABLED, Boolean.class, false)) {
             return;
         }
-        LOGGER.debug("Setting AlwaysEncrypted settings");
+        LOGGER.info("Setting AlwaysEncrypted properties");
 
         final MapPropertySource target = new MapPropertySource(PROPERTY_SOURCE_NAME, getSettingsMap(environment));
         environment.getPropertySources().addFirst(target);

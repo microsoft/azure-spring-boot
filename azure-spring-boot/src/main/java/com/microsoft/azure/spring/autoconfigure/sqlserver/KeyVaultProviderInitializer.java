@@ -12,17 +12,14 @@ import com.microsoft.sqlserver.jdbc.SQLServerColumnEncryptionKeyStoreProvider;
 import com.microsoft.sqlserver.jdbc.SQLServerConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.FatalBeanException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.util.ClassUtils;
 
-import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KeyVaultProviderInitializer implements BeanPostProcessor {
+public class KeyVaultProviderInitializer  {
     private static final Logger LOG = LoggerFactory.getLogger(KeyVaultProviderInitializer.class);
 
     private KeyVaultProperties properties;
@@ -31,39 +28,30 @@ public class KeyVaultProviderInitializer implements BeanPostProcessor {
     public  KeyVaultProviderInitializer(KeyVaultProperties properties) {
         this.properties = properties;
         this.telemetryProxy = new TelemetryProxy(properties.isAllowTelemetry());
-
-    }
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        return bean;
+        init();
     }
 
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+    public void init() {
+        LOG.info("initializing DataSource AlwaysEncryption Vault provider");
+        trackCustomEvent();
+        try {
 
-        if (bean instanceof DataSource) {
-            try {
+            final SQLServerColumnEncryptionAzureKeyVaultProvider akvProvider =
+                    new SQLServerColumnEncryptionAzureKeyVaultProvider(properties.getClientId(),
+                            properties.getClientSecret());
 
-                LOG.info("initializing DataSource AlwaysEncryption Vault provider");
-                trackCustomEvent();
+            final Map<String, SQLServerColumnEncryptionKeyStoreProvider> keyStoreMap =
+                    new HashMap<String, SQLServerColumnEncryptionKeyStoreProvider>();
+            keyStoreMap.put(akvProvider.getName(), akvProvider);
 
-                final SQLServerColumnEncryptionAzureKeyVaultProvider akvProvider =
-                        new SQLServerColumnEncryptionAzureKeyVaultProvider(properties.getClientId(),
-                                properties.getClientSecret());
+            SQLServerConnection.registerColumnEncryptionKeyStoreProviders(keyStoreMap);
 
-                final Map<String, SQLServerColumnEncryptionKeyStoreProvider> keyStoreMap =
-                        new HashMap<String, SQLServerColumnEncryptionKeyStoreProvider>();
-                keyStoreMap.put(akvProvider.getName(), akvProvider);
-
-                SQLServerConnection.registerColumnEncryptionKeyStoreProviders(keyStoreMap);
-
-            } catch (SQLException ex) {
-                LOG.error(ex.getMessage());
-                throw new FatalBeanException(ex.getMessage());
-            }
+        } catch (SQLException ex) {
+            LOG.error(ex.getMessage());
+            throw new FatalBeanException(ex.getMessage());
         }
-        return bean;
     }
+
     private void trackCustomEvent() {
         final HashMap<String, String> customTelemetryProperties = new HashMap<>();
 

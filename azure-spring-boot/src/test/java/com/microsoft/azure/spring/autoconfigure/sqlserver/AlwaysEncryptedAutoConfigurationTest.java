@@ -52,7 +52,8 @@ public class AlwaysEncryptedAutoConfigurationTest {
     @Test
     public void setDataEncryptionEnabledMissingConfig() {
       contextRunner.withPropertyValues(AEConstants.PROPERTY_AE_ENABLED + "=true",
-                                    KeyVaultPropertiesTest.CLIENT_ID_PROPERTY + "=id")
+              KeyVaultPropertiesTest.CLIENT_ID_PROPERTY + "=id",
+              "spring.datasource.url=jdbc:sqlserver://xxx")
             .withUserConfiguration(SQLServerDataSource.class)
             .run((context) ->  {
                 assertThat(context).hasFailed();

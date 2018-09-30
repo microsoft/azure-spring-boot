@@ -38,7 +38,7 @@ public class AlwaysEncryptedAutoConfiguration {
      */
     @Bean(name = "dataSourceKeyVaultInitializer")
     @ConditionalOnClass(com.microsoft.sqlserver.jdbc.SQLServerDriver.class)
-    public BeanPostProcessor dataSourceKeyVaultInitializer(KeyVaultProperties properties) {
+    public KeyVaultProviderInitializer dataSourceKeyVaultInitializer(KeyVaultProperties properties) {
         return new KeyVaultProviderInitializer(properties);
     }
 
@@ -49,7 +49,7 @@ public class AlwaysEncryptedAutoConfiguration {
         @Primary
         @ConditionalOnClass(com.microsoft.sqlserver.jdbc.SQLServerDriver.class)
         public DataSourceProperties dataSourceProperties() {
-            LOG.info("Setting AlwaysEncrypted url");
+            LOG.info("Setting AlwaysEncrypted url flag");
             // Set Property to enable Encryption
            return new AlwaysEncryptedDataSourceProperties();
         }
