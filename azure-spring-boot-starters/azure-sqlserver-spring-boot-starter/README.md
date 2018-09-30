@@ -40,7 +40,7 @@ Open `application.properties` file and add below properties with your SQL DB cre
 ### Allow telemetry
 Microsoft would like to collect data about how users use this Spring boot starter. Microsoft uses this information to improve our tooling experience. Participation is voluntary. If you don't want to participate, just simply disable it by setting below configuration in `application.properties`.
 ```
-azure.sqlserver.allow-telemetry=false
+ spring.datasource.always-encrypted.keyvault.allow-telemetry=false
 ```
 Find more information about Azure Service Privacy Statement, please check [Microsoft Online Services Privacy Statement](https://www.microsoft.com/en-us/privacystatement/OnlineServices/Default.aspx).
 
