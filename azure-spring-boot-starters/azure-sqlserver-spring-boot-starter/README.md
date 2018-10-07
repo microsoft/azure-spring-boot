@@ -31,7 +31,7 @@ Open `application.properties` file and add below properties with your SQL DB cre
  To enable always encryption set the following
 
 ```properties
- spring.datasource.alwaysencrypted=true
+ spring.datasource.always-encrypted=true
  spring.datasource.always-encrypted.keyvault.client-id=
  spring.datasource.always-encrypted.keyvault.client-secret=
 ```
