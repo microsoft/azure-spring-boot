@@ -126,6 +126,19 @@
             <groupId>com.microsoft.azure</groupId>
             <artifactId>applicationinsights-core</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- Spring JDBC -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <optional>true</optional>
+        </dependency>
+        
         <!-- Annotation processor -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

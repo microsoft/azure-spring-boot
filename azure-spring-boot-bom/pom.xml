@@ -56,6 +56,7 @@
         <spring.data.documentdb.version>0.1.4</spring.data.documentdb.version>
         <azure.applicationinsights.version>1.0.9</azure.applicationinsights.version>
         <microsoft.client-runtime.version>1.0.0</microsoft.client-runtime.version>
+        <mssql.jdbc.version>6.4.0.jre7</mssql.jdbc.version>
     </properties>
 
     <dependencyManagement>
@@ -93,6 +94,11 @@
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-mediaservices-spring-boot-starter</artifactId>
+                <version>${azure.spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-sqlserver-spring-boot-starter</artifactId>
                 <version>${azure.spring.boot.version}</version>
             </dependency>
             <dependency>
@@ -147,6 +153,11 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>applicationinsights-core</artifactId>
                 <version>${azure.applicationinsights.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.sqlserver</groupId>
+                <artifactId>mssql-jdbc</artifactId>
+                <version>${mssql.jdbc.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

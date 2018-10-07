@@ -26,6 +26,7 @@
         <module>azure-mediaservices-spring-boot-starter</module>
         <module>azure-servicebus-spring-boot-starter</module>
         <module>azure-storage-spring-boot-starter</module>
+        <module>azure-sqlserver-spring-boot-starter</module>
     </modules>
 
 </project>
