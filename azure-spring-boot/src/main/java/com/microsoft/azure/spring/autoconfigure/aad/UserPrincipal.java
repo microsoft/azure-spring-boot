@@ -16,6 +16,8 @@ import com.nimbusds.jose.proc.BadJOSEException;
 import com.nimbusds.jose.proc.JWSKeySelector;
 import com.nimbusds.jose.proc.JWSVerificationKeySelector;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.nimbusds.jose.util.DefaultResourceRetriever;
+import com.nimbusds.jose.util.ResourceRetriever;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.proc.*;
 import org.slf4j.Logger;
@@ -35,15 +37,18 @@ public class UserPrincipal {
     private JWSObject jwsObject;
     private JWTClaimsSet jwtClaimsSet;
     private List<UserGroup> userGroups;
+    private ResourceRetriever resourceRetriever;
 
     public UserPrincipal() {
         jwsObject = null;
         jwtClaimsSet = null;
         userGroups = null;
         serviceEndpoints = new ServiceEndpoints();
+        resourceRetriever = new DefaultResourceRetriever(RemoteJWKSet.DEFAULT_HTTP_CONNECT_TIMEOUT,
+                RemoteJWKSet.DEFAULT_HTTP_READ_TIMEOUT, RemoteJWKSet.DEFAULT_HTTP_SIZE_LIMIT);
     }
 
-    public UserPrincipal(String idToken, ServiceEndpoints serviceEndpoints)
+    public UserPrincipal(String idToken, ServiceEndpoints serviceEndpoints, ResourceRetriever resourceRetriever)
             throws MalformedURLException, ParseException, BadJOSEException, JOSEException {
         this.serviceEndpoints = serviceEndpoints;
         this.jwsKeySet = loadAadPublicKeys();
@@ -54,6 +59,7 @@ public class UserPrincipal {
         verifier.verify(jwtClaimsSet, null);
         jwsObject = JWSObject.parse(idToken);
         userGroups = null;
+        this.resourceRetriever = resourceRetriever;
     }
 
     private JWKSet loadAadPublicKeys() {
@@ -108,7 +114,7 @@ public class UserPrincipal {
             throws MalformedURLException {
         final ConfigurableJWTProcessor<SecurityContext> jwtProcessor = new DefaultJWTProcessor<>();
         final JWKSource<SecurityContext> keySource =
-                new RemoteJWKSet<>(new URL(serviceEndpoints.getAadKeyDiscoveryUri()));
+                new RemoteJWKSet<>(new URL(serviceEndpoints.getAadKeyDiscoveryUri()), resourceRetriever);
         final JWSAlgorithm expectedJWSAlg = JWSAlgorithm.RS256;
         final JWSKeySelector<SecurityContext> keySelector = new JWSVerificationKeySelector<>(expectedJWSAlg, keySource);
         jwtProcessor.setJWSKeySelector(keySelector);

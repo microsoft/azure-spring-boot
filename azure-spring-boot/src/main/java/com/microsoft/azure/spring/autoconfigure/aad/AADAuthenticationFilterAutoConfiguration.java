@@ -7,6 +7,8 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 
 import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
+import com.nimbusds.jose.util.DefaultResourceRetriever;
+import com.nimbusds.jose.util.ResourceRetriever;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -50,7 +52,15 @@ public class AADAuthenticationFilterAutoConfiguration {
     public AADAuthenticationFilter azureADJwtTokenFilter() {
         LOG.info("AzureADJwtTokenFilter Constructor.");
         trackCustomEvent();
-        return new AADAuthenticationFilter(aadAuthProps, serviceEndpointsProps);
+        return new AADAuthenticationFilter(aadAuthProps, serviceEndpointsProps, getJWTResourceRetriever());
+    }
+
+    @Bean
+    @Scope("singleton")
+    @ConditionalOnMissingBean(ResourceRetriever.class)
+    public ResourceRetriever getJWTResourceRetriever() {
+        return new DefaultResourceRetriever(aadAuthProps.getJwtConnectTimeout(), aadAuthProps.getJwtReadTimeout(),
+                aadAuthProps.getJwtSizeLimit());
     }
 
     private void trackCustomEvent() {
