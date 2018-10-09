@@ -16,8 +16,6 @@ public class Constants {
     public static final String TENANT_ID_PROPERTY = "azure.activedirectory.tenant-id";
 
     public static final String DEFAULT_ENVIRONMENT = "global";
-    public static final String AAD_KEYDISCOVERY_URI_PROPERTY = "azure.service.endpoints.global.aadKeyDiscoveryUri";
-    public static final String AAD_KEYDISCOVERY_URI = "http://fake.aad.discovery.uri";
     public static final String CLIENT_ID = "real_client_id";
     public static final String CLIENT_SECRET = "real_client_secret";
     public static final List<String> TARGETED_GROUPS = Arrays.asList("group1", "group2", "group3");
