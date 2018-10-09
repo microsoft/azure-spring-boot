@@ -27,9 +27,9 @@ import java.text.ParseException;
 public class UserPrincipalManager {
     private static final Logger LOG = LoggerFactory.getLogger(UserPrincipalManager.class);
 
-    private ServiceEndpoints serviceEndpoints;
-    private ConfigurableJWTProcessor<SecurityContext> validator;
-    private ResourceRetriever resourceRetriever;
+    private final ServiceEndpoints serviceEndpoints;
+    private final ConfigurableJWTProcessor<SecurityContext> validator;
+    private final ResourceRetriever resourceRetriever;
 
     public UserPrincipalManager(ServiceEndpoints serviceEndpoints, ResourceRetriever resourceRetriever) {
         this.serviceEndpoints = serviceEndpoints;
