@@ -19,7 +19,8 @@ public class ResourceRetrieverTest {
             .withConfiguration(AutoConfigurations.of(AADAuthenticationFilterAutoConfiguration.class))
             .withPropertyValues("azure.activedirectory.client-id=fake-client-id",
                     "azure.activedirectory.client-secret=fake-client-secret",
-                    "azure.activedirectory.active-directory-groups=fake-group");
+                    "azure.activedirectory.active-directory-groups=fake-group",
+                    "azure.service.endpoints.global.aadKeyDiscoveryUri=http://fake.aad.discovery.uri");
 
     @Test
     public void resourceRetrieverDefaultConfig() {
@@ -39,7 +40,8 @@ public class ResourceRetrieverTest {
     public void resourceRetriverIsConfigurable() {
         this.contextRunner.withPropertyValues("azure.activedirectory.jwt-connect-timeout=1234",
                 "azure.activedirectory.jwt-read-timeout=1234",
-                "azure.activedirectory.jwt-size-limit=123400")
+                "azure.activedirectory.jwt-size-limit=123400",
+                "azure.service.endpoints.global.aadKeyDiscoveryUri=http://fake.aad.discovery.uri")
                 .run(context -> {
                     assertThat(context).hasSingleBean(ResourceRetriever.class);
                     final ResourceRetriever retriever = context.getBean(ResourceRetriever.class);
