@@ -5,9 +5,12 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class UserGroup {
+public class UserGroup implements Serializable {
+    private static final long serialVersionUID = 9064197572478554735L;
+
     private String objectID;
     private String displayName;
 

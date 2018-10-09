@@ -6,6 +6,9 @@
 package com.microsoft.azure.spring.autoconfigure.aad;
 
 import com.microsoft.aad.adal4j.ClientCredential;
+import com.nimbusds.jose.JWSObject;
+import com.nimbusds.jwt.JWTClaimsSet;
+import org.apache.commons.io.IOUtils;
 import org.hamcrest.collection.IsIterableContainingInAnyOrder;
 import org.junit.Assert;
 import org.junit.Before;
@@ -18,7 +21,11 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.util.StringUtils;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -74,5 +81,35 @@ public class UserPrincipalTest {
         targetedGroups.add(new UserGroup("12345678-86a4-4237-aeb0-60bad29c1de0", "group3"));
 
         Assert.assertThat(groups, IsIterableContainingInAnyOrder.containsInAnyOrder(groups.toArray()));
+    }
+
+    @Test
+    public void userPrinciplaIsSerializable() throws ParseException, IOException, ClassNotFoundException {
+        final File tmpOutputFile = File.createTempFile("test-user-principal", "txt");
+
+        try (final FileOutputStream fileOutputStream = new FileOutputStream(tmpOutputFile);
+             final ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+             final FileInputStream fileInputStream = new FileInputStream(tmpOutputFile);
+             final ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);){
+
+            final JWSObject jwsObject = JWSObject.parse(Constants.JWT_TOKEN);
+            final JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject("fake-subject").build();
+            final UserPrincipal principal = new UserPrincipal(jwsObject, jwtClaimsSet);
+
+            objectOutputStream.writeObject(principal);
+
+            final UserPrincipal serializedPrincipal = (UserPrincipal) objectInputStream.readObject();
+
+            Assert.assertNotNull("Serialized UserPrincipal not null", serializedPrincipal);
+            Assert.assertTrue("Serialized UserPrincipal kid not empty",
+                    !StringUtils.isEmpty(serializedPrincipal.getKid()));
+            Assert.assertNotNull("Serialized UserPrincipal claims not null.", serializedPrincipal.getClaims());
+            Assert.assertTrue("Serialized UserPrincipal claims not empty.",
+                    serializedPrincipal.getClaims().size() > 0);
+        } finally {
+            if (tmpOutputFile != null) {
+                Files.deleteIfExists(tmpOutputFile.toPath());
+            }
+        }
     }
 }
