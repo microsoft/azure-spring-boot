@@ -30,5 +30,9 @@
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-servicebus</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+        </dependency>
     </dependencies>
 </project>

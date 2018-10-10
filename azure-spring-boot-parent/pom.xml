@@ -33,7 +33,6 @@
         <mockito.core.version>2.8.9</mockito.core.version>
         <powermock.junit4.version>1.7.0</powermock.junit4.version>
         <powermock.api.mockito2.version>1.7.0</powermock.api.mockito2.version>
-        <commons.logging.version>1.2</commons.logging.version>
         <azuremonitor.micrometer.registry.version>1.1.0-m.1</azuremonitor.micrometer.registry.version>
         <micrometer.core.version>1.1.0-m.1</micrometer.core.version>
         <spring-boot-actuator-autoconfigure.version>2.0.3.RELEASE</spring-boot-actuator-autoconfigure.version>
@@ -93,11 +92,6 @@
                 <groupId>org.powermock</groupId>
                 <artifactId>powermock-api-mockito2</artifactId>
                 <version>${powermock.api.mockito2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-                <version>${commons.logging.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.micrometer</groupId>
