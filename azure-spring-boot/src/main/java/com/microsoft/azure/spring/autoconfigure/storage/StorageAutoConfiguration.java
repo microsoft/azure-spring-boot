@@ -61,12 +61,7 @@ public class StorageAutoConfiguration {
     }
 
     private PipelineOptions buildOptions(PipelineOptions fromOptions) {
-        final PipelineOptions pipelineOptions;
-        if (fromOptions != null) {
-            pipelineOptions = fromOptions;
-        } else {
-            pipelineOptions = new PipelineOptions();
-        }
+        final PipelineOptions pipelineOptions = fromOptions == null ? new PipelineOptions() : fromOptions;
 
         pipelineOptions.withTelemetryOptions(new TelemetryOptions(USER_AGENT_PREFIX
                 + pipelineOptions.telemetryOptions().userAgentPrefix()));
