@@ -31,9 +31,9 @@ public class StorageAutoConfigurationTest {
                 "azure.storage.account-key=" + ACCOUNT_KEY)
                 .run(context -> {
                     final ServiceURL serviceURL = context.getBean(ServiceURL.class);
-                   final String blobUrl = String.format(BLOB_URL, "fakeStorageAccountName");
-                   assertThat(serviceURL).isNotNull();
-                   assertThat(serviceURL.toURL().toString()).isEqualTo(blobUrl);
+                    final String blobUrl = String.format(BLOB_URL, "fakeStorageAccountName");
+                    assertThat(serviceURL).isNotNull();
+                    assertThat(serviceURL.toURL().toString()).isEqualTo(blobUrl);
                 });
     }
 
