@@ -26,7 +26,7 @@ public class StoragePropertiesTest {
 
     private static final String ACCOUNT_NAME = "fakeStorageAccountName";
     private static final String ACCOUNT_KEY = "ZmFrZUFjY291bnRLZXk="; /* Base64 encoded for string fakeAccountKey */
-    private static final String CONTAINER_NAME = "fakeStorageContainerName";
+    private static final String CONTAINER_NAME = "fakestoragecontainername";
 
     private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(StorageAutoConfiguration.class));

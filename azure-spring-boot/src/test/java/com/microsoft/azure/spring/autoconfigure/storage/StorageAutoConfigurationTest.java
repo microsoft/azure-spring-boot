@@ -48,11 +48,11 @@ public class StorageAutoConfigurationTest {
     public void containerUrlCreatedIfConfigured() {
         contextRunner.withPropertyValues("azure.storage.account-name=fakeStorageAccountName",
                 "azure.storage.account-key=" + ACCOUNT_KEY,
-                "azure.storage.container-name=fakeStorageContainerName")
+                "azure.storage.container-name=fakestoragecontainername")
                 .run(context -> {
                     final ContainerURL containerURL = context.getBean(ContainerURL.class);
                     assertThat(containerURL).isNotNull();
-                    assertThat(containerURL.toURL().toString()).contains("fakeStorageContainerName");
+                    assertThat(containerURL.toURL().toString()).contains("fakestoragecontainername");
                 });
     }
 }
