@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-storage</artifactId>
+            <artifactId>azure-storage-blob</artifactId>
         </dependency>
     </dependencies>
 </project>

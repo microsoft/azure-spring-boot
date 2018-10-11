@@ -5,54 +5,54 @@
  */
 package com.microsoft.azure.spring.autoconfigure.storage;
 
-import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.storage.blob.ContainerURL;
+import com.microsoft.azure.storage.blob.ServiceURL;
 import org.junit.Test;
-import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StorageAutoConfigurationTest {
-    private static final String CONNECTION_STRING_PROPERTY = "azure.storage.connection-string";
-    private static final String INVALID_CONNECTION_STRING = "invalid connection string";
-    private static final String CONNECTION_STRING_WITH_VALID_FORMAT = "DefaultEndpointsProtocol=https;" +
-            "AccountName=account-name;" +
-            "AccountKey=9ycDniQThM+dT18TmcfhgLyHQCKju9/B9VOtTQ4BOLPhpVbWXbyf9zvNTGe7LB3p2zm5Yl89IQyNgLWw1Wnjxzzj;" +
-            "EndpointSuffix=core.windows.net";
+    private static final String BLOB_URL = "http://%s.blob.core.windows.net";
+    private static final String ACCOUNT_KEY = "ZmFrZUFjY291bnRLZXk="; /* Base64 encoded for string fakeAccountKey */
+    private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
+            .withConfiguration(AutoConfigurations.of(StorageAutoConfiguration.class));
 
-    @Test
-    public void createStorageAccountWithInvalidConnectionString() {
-        System.setProperty(CONNECTION_STRING_PROPERTY, INVALID_CONNECTION_STRING);
-
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(StorageAutoConfiguration.class);
-            context.refresh();
-
-            CloudStorageAccount cloudStorageAccount = null;
-            try {
-                cloudStorageAccount = context.getBean(CloudStorageAccount.class);
-            } catch (Exception e) {
-                assertThat(e).isExactlyInstanceOf(BeanCreationException.class);
-            }
-
-            assertThat(cloudStorageAccount).isNull();
-        }
-
-        System.clearProperty(CONNECTION_STRING_PROPERTY);
+    @Test(expected = NoSuchBeanDefinitionException.class)
+    public void serviceUrlBeanNotCreatedByDefault() {
+        contextRunner.run(context -> context.getBean(ServiceURL.class));
     }
 
     @Test
-    public void createStorageAccountWithValidConnectionStringFormat() {
-        System.setProperty(CONNECTION_STRING_PROPERTY, CONNECTION_STRING_WITH_VALID_FORMAT);
+    public void serviceUrlBeanCreatedCorrectly() {
+        contextRunner.withPropertyValues("azure.storage.account-name=fakeStorageAccountName",
+                "azure.storage.account-key=" + ACCOUNT_KEY)
+                .run(context -> {
+                    final ServiceURL serviceURL = context.getBean(ServiceURL.class);
+                    final String blobUrl = String.format(BLOB_URL, "fakeStorageAccountName");
+                    assertThat(serviceURL).isNotNull();
+                    assertThat(serviceURL.toURL().toString()).isEqualTo(blobUrl);
+                });
+    }
 
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(StorageAutoConfiguration.class);
-            context.refresh();
+    @Test(expected = NoSuchBeanDefinitionException.class)
+    public void containerUrlNotCreatedIfNotConfigured() {
+        contextRunner.withPropertyValues("azure.storage.account-name=fakeStorageAccountName",
+                "azure.storage.account-key=" + ACCOUNT_KEY)
+                .run(context -> context.getBean(ContainerURL.class));
+    }
 
-            final CloudStorageAccount cloudStorageAccount = context.getBean(CloudStorageAccount.class);
-            assertThat(cloudStorageAccount).isNotNull();
-        }
-
-        System.clearProperty(CONNECTION_STRING_PROPERTY);
+    @Test
+    public void containerUrlCreatedIfConfigured() {
+        contextRunner.withPropertyValues("azure.storage.account-name=fakeStorageAccountName",
+                "azure.storage.account-key=" + ACCOUNT_KEY,
+                "azure.storage.container-name=fakestoragecontainername")
+                .run(context -> {
+                    final ContainerURL containerURL = context.getBean(ContainerURL.class);
+                    assertThat(containerURL).isNotNull();
+                    assertThat(containerURL.toURL().toString()).contains("fakestoragecontainername");
+                });
     }
 }
