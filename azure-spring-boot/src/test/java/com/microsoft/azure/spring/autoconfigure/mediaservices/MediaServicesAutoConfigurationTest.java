@@ -7,93 +7,32 @@
 package com.microsoft.azure.spring.autoconfigure.mediaservices;
 
 import com.microsoft.windowsazure.services.media.MediaContract;
-import com.microsoft.windowsazure.services.media.implementation.MediaExceptionProcessor;
 import org.junit.Test;
-import org.springframework.beans.factory.BeanCreationException;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.boot.autoconfigure.AutoConfigurations;
+import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
+import static com.microsoft.azure.spring.autoconfigure.mediaservices.Constants.*;
+import static com.microsoft.azure.utils.TestUtils.propPair;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MediaServicesAutoConfigurationTest {
-    @Test
-    public void createMediaServiceAccount() {
-        System.setProperty(Constants.ACCOUNT_KEY_PROPERTY, Constants.ACCOUNT_KEY);
-        System.setProperty(Constants.ACCOUNT_NAME_PROPERTY, Constants.ACCOUNT_NAME);
-
-        createAndVerifyMediaContract();
-
-        System.clearProperty(Constants.ACCOUNT_KEY_PROPERTY);
-        System.clearProperty(Constants.ACCOUNT_NAME_PROPERTY);
-    }
+    private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
+            .withConfiguration(AutoConfigurations.of(MediaServicesAutoConfiguration.class));
 
     @Test
-    public void createMediaServiceAccountWithProxy() {
-        System.setProperty(Constants.ACCOUNT_KEY_PROPERTY, Constants.ACCOUNT_KEY);
-        System.setProperty(Constants.ACCOUNT_NAME_PROPERTY, Constants.ACCOUNT_NAME);
-        System.setProperty(Constants.PROXY_HOST_PROPERTY, Constants.PROXY_HOST);
-        System.setProperty(Constants.PROXY_PORT_PROPERTY, Constants.PROXY_PORT);
-        System.setProperty(Constants.PROXY_SCHEME_PROPERTY, Constants.PROXY_SCHEME);
-
-        createAndVerifyMediaContract();
-
-        System.clearProperty(Constants.ACCOUNT_KEY_PROPERTY);
-        System.clearProperty(Constants.ACCOUNT_NAME_PROPERTY);
-        System.clearProperty(Constants.PROXY_HOST_PROPERTY);
-        System.clearProperty(Constants.PROXY_PORT_PROPERTY);
-        System.clearProperty(Constants.PROXY_SCHEME_PROPERTY);
+    public void mediaContractBeanCanBeCreated() {
+        contextRunner.withPropertyValues(propPair(TENANT_PROP, TENANT),
+                propPair(CLIENT_ID_PROP, CLIENT_ID),
+                propPair(CLIENT_SECRET_PROP, CLIENT_SECRET),
+                propPair(REST_API_ENDPOINT_PROP, REST_API_ENDPOINT))
+                .run(context ->
+                        assertThat(context).hasSingleBean(MediaContract.class)
+                );
     }
 
-    @Test
-    public void createMediaServiceAccountWithProxyHostMissing() {
-        System.setProperty(Constants.ACCOUNT_KEY_PROPERTY, Constants.ACCOUNT_KEY);
-        System.setProperty(Constants.ACCOUNT_NAME_PROPERTY, Constants.ACCOUNT_NAME);
-        System.setProperty(Constants.PROXY_PORT_PROPERTY, Constants.PROXY_PORT);
-
-        createAndFailWithCause("Please Set Network Proxy host in application.properties");
-
-        System.clearProperty(Constants.ACCOUNT_KEY_PROPERTY);
-        System.clearProperty(Constants.ACCOUNT_NAME_PROPERTY);
-        System.clearProperty(Constants.PROXY_PORT_PROPERTY);
-    }
-
-    @Test
-    public void createMediaServiceAccountWithProxyPortMissing() {
-        System.setProperty(Constants.ACCOUNT_KEY_PROPERTY, Constants.ACCOUNT_KEY);
-        System.setProperty(Constants.ACCOUNT_NAME_PROPERTY, Constants.ACCOUNT_NAME);
-        System.setProperty(Constants.PROXY_HOST_PROPERTY, Constants.PROXY_HOST);
-
-        createAndFailWithCause("Please Set Network Proxy port in application.properties");
-
-        System.clearProperty(Constants.ACCOUNT_KEY_PROPERTY);
-        System.clearProperty(Constants.ACCOUNT_NAME_PROPERTY);
-        System.clearProperty(Constants.PROXY_HOST_PROPERTY);
-    }
-
-    private void createAndVerifyMediaContract() {
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(MediaServicesAutoConfiguration.class);
-            context.refresh();
-
-            final MediaContract mediaContract = context.getBean(MediaContract.class);
-            assertThat(mediaContract).isNotNull();
-            assertThat(mediaContract).isExactlyInstanceOf(MediaExceptionProcessor.class);
-        }
-    }
-
-    private void createAndFailWithCause(String cause) {
-        try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
-            context.register(MediaServicesAutoConfiguration.class);
-
-            Exception exception = null;
-            try {
-                context.refresh();
-            } catch (Exception e) {
-                exception = e;
-            }
-
-            assertThat(exception).isNotNull();
-            assertThat(exception).isExactlyInstanceOf(BeanCreationException.class);
-            assertThat(exception.getCause().getCause().toString()).contains(cause);
-        }
+    @Test(expected = NoSuchBeanDefinitionException.class)
+    public void byDefaultMediaContractBeanNotCreated() {
+        contextRunner.run(context -> context.getBean(MediaContract.class));
     }
 }
