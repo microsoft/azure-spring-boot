@@ -11,8 +11,6 @@ import com.microsoft.azure.storage.blob.BlockBlobURL;
 import com.microsoft.azure.storage.blob.ContainerURL;
 import com.microsoft.azure.storage.blob.ServiceURL;
 import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,7 +24,6 @@ import java.nio.file.Files;
 
 @SpringBootApplication
 public class StorageSampleApplication implements CommandLineRunner {
-    private static final Logger LOGGER = LoggerFactory.getLogger(StorageSampleApplication.class);
     private static final String SOURCE_FILE = "storageTestFile.txt";
 
     @Autowired
@@ -43,13 +40,11 @@ public class StorageSampleApplication implements CommandLineRunner {
     }
 
     public void run(String... var1) throws IOException {
-        File sourceFile = new File(this.getClass().getResource(SOURCE_FILE).getFile());
+        File sourceFile = new File(this.getClass().getClassLoader().getResource(SOURCE_FILE).getFile());
         File downloadFile = Files.createTempFile("azure-storage-test", null).toFile();
 
         StorageService.createContainer(containerURL,  properties.getContainerName());
         BlockBlobURL blockBlobURL = containerURL.createBlockBlobURL(SOURCE_FILE);
-
-        StorageService.uploadFile(blockBlobURL, sourceFile);
 
         System.out.println("Enter a command:");
         System.out.println("(P)utBlob | (G)etBlob | (D)eleteBlobs | (E)xitSample");
@@ -70,11 +65,12 @@ public class StorageSampleApplication implements CommandLineRunner {
                     StorageService.deleteBlob(blockBlobURL);
                     break;
                 case "E":
+                    System.out.println("Cleaning up container and tmp file...");
                     containerURL.delete(null, null).blockingGet();
                     FileUtils.deleteQuietly(downloadFile);
                     System.exit(0);
                 default:
-                        break;
+                    break;
             }
         }
     }
