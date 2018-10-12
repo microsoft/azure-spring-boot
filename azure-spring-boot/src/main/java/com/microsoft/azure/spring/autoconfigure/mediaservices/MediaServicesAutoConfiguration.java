@@ -8,6 +8,7 @@ package com.microsoft.azure.spring.autoconfigure.mediaservices;
 
 import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
+import com.microsoft.windowsazure.exception.ServiceException;
 import com.microsoft.windowsazure.services.media.MediaConfiguration;
 import com.microsoft.windowsazure.services.media.MediaContract;
 import com.microsoft.windowsazure.services.media.MediaService;
@@ -23,6 +24,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -30,6 +32,12 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_HOST;
+import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_PORT;
+import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_SCHEME;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Configuration
 @ConditionalOnMissingBean(MediaContract.class)
@@ -48,13 +56,13 @@ public class MediaServicesAutoConfiguration {
     }
 
     @Bean
-    public MediaContract mediaContract() throws MalformedURLException, URISyntaxException {
+    public MediaContract mediaContract() throws ServiceException, MalformedURLException, URISyntaxException {
         LOG.debug("mediaContract called");
         trackCustomEvent();
         return createMediaContract();
     }
 
-    private MediaContract createMediaContract() throws MalformedURLException, URISyntaxException {
+    private MediaContract createMediaContract() throws ServiceException, MalformedURLException, URISyntaxException {
         LOG.debug("createMediaContract called");
 
         final ExecutorService executorService = Executors.newFixedThreadPool(1);
@@ -66,6 +74,16 @@ public class MediaServicesAutoConfiguration {
 
         final com.microsoft.windowsazure.Configuration configuration = MediaConfiguration
                 .configureWithAzureAdTokenProvider(new URI(properties.getRestApiEndpoint()), tokenProvider);
+
+        if (!StringUtils.isEmpty(properties.getProxyHost()) && nonNull(properties.getProxyPort())) {
+            configuration.getProperties().put(PROPERTY_HTTP_PROXY_HOST, properties.getProxyHost());
+            configuration.getProperties().put(PROPERTY_HTTP_PROXY_PORT, properties.getProxyPort());
+            configuration.getProperties().put(PROPERTY_HTTP_PROXY_SCHEME, properties.getProxyScheme());
+        } else if (!StringUtils.isEmpty(properties.getProxyHost()) && isNull(properties.getProxyPort())) {
+            throw new ServiceException("Please configure azure.mediaservices.proxy-port");
+        } else if (nonNull(properties.getProxyPort()) && StringUtils.isEmpty(properties.getProxyHost())) {
+            throw new ServiceException("Please configure azure.mediaservices.proxy-host");
+        }
 
         return MediaService.create(configuration);
     }

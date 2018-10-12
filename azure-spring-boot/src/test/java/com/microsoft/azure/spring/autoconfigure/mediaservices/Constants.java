@@ -15,4 +15,8 @@ public class Constants {
     public static final String CLIENT_SECRET = "fake-client-secret";
     public static final String REST_API_ENDPOINT_PROP = "azure.mediaservices.rest-api-endpoint";
     public static final String REST_API_ENDPOINT = "https://fake.media.service.media.azure.net/api/";
+    public static final String PROXY_HOST = "localhost";
+    public static final String PROXY_HOST_PROP = "azure.mediaservices.proxy-host";
+    public static final String PROXY_PORT = "8080";
+    public static final String PROXY_PORT_PROP = "azure.mediaservices.proxy-port";
 }

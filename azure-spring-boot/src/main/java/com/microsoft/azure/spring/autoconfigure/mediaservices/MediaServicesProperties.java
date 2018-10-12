@@ -46,6 +46,27 @@ public class MediaServicesProperties {
     private String restApiEndpoint;
 
     /**
+     * Proxy host if to use proxy.
+     */
+    @Getter
+    @Setter
+    private String proxyHost;
+
+    /**
+     * Proxy port if to use proxy.
+     */
+    @Getter
+    @Setter
+    private Integer proxyPort;
+
+    /**
+     * Proxy scheme if to use proxy. Default is http.
+     */
+    @Getter
+    @Setter
+    private String proxyScheme = "http";
+
+    /**
      * Whether allow telemetry collecting.
      */
     @Getter

@@ -6,7 +6,9 @@
 
 package com.microsoft.azure.spring.autoconfigure.mediaservices;
 
+import com.microsoft.windowsazure.exception.ServiceException;
 import com.microsoft.windowsazure.services.media.MediaContract;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -18,21 +20,43 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MediaServicesAutoConfigurationTest {
     private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(MediaServicesAutoConfiguration.class));
+            .withConfiguration(AutoConfigurations.of(MediaServicesAutoConfiguration.class))
+            .withPropertyValues(propPair(TENANT_PROP, TENANT),
+                    propPair(CLIENT_ID_PROP, CLIENT_ID),
+                    propPair(CLIENT_SECRET_PROP, CLIENT_SECRET),
+                    propPair(REST_API_ENDPOINT_PROP, REST_API_ENDPOINT));
 
     @Test
     public void mediaContractBeanCanBeCreated() {
-        contextRunner.withPropertyValues(propPair(TENANT_PROP, TENANT),
-                propPair(CLIENT_ID_PROP, CLIENT_ID),
-                propPair(CLIENT_SECRET_PROP, CLIENT_SECRET),
-                propPair(REST_API_ENDPOINT_PROP, REST_API_ENDPOINT))
-                .run(context ->
-                        assertThat(context).hasSingleBean(MediaContract.class)
-                );
+        contextRunner.run(context -> assertThat(context).hasSingleBean(MediaContract.class));
     }
 
     @Test(expected = NoSuchBeanDefinitionException.class)
     public void byDefaultMediaContractBeanNotCreated() {
-        contextRunner.run(context -> context.getBean(MediaContract.class));
+        new ApplicationContextRunner()
+                .withConfiguration(AutoConfigurations.of(MediaServicesAutoConfiguration.class))
+                .withPropertyValues().run(context -> context.getBean(MediaContract.class));
+    }
+
+    @Test
+    public void createMediaServiceAccountWithProxyHostMissing() {
+        contextRunner.withPropertyValues(propPair(PROXY_PORT_PROP, PROXY_PORT)).run(context -> {
+            try {
+                context.getBean(MediaContract.class);
+            } catch (IllegalStateException e) {
+                assertThat(ExceptionUtils.indexOfThrowable(e, ServiceException.class)).isGreaterThan(-1);
+            }
+        });
+    }
+
+    @Test
+    public void createMediaServiceAccountWithProxyPortMissing() {
+        contextRunner.withPropertyValues(propPair(PROXY_HOST_PROP, PROXY_HOST)).run(context -> {
+            try {
+                context.getBean(MediaContract.class);
+            } catch (IllegalStateException e) {
+                assertThat(ExceptionUtils.indexOfThrowable(e, ServiceException.class)).isGreaterThan(-1);
+            }
+        });
     }
 }
