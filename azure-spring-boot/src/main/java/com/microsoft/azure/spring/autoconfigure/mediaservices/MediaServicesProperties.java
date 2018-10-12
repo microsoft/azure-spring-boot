@@ -8,138 +8,68 @@ package com.microsoft.azure.spring.autoconfigure.mediaservices;
 
 import javax.validation.constraints.NotEmpty;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
 @ConfigurationProperties("azure.mediaservices")
 public class MediaServicesProperties {
+    @NotEmpty(message = "azure.mediaservices.tenant property must be configured.")
+    @Getter
+    @Setter
+    private String tenant;
+
     /**
-     * Media service configuration URI.
+     * Media service Azure Active Directory client-id(application id).
      */
-    public static final String MEDIA_SERVICE_URI = "https://media.windows.net/API/";
+    @NotEmpty(message = "azure.mediaservices.client-id property must be configured.")
+    @Getter
+    @Setter
+    private String clientId;
+
     /**
-     * Media service OAuth configuration URI.
+     * Media service Azure Active Directory client secret.
      */
-    public static final String OAUTH_URI = "https://wamsprodglobal001acs.accesscontrol.windows.net/v2/OAuth2-13";
+    @NotEmpty(message = "azure.mediaservices.client-secret property must be configured.")
+    @Getter
+    @Setter
+    private String clientSecret;
+
     /**
-     * Media service scope sent to OAuth.
+     * Media service REST API endpoint.
      */
-    public static final String SCOPE = "urn:WindowsAzureMediaServices";
-    /**
-     * Media service account name.
-     */
-    @NotEmpty(message = "Please Set azure.mediaservices.account-name in application.properties")
-    private String accountName;
-    /**
-     * Media service account key.
-     */
-    @NotEmpty(message = "Please Set azure.mediaservices.account-key in application.properties")
-    private String accountKey;
+    @NotEmpty(message = "azure.mediaservices.rest-api-endpoint property must be configured.")
+    @Getter
+    @Setter
+    private String restApiEndpoint;
+
     /**
      * Proxy host if to use proxy.
      */
+    @Getter
+    @Setter
     private String proxyHost;
+
     /**
      * Proxy port if to use proxy.
      */
+    @Getter
+    @Setter
     private Integer proxyPort;
+
     /**
      * Proxy scheme if to use proxy. Default is http.
      */
+    @Getter
+    @Setter
     private String proxyScheme = "http";
 
     /**
-     * Weather allow telemetry collecting.
+     * Whether allow telemetry collecting.
      */
+    @Getter
+    @Setter
     private boolean allowTelemetry = true;
-
-    /**
-     * return allow telemery or not
-     *
-     * @return
-     */
-    public boolean isAllowTelemetry() {
-        return allowTelemetry;
-    }
-
-    /**
-     * Set allowTelemetry
-     *
-     * @param allowTelemetry
-     */
-    public void setAllowTelemetry(boolean allowTelemetry) {
-        this.allowTelemetry = allowTelemetry;
-    }
-
-    /**
-     * @return the accountName
-     */
-    public String getAccountName() {
-        return accountName;
-    }
-
-    /**
-     * @param accountName the accountName to set
-     */
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
-
-    /**
-     * @return the accountKey
-     */
-    public String getAccountKey() {
-        return accountKey;
-    }
-
-    /**
-     * @param accountKey the accountKey to set
-     */
-    public void setAccountKey(String accountKey) {
-        this.accountKey = accountKey;
-    }
-
-    /**
-     * @return the proxyHost
-     */
-    public String getProxyHost() {
-        return proxyHost;
-    }
-
-    /**
-     * @param proxyHost the proxyHost to set
-     */
-    public void setProxyHost(String proxyHost) {
-        this.proxyHost = proxyHost;
-    }
-
-    /**
-     * @return the proxyPort
-     */
-    public Integer getProxyPort() {
-        return proxyPort;
-    }
-
-    /**
-     * @param proxyPort the proxyPort to set
-     */
-    public void setProxyPort(Integer proxyPort) {
-        this.proxyPort = proxyPort;
-    }
-
-    /**
-     * @return the proxyScheme
-     */
-    public String getProxyScheme() {
-        return proxyScheme;
-    }
-
-    /**
-     * @param proxyScheme the proxyScheme to set
-     */
-    public void setProxyScheme(String proxyScheme) {
-        this.proxyScheme = proxyScheme;
-    }
-
 }
