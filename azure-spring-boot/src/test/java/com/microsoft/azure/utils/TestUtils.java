@@ -6,6 +6,9 @@
 package com.microsoft.azure.utils;
 
 public class TestUtils {
+    private TestUtils() {
+    }
+    
     /**
      *
      * @param propName property name
