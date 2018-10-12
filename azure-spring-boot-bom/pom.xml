@@ -124,13 +124,6 @@
                 <artifactId>azure-spring-boot</artifactId>
                 <version>${azure.spring.boot.version}</version>
             </dependency>
-
-            <!-- TODO to be removed after version upgraded in azure-dependencies-bom -->
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-storage-blob</artifactId>
-                <version>${azure.storage.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>
