@@ -35,28 +35,29 @@ Starter Name | Version
 
 
 
-### How to Build and Contribute
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit https://cla.microsoft.com.
 
-Please follow [instructions here](./HowToContribute.md) to build from source or contribute.
+### कैसे बनाएं और योगदान करें
+यह परियोजना योगदान और सुझावों का स्वागत करती है। अधिकतर योगदानों के लिए आपको एक योगदानकर्ता लाइसेंस अनुबंध (सीएलए) से सहमत होने की आवश्यकता होती है कि आपको यह अधिकार है कि आपको अपने योगदान का उपयोग करने का अधिकार है, और वास्तव में ऐसा करने का अधिकार है। विवरण के लिए, https://cla.microsoft.com पर जाएं।
 
-### Other articles
-You could check below articles to learn more on usage of specific starters.
+स्रोत या योगदान से निर्माण करने के लिए कृपया [निर्देश यहां] (./ HowToContribute.md) का पालन करें।
 
-[How to use the Spring Boot Starter with Azure Cosmos DB DocumentDB API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-java-spring-boot-starter-with-cosmos-db)
+### अन्य लेख
+विशिष्ट स्टार्टर्स के उपयोग पर अधिक जानने के लिए आप नीचे लेखों की जांच कर सकते हैं।
 
-### Filing Issues
+[Azure Cosmos DB DocumentDB API के साथ स्प्रिंग बूट स्टार्टर का उपयोग कैसे करें] (https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-java-spring-boot-starter-with-cosmos- डाटाबेस)
 
-If you encounter any bug, please file an issue [here](https://github.com/Microsoft/azure-spring-boot/issues/new).
+### फाइलिंग मुद्दे
 
-To suggest a new feature or changes that could be made, file an issue the same way you would for a bug.
+अगर आपको कोई बग मिलती है, तो कृपया एक समस्या दर्ज करें [यहां] (https://github.com/Microsoft/azure-spring-boot/issues/new)।
 
-You can participate community driven [![Gitter](https://badges.gitter.im/Microsoft/spring-on-azure.svg)](https://gitter.im/Microsoft/spring-on-azure)
+एक नई सुविधा या परिवर्तन किए जाने वाले सुझावों का सुझाव देने के लिए, एक समस्या को उसी तरह दर्ज करें जैसे आप एक बग के लिए करेंगे।
 
-### Pull Requests
+आप समुदाय संचालित [! [गिटर] (https://badges.gitter.im/Microsoft/spring-on-azure.svg) में भाग ले सकते हैं] (https://gitter.im/Microsoft/spring-on-azure)
 
-Pull requests are welcome. To open your own pull request, click [here](https://github.com/Microsoft/azure-spring-boot/compare). When creating a pull request, make sure you are pointing to the fork and branch that your changes were made in.
+### अनुरोध खींचें
 
-### Code of Conduct
+पुल अनुरोधों का स्वागत है। अपना खुद का पुल अनुरोध खोलने के लिए, [यहां] क्लिक करें (https://github.com/Microsoft/azure-spring-boot/compare)। पुल अनुरोध बनाते समय, सुनिश्चित करें कि आप कांटा और शाखा को इंगित कर रहे हैं कि आपके परिवर्तन किए गए थे।
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+### आचार संहिता
+
+इस परियोजना ने [माइक्रोसॉफ्ट ओपन सोर्स आचार संहिता] (https://opensource.microsoft.com/codeofconduct/) अपनाया है। अधिक जानकारी के लिए [आचार संहिता पूछे जाने वाले प्रश्न] (https://opensource.microsoft.com/codeofconduct/faq/) देखें या किसी भी अतिरिक्त प्रश्न के साथ [opencode@microsoft.com] (mailto: opencode@microsoft.com) से संपर्क करें या टिप्पणियाँ।
