@@ -135,6 +135,11 @@
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-client-authentication</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
             <artifactId>applicationinsights-core</artifactId>
         </dependency>
         <dependency>
