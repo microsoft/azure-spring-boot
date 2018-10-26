@@ -28,21 +28,21 @@ public class StorageService {
         final AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(sourceFile.toPath());
 
         TransferManager.uploadFileToBlockBlob(fileChannel, blob, 8 * 1024 * 1024, null)
-                .subscribe(response -> {
-                    logInfo("File %s is uploaded, status code: %s.", sourceFile.toPath(),
-                            response.response().statusCode());
-                }, error -> {
-                    logError("Failed to upload file %s with error %s.", sourceFile.toPath(), error.getMessage());
-                });
+                .toCompletable()
+                .doOnComplete(() -> logInfo("File %s is uploaded.", sourceFile.toPath()))
+                .doOnError(error -> logError("Failed to upload file %s with error %s.", sourceFile.toPath(),
+                        error.getMessage()))
+                .blockingAwait();
     }
 
     public static void deleteBlob(BlockBlobURL blockBlobURL) {
         logInfo("Start deleting file %s...", blockBlobURL.toURL());
         blockBlobURL.delete(null, null, null)
-                .subscribe(
-                        response -> logInfo("Blob %s is deleted.", blockBlobURL.toURL()),
-                        error -> logError("Failed to delete blob %s with error %s.",
-                                blockBlobURL.toURL(), error.getMessage()));
+                .toCompletable()
+                .doOnComplete(() -> logInfo("Blob %s is deleted.", blockBlobURL.toURL()))
+                .doOnError(error -> logError("Failed to delete blob %s with error %s.",
+                        blockBlobURL.toURL(), error.getMessage()))
+                .blockingAwait();
     }
 
     public static void downloadBlob(BlockBlobURL blockBlobURL, File downloadToFile) {
@@ -56,8 +56,11 @@ public class StorageService {
                                     .open(Paths.get(downloadToFile.getAbsolutePath()), StandardOpenOption.CREATE,
                                             StandardOpenOption.WRITE);
                     return FlowableUtil.writeFile(response.body(null), channel);
-                }).doOnComplete(() -> logInfo("File is downloaded to %s.", downloadToFile))
-                .subscribe();
+                })
+                .doOnComplete(() -> logInfo("File is downloaded to %s.", downloadToFile))
+                .doOnError(error -> logError("Failed to download file from blob %s with error %s.",
+                        blockBlobURL.toURL(), error.getMessage()))
+                .blockingAwait();
     }
 
     public static void createContainer(ContainerURL containerURL, String containerName) {
