@@ -1,5 +1,5 @@
 ## Overview
-This sample project demonstrates how to use Azure DocumentDB via Spring Boot Starter `azure-documentdb-spring-boot-starter` to store data in and retrieve data from your Azure Cosmos DB by using the DocumentDB API.
+This sample project demonstrates how to use Azure CosmosDB via Spring Boot Starter `azure-cosmosdb-spring-boot-starter` to store data in and retrieve data from your Azure Cosmos DB.
 
 ## Prerequisites
 
@@ -22,14 +22,14 @@ This sample project demonstrates how to use Azure DocumentDB via Spring Boot Sta
 1. Navigate to `src/main/resources` and open `application.properties`.
 2. replace below properties in `application.properties` with information of your database.
    ```properties
-   azure.documentdb.uri=your-documentdb-uri
-   azure.documentdb.key=your-documentdb-key
-   azure.documentdb.database=your-documentdb-databasename
+   azure.cosmosdb.uri=your-cosmosdb-uri
+   azure.cosmosdb.key=your-cosmosdb-key
+   azure.cosmosdb.database=your-cosmosdb-databasename
    ```
 
 ### Run the sample
 
-1. Change directory to folder `azure-documentdb-spring-boot-sample`.
+1. Change directory to folder `azure-cosmosdb-spring-boot-sample`.
 2. Run below commands. 
  
    - Use Maven 
