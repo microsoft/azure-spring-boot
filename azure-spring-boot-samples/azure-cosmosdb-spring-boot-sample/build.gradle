@@ -5,5 +5,5 @@ plugins {
 description = 'Azure Document DB Spring Boot Starter Sample'
 
 dependencies {
-    compile group: 'com.microsoft.azure', name: 'azure-documentdb-spring-boot-starter', version:"${azureSpringBootStartersVersion}"
+    compile group: 'com.microsoft.azure', name: 'azure-cosmosdb-spring-boot-starter', version:"${azureSpringBootStartersVersion}"
 }

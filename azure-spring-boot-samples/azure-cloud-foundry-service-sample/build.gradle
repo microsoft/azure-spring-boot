@@ -2,7 +2,7 @@
 description = 'Azure Cloud Foundry Service Sample'
 dependencies {
     compile group: 'com.microsoft.azure', name: 'azure-storage-spring-boot-starter', version:"${azureSpringBootStartersVersion}"
-    compile group: 'com.microsoft.azure', name: 'azure-documentdb-spring-boot-starter', version:"${azureSpringBootStartersVersion}"
+    compile group: 'com.microsoft.azure', name: 'azure-cosmosdb-spring-boot-starter', version:"${azureSpringBootStartersVersion}"
     compile group: 'com.microsoft.azure', name: 'azure-servicebus-spring-boot-starter', version:"${azureSpringBootStartersVersion}"
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-jersey'
