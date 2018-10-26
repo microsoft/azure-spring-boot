@@ -10,6 +10,7 @@ import com.microsoft.azure.spring.autoconfigure.storage.StorageProperties;
 import com.microsoft.azure.storage.blob.BlockBlobURL;
 import com.microsoft.azure.storage.blob.ContainerURL;
 import com.microsoft.azure.storage.blob.ServiceURL;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -20,8 +21,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+@SuppressFBWarnings({"RV_RETURN_VALUE_IGNORED"})
 @SpringBootApplication
 public class StorageSampleApplication implements CommandLineRunner {
     private static final String SOURCE_FILE = "storageTestFile.txt";
@@ -40,19 +43,24 @@ public class StorageSampleApplication implements CommandLineRunner {
     }
 
     public void run(String... var1) throws IOException {
-        File sourceFile = new File(this.getClass().getClassLoader().getResource(SOURCE_FILE).getFile());
-        File downloadFile = Files.createTempFile("azure-storage-test", null).toFile();
+        final File sourceFile = new File(this.getClass().getClassLoader().getResource(SOURCE_FILE).getFile());
+        final File downloadFile = Files.createTempFile("azure-storage-test", null).toFile();
 
         StorageService.createContainer(containerURL,  properties.getContainerName());
-        BlockBlobURL blockBlobURL = containerURL.createBlockBlobURL(SOURCE_FILE);
+        final BlockBlobURL blockBlobURL = containerURL.createBlockBlobURL(SOURCE_FILE);
 
         System.out.println("Enter a command:");
         System.out.println("(P)utBlob | (G)etBlob | (D)eleteBlobs | (E)xitSample");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        final BufferedReader reader =
+                new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8.name()));
 
-        while(true) {
+        boolean isExit = false;
+        while (!isExit) {
             System.out.println("Enter a command:");
-            String input = reader.readLine();
+            final String input = reader.readLine();
+            if (input == null) {
+                continue;
+            }
 
             switch(input) {
                 case "P":
@@ -68,7 +76,8 @@ public class StorageSampleApplication implements CommandLineRunner {
                     System.out.println("Cleaning up container and tmp file...");
                     containerURL.delete(null, null).blockingGet();
                     FileUtils.deleteQuietly(downloadFile);
-                    System.exit(0);
+                    isExit = true;
+                    break;
                 default:
                     break;
             }
