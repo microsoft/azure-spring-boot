@@ -15,6 +15,7 @@ public class Constants {
     public static final String AZURE_KEYVAULT_ENABLED = "azure.keyvault.enabled";
     public static final String AZURE_KEYVAULT_VAULT_URI = "azure.keyvault.uri";
     public static final String AZURE_KEYVAULT_REFRESH_INTERVAL = "azure.keyvault.refresh-interval";
+    public static final String AZURE_KEYVAULT_POLICY = "azure.keyvault.policy";
     public static final String AZURE_KEYVAULT_PROPERTYSOURCE_NAME = "azurekv";
     public static final String AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS = "azure.keyvault.token-acquire-timeout-seconds";
     public static final String AZURE_KEYVAULT_ALLOW_TELEMETRY = "azure.keyvault.allow.telemetry";

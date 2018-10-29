@@ -15,14 +15,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.microsoft.azure.keyvault.spring.KeyVaultOperationFactory.createDefaultKeyVault;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -32,7 +35,6 @@ public class KeyVaultOperationUnitTest {
     private static final String fakeVaultUri = "https://fake.vault.com";
     @Mock
     KeyVaultClient keyVaultClient;
-    KeyVaultOperation keyVaultOperation;
 
     @Before
     public void setup() {
@@ -57,11 +59,12 @@ public class KeyVaultOperationUnitTest {
         when(keyVaultClient.listSecrets(anyString())).thenReturn(mockResult);
         when(keyVaultClient.getSecret(anyString(), anyString())).thenReturn(secretBundle);
 
-        keyVaultOperation = new KeyVaultOperation(keyVaultClient, fakeVaultUri);
     }
 
     @Test
     public void testGet() {
+        final KeyVaultOperation keyVaultOperation = createDefaultKeyVault(keyVaultClient, fakeVaultUri);
+
         final String result = (String) keyVaultOperation.get(testPropertyName1);
 
         assertThat(result).isEqualTo(testPropertyName1);
@@ -69,6 +72,8 @@ public class KeyVaultOperationUnitTest {
 
     @Test
     public void testList() {
+        final KeyVaultOperation keyVaultOperation = createDefaultKeyVault(keyVaultClient, fakeVaultUri);
+
         final String[] result = keyVaultOperation.list();
 
         assertThat(result.length).isEqualTo(1);
@@ -89,5 +94,28 @@ public class KeyVaultOperationUnitTest {
             mockSecretItem.withId("testPropertyName1");
             return Arrays.asList(mockSecretItem);
         }
+    }
+
+    @Test
+    public void should_never_fetch_listSecrets_when_policy_is_single() {
+        final KeyVaultOperation keyVaultOperation = new KeyVaultOperation(keyVaultClient,
+                fakeVaultUri,
+                Constants.DEFAULT_REFRESH_INTERVAL_MS,
+                VaultPolicy.SINGLE);
+
+        final Object result = keyVaultOperation.get(testPropertyName1);
+
+        assertThat(result).isEqualTo(testPropertyName1);
+        Mockito.verify(keyVaultClient, never()).listSecrets(anyString());
+    }
+
+    @Test
+    public void should_call_fetch_listSecrets_when_policy_is_single() {
+        final KeyVaultOperation keyVaultOperation = createDefaultKeyVault(keyVaultClient, fakeVaultUri);
+
+        final Object result = keyVaultOperation.get(testPropertyName1);
+
+        assertThat(result).isEqualTo(testPropertyName1);
+        Mockito.verify(keyVaultClient).listSecrets(anyString());
     }
 }

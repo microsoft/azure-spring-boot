@@ -8,14 +8,15 @@ package com.microsoft.azure.keyvault.spring;
 
 import com.microsoft.azure.AzureEnvironment;
 import com.microsoft.azure.AzureResponseBuilder;
+import com.microsoft.azure.credentials.AppServiceMSICredentials;
 import com.microsoft.azure.keyvault.KeyVaultClient;
 import com.microsoft.azure.serializer.AzureJacksonAdapter;
 import com.microsoft.azure.spring.support.UserAgent;
 import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.microsoft.rest.RestClient;
-import com.microsoft.azure.credentials.AppServiceMSICredentials;
 import com.microsoft.rest.credentials.ServiceClientCredentials;
+import org.apache.commons.lang3.EnumUtils;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.StandardEnvironment;
@@ -39,22 +40,23 @@ class KeyVaultEnvironmentPostProcessorHelper {
         final String vaultUri = getProperty(this.environment, Constants.AZURE_KEYVAULT_VAULT_URI);
         final Long refreshInterval = Optional.ofNullable(
                 this.environment.getProperty(Constants.AZURE_KEYVAULT_REFRESH_INTERVAL))
-                .map(Long::valueOf).orElse(Constants.DEFAULT_REFRESH_INTERVAL_MS);
+                                             .map(Long::valueOf).orElse(Constants.DEFAULT_REFRESH_INTERVAL_MS);
         final long timeAcquiringTimeoutInSeconds = this.environment.getProperty(
-            Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, Long.class, Constants.TOKEN_ACQUIRE_TIMEOUT_SECS);
+                Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, Long.class, Constants.TOKEN_ACQUIRE_TIMEOUT_SECS);
         final ServiceClientCredentials credentials;
 
         if (this.environment.containsProperty("MSI_ENDPOINT")
-            && this.environment.containsProperty("MSI_SECRET")) {
+                && this.environment.containsProperty("MSI_SECRET")) {
             credentials = new AppServiceMSICredentials(AzureEnvironment.AZURE);
         } else {
             final String clientId = getProperty(this.environment, Constants.AZURE_CLIENTID);
             final String clientKey = getProperty(this.environment, Constants.AZURE_CLIENTKEY);
             credentials = new AzureKeyVaultCredential(clientId, clientKey,
-                timeAcquiringTimeoutInSeconds);
+                    timeAcquiringTimeoutInSeconds);
         }
-        
-        final RestClient restClient = new RestClient.Builder().withBaseUrl(vaultUri)
+
+        final RestClient restClient = new RestClient.Builder()
+                .withBaseUrl(vaultUri)
                 .withCredentials(credentials)
                 .withSerializerAdapter(new AzureJacksonAdapter())
                 .withResponseBuilderFactory(new AzureResponseBuilder.Factory())
@@ -68,7 +70,11 @@ class KeyVaultEnvironmentPostProcessorHelper {
 
         try {
             final MutablePropertySources sources = this.environment.getPropertySources();
-            final KeyVaultOperation kvOperation = new KeyVaultOperation(kvClient, vaultUri, refreshInterval);
+            final VaultPolicy policy = Optional
+                    .ofNullable(this.environment.getProperty(Constants.AZURE_KEYVAULT_POLICY))
+                    .map(value -> EnumUtils.getEnum(VaultPolicy.class, value))
+                    .orElse(VaultPolicy.LIST);
+            final KeyVaultOperation kvOperation = new KeyVaultOperation(kvClient, vaultUri, refreshInterval, policy);
 
             if (sources.contains(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME)) {
                 sources.addAfter(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME,
