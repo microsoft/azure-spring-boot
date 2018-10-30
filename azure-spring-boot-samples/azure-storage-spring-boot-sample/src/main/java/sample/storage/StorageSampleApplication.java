@@ -6,42 +6,81 @@
 
 package sample.storage;
 
-import com.microsoft.azure.storage.CloudStorageAccount;
-import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.CloudBlobClient;
-import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.microsoft.azure.spring.autoconfigure.storage.StorageProperties;
+import com.microsoft.azure.storage.blob.BlockBlobURL;
+import com.microsoft.azure.storage.blob.ContainerURL;
+import com.microsoft.azure.storage.blob.ServiceURL;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.net.URISyntaxException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
+@SuppressFBWarnings({"RV_RETURN_VALUE_IGNORED"})
 @SpringBootApplication
 public class StorageSampleApplication implements CommandLineRunner {
+    private static final String SOURCE_FILE = "storageTestFile.txt";
+
     @Autowired
-    private CloudStorageAccount cloudStorageAccount;
+    private ServiceURL serviceURL;
+
+    @Autowired
+    private ContainerURL containerURL;
+
+    @Autowired
+    private StorageProperties properties;
 
     public static void main(String[] args) {
         SpringApplication.run(StorageSampleApplication.class);
     }
 
-    public void run(String... var1) throws URISyntaxException, StorageException {
-        createContainerIfNotExists("mycontainer");
-    }
+    public void run(String... var1) throws IOException {
+        final File sourceFile = new File(this.getClass().getClassLoader().getResource(SOURCE_FILE).getFile());
+        final File downloadFile = Files.createTempFile("azure-storage-test", null).toFile();
 
-    // Note: Here is the minimum sample code that demonstrates how CloudStorageAccount is autowired and used.
-    // For more complete Azure Storage API usage, please go to https://github.com/Azure-Samples and search repositories
-    // with key words `storage` and 'java'.
-    private void createContainerIfNotExists(String containerName) throws URISyntaxException, StorageException {
-        // Create the blob client.
-        final CloudBlobClient blobClient = cloudStorageAccount.createCloudBlobClient();
+        StorageService.createContainer(containerURL,  properties.getContainerName());
+        final BlockBlobURL blockBlobURL = containerURL.createBlockBlobURL(SOURCE_FILE);
 
-        // Get a reference to a container.
-        // The container name must be lower case
-        final CloudBlobContainer container = blobClient.getContainerReference(containerName);
+        System.out.println("Enter a command:");
+        System.out.println("(P)utBlob | (G)etBlob | (D)eleteBlobs | (E)xitSample");
+        final BufferedReader reader =
+                new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8.name()));
 
-        // Create the container if it does not exist.
-        container.createIfNotExists();
+        boolean isExit = false;
+        while (!isExit) {
+            System.out.println("Enter a command:");
+            final String input = reader.readLine();
+            if (input == null) {
+                continue;
+            }
+
+            switch(input) {
+                case "P":
+                    StorageService.uploadFile(blockBlobURL, sourceFile);
+                    break;
+                case "G":
+                    StorageService.downloadBlob(blockBlobURL, downloadFile);
+                    break;
+                case "D":
+                    StorageService.deleteBlob(blockBlobURL);
+                    break;
+                case "E":
+                    System.out.println("Cleaning up container and tmp file...");
+                    containerURL.delete(null, null).blockingGet();
+                    FileUtils.deleteQuietly(downloadFile);
+                    isExit = true;
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

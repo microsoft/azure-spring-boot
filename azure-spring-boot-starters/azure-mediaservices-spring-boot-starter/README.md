@@ -9,7 +9,7 @@ If you are using Maven, add the following dependency.
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-mediaservices-spring-boot-starter</artifactId>
-    <version>0.2.3</version>
+    <version>2.0.5</version>
 </dependency>
 ```
 
@@ -18,8 +18,10 @@ If you are using Maven, add the following dependency.
 Open `application.properties` file and add below properties with your Azure Media Services credentials.
 
 ```
-azure.mediaservices.account-name=put-your-media-services-account-name-here
-azure.mediaservices.account-key=put-your-media-services-account-key-here
+azure.mediaservices.tenant=put-your-media-service-azure-ad-tenant-domain-here
+azure.mediaservices.client-id=put-your-azure-ad-client-id-here
+azure.mediaservices.client-secret=put-your-azure-ad-client-secret-here
+azure.mediaservices.rest-api-endpoint=put-your-media-service-rest-api-endpoint-here
 ```
 
 # Optional

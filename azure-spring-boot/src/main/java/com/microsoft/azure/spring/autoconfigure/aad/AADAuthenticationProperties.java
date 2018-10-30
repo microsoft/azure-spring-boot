@@ -5,6 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import com.nimbusds.jose.jwk.source.RemoteJWKSet;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -37,6 +38,12 @@ public class AADAuthenticationProperties {
      */
     @NotEmpty
     private List<String> activeDirectoryGroups;
+
+    private int jwtConnectTimeout = RemoteJWKSet.DEFAULT_HTTP_CONNECT_TIMEOUT; /* milliseconds */
+
+    private int jwtReadTimeout = RemoteJWKSet.DEFAULT_HTTP_READ_TIMEOUT; /* milliseconds */
+
+    private int jwtSizeLimit = RemoteJWKSet.DEFAULT_HTTP_SIZE_LIMIT; /* bytes */
 
     private String tenantId;
 
@@ -88,5 +95,29 @@ public class AADAuthenticationProperties {
 
     public void setTenantId(String tenantId) {
         this.tenantId = tenantId;
+    }
+
+    public int getJwtConnectTimeout() {
+        return jwtConnectTimeout;
+    }
+
+    public void setJwtConnectTimeout(int jwtConnectTimeout) {
+        this.jwtConnectTimeout = jwtConnectTimeout;
+    }
+
+    public int getJwtReadTimeout() {
+        return jwtReadTimeout;
+    }
+
+    public void setJwtReadTimeout(int jwtReadTimeout) {
+        this.jwtReadTimeout = jwtReadTimeout;
+    }
+
+    public int getJwtSizeLimit() {
+        return jwtSizeLimit;
+    }
+
+    public void setJwtSizeLimit(int jwtSizeLimit) {
+        this.jwtSizeLimit = jwtSizeLimit;
     }
 }

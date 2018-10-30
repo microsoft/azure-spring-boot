@@ -8,6 +8,7 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 import com.microsoft.aad.adal4j.ClientCredential;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.proc.BadJOSEException;
+import com.nimbusds.jose.util.ResourceRetriever;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -36,17 +37,21 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
 
     private AADAuthenticationProperties aadAuthProps;
     private ServiceEndpointsProperties serviceEndpointsProps;
+    private ResourceRetriever resourceRetriever;
+    private UserPrincipalManager principalManager;
 
     public AADAuthenticationFilter(AADAuthenticationProperties aadAuthProps,
-                                   ServiceEndpointsProperties serviceEndpointsProps) {
+                                   ServiceEndpointsProperties serviceEndpointsProps,
+                                   ResourceRetriever resourceRetriever) {
         this.aadAuthProps = aadAuthProps;
         this.serviceEndpointsProps = serviceEndpointsProps;
+        this.resourceRetriever = resourceRetriever;
+        this.principalManager = new UserPrincipalManager(
+                serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment()), resourceRetriever);
     }
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader(TOKEN_HEADER);
@@ -59,9 +64,6 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                 String graphApiToken = (String) request
                         .getSession().getAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN);
 
-                final ServiceEndpoints serviceEndpoints =
-                        serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment());
-
                 final ClientCredential credential =
                         new ClientCredential(aadAuthProps.getClientId(), aadAuthProps.getClientSecret());
 
@@ -69,7 +71,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                         new AzureADGraphClient(credential, aadAuthProps, serviceEndpointsProps);
 
                 if (principal == null || graphApiToken == null || graphApiToken.isEmpty()) {
-                    principal = new UserPrincipal(idToken, serviceEndpoints);
+                    principal = principalManager.buildUserPrincipal(idToken);
 
                     final String tenantId = principal.getClaim().toString();
                     graphApiToken = client.acquireTokenForGraphApi(idToken, tenantId).getAccessToken();

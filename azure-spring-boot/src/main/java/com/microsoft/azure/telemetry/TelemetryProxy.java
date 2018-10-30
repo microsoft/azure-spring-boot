@@ -8,6 +8,8 @@ package com.microsoft.azure.telemetry;
 import com.microsoft.applicationinsights.TelemetryClient;
 import com.microsoft.azure.spring.support.GetHashMac;
 import com.microsoft.azure.utils.PropertyLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
@@ -15,6 +17,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class TelemetryProxy {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TelemetryProxy.class);
     private static final String PROJECT_INFO = "spring-boot-starter/" + PropertyLoader.getProjectVersion();
 
     protected TelemetryClient client;
@@ -44,8 +47,13 @@ public class TelemetryProxy {
             properties = mergeProperties(getDefaultProperties(), customProperties,
                     overrideDefaultProperties);
         }
-        client.trackEvent(eventName, properties, null);
-        client.flush();
+
+        try {
+            client.trackEvent(eventName, properties, null);
+            client.flush();
+        } catch (Exception e) {
+            LOGGER.trace("Failed to track event.", e);
+        }
     }
 
     protected Map<String, String> mergeProperties(Map<String, String> defaultProperties,

@@ -37,6 +37,7 @@ public class DocumentDBProperties {
     /**
      * Document DB database name.
      */
+    @NotEmpty
     private String database;
 
     /**

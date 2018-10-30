@@ -9,7 +9,7 @@ If you are using Maven, add the following dependency.
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-storage-spring-boot-starter</artifactId>
-    <version>2.0.2</version>
+    <version>2.0.5</version>
 </dependency>
 ```
 
@@ -18,16 +18,24 @@ If you are using Maven, add the following dependency.
 Open `application.properties` file and add below property with your Azure Storage connection string.
 
 ```
-azure.storage.connection-string=DefaultEndpointsProtocol=[http|https];AccountName=myAccountName;AccountKey=myAccountKey
+azure.storage.account-name=put-your-azure-storage-account-name-here
+azure.storage.account-key=put-your-azure-storage-account-key-here
+azure.storage.container-name=put-your-azure-storage-container-name-here
 ```
+
+With above configuration, a `ServiceURL` and a `ContainerURL` bean will be created.
+`azure.storage.container-name` is optional, you can also create `ContainerURL` from `ServiceURL` by `ServiceURL#createContainerURL(String containerName)`.
 
 ### Add auto-wiring code
 
-Add below alike code to auto-wire the `CloudStorageAccount` object. Then you can use it to create the client, such as `CloudBlobClient`. For details usage, please reference this [document](https://docs.microsoft.com/en-us/azure/storage/storage-java-how-to-use-blob-storage).
+Add below alike code to auto-wire the `ServiceURL` bean and `ContainerURL` bean. For details usage, please reference this [document](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-java-v10#upload-blobs-to-the-container).
 
 ```
 @Autowired
-private CloudStorageAccount storageAccount;
+private ServiceURL serviceURL;
+
+@Autowired
+private ContainerURL containerURL;
 ```
 
 ### Allow telemetry
