@@ -19,7 +19,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConditionalOnClass({DocumentClient.class, DocumentDbTemplate.class})
-@ConditionalOnProperty(prefix = "azure.cosmosdb", value = {"uri", "key", "database"})
 @EnableConfigurationProperties(DocumentDBProperties.class)
 public class DocumentDBAutoConfiguration extends AbstractDocumentDbConfiguration {
     private final DocumentDBProperties properties;
