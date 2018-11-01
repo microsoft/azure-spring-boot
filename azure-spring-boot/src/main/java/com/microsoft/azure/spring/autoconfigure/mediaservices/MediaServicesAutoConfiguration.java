@@ -33,6 +33,8 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.microsoft.windowsazure.Configuration.PROPERTY_CONNECT_TIMEOUT;
+import static com.microsoft.windowsazure.Configuration.PROPERTY_READ_TIMEOUT;
 import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_HOST;
 import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_PORT;
 import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_SCHEME;
@@ -74,6 +76,13 @@ public class MediaServicesAutoConfiguration {
 
         final com.microsoft.windowsazure.Configuration configuration = MediaConfiguration
                 .configureWithAzureAdTokenProvider(new URI(properties.getRestApiEndpoint()), tokenProvider);
+
+        if (properties.getConnectTimeout() != null) {
+            configuration.getProperties().put(PROPERTY_CONNECT_TIMEOUT, properties.getConnectTimeout());
+        }
+        if (properties.getReadTimeout() != null) {
+            configuration.getProperties().put(PROPERTY_READ_TIMEOUT, properties.getReadTimeout());
+        }
 
         if (!StringUtils.isEmpty(properties.getProxyHost()) && nonNull(properties.getProxyPort())) {
             configuration.getProperties().put(PROPERTY_HTTP_PROXY_HOST, properties.getProxyHost());
