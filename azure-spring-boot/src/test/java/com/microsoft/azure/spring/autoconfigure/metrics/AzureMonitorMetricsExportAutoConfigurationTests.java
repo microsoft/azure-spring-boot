@@ -152,9 +152,9 @@ public class AzureMonitorMetricsExportAutoConfigurationTests {
         @Bean
         public AzureMonitorMeterRegistry customRegistry(AzureMonitorConfig config,
                                                         Clock clock) {
-            return new AzureMonitorMeterRegistry(config, clock, null);
+            return AzureMonitorMeterRegistry.builder(config)
+                    .clock(clock)
+                    .build();
         }
-
     }
-
 }
