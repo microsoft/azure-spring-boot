@@ -41,6 +41,22 @@ public class UserPrincipal implements Serializable {
         return jwtClaimsSet == null ? null : jwtClaimsSet.getClaim("tid");
     }
 
+    public Object getClaim(String name) {
+        return jwtClaimsSet == null ? null : jwtClaimsSet.getClaim(name);
+    }
+
+    public String getUpn() {
+        return jwtClaimsSet == null ? null : (String) jwtClaimsSet.getClaim("upn");
+    }
+
+    public String getUniqueName() {
+        return jwtClaimsSet == null ? null : (String) jwtClaimsSet.getClaim("unique_name");
+    }
+
+    public String getName() {
+        return jwtClaimsSet == null ? null : (String) jwtClaimsSet.getClaim("name");
+    }
+
     // header
     public String getKid() {
         return jwsObject == null ? null : jwsObject.getHeader().getKeyID();
