@@ -19,9 +19,8 @@ If you are using Maven, add the following dependency.
 </dependency>
 ```
 
-### Add the property setting
-
-Open `application.properties` file and add below properties to specify your Azure Key Vault url, Azure service principal client id and client key. `azure.keyvault.enabled` is used to turn on/off Azure Key Vault Secret property source, default is true. `azure.keyvault.token-acquiring-timeout-seconds` is used to specify the timeout in seconds when acquiring token from Azure AAD. Default value is 60 seconds. This property is optional.
+### Custom settings
+To use custom configuration, open `application.properties` file and add below properties to specify your Azure Key Vault url, Azure service principal client id and client key. `azure.keyvault.enabled` is used to turn on/off Azure Key Vault Secret property source, default is true. `azure.keyvault.token-acquiring-timeout-seconds` is used to specify the timeout in seconds when acquiring token from Azure AAD. Default value is 60 seconds. This property is optional.
 ```
 azure.keyvault.enabled=true
 azure.keyvault.uri=put-your-azure-keyvault-uri-here
@@ -30,6 +29,27 @@ azure.keyvault.client-key=put-your-azure-client-key-here
 azure.keyvault.token-acquire-timeout-seconds=60
 ```
 
+### Use MSI / Managed identities 
+#### App Services
+To use managed identities for App Services - please refer to [How to use managed identities for App Service and Azure Functions](https://docs.microsoft.com/en-us/azure/app-service/app-service-managed-service-identity).
+
+To use it in an App Service, add the below properties:
+```
+azure.keyvault.enabled=true
+azure.keyvault.uri=put-your-azure-keyvault-uri-here
+```
+
+#### VM       
+To use it for virtual machines, please refer to [Azure AD managed identities for Azure resources documentation](https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/).
+
+To use it in a VM, add the below properties:
+```
+azure.keyvault.enabled=true
+azure.keyvault.uri=put-your-azure-keyvault-uri-here
+azure.keyvault.client-id=put-your-azure-client-id-here
+``` 
+
+If you are using system assigned identity you don't need to specify the client-id.
 
 ### Save secrets in Azure Key Vault
 Save secrets in Azure Key Vault through [Azure Portal](https://blogs.technet.microsoft.com/kv/2016/09/12/manage-your-key-vaults-from-new-azure-portal/) or [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/keyvault/secret).
