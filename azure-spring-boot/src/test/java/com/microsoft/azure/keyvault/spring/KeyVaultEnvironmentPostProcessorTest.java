@@ -23,7 +23,7 @@ import java.util.Map;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
-public class KeyVaultEnvironmentPostProcessorHelperUnitTest {
+public class KeyVaultEnvironmentPostProcessorTest {
 
     private KeyVaultEnvironmentPostProcessorHelper keyVaultEnvironmentPostProcessorHelper;
     private ConfigurableEnvironment environment;
