@@ -6,57 +6,79 @@
 
 package com.microsoft.azure.keyvault.spring;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.microsoft.azure.credentials.AppServiceMSICredentials;
+import com.microsoft.azure.credentials.MSICredentials;
+import com.microsoft.rest.credentials.ServiceClientCredentials;
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.Before;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.junit.Test;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.MutablePropertySources;
-import org.springframework.core.env.EnvironmentCapable;
 import org.springframework.core.env.MapPropertySource;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.core.env.MutablePropertySources;
+import org.springframework.mock.env.MockEnvironment;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@TestPropertySource(locations = "classpath:application.properties")
 public class KeyVaultEnvironmentPostProcessorHelperUnitTest {
-
-    @Autowired
-    ApplicationContext context;
 
     private KeyVaultEnvironmentPostProcessorHelper keyVaultEnvironmentPostProcessorHelper;
     private ConfigurableEnvironment environment;
+    private MutablePropertySources propertySources;
+    private Map<String, Object> msiProperties = new HashMap<>();
 
     @Before
     public void setup() {
-        environment = (ConfigurableEnvironment) context.getEnvironment();
+        environment = new MockEnvironment();
+        propertySources = environment.getPropertySources();
     }
 
     @Test
-    public void testMSIAuthPropertiesNotInitialized() { 
-        assertFalse("Environment should not contain MSI_ENDPOINT when not on Azure App Service environment",
-        environment.containsProperty("MSI_ENDPOINT"));
-
-        assertFalse("Environment should not contain MSI_SECRET when not on Azure App Service environment",
-        environment.containsProperty("MSI_SECRET"));
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void testMSIAuthentication() {
-        final MutablePropertySources propertySources = environment.getPropertySources();
-        final Map msiProperties = new HashMap();
-
+    public void testGetCredentialsWhenMSIEnabledInAppService() {
         msiProperties.put("MSI_ENDPOINT", "fakeendpoint");
         msiProperties.put("MSI_SECRET", "fakesecret");
         propertySources.addLast(new MapPropertySource("MSI_Properties", msiProperties));
-        keyVaultEnvironmentPostProcessorHelper = 
-            new KeyVaultEnvironmentPostProcessorHelper(environment);
-        keyVaultEnvironmentPostProcessorHelper.addKeyVaultPropertySource();
-    }  
+
+        keyVaultEnvironmentPostProcessorHelper = new KeyVaultEnvironmentPostProcessorHelper(environment);
+
+        final ServiceClientCredentials credentials = keyVaultEnvironmentPostProcessorHelper.getCredentials();
+
+        assertThat(credentials, IsInstanceOf.instanceOf(AppServiceMSICredentials.class));
+    }
+
+    @Test
+    public void testGetCredentialsWhenUsingClientAndKey() {
+        msiProperties.put("azure.keyvault.client-id", "aaaa-bbbb-cccc-dddd");
+        msiProperties.put("azure.keyvault.client-key", "mySecret");
+        propertySources.addLast(new MapPropertySource("MSI_Properties", msiProperties));
+
+        keyVaultEnvironmentPostProcessorHelper = new KeyVaultEnvironmentPostProcessorHelper(environment);
+
+        final ServiceClientCredentials credentials = keyVaultEnvironmentPostProcessorHelper.getCredentials();
+
+        assertThat(credentials, IsInstanceOf.instanceOf(AzureKeyVaultCredential.class));
+    }
+
+    @Test
+    public void testGetCredentialsWhenMSIEnabledInVMWithClientId() {
+        msiProperties.put("azure.keyvault.client-id", "aaaa-bbbb-cccc-dddd");
+        propertySources.addLast(new MapPropertySource("MSI_Properties", msiProperties));
+
+        keyVaultEnvironmentPostProcessorHelper = new KeyVaultEnvironmentPostProcessorHelper(environment);
+
+        final ServiceClientCredentials credentials = keyVaultEnvironmentPostProcessorHelper.getCredentials();
+
+        assertThat(credentials, IsInstanceOf.instanceOf(MSICredentials.class));
+    }
+
+    @Test
+    public void testGetCredentialsWhenMSIEnabledInVMWithoutClientId() {
+        keyVaultEnvironmentPostProcessorHelper = new KeyVaultEnvironmentPostProcessorHelper(environment);
+
+        final ServiceClientCredentials credentials = keyVaultEnvironmentPostProcessorHelper.getCredentials();
+
+        assertThat(credentials, IsInstanceOf.instanceOf(MSICredentials.class));
+    }
 }

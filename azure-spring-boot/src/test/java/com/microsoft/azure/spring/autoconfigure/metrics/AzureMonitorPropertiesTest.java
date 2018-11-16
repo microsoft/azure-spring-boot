@@ -20,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureMonitorPropertiesTest {
 
+    @SuppressWarnings("depreciation")
     private void assertStepRegistryDefaultValues(StepRegistryProperties properties,
                                                  StepRegistryConfig config) {
 
@@ -34,7 +35,7 @@ public class AzureMonitorPropertiesTest {
     @Test
     public void defaultValuesAreConsistent() {
         final AzureMonitorProperties properties = new AzureMonitorProperties();
-        final AzureMonitorConfig config = AzureMonitorConfig.DEFAULT;
+        final AzureMonitorConfig config = (key) -> null;
         assertStepRegistryDefaultValues(properties, config);
     }
 

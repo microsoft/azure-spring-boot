@@ -78,6 +78,7 @@ public class DocumentDBPropertiesTest {
             Collections.sort(errorStrings);
 
             final List<String> errorStringsExpected = Arrays.asList(
+                    "Field error in object 'azure.cosmosdb' on field 'database': rejected value [null];",
                     "Field error in object 'azure.cosmosdb' on field 'key': rejected value [null];",
                     "Field error in object 'azure.cosmosdb' on field 'uri': rejected value [null];"
             );

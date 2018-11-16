@@ -72,4 +72,19 @@ public class MediaServicesProperties {
     @Getter
     @Setter
     private boolean allowTelemetry = true;
+
+    /**
+     * Socket connect timeout
+     */
+    @Getter
+    @Setter
+    private Integer connectTimeout;
+
+    /**
+     * Socket read timeout
+     */
+    @Getter
+    @Setter
+    private Integer readTimeout;
+
 }
