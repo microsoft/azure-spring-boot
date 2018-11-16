@@ -36,6 +36,7 @@
         <azuremonitor.micrometer.registry.version>1.1.0</azuremonitor.micrometer.registry.version>
         <micrometer.core.version>1.1.0</micrometer.core.version>
         <spring-boot-actuator-autoconfigure.version>2.0.3.RELEASE</spring-boot-actuator-autoconfigure.version>
+        <hibernate.validator.version>6.0.9.Final</hibernate.validator.version>
     </properties>
 
     <profiles>
@@ -94,6 +95,11 @@
                 <groupId>io.micrometer</groupId>
                 <artifactId>micrometer-core</artifactId>
                 <version>${micrometer.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate.validator.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
