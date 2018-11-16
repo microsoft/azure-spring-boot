@@ -61,13 +61,13 @@ public class KeyVaultOperation {
 
     private Object getValueBy(String secretName) {
         // NOTE: azure keyvault secret name convention: ^[0-9a-zA-Z-]+$ "." is not allowed
-        final String localSecretName = secretName.replace(".", "-");
+        final String replacedSecretName = secretName.replace(".", "-");
         if (this.propertyNamesHashMap.containsKey(secretName)) {
-            return propertyNamesHashMap.get(localSecretName);
+            return propertyNamesHashMap.get(replacedSecretName);
         } else {
-            final SecretBundle secretBundle = this.keyVaultClient.getSecret(this.vaultUri, localSecretName);
+            final SecretBundle secretBundle = this.keyVaultClient.getSecret(this.vaultUri, replacedSecretName);
             final String value = secretBundle.value();
-            propertyNamesHashMap.put(localSecretName, value);
+            propertyNamesHashMap.put(replacedSecretName, value);
             return value;
         }
     }
