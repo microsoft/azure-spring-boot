@@ -109,7 +109,7 @@ public class KeyVaultOperationUnitTest {
     }
 
     @Test
-    public void should_call_fetch_listSecrets_when_policy_is_single() {
+    public void should_call_fetch_listSecrets_when_policy_is_list() {
         final KeyVaultOperation keyVaultOperation = createDefaultKeyVault(keyVaultClient);
 
         final Object result = keyVaultOperation.get(testPropertyName1);
