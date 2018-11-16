@@ -8,6 +8,7 @@ package com.microsoft.azure.keyvault.spring;
 
 import com.microsoft.azure.AzureEnvironment;
 import com.microsoft.azure.AzureResponseBuilder;
+import com.microsoft.azure.credentials.AppServiceMSICredentials;
 import com.microsoft.azure.credentials.MSICredentials;
 import com.microsoft.azure.keyvault.KeyVaultClient;
 import com.microsoft.azure.serializer.AzureJacksonAdapter;
@@ -15,8 +16,8 @@ import com.microsoft.azure.spring.support.UserAgent;
 import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.microsoft.rest.RestClient;
-import com.microsoft.azure.credentials.AppServiceMSICredentials;
 import com.microsoft.rest.credentials.ServiceClientCredentials;
+import org.apache.commons.lang3.EnumUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -60,7 +61,11 @@ class KeyVaultEnvironmentPostProcessorHelper {
 
         try {
             final MutablePropertySources sources = this.environment.getPropertySources();
-            final KeyVaultOperation kvOperation = new KeyVaultOperation(kvClient, vaultUri, refreshInterval);
+            final VaultPolicy policy = Optional
+                    .ofNullable(this.environment.getProperty(Constants.AZURE_KEYVAULT_POLICY))
+                    .map(value -> EnumUtils.getEnum(VaultPolicy.class, value))
+                    .orElse(VaultPolicy.LIST);
+            final KeyVaultOperation kvOperation = new KeyVaultOperation(kvClient, vaultUri, refreshInterval, policy);
 
             if (sources.contains(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME)) {
                 sources.addAfter(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME,
