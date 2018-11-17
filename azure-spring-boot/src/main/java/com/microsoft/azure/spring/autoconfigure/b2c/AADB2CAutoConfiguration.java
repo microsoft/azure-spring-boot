@@ -13,24 +13,24 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CAuthenticationProperties.POLICY_SIGN_UP_OR_SIGN_IN_NAME;
-import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CAuthenticationProperties.POLICY_SIGN_UP_OR_SIGN_IN_REDIRECT_URL;
+import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.POLICY_SIGN_UP_OR_SIGN_IN_NAME;
+import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.POLICY_SIGN_UP_OR_SIGN_IN_REDIRECT_URL;
 
 @Configuration
 @ConditionalOnWebApplication
-@ConditionalOnProperty(prefix = AADB2CAuthenticationProperties.PREFIX, value = {
+@ConditionalOnProperty(prefix = AADB2CProperties.PREFIX, value = {
         "tenant",
         "client-id",
         POLICY_SIGN_UP_OR_SIGN_IN_NAME,
         POLICY_SIGN_UP_OR_SIGN_IN_REDIRECT_URL,
 })
-@EnableConfigurationProperties(AADB2CAuthenticationProperties.class)
-public class AADB2CAuthenticationAutoConfiguration {
+@EnableConfigurationProperties(AADB2CProperties.class)
+public class AADB2CAutoConfiguration {
 
     @Getter(AccessLevel.PROTECTED) // TODO(pan): make the findbugs happy, will remove this after referenced.
-    private final AADB2CAuthenticationProperties b2cProperties;
+    private final AADB2CProperties b2cProperties;
 
-    public AADB2CAuthenticationAutoConfiguration(@NonNull AADB2CAuthenticationProperties b2cProperties) {
+    public AADB2CAutoConfiguration(@NonNull AADB2CProperties b2cProperties) {
         this.b2cProperties = b2cProperties;
     }
 }

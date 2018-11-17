@@ -19,8 +19,8 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @Validated
-@ConfigurationProperties(prefix = AADB2CAuthenticationProperties.PREFIX)
-public class AADB2CAuthenticationProperties {
+@ConfigurationProperties(prefix = AADB2CProperties.PREFIX)
+public class AADB2CProperties {
 
     public static final String PREFIX = "azure.activedirectory.b2c";
 
@@ -83,7 +83,7 @@ public class AADB2CAuthenticationProperties {
         private String name;
 
         /**
-         * The redirect URL that configured under
+         * The redirect URL that configured under b2c tenant.
          */
         @URL(message = "redirect URL should be valid")
         private String redirectUrl;
