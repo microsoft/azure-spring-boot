@@ -51,7 +51,7 @@ public class AADB2CProperties {
     private String clientId;
 
     /**
-     * The all polices that created under b2c tenant
+     * The all polices that created under b2c tenant.
      */
     @JsonProperty(POLICIES)
     private Policies policies = new Policies();
