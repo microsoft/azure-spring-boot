@@ -88,6 +88,8 @@ public class AADB2CURL {
         final String endpoint = format(API_PATTERN, properties.getTenant(), properties.getTenant(), API_TYPE_AUTHORIZE);
         final AADB2CProperties.Policy policy = properties.getPolicies().getSignUpOrSignIn();
         final List<String> parameters = Arrays.asList(
+                // Each element is one parameter of redirect URL that take 'property=value' format.
+                // For example, 'response_mode=query' and 'response_type=code+id_token'.
                 format(PARAMETER_PATTERN, CLIENT_ID, properties.getClientId()),
                 format(PARAMETER_PATTERN, REDIRECT_URL, getEncodedURL(policy.getRedirectURI())),
                 format(PARAMETER_PATTERN, RESPONSE_MODE, RESPONSE_MODE_QUERY),
