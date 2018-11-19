@@ -36,7 +36,7 @@ public class AADB2CProperties {
 
     public static final String POLICY_SIGN_UP_OR_SIGN_IN_NAME = POLICY_SIGN_UP_OR_SIGN_IN + ".name";
 
-    public static final String POLICY_SIGN_UP_OR_SIGN_IN_REDIRECT_URL = POLICY_SIGN_UP_OR_SIGN_IN + ".redirect-url";
+    public static final String POLICY_SIGN_UP_OR_SIGN_IN_REDIRECT_URL = POLICY_SIGN_UP_OR_SIGN_IN + ".redirect-uri";
 
     /**
      * The name of the b2c tenant that created.
@@ -83,9 +83,9 @@ public class AADB2CProperties {
         private String name;
 
         /**
-         * The redirect URL that configured under b2c tenant.
+         * The redirect URI that configured under b2c tenant.
          */
-        @URL(message = "redirect URL should be valid")
-        private String redirectUrl;
+        @URL(message = "redirect URI should be valid")
+        private String redirectURI;
     }
 }

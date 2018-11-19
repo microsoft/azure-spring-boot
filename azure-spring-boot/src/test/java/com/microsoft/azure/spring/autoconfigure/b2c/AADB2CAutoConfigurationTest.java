@@ -36,12 +36,17 @@ public class AADB2CAutoConfigurationTest {
             );
 
     @Test
-    public void testAutoConfigurationBeans() {
+    public void testAutoConfigurationBean() {
         this.contextRunner.run(c -> {
             final AADB2CAutoConfiguration config = c.getBean(AADB2CAutoConfiguration.class);
 
             assertThat(config).isNotNull();
+        });
+    }
 
+    @Test
+    public void testPropertiesBean() {
+        this.contextRunner.run(c -> {
             final AADB2CProperties properties = c.getBean(AADB2CProperties.class);
 
             assertThat(properties).isNotNull();
@@ -51,7 +56,16 @@ public class AADB2CAutoConfigurationTest {
             final AADB2CProperties.Policies policies = properties.getPolicies();
 
             assertThat(policies.getSignUpOrSignIn().getName()).isEqualTo(SIGN_UP_OR_IN_NAME);
-            assertThat(policies.getSignUpOrSignIn().getRedirectUrl()).isEqualTo(SIGN_UP_OR_IN_REDIRECT_URL);
+            assertThat(policies.getSignUpOrSignIn().getRedirectURI()).isEqualTo(SIGN_UP_OR_IN_REDIRECT_URL);
+        });
+    }
+
+    @Test
+    public void testEntryPointBean() {
+        this.contextRunner.run(c -> {
+            final AADB2CEntryPoint entryPoint = c.getBean(AADB2CEntryPoint.class);
+
+            assertThat(entryPoint).isNotNull();
         });
     }
 }
