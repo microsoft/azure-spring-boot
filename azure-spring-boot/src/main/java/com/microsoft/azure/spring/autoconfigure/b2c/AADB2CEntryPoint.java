@@ -31,7 +31,7 @@ public class AADB2CEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws
             IOException {
         final String requestURL = request.getRequestURL().toString();
-        final String redirectURL = AADB2CURL.getOpenIdSignUpOrSignInUrl(b2cProperties, requestURL);
+        final String redirectURL = AADB2CURL.getOpenIdSignUpOrSignInURL(b2cProperties, requestURL);
 
         log.info("Authentication is required to access URL {}.", requestURL);
 
