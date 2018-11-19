@@ -8,7 +8,10 @@ package com.microsoft.azure.spring.autoconfigure.b2c;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.springframework.util.Assert;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -16,15 +19,15 @@ import java.util.UUID;
 import static java.lang.String.format;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class AADB2CUrl {
+public class AADB2CURL {
 
     private static final String API_PATTERN = "https://%s.b2clogin.com/%s.onmicrosoft.com/oauth2/v2.0/%s?";
 
     private static final String PARAMETER_PATTERN = "%s=%s";
 
-    private static final String CLIENT_ID = "client-id";
+    private static final String CLIENT_ID = "client_id";
 
-    private static final String REDIRECT_URL = "redirect-url";
+    private static final String REDIRECT_URL = "redirect_uri";
 
     private static final String RESPONSE_MODE = "response_mode";
 
@@ -44,7 +47,7 @@ public class AADB2CUrl {
 
     private static final String RESPONSE_TYPE_CODE = "code";
 
-    private static final String RESPONSE_TYPE_ID_TOKEN = "id-token";
+    private static final String RESPONSE_TYPE_ID_TOKEN = "id_token";
 
     private static final String SCOPE_OPENID = "openid";
 
@@ -52,21 +55,36 @@ public class AADB2CUrl {
         return UUID.randomUUID().toString();
     }
 
-    private static String getState(String requestUrl) {
-        return String.join("-", getUUID(), requestUrl);
+    private static String getEncodedURL(@NonNull String url) {
+        try {
+            return URLEncoder.encode(url, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new AADB2CConfigurationException("failed to encode url: " + url, e);
+        }
     }
 
-    public static String toOpenIdSignUpOrSignInUrl(@NonNull AADB2CProperties properties, @NonNull String requestUrl) {
+    /**
+     * Take state's format as UUID-RequestURI when redirect to sign-in URL.
+     *
+     * @param requestURL the request URI user attempt to access.
+     * @return the encoded state String.
+     */
+    private static String getState(String requestURL) {
+        return String.join("-", getUUID(), getEncodedURL(requestURL));
+    }
+
+    public static String getOpenIdSignUpOrSignInUrl(@NonNull AADB2CProperties properties, String requestURL) {
+        Assert.hasText(requestURL, "requestURL should have text.");
+
         final String endpoint = format(API_PATTERN, properties.getTenant(), properties.getTenant(), API_TYPE_AUTHORIZE);
         final AADB2CProperties.Policy policy = properties.getPolicies().getSignUpOrSignIn();
-
         final List<String> parameters = Arrays.asList(
                 format(PARAMETER_PATTERN, CLIENT_ID, properties.getClientId()),
-                format(PARAMETER_PATTERN, REDIRECT_URL, policy.getRedirectUrl()),
+                format(PARAMETER_PATTERN, REDIRECT_URL, getEncodedURL(policy.getRedirectURI())),
                 format(PARAMETER_PATTERN, RESPONSE_MODE, RESPONSE_MODE_QUERY),
                 format(PARAMETER_PATTERN, RESPONSE_TYPE, format("%s+%s", RESPONSE_TYPE_CODE, RESPONSE_TYPE_ID_TOKEN)),
                 format(PARAMETER_PATTERN, SCOPE, SCOPE_OPENID),
-                format(PARAMETER_PATTERN, STATE, getState(requestUrl)),
+                format(PARAMETER_PATTERN, STATE, getState(requestURL)),
                 format(PARAMETER_PATTERN, NONCE, getUUID()),
                 format(PARAMETER_PATTERN, POLICY, policy.getName())
         );

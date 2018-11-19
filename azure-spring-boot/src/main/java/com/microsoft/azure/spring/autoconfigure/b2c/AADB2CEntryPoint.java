@@ -6,6 +6,7 @@
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 public class AADB2CEntryPoint implements AuthenticationEntryPoint {
 
     private final AADB2CProperties b2cProperties;
@@ -28,8 +30,11 @@ public class AADB2CEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws
             IOException {
-        final String redirectUrl = AADB2CUrl.toOpenIdSignUpOrSignInUrl(b2cProperties, request.getRequestURI());
+        final String requestURL = request.getRequestURL().toString();
+        final String redirectURL = AADB2CURL.getOpenIdSignUpOrSignInUrl(b2cProperties, requestURL);
 
-        redirectStrategy.sendRedirect(request, response, redirectUrl);
+        log.info("Authentication is required to access URL {}.", requestURL);
+
+        redirectStrategy.sendRedirect(request, response, redirectURL);
     }
 }

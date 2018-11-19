@@ -34,7 +34,7 @@ public class AADB2CAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(AADB2CEntryPoint.class)
+    @ConditionalOnMissingBean
     public AADB2CEntryPoint aadb2CEntryPoint() {
         return new AADB2CEntryPoint(b2cProperties);
     }
