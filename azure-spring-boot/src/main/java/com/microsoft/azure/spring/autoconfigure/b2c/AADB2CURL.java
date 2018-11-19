@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.springframework.util.Assert;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
@@ -66,13 +67,21 @@ public class AADB2CURL {
     /**
      * Take state's format as UUID-RequestURI when redirect to sign-in URL.
      *
-     * @param requestURL the request URI user attempt to access.
+     * @param requestURL from ${@link HttpServletRequest} that user attempt to access.
      * @return the encoded state String.
      */
     private static String getState(String requestURL) {
         return String.join("-", getUUID(), getEncodedURL(requestURL));
     }
 
+    /**
+     * Get the openId sign up or sign in redirect URL based on ${@link AADB2CProperties}, encodes the
+     * requestURL and UUID in ${@link AADB2CURL#SCOPE} field.
+     *
+     * @param properties of ${@link AADB2CProperties}
+     * @param requestURL from ${@link HttpServletRequest} that user attempt to access.
+     * @return
+     */
     public static String getOpenIdSignUpOrSignInUrl(@NonNull AADB2CProperties properties, String requestURL) {
         Assert.hasText(requestURL, "requestURL should have text.");
 
