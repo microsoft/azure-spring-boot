@@ -97,8 +97,7 @@ public class KeyVaultEnvironmentPostProcessorTest {
     public void postProcessorOrderConfigurable() {
         final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
                 .withConfiguration(AutoConfigurations.of(OrderedProcessConfig.class))
-                .withPropertyValues("azure.keyvault.uri=fakeuri",
-                        "azure.keyvault.enabled=true");
+                .withPropertyValues("azure.keyvault.uri=fakeuri", "azure.keyvault.enabled=true");
 
         contextRunner.run(context -> {
             assertThat("Configured order for KeyVaultEnvironmentPostProcessor is different with default order " +
