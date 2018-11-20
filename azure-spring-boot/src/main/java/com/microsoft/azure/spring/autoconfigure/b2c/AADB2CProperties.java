@@ -10,7 +10,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.URL;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -85,7 +84,7 @@ public class AADB2CProperties {
         /**
          * The redirect URI that configured under b2c tenant.
          */
-        @URL(message = "redirect URI should be valid")
+        @NotBlank(message = "redirect URI should not be blank")
         private String redirectURI;
     }
 }

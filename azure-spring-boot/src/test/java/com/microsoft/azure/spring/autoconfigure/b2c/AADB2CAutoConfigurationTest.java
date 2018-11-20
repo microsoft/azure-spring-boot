@@ -83,15 +83,6 @@ public class AADB2CAutoConfigurationTest {
         });
     }
 
-    @Test(expected = AADB2CConfigurationException.class)
-    public void testLogoutSuccessHandlerBeanException() {
-        this.contextRunner.run(c -> {
-            final AADB2CLogoutSuccessHandler handler = c.getBean(AADB2CLogoutSuccessHandler.class);
-
-            handler.with("invalid-url");
-        });
-    }
-
     @Test
     public void testFilterBean() {
         this.contextRunner.run(c -> {
