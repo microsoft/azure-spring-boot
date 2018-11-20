@@ -52,7 +52,7 @@ public class AADB2CURL {
         try {
             new URL(url);
         } catch (MalformedURLException e) {
-            throw new AADB2CConfigurationException("Invalid logoutSuccessUrl: " + url, e);
+            throw new AADB2CConfigurationException("Invalid URL: " + url, e);
         }
     }
 
