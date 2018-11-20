@@ -8,6 +8,7 @@ package com.microsoft.azure.spring.autoconfigure.b2c;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
@@ -53,14 +54,14 @@ public class AADB2CURL {
         } catch (MalformedURLException ignore) {
             try {
                 new URI(url);
-                // Absolute URL example: http://localhost:8080/greeting
-                return String.format("%s://%s:%d/%s",
-                        request.getScheme(),
-                        request.getServerName(),
-                        request.getServerPort(),
-                        url.startsWith("/") ? url.replaceFirst("/", "") : url
+                final URL requestURL = new URL(request.getRequestURL().toString());
+                // URI format => scheme:[//authority]path[?query][#fragment]
+                return String.format("%s:%s%s",
+                        requestURL.getProtocol(),
+                        StringUtils.hasText(requestURL.getAuthority()) ? "//" + requestURL.getAuthority() : "",
+                        url.startsWith("/") ? url : "/" + url
                 );
-            } catch (URISyntaxException e) {
+            } catch (URISyntaxException | MalformedURLException e) {
                 throw new AADB2CConfigurationException("Invalid URL: " + url, e);
             }
         }
