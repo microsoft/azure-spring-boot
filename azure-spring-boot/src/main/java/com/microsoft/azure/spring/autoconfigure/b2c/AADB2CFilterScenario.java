@@ -7,6 +7,7 @@ package com.microsoft.azure.spring.autoconfigure.b2c;
 
 import lombok.Getter;
 import lombok.NonNull;
+import org.springframework.http.HttpMethod;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,10 +26,11 @@ public enum AADB2CFilterScenario {
 
     public static AADB2CFilterScenario resolve(@NonNull HttpServletRequest request, @NonNull AADB2CFilter filter) {
         final String requestURL = request.getRequestURL().toString();
+        final String method = request.getMethod();
 
-        if ("GET".equals(request.getMethod()) && requestURL.equals(filter.getSignUpOrInRedirectURL())) {
+        if (HttpMethod.GET.matches(method) && requestURL.equals(filter.getSignUpOrInRedirectURL())) {
             return SIGN_IN_OR_SIGN_UP;
-        } else if ("GET".equals(request.getMethod()) && requestURL.equals(filter.getLogoutSuccessURL())) {
+        } else if (HttpMethod.GET.matches(method) && requestURL.equals(filter.getLogoutSuccessURL())) {
             return LOGOUT_SUCCESS;
         }
 
