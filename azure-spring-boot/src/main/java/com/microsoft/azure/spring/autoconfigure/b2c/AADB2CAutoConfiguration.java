@@ -35,13 +35,19 @@ public class AADB2CAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public AADB2CEntryPoint aadb2CEntryPoint() {
+    public AADB2CEntryPoint aadB2CEntryPoint() {
         return new AADB2CEntryPoint(b2cProperties);
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public AADB2CLogoutSuccessHandler aadb2CLogoutSuccessHandler() {
+    public AADB2CLogoutSuccessHandler aadB2CLogoutSuccessHandler() {
         return new AADB2CLogoutSuccessHandler(b2cProperties);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public AADB2CFilter aadB2CFilter() {
+        return new AADB2CFilter(b2cProperties, aadB2CLogoutSuccessHandler());
     }
 }
