@@ -38,4 +38,10 @@ public class AADB2CAutoConfiguration {
     public AADB2CEntryPoint aadb2CEntryPoint() {
         return new AADB2CEntryPoint(b2cProperties);
     }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public AADB2CLogoutSuccessHandler aadb2CLogoutSuccessHandler() {
+        return new AADB2CLogoutSuccessHandler(b2cProperties);
+    }
 }

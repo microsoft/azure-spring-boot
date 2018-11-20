@@ -68,4 +68,27 @@ public class AADB2CAutoConfigurationTest {
             assertThat(entryPoint).isNotNull();
         });
     }
+
+    @Test
+    public void testLogoutSuccessHandlerBean() {
+        this.contextRunner.run(c -> {
+            final AADB2CLogoutSuccessHandler handler = c.getBean(AADB2CLogoutSuccessHandler.class);
+
+            assertThat(handler).isNotNull();
+
+            final String newURL = "http://new-fake-url";
+            handler.with(newURL);
+
+            assertThat(handler.getLogoutSuccessURL()).isEqualTo(newURL);
+        });
+    }
+
+    @Test(expected = AADB2CConfigurationException.class)
+    public void testLogoutSuccessHandlerBeanException() {
+        this.contextRunner.run(c -> {
+            final AADB2CLogoutSuccessHandler handler = c.getBean(AADB2CLogoutSuccessHandler.class);
+
+            handler.with("invalid-url");
+        });
+    }
 }
