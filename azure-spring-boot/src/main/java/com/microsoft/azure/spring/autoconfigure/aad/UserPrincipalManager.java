@@ -33,8 +33,8 @@ public class UserPrincipalManager {
 
     public UserPrincipalManager(ServiceEndpoints serviceEndpoints, ResourceRetriever resourceRetriever) {
         this.serviceEndpoints = serviceEndpoints;
-        this.validator = getAadJwtTokenValidator();
         this.resourceRetriever = resourceRetriever;
+        this.validator = getAadJwtTokenValidator();
     }
 
     public UserPrincipal buildUserPrincipal(String idToken) throws ParseException, JOSEException, BadJOSEException {
