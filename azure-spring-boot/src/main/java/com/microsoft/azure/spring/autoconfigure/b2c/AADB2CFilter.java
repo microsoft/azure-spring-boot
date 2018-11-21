@@ -20,13 +20,16 @@ public class AADB2CFilter extends OncePerRequestFilter {
     @Getter
     private final String signUpOrInRedirectURL;
 
-    private AADB2CLogoutSuccessHandler logoutSuccessHandler;
+    private final AADB2CProperties b2cProperties;
+
+    private final AADB2CLogoutSuccessHandler logoutSuccessHandler;
 
     public AADB2CFilter(@NonNull AADB2CProperties b2cProperties,
                         @NonNull AADB2CLogoutSuccessHandler logoutSuccessHandler) {
         super();
 
         this.logoutSuccessHandler = logoutSuccessHandler;
+        this.b2cProperties = b2cProperties;
         this.signUpOrInRedirectURL = b2cProperties.getPolicies().getSignUpOrSignIn().getRedirectURI();
     }
 
@@ -37,7 +40,12 @@ public class AADB2CFilter extends OncePerRequestFilter {
     @Override
     public void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
                                  @NonNull FilterChain chain) throws IOException, ServletException {
-        AADB2CFilterScenario.resolve(request, this).getScenarioHandler().handle(request, response);
+        try {
+            AADB2CFilterScenario.resolve(request, this).getScenarioHandler().handle(request, response, b2cProperties);
+        } catch (AADB2CAuthenticationException e) {
+            throw new ServletException("Authentication failed", e);
+        }
+
         chain.doFilter(request, response);
     }
 }

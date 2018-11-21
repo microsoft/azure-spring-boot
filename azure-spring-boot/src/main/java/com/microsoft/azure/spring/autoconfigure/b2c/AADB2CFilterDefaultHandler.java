@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AADB2CFilterDefaultHandler implements AADB2CFilterScenarioHandler {
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response) {
+    public void handle(HttpServletRequest request, HttpServletResponse response, AADB2CProperties properties) {
         log.debug("Currently there is nothing need to do for AADB2CFilterDefaultHandler.");
     }
 }

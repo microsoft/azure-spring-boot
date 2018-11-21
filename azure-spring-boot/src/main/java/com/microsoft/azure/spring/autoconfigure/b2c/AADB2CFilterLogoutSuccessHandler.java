@@ -11,10 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @NoArgsConstructor
-public class AADB2CFilterLogoutSuccessHandler implements AADB2CFilterScenarioHandler {
+public class AADB2CFilterLogoutSuccessHandler extends AbstractAADB2CFilterScenarioHandler
+        implements AADB2CFilterScenarioHandler {
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("AADB2CFilterLogoutSuccessHandler implemented yet.");
+    public void handle(HttpServletRequest request, HttpServletResponse response, AADB2CProperties properties)
+            throws AADB2CAuthenticationException {
+        super.validateAuthentication(request);
     }
 }
