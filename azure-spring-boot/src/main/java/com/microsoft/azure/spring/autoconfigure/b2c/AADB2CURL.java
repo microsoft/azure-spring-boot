@@ -8,11 +8,12 @@ package com.microsoft.azure.spring.autoconfigure.b2c;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
-import java.net.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -51,19 +52,21 @@ public class AADB2CURL {
         try {
             new URL(url);
             return url;
-        } catch (MalformedURLException ignore) {
-            try {
-                new URI(url);
-                final URL requestURL = new URL(request.getRequestURL().toString());
-                // URI format => scheme:[//authority]path[?query][#fragment]
-                return String.format("%s:%s%s",
-                        requestURL.getProtocol(),
-                        StringUtils.hasText(requestURL.getAuthority()) ? "//" + requestURL.getAuthority() : "",
-                        url.startsWith("/") ? url : "/" + url
-                );
-            } catch (URISyntaxException | MalformedURLException e) {
-                throw new AADB2CConfigurationException("Invalid URL: " + url, e);
-            }
+        } catch (MalformedURLException e) {
+            throw new AADB2CConfigurationException("Invalid URL: " + url, e);
+// TODO(pan): need to investigate the relative URL with context path of spring security, only support absolute URL.
+//            try {
+//                new URI(url);
+//                final URL requestURL = new URL(request.getRequestURL().toString());
+//            URI format =>scheme:[//authority]path[?query][#fragment]
+//                return String.format("%s:%s%s",
+//                        requestURL.getProtocol(),
+//                        StringUtils.hasText(requestURL.getAuthority()) ? "//" + requestURL.getAuthority() : "",
+//                        url.startsWith("/") ? url : "/" + url
+//                );
+//            } catch (URISyntaxException | MalformedURLException e) {
+//                throw new AADB2CConfigurationException("Invalid URL: " + url, e);
+//            }
         }
     }
 
