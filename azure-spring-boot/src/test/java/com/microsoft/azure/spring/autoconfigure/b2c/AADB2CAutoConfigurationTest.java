@@ -83,12 +83,15 @@ public class AADB2CAutoConfigurationTest {
         });
     }
 
-    @Test(expected = AADB2CConfigurationException.class)
-    public void testLogoutSuccessHandlerBeanException() {
+    @Test
+    public void testFilterBean() {
         this.contextRunner.run(c -> {
+            final AADB2CFilter filter = c.getBean(AADB2CFilter.class);
             final AADB2CLogoutSuccessHandler handler = c.getBean(AADB2CLogoutSuccessHandler.class);
 
-            handler.with("invalid-url");
+            assertThat(filter).isNotNull();
+            assertThat(filter.getSignUpOrInRedirectURL()).isEqualTo(SIGN_UP_OR_IN_REDIRECT_URL);
+            assertThat(filter.getLogoutSuccessURL()).isEqualTo(handler.getLogoutSuccessURL());
         });
     }
 }

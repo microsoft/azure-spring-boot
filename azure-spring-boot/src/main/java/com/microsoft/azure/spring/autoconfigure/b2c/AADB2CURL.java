@@ -48,11 +48,25 @@ public class AADB2CURL {
         }
     }
 
-    public static void validateURL(String url) {
+    public static String toAbsoluteURL(String url, @NonNull HttpServletRequest request) {
         try {
             new URL(url);
+            return url;
         } catch (MalformedURLException e) {
             throw new AADB2CConfigurationException("Invalid URL: " + url, e);
+// TODO(pan): need to investigate the relative URL with context path of spring security, only support absolute URL.
+//            try {
+//                new URI(url);
+//                final URL requestURL = new URL(request.getRequestURL().toString());
+//            URI format =>scheme:[//authority]path[?query][#fragment]
+//                return String.format("%s:%s%s",
+//                        requestURL.getProtocol(),
+//                        StringUtils.hasText(requestURL.getAuthority()) ? "//" + requestURL.getAuthority() : "",
+//                        url.startsWith("/") ? url : "/" + url
+//                );
+//            } catch (URISyntaxException | MalformedURLException e) {
+//                throw new AADB2CConfigurationException("Invalid URL: " + url, e);
+//            }
         }
     }
 
@@ -74,16 +88,15 @@ public class AADB2CURL {
      * @param requestURL from ${@link HttpServletRequest} that user attempt to access.
      * @return the URL of openid sign up or sign in.
      */
-    public static String getOpenIdSignUpOrSignInURL(@NonNull AADB2CProperties properties, String requestURL) {
-        validateURL(requestURL);
-
+    public static String getOpenIdSignUpOrSignInURL(@NonNull AADB2CProperties properties, String requestURL,
+                                                    @NonNull HttpServletRequest request) {
         final AADB2CProperties.Policy policy = properties.getPolicies().getSignUpOrSignIn();
         return String.format(OPENID_AUTHORIZE_PATTERN,
                 properties.getTenant(),
                 properties.getTenant(),
                 properties.getClientId(),
-                getEncodedURL(policy.getRedirectURI()),
-                getState(requestURL),
+                getEncodedURL(toAbsoluteURL(policy.getRedirectURI(), request)),
+                getState(toAbsoluteURL(requestURL, request)),
                 getUUID(),
                 policy.getName()
         );
@@ -96,13 +109,12 @@ public class AADB2CURL {
      * @param redirectURL from ${@link AADB2CLogoutSuccessHandler#getLogoutSuccessURL()}.
      * @return the URL of openid logout.
      */
-    public static String getOpenIdLogoutURL(@NonNull AADB2CProperties properties, String redirectURL) {
-        validateURL(redirectURL);
-
+    public static String getOpenIdLogoutURL(@NonNull AADB2CProperties properties, String redirectURL,
+                                            @NonNull HttpServletRequest request) {
         return String.format(OPENID_LOGOUT_PATTERN,
                 properties.getTenant(),
                 properties.getTenant(),
-                getEncodedURL(redirectURL),
+                getEncodedURL(toAbsoluteURL(redirectURL, request)),
                 properties.getPolicies().getSignUpOrSignIn().getName()
         );
     }
