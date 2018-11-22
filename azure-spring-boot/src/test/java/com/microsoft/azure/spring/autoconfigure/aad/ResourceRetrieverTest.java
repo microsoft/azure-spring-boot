@@ -75,11 +75,12 @@ public class ResourceRetrieverTest {
             final ResourceRetriever retriever = context.getBean(ResourceRetriever.class);
 
             final UserPrincipalManager manager = new UserPrincipalManager(endpoints, retriever);
-            final ConfigurableJWTProcessor processor = Whitebox.getInternalState(manager, ConfigurableJWTProcessor.class);
+            final ConfigurableJWTProcessor processor = Whitebox.getInternalState(manager,
+                    ConfigurableJWTProcessor.class);
             final JWSKeySelector selector = processor.getJWSKeySelector();
             final JWKSource jwkSource = Whitebox.getInternalState(selector, JWKSource.class);
             assertThat(jwkSource).isInstanceOf(RemoteJWKSet.class);
-            final ResourceRetriever validatorRetriever = ((RemoteJWKSet)jwkSource).getResourceRetriever();
+            final ResourceRetriever validatorRetriever = ((RemoteJWKSet) jwkSource).getResourceRetriever();
 
             assertThat(validatorRetriever).isInstanceOf(DefaultResourceRetriever.class);
             final DefaultResourceRetriever defaultRetriever = (DefaultResourceRetriever) retriever;
