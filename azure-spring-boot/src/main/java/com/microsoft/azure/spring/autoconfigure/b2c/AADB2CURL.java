@@ -11,7 +11,9 @@ import lombok.NonNull;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
-import java.net.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -54,19 +56,21 @@ public class AADB2CURL {
         try {
             new URL(url);
             return url;
-        } catch (MalformedURLException ignore) {
-            try {
-                new URI(url);
-                // Absolute URL example: http://localhost:8080/greeting
-                return String.format("%s://%s:%d/%s",
-                        request.getScheme(),
-                        request.getServerName(),
-                        request.getServerPort(),
-                        url.startsWith("/") ? url.replaceFirst("/", "") : url
-                );
-            } catch (URISyntaxException e) {
-                throw new AADB2CConfigurationException("Invalid URL: " + url, e);
-            }
+        } catch (MalformedURLException e) {
+            throw new AADB2CConfigurationException("Invalid URL: " + url, e);
+// TODO(pan): need to investigate the relative URL with context path of spring security, only support absolute URL.
+//            try {
+//                new URI(url);
+//                final URL requestURL = new URL(request.getRequestURL().toString());
+//            URI format =>scheme:[//authority]path[?query][#fragment]
+//                return String.format("%s:%s%s",
+//                        requestURL.getProtocol(),
+//                        StringUtils.hasText(requestURL.getAuthority()) ? "//" + requestURL.getAuthority() : "",
+//                        url.startsWith("/") ? url : "/" + url
+//                );
+//            } catch (URISyntaxException | MalformedURLException e) {
+//                throw new AADB2CConfigurationException("Invalid URL: " + url, e);
+//            }
         }
     }
 
