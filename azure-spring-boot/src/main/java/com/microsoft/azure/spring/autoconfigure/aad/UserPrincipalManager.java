@@ -19,6 +19,7 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.proc.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -27,14 +28,10 @@ import java.text.ParseException;
 public class UserPrincipalManager {
     private static final Logger LOG = LoggerFactory.getLogger(UserPrincipalManager.class);
 
-    private final ServiceEndpoints serviceEndpoints;
     private final ConfigurableJWTProcessor<SecurityContext> validator;
-    private final ResourceRetriever resourceRetriever;
 
     public UserPrincipalManager(ServiceEndpoints serviceEndpoints, ResourceRetriever resourceRetriever) {
-        this.serviceEndpoints = serviceEndpoints;
-        this.resourceRetriever = resourceRetriever;
-        this.validator = getAadJwtTokenValidator();
+        this.validator = getAadJwtTokenValidator(serviceEndpoints, resourceRetriever);
     }
 
     public UserPrincipal buildUserPrincipal(String idToken) throws ParseException, JOSEException, BadJOSEException {
@@ -46,12 +43,16 @@ public class UserPrincipalManager {
         return new UserPrincipal(jwsObject, jwtClaimsSet);
     }
 
-    private ConfigurableJWTProcessor<SecurityContext> getAadJwtTokenValidator() {
+    private ConfigurableJWTProcessor<SecurityContext> getAadJwtTokenValidator(ServiceEndpoints endpoints,
+                                                                              ResourceRetriever retriever) {
+        Assert.notNull(endpoints, "ServiceEndpoints should not be null.");
+        Assert.notNull(retriever, "Resource retriever should not be null");
+
         final ConfigurableJWTProcessor<SecurityContext> jwtProcessor = new DefaultJWTProcessor<>();
         final JWKSource<SecurityContext> keySource;
 
         try {
-            keySource = new RemoteJWKSet<>(new URL(serviceEndpoints.getAadKeyDiscoveryUri()), resourceRetriever);
+            keySource = new RemoteJWKSet<>(new URL(endpoints.getAadKeyDiscoveryUri()), retriever);
         } catch (MalformedURLException e) {
             LOG.error("Failed to parse active directory key discovery uri.", e);
             throw new IllegalStateException("Failed to parse active directory key discovery uri.", e);

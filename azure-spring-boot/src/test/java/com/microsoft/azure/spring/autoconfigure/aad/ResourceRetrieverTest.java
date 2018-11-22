@@ -5,16 +5,24 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.jwk.source.RemoteJWKSet;
+import com.nimbusds.jose.proc.JWSKeySelector;
 import com.nimbusds.jose.util.DefaultResourceRetriever;
 import com.nimbusds.jose.util.ResourceRetriever;
+import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
 import org.junit.Test;
+import org.powermock.reflect.Whitebox;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ResourceRetrieverTest {
+    private static final int TEST_CONN_TIMEOUT = 1234;
+    private static final int TEST_READ_TIMEOUT = 1234;
+    private static final int TEST_SIZE_LIMIT = 123400;
+
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(AADAuthenticationFilterAutoConfiguration.class))
             .withPropertyValues("azure.activedirectory.client-id=fake-client-id",
@@ -38,19 +46,46 @@ public class ResourceRetrieverTest {
 
     @Test
     public void resourceRetriverIsConfigurable() {
-        this.contextRunner.withPropertyValues("azure.activedirectory.jwt-connect-timeout=1234",
-                "azure.activedirectory.jwt-read-timeout=1234",
-                "azure.activedirectory.jwt-size-limit=123400",
-                "azure.service.endpoints.global.aadKeyDiscoveryUri=http://fake.aad.discovery.uri")
+        this.contextRunner.withPropertyValues(
+                String.format("azure.activedirectory.jwt-connect-timeout=%s", TEST_CONN_TIMEOUT),
+                String.format("azure.activedirectory.jwt-read-timeout=%s", TEST_READ_TIMEOUT),
+                String.format("azure.activedirectory.jwt-size-limit=%s", TEST_SIZE_LIMIT))
                 .run(context -> {
                     assertThat(context).hasSingleBean(ResourceRetriever.class);
                     final ResourceRetriever retriever = context.getBean(ResourceRetriever.class);
                     assertThat(retriever).isInstanceOf(DefaultResourceRetriever.class);
 
                     final DefaultResourceRetriever defaultRetriever = (DefaultResourceRetriever) retriever;
-                    assertThat(defaultRetriever.getConnectTimeout()).isEqualTo(1234);
-                    assertThat(defaultRetriever.getReadTimeout()).isEqualTo(1234);
-                    assertThat(defaultRetriever.getSizeLimit()).isEqualTo(123400);
+                    assertThat(defaultRetriever.getConnectTimeout()).isEqualTo(TEST_CONN_TIMEOUT);
+                    assertThat(defaultRetriever.getReadTimeout()).isEqualTo(TEST_READ_TIMEOUT);
+                    assertThat(defaultRetriever.getSizeLimit()).isEqualTo(TEST_SIZE_LIMIT);
                 });
+    }
+
+    @Test
+    public void validatorUsedConfiguredResourceRetriever() {
+        contextRunner.withPropertyValues(
+                String.format("azure.activedirectory.jwt-connect-timeout=%s", TEST_CONN_TIMEOUT),
+                String.format("azure.activedirectory.jwt-read-timeout=%s", TEST_READ_TIMEOUT),
+                String.format("azure.activedirectory.jwt-size-limit=%s", TEST_SIZE_LIMIT)).run(context -> {
+            final AADAuthenticationProperties aadAuthProps = context.getBean(AADAuthenticationProperties.class);
+            final ServiceEndpointsProperties serviceEndpointsProps = context.getBean(ServiceEndpointsProperties.class);
+            final ServiceEndpoints endpoints = serviceEndpointsProps.getServiceEndpoints(
+                    aadAuthProps.getEnvironment());
+            final ResourceRetriever retriever = context.getBean(ResourceRetriever.class);
+
+            final UserPrincipalManager manager = new UserPrincipalManager(endpoints, retriever);
+            final ConfigurableJWTProcessor processor = Whitebox.getInternalState(manager, ConfigurableJWTProcessor.class);
+            final JWSKeySelector selector = processor.getJWSKeySelector();
+            final JWKSource jwkSource = Whitebox.getInternalState(selector, JWKSource.class);
+            assertThat(jwkSource).isInstanceOf(RemoteJWKSet.class);
+            final ResourceRetriever validatorRetriever = ((RemoteJWKSet)jwkSource).getResourceRetriever();
+
+            assertThat(validatorRetriever).isInstanceOf(DefaultResourceRetriever.class);
+            final DefaultResourceRetriever defaultRetriever = (DefaultResourceRetriever) retriever;
+            assertThat(defaultRetriever.getConnectTimeout()).isEqualTo(TEST_CONN_TIMEOUT);
+            assertThat(defaultRetriever.getReadTimeout()).isEqualTo(TEST_READ_TIMEOUT);
+            assertThat(defaultRetriever.getSizeLimit()).isEqualTo(TEST_SIZE_LIMIT);
+        });
     }
 }
