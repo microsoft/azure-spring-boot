@@ -25,6 +25,8 @@ import org.springframework.mock.env.MockEnvironment;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.microsoft.azure.keyvault.spring.Constants.AZURE_CLIENTID;
+import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_CERTIFICAT_PATH;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
@@ -85,6 +87,18 @@ public class KeyVaultEnvironmentPostProcessorTest {
         final ServiceClientCredentials credentials = keyVaultEnvironmentPostProcessorHelper.getCredentials();
 
         assertThat(credentials, IsInstanceOf.instanceOf(MSICredentials.class));
+    }
+
+    @Test
+    public void testGetCredentialsWhenPFXCertConfigured() {
+        msiProperties.put(AZURE_CLIENTID, "aaaa-bbbb-cccc-dddd");
+        msiProperties.put(AZURE_KEYVAULT_CERTIFICAT_PATH, "fake-cert.pfx");
+
+        propertySources.addLast(new MapPropertySource("MSI_Properties", msiProperties));
+        keyVaultEnvironmentPostProcessorHelper = new KeyVaultEnvironmentPostProcessorHelper(environment);
+
+        final ServiceClientCredentials credentials = keyVaultEnvironmentPostProcessorHelper.getCredentials();
+        assertThat(credentials, IsInstanceOf.instanceOf(KeyVaultCertificateCredential.class));
     }
 
     @Test

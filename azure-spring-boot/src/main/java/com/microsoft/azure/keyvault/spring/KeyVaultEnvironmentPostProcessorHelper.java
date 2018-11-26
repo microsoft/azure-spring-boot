@@ -28,6 +28,9 @@ import org.springframework.util.ClassUtils;
 import java.util.HashMap;
 import java.util.Optional;
 
+import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_CERTIFICAT_PASSWORD;
+import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_CERTIFICAT_PATH;
+
 class KeyVaultEnvironmentPostProcessorHelper {
     private static final Logger LOG = LoggerFactory.getLogger(KeyVaultEnvironmentPostProcessorHelper.class);
 
@@ -81,22 +84,38 @@ class KeyVaultEnvironmentPostProcessorHelper {
             final String msiEndpoint = getProperty(this.environment, "MSI_ENDPOINT");
             final String msiSecret = getProperty(this.environment, "MSI_SECRET");
             return new AppServiceMSICredentials(AzureEnvironment.AZURE, msiEndpoint, msiSecret);
-        } else if (this.environment.containsProperty(Constants.AZURE_CLIENTID)
+        }
+
+        final long timeAcquiringTimeoutInSeconds = this.environment.getProperty(
+                Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, Long.class, Constants.TOKEN_ACQUIRE_TIMEOUT_SECS);
+        if (this.environment.containsProperty(Constants.AZURE_CLIENTID)
                 && this.environment.containsProperty(Constants.AZURE_CLIENTKEY)) {
             LOG.debug("Will use custom credentials");
-            final long timeAcquiringTimeoutInSeconds = this.environment.getProperty(
-                    Constants.AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, Long.class, Constants.TOKEN_ACQUIRE_TIMEOUT_SECS);
             final String clientId = getProperty(this.environment, Constants.AZURE_CLIENTID);
             final String clientKey = getProperty(this.environment, Constants.AZURE_CLIENTKEY);
             return new AzureKeyVaultCredential(clientId, clientKey, timeAcquiringTimeoutInSeconds);
-        } else if (this.environment.containsProperty(Constants.AZURE_CLIENTID)) {
+        }
+
+        if (this.environment.containsProperty(Constants.AZURE_CLIENTID) &&
+                this.environment.containsProperty(AZURE_KEYVAULT_CERTIFICAT_PATH)) {
+            // Password can be empty
+            final String certPwd = this.environment.getProperty(AZURE_KEYVAULT_CERTIFICAT_PASSWORD);
+            final String certPath = this.environment.getProperty(AZURE_KEYVAULT_CERTIFICAT_PATH);
+
+            LOG.debug(String.format("Read certificate from %s...", certPath));
+            final String clientId = getProperty(this.environment, Constants.AZURE_CLIENTID);
+
+            return new KeyVaultCertificateCredential(clientId, certPath, certPwd, timeAcquiringTimeoutInSeconds);
+        }
+
+        if (this.environment.containsProperty(Constants.AZURE_CLIENTID)) {
             LOG.debug("Will use MSI credentials for VMs with specified clientId");
             final String clientId = getProperty(this.environment, Constants.AZURE_CLIENTID);
             return new MSICredentials(AzureEnvironment.AZURE).withClientId(clientId);
-        } else {
-            LOG.debug("Will use MSI credentials for VM");
-            return new MSICredentials(AzureEnvironment.AZURE);
         }
+
+        LOG.debug("Will use MSI credentials for VM");
+        return new MSICredentials(AzureEnvironment.AZURE);
     }
 
     private String getProperty(final ConfigurableEnvironment env, final String propertyName) {
