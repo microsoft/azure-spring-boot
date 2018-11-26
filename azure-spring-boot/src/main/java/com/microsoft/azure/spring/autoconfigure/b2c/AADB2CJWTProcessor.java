@@ -39,7 +39,7 @@ public class AADB2CJWTProcessor {
 
     private final String configURL;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private final ConfigurableJWTProcessor<SecurityContext> processor = new DefaultJWTProcessor<>();
 
@@ -50,7 +50,7 @@ public class AADB2CJWTProcessor {
 
     private JWKSource<SecurityContext> getAADB2CKeySource() throws AADB2CAuthenticationException {
         try {
-            final Configuration config = objectMapper.readValue(new java.net.URL(configURL), Configuration.class);
+            final Configuration config = OBJECT_MAPPER.readValue(new java.net.URL(configURL), Configuration.class);
 
             return new ImmutableJWKSet<>(JWKSet.load(new java.net.URL(config.getJwksURI())));
         } catch (IOException | ParseException e) {
