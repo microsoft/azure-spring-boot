@@ -36,6 +36,10 @@ public class AADB2CURL {
                     "post_logout_redirect_uri=%s&" +
                     "p=%s";
 
+    private static final String OPENID_CONFIGURATION_PATTERN =
+            "https://%s.b2clogin.com/%s.onmicrosoft.com/v2.0/.well-known/openid-configuration?" +
+                    "p=%s";
+
     private static String getUUID() {
         return UUID.randomUUID().toString();
     }
@@ -115,6 +119,20 @@ public class AADB2CURL {
                 properties.getTenant(),
                 properties.getTenant(),
                 getEncodedURL(toAbsoluteURL(redirectURL, request)),
+                properties.getPolicies().getSignUpOrSignIn().getName()
+        );
+    }
+
+    /**
+     * Get the openid configuration URL based on ${@link AADB2CProperties}
+     *
+     * @param properties of ${@link AADB2CProperties}
+     * @return the URL of openid configuration.
+     */
+    public static String getOpenIdSignUpOrInConfigurationURL(@NonNull AADB2CProperties properties) {
+        return String.format(OPENID_CONFIGURATION_PATTERN,
+                properties.getTenant(),
+                properties.getTenant(),
                 properties.getPolicies().getSignUpOrSignIn().getName()
         );
     }

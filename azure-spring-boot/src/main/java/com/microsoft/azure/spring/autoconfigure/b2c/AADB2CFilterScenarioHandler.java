@@ -26,8 +26,12 @@ public interface AADB2CFilterScenarioHandler {
     /**
      * Handle different scenario for AAD B2C filter.
      *
-     * @param request  from ${@link AADB2CFilter#doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain)}
-     * @param response from ${@link AADB2CFilter#doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain)}
+     * @param request       from
+     *                      ${@link AADB2CFilter#doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain)}
+     * @param response      from
+     *                      ${@link AADB2CFilter#doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain)}
+     * @param b2cProperties of ${@link AADB2CProperties} represents customer configuration.
      */
-    void handle(HttpServletRequest request, HttpServletResponse response);
+    void handle(HttpServletRequest request, HttpServletResponse response, AADB2CProperties b2cProperties)
+            throws AADB2CAuthenticationException;
 }
