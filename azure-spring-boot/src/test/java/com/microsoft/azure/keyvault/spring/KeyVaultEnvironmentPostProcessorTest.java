@@ -34,19 +34,20 @@ public class KeyVaultEnvironmentPostProcessorTest {
     private KeyVaultEnvironmentPostProcessorHelper keyVaultEnvironmentPostProcessorHelper;
     private ConfigurableEnvironment environment;
     private MutablePropertySources propertySources;
-    private Map<String, Object> msiProperties = new HashMap<>();
+    private Map<String, Object> testProperties = new HashMap<>();
 
     @Before
     public void setup() {
         environment = new MockEnvironment();
+        testProperties.clear();
         propertySources = environment.getPropertySources();
     }
 
     @Test
     public void testGetCredentialsWhenMSIEnabledInAppService() {
-        msiProperties.put("MSI_ENDPOINT", "fakeendpoint");
-        msiProperties.put("MSI_SECRET", "fakesecret");
-        propertySources.addLast(new MapPropertySource("MSI_Properties", msiProperties));
+        testProperties.put("MSI_ENDPOINT", "fakeendpoint");
+        testProperties.put("MSI_SECRET", "fakesecret");
+        propertySources.addLast(new MapPropertySource("Test_Properties", testProperties));
 
         keyVaultEnvironmentPostProcessorHelper = new KeyVaultEnvironmentPostProcessorHelper(environment);
 
@@ -57,9 +58,9 @@ public class KeyVaultEnvironmentPostProcessorTest {
 
     @Test
     public void testGetCredentialsWhenUsingClientAndKey() {
-        msiProperties.put("azure.keyvault.client-id", "aaaa-bbbb-cccc-dddd");
-        msiProperties.put("azure.keyvault.client-key", "mySecret");
-        propertySources.addLast(new MapPropertySource("MSI_Properties", msiProperties));
+        testProperties.put("azure.keyvault.client-id", "aaaa-bbbb-cccc-dddd");
+        testProperties.put("azure.keyvault.client-key", "mySecret");
+        propertySources.addLast(new MapPropertySource("Test_Properties", testProperties));
 
         keyVaultEnvironmentPostProcessorHelper = new KeyVaultEnvironmentPostProcessorHelper(environment);
 
@@ -70,8 +71,8 @@ public class KeyVaultEnvironmentPostProcessorTest {
 
     @Test
     public void testGetCredentialsWhenMSIEnabledInVMWithClientId() {
-        msiProperties.put("azure.keyvault.client-id", "aaaa-bbbb-cccc-dddd");
-        propertySources.addLast(new MapPropertySource("MSI_Properties", msiProperties));
+        testProperties.put("azure.keyvault.client-id", "aaaa-bbbb-cccc-dddd");
+        propertySources.addLast(new MapPropertySource("Test_Properties", testProperties));
 
         keyVaultEnvironmentPostProcessorHelper = new KeyVaultEnvironmentPostProcessorHelper(environment);
 
@@ -91,10 +92,10 @@ public class KeyVaultEnvironmentPostProcessorTest {
 
     @Test
     public void testGetCredentialsWhenPFXCertConfigured() {
-        msiProperties.put(AZURE_CLIENTID, "aaaa-bbbb-cccc-dddd");
-        msiProperties.put(AZURE_KEYVAULT_CERTIFICAT_PATH, "fake-cert.pfx");
+        testProperties.put(AZURE_CLIENTID, "aaaa-bbbb-cccc-dddd");
+        testProperties.put(AZURE_KEYVAULT_CERTIFICAT_PATH, "fake-cert.pfx");
 
-        propertySources.addLast(new MapPropertySource("MSI_Properties", msiProperties));
+        propertySources.addLast(new MapPropertySource("Test_Properties", testProperties));
         keyVaultEnvironmentPostProcessorHelper = new KeyVaultEnvironmentPostProcessorHelper(environment);
 
         final ServiceClientCredentials credentials = keyVaultEnvironmentPostProcessorHelper.getCredentials();
