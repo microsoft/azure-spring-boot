@@ -6,6 +6,7 @@
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
@@ -14,10 +15,24 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AADB2CURL {
+
+    /**
+     * The ${@link Set} of generated ${@link UUID} for state field.
+     */
+    @Getter
+    private static Set<String> stateIDSet = new ConcurrentSkipListSet<>();
+
+    /**
+     * The ${@link Set} of generated ${@link UUID} for nonce field.
+     */
+    @Getter
+    private static Set<String> nonceIdSet = new ConcurrentSkipListSet<>();
 
     // 'p' is the abbreviation for 'policy'.
     private static final String OPENID_AUTHORIZE_PATTERN =
@@ -52,6 +67,14 @@ public class AADB2CURL {
         }
     }
 
+    public static Boolean isValidState(String uuid) {
+        return stateIDSet.contains(uuid);
+    }
+
+    public static Boolean isValidNonce(String uuid) {
+        return nonceIdSet.contains(uuid);
+    }
+
     public static String toAbsoluteURL(String url, @NonNull HttpServletRequest request) {
         try {
             new URL(url);
@@ -81,7 +104,19 @@ public class AADB2CURL {
      * @return the encoded state String.
      */
     private static String getState(String requestURL) {
-        return String.join("-", getUUID(), getEncodedURL(requestURL));
+        final String uuid = getUUID();
+
+        stateIDSet.add(uuid);
+
+        return String.join("-", uuid, getEncodedURL(requestURL));
+    }
+
+    private static String getNonce() {
+        final String uuid = getUUID();
+
+        nonceIdSet.add(uuid);
+
+        return uuid;
     }
 
     /**
@@ -101,7 +136,7 @@ public class AADB2CURL {
                 properties.getClientId(),
                 getEncodedURL(toAbsoluteURL(policy.getRedirectURI(), request)),
                 getState(toAbsoluteURL(requestURL, request)),
-                getUUID(),
+                getNonce(),
                 policy.getName()
         );
     }

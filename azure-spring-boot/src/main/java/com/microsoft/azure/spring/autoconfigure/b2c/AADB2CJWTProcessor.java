@@ -39,16 +39,12 @@ public class AADB2CJWTProcessor {
 
     private final String configURL;
 
-    private final JWKSource<SecurityContext> jwkSource;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final ConfigurableJWTProcessor<SecurityContext> processor = new DefaultJWTProcessor<>();
 
-    public AADB2CJWTProcessor(@URL String url, @NonNull AADB2CProperties b2cProperties)
-            throws AADB2CAuthenticationException {
+    public AADB2CJWTProcessor(@URL String url, @NonNull AADB2CProperties b2cProperties) {
         this.configURL = url;
-        this.jwkSource = getAADB2CKeySource();
         this.processor.setJWTClaimsSetVerifier(new JWTClaimsVerifier(b2cProperties));
     }
 
@@ -78,7 +74,7 @@ public class AADB2CJWTProcessor {
             final JWSObject jwsObject = JWSObject.parse(idToken);
             final JWSAlgorithm jwsAlgorithm = jwsObject.getHeader().getAlgorithm();
 
-            processor.setJWSKeySelector(new JWSVerificationKeySelector<>(jwsAlgorithm, jwkSource));
+            processor.setJWSKeySelector(new JWSVerificationKeySelector<>(jwsAlgorithm, getAADB2CKeySource()));
 
             final JWTClaimsSet claimsSet = processor.process(idToken, null);
 
@@ -152,8 +148,9 @@ public class AADB2CJWTProcessor {
                 throw new BadJWTException("Token expired.");
             } else if (claimsSet.getIssueTime().after(claimsSet.getExpirationTime())) {
                 throw new BadJWTException("Invalid issue time.");
+            } else if (!AADB2CURL.isValidNonce(claimsSet.getClaims().get("nonce").toString())) {
+                throw new BadJWTException("Invalid nonce.");
             }
-            // TODO(pan): investigate verification of nonce.
         }
     }
 }

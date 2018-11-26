@@ -15,6 +15,8 @@ public abstract class AbstractAADB2CFilterScenarioHandler {
 
     protected static final String PARAMETER_ID_TOKEN = "id_token";
 
+    protected static final String PARAMETER_STATE = "state";
+
     protected static final String PARAMETER_ERROR = "error";
 
     protected static final String PARAMETER_ERROR_DESCRIPTION = "error_description";
