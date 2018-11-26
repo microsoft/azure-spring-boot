@@ -48,9 +48,7 @@ public class AADB2CFilterSignUpOrInHandler extends AbstractAADB2CFilterScenarioH
      */
     private AADB2CJWTProcessor getAADB2CJwtProcessor(@URL String url, @NonNull AADB2CProperties properties) {
         // TODO(pan): url should exclude state and nonce UUID part.
-        URL_TO_JWT_PARSER.putIfAbsent(url, new AADB2CJWTProcessor(url, properties));
-
-        return URL_TO_JWT_PARSER.get(url);
+        return URL_TO_JWT_PARSER.computeIfAbsent(url, k -> new AADB2CJWTProcessor(k, properties));
     }
 
     /**
