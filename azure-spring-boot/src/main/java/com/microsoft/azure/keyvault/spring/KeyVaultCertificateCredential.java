@@ -15,7 +15,6 @@ import com.microsoft.azure.keyvault.spring.certificate.KeyCertReaderFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.security.PrivateKey;
 import java.util.concurrent.ExecutionException;

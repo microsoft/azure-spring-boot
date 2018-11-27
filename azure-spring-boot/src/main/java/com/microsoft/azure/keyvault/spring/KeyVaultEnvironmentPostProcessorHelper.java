@@ -17,7 +17,6 @@ import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.microsoft.rest.RestClient;
 import com.microsoft.azure.credentials.AppServiceMSICredentials;
 import com.microsoft.rest.credentials.ServiceClientCredentials;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -27,7 +26,6 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Optional;

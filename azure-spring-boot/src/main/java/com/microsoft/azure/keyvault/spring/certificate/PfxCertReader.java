@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.keyvault.spring.certificate;
 
-import org.apache.tinkerpop.shaded.kryo.io.Input;
 import org.springframework.core.io.Resource;
 
 import java.io.*;
