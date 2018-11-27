@@ -5,6 +5,9 @@
  */
 package com.microsoft.azure.keyvault.spring.certificate;
 
+import org.apache.tinkerpop.shaded.kryo.io.Input;
+import org.springframework.core.io.Resource;
+
 import java.io.*;
 import java.security.*;
 import java.security.cert.CertificateException;
@@ -16,8 +19,8 @@ public class PfxCertReader implements KeyCertReader {
     private String CERT_READ_FAILURE = "Failed to read cert file %s.";
 
     @Override
-    public KeyCert read(File certFile, String password) {
-        try (FileInputStream inputStream = new FileInputStream(certFile)) {
+    public KeyCert read(Resource resource, String password) {
+        try (InputStream inputStream = resource.getInputStream()) {
             KeyCert keyCert = null;
 
             final KeyStore store = KeyStore.getInstance("pkcs12", "SunJSSE");
@@ -41,15 +44,15 @@ public class PfxCertReader implements KeyCertReader {
             }
 
             if (keyCert == null) {
-                throw new IllegalStateException(String.format(CERT_READ_FAILURE, certFile.getAbsoluteFile()));
+                throw new IllegalStateException(String.format(CERT_READ_FAILURE, resource.getFilename()));
             }
 
             return keyCert;
         } catch (FileNotFoundException e) {
-            throw new IllegalStateException(String.format(CERT_NOT_FOUND, certFile.getAbsoluteFile()), e);
+            throw new IllegalStateException(String.format(CERT_NOT_FOUND, resource.getFilename()), e);
         } catch (IOException | KeyStoreException | NoSuchProviderException | NoSuchAlgorithmException |
                 UnrecoverableKeyException | CertificateException e) {
-            throw new IllegalStateException(String.format(CERT_READ_FAILURE, certFile.getAbsoluteFile()), e);
+            throw new IllegalStateException(String.format(CERT_READ_FAILURE, resource.getFilename()), e);
         }
     }
 }

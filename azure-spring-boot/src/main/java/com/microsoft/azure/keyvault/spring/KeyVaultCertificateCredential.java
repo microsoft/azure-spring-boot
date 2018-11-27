@@ -13,6 +13,7 @@ import com.microsoft.azure.keyvault.spring.certificate.KeyCert;
 import com.microsoft.azure.keyvault.spring.certificate.KeyCertReader;
 import com.microsoft.azure.keyvault.spring.certificate.KeyCertReaderFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -26,30 +27,29 @@ import java.util.concurrent.TimeoutException;
 public class KeyVaultCertificateCredential extends KeyVaultCredentials {
     private static final long DEFAULT_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS = 60L;
     private final String clientId;
-    private final String certPath;
+    private final Resource certResource;
     private final String certPassword;
     private final long timeoutInSeconds;
 
-    public KeyVaultCertificateCredential(String clientId, String certPath, String certPassword, long timeoutInSeconds) {
+    public KeyVaultCertificateCredential(String clientId, Resource certResource, String certPassword,
+                                         long timeoutInSeconds) {
         this.clientId = clientId;
-        this.certPath = certPath;
+        this.certResource = certResource;
         this.certPassword = certPassword;
         this.timeoutInSeconds = timeoutInSeconds <= 0 ? DEFAULT_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS : timeoutInSeconds;
     }
 
     @Override
     public String doAuthenticate(String authorization, String resource, String scope) {
-        final KeyCertReader certReader = KeyCertReaderFactory.getReader(certPath);
-        File certfile = new File(certPath);
-        if (!certfile.exists()) {
-            certfile = new File(getClass().getClassLoader().getResource(certPath).getFile());
+        if (!certResource.exists()) {
+            throw new IllegalStateException(String.format("Certificate file %s not found.",
+                    certResource.getFilename()));
         }
 
-        if (!certfile.exists()) {
-            throw new IllegalStateException(String.format("Certificate file %s not found.", certPath));
-        }
+        final String certFileName = certResource.getFilename();
+        final KeyCertReader certReader = KeyCertReaderFactory.getReader(certFileName);
 
-        final KeyCert keyCert = certReader.read(certfile, certPassword);
+        final KeyCert keyCert = certReader.read(certResource, certPassword);
         final PrivateKey privateKey = keyCert.getKey();
 
         try {

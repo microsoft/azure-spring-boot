@@ -5,8 +5,8 @@
  */
 package com.microsoft.azure.keyvault.spring.certificate;
 
-import java.io.File;
+import org.springframework.core.io.Resource;
 
 public interface KeyCertReader {
-    KeyCert read(File cerFile, String password);
+    KeyCert read(Resource resource, String password);
 }

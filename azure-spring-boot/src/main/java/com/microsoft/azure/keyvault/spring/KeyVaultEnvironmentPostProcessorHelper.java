@@ -17,19 +17,20 @@ import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.microsoft.rest.RestClient;
 import com.microsoft.azure.credentials.AppServiceMSICredentials;
 import com.microsoft.rest.credentials.ServiceClientCredentials;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.StandardEnvironment;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Optional;
-
-import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_CERTIFICAT_PASSWORD;
-import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_CERTIFICAT_PATH;
 
 class KeyVaultEnvironmentPostProcessorHelper {
     private static final Logger LOG = LoggerFactory.getLogger(KeyVaultEnvironmentPostProcessorHelper.class);
@@ -97,15 +98,16 @@ class KeyVaultEnvironmentPostProcessorHelper {
         }
 
         if (this.environment.containsProperty(Constants.AZURE_CLIENTID) &&
-                this.environment.containsProperty(AZURE_KEYVAULT_CERTIFICAT_PATH)) {
+                this.environment.containsProperty(Constants.AZURE_KEYVAULT_CERTIFICAT_PATH)) {
             // Password can be empty
-            final String certPwd = this.environment.getProperty(AZURE_KEYVAULT_CERTIFICAT_PASSWORD);
-            final String certPath = this.environment.getProperty(AZURE_KEYVAULT_CERTIFICAT_PATH);
+            final String certPwd = this.environment.getProperty(Constants.AZURE_KEYVAULT_CERTIFICAT_PASSWORD);
+            final String certPath = getProperty(this.environment, Constants.AZURE_KEYVAULT_CERTIFICAT_PATH);
+            final Resource certResource = new DefaultResourceLoader().getResource(certPath);
 
             LOG.debug(String.format("Read certificate from %s...", certPath));
             final String clientId = getProperty(this.environment, Constants.AZURE_CLIENTID);
 
-            return new KeyVaultCertificateCredential(clientId, certPath, certPwd, timeAcquiringTimeoutInSeconds);
+            return new KeyVaultCertificateCredential(clientId, certResource, certPwd, timeAcquiringTimeoutInSeconds);
         }
 
         if (this.environment.containsProperty(Constants.AZURE_CLIENTID)) {
