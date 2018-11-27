@@ -54,7 +54,7 @@ public class AADB2CLogoutSuccessHandler implements LogoutSuccessHandler {
         final String redirectURL = AADB2CURL.getOpenIdLogoutURL(b2cProperties, getLogoutSuccessURL(), request);
 
         log.debug("Redirect to AAD B2C URL {} for expiring token.", redirectURL);
-        log.debug("Expire AAD B2C token successful, will redirect to URL {}.", getLogoutSuccessURL());
+        log.debug("AAD B2C token has been successfully expired. Redirecting to URL {}.", getLogoutSuccessURL());
 
         redirectStrategy.sendRedirect(request, response, redirectURL);
     }

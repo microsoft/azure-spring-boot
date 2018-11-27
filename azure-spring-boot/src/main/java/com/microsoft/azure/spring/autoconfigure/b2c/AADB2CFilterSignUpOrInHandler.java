@@ -100,7 +100,7 @@ public class AADB2CFilterSignUpOrInHandler extends AbstractAADB2CFilterScenarioH
             SecurityContextHolder.getContext().setAuthentication(auth);
 
             redirectStrategy.sendRedirect(request, response, state);
-            log.debug("Authenticated user {}, will redirect to {}.", principal.getDisplayName(), state);
+            log.debug("User {} is authenticated. Redirecting to {}.", principal.getDisplayName(), state);
         }
     }
 
@@ -114,7 +114,7 @@ public class AADB2CFilterSignUpOrInHandler extends AbstractAADB2CFilterScenarioH
         if (isAuthenticated(auth)) {
             return;
         } else if (auth instanceof PreAuthenticatedAuthenticationToken) {
-            log.debug("User principal {} not authenticated.", ((UserPrincipal) auth.getPrincipal()).getDisplayName());
+            log.debug("User {} is not authenticated.", ((UserPrincipal) auth.getPrincipal()).getDisplayName());
             ((PreAuthenticatedAuthenticationToken) auth).setAuthenticated(false);
         }
 

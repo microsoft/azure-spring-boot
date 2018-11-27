@@ -21,7 +21,7 @@ import java.io.IOException;
  * spring security context if success, or take care the error response and throw exception.
  * <p>
  * ${@link AADB2CFilterLogoutSuccessHandler} will obtain the result from AAD B2C, it will do nothing if success,
- * or warn the user that the token failed to expireDate.
+ * or warn the user that the token is expired.
  */
 public interface AADB2CFilterScenarioHandler {
     /**
