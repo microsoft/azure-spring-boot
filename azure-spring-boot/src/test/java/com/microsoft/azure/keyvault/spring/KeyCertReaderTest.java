@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class KeyCertReaderTest {
     private static final String TEST_PFX_FILE = "testkeyvault.pfx";
+    private static final String TEST_SUBJECT = "CN=testkeyvault";
     private static final String TEST_PFX_PASSWORD = "123456";
 
     @Test
@@ -25,6 +26,7 @@ public class KeyCertReaderTest {
 
         assertThat(pfxCert).isNotNull();
         assertThat(pfxCert.getCertificate()).isNotNull();
+        assertThat(pfxCert.getCertificate().getSubjectX500Principal().getName()).isEqualTo(TEST_SUBJECT);
         assertThat(pfxCert.getKey()).isNotNull();
     }
 
