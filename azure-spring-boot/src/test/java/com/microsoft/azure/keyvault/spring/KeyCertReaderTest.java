@@ -18,16 +18,28 @@ public class KeyCertReaderTest {
     private static final String TEST_SUBJECT = "CN=testkeyvault";
     private static final String TEST_PFX_PASSWORD = "123456";
 
+    private static final String TEST_NO_PASSWORD_PFX_FILE = "nopwdcert.pfx";
+    private static final String TEST_NO_PASSWORD_SUBJECT = "CN=nopwdcert";
+    private static final String TEST_NO_PASSWORD = null;
+
     @Test
     public void testPfxCertReaderCanRead() {
-        final Resource resource = new DefaultResourceLoader().getResource(TEST_PFX_FILE);
+        validatePfxCertRead(TEST_PFX_FILE, TEST_PFX_PASSWORD, TEST_SUBJECT);
+    }
+
+    @Test
+    public void testPfxCertNoPasswordReaderCanRead() {
+        validatePfxCertRead(TEST_NO_PASSWORD_PFX_FILE, TEST_NO_PASSWORD, TEST_NO_PASSWORD_SUBJECT);
+    }
+
+    private void validatePfxCertRead(String file, String password, String expectedSubject) {
+        final Resource resource = new DefaultResourceLoader().getResource(file);
         final PfxCertReader reader = new PfxCertReader();
-        final KeyCert pfxCert = reader.read(resource, TEST_PFX_PASSWORD);
+        final KeyCert pfxCert = reader.read(resource, password);
 
         assertThat(pfxCert).isNotNull();
         assertThat(pfxCert.getCertificate()).isNotNull();
-        assertThat(pfxCert.getCertificate().getSubjectX500Principal().getName()).isEqualTo(TEST_SUBJECT);
+        assertThat(pfxCert.getCertificate().getSubjectX500Principal().getName()).isEqualTo(expectedSubject);
         assertThat(pfxCert.getKey()).isNotNull();
     }
-
 }

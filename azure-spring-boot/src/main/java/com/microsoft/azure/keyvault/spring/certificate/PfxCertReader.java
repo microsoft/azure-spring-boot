@@ -23,7 +23,7 @@ public class PfxCertReader implements KeyCertReader {
             KeyCert keyCert = null;
 
             final KeyStore store = KeyStore.getInstance("pkcs12", "SunJSSE");
-            final char[] passwordArray = password == null ? null : password.toCharArray();
+            final char[] passwordArray = password == null ? new char[]{} : password.toCharArray();
             store.load(inputStream, passwordArray);
 
             final Enumeration<String> aliases = store.aliases();
