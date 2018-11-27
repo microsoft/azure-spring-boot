@@ -5,6 +5,8 @@
  */
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,5 +31,20 @@ public abstract class AbstractAADB2CFilterScenarioHandler {
 
             throw new AADB2CAuthenticationException("Authentication failure: " + message);
         }
+    }
+
+    protected boolean isAuthenticated(Authentication auth) {
+        if (auth == null) {
+            return false;
+        } else if (auth instanceof PreAuthenticatedAuthenticationToken) {
+            final UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
+            return !principal.isUserExpired() && principal.isUserValid();
+        } else {
+            return auth.isAuthenticated();
+        }
+    }
+
+    protected boolean isNotAuthenticated(Authentication auth) {
+        return !isAuthenticated(auth);
     }
 }

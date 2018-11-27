@@ -7,19 +7,21 @@ package com.microsoft.azure.spring.autoconfigure.b2c;
 
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jwt.JWTClaimsSet;
-import io.jsonwebtoken.lang.Assert;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -28,16 +30,21 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 @Slf4j
-@NoArgsConstructor
-public class AADB2CFilterSignUpOrInHandler extends AbstractAADB2CFilterScenarioHandler
+public class AADB2CFilterPolicyReplyHandler extends AbstractAADB2CFilterScenarioHandler
         implements AADB2CFilterScenarioHandler {
 
     private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+
+    private final AADB2CProperties b2cProperties;
 
     /**
      * Mapping configuration URL to ${@link AADB2CJWTProcessor}.
      */
     private static final ConcurrentMap<String, AADB2CJWTProcessor> URL_TO_JWT_PARSER = new ConcurrentHashMap<>();
+
+    public AADB2CFilterPolicyReplyHandler(@NonNull AADB2CProperties b2cProperties) {
+        this.b2cProperties = b2cProperties;
+    }
 
     /**
      * Get cached instance of ${@link AADB2CJWTProcessor} from given url, or create new one.
@@ -78,53 +85,54 @@ public class AADB2CFilterSignUpOrInHandler extends AbstractAADB2CFilterScenarioH
         return requestURL;
     }
 
-    private boolean isAuthenticated(Authentication auth) {
-        if (auth == null || !auth.isAuthenticated()) {
-            return false;
-        } else if (auth instanceof PreAuthenticatedAuthenticationToken) {
-            final UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
-            return !principal.isUserExpired() && principal.isUserValid();
-        } else {
-            return auth.isAuthenticated();
-        }
-    }
-
-    private void handleAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                      AADB2CProperties properties) throws AADB2CAuthenticationException, IOException {
+    private void handleAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AADB2CAuthenticationException, IOException {
         final String idToken = request.getParameter(PARAMETER_ID_TOKEN);
         final String code = request.getParameter(PARAMETER_CODE);
 
         if (StringUtils.hasText(idToken) && StringUtils.hasText(code)) {
             final String requestURL = validateState(request.getParameter(PARAMETER_STATE));
-            final String url = AADB2CURL.getOpenIdSignUpOrInConfigurationURL(properties);
-            final Pair<JWSObject, JWTClaimsSet> jwtToken = getAADB2CJwtProcessor(url, properties).validate(idToken);
+            final String url = AADB2CURL.getOpenIdSignUpOrInConfigurationURL(b2cProperties);
+            final Pair<JWSObject, JWTClaimsSet> jwtToken = getAADB2CJwtProcessor(url, b2cProperties).validate(idToken);
             final UserPrincipal principal = new UserPrincipal(jwtToken, code);
 
             final Authentication auth = new PreAuthenticatedAuthenticationToken(principal, null);
             auth.setAuthenticated(true);
 
             SecurityContextHolder.getContext().setAuthentication(auth);
-
             redirectStrategy.sendRedirect(request, response, requestURL);
+
             log.debug("Authenticated user {}, will redirect to {}.", principal.getDisplayName(), requestURL);
         }
     }
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AADB2CProperties properties)
-            throws AADB2CAuthenticationException, IOException {
-        Assert.notNull(properties, "AADB2CProperties should not be null.");
-
+    public void handle(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws AADB2CAuthenticationException, IOException, ServletException {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (isAuthenticated(auth)) {
-            return;
-        } else if (auth instanceof PreAuthenticatedAuthenticationToken) {
-            log.debug("User principal {} not authenticated.", ((UserPrincipal) auth.getPrincipal()).getDisplayName());
-            ((PreAuthenticatedAuthenticationToken) auth).setAuthenticated(false);
+        if (super.isNotAuthenticated(auth)) {
+            if (auth != null) {
+                auth.setAuthenticated(false);
+            }
+
+            super.validateAuthentication(request);
+            this.handleAuthentication(request, response);
         }
 
-        super.validateAuthentication(request);
-        this.handleAuthentication(request, response, properties);
+        chain.doFilter(request, response);
+    }
+
+    @Override
+    public Boolean matches(HttpServletRequest request) {
+        final String requestURL = request.getRequestURL().toString();
+        final String signUpOrInRedirectURL = b2cProperties.getPolicies().getSignUpOrSignIn().getRedirectURI();
+        final String passwordResetRedirectURL = b2cProperties.getPolicies().getPasswordReset().getRedirectURI();
+
+        if (!HttpMethod.GET.matches(request.getMethod())) {
+            return false;
+        } else {
+            return requestURL.equals(signUpOrInRedirectURL) || requestURL.equals(passwordResetRedirectURL);
+        }
     }
 }

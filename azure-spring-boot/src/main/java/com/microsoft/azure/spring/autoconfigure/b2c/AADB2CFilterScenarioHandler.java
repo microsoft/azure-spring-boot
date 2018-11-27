@@ -6,6 +6,7 @@
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -16,25 +17,32 @@ import java.io.IOException;
  * <p>
  * ${@link AADB2CFilterDefaultHandler} is default handler for AAD B2C filter, do nothing at all.
  * <p>
- * ${@link AADB2CFilterSignUpOrInHandler} will obtain the result from AAD B2C, it will generate UserPrinciple
+ * ${@link AADB2CFilterPolicyReplyHandler} will obtain the result from AAD B2C, it will generate UserPrinciple
  * and ${@link org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken} for
  * spring security context if success, or take care the error response and throw exception.
  * <p>
- * ${@link AADB2CFilterLogoutSuccessHandler} will obtain the result from AAD B2C, it will do nothing if success,
- * or warn the user that the token failed to expireDate.
+ * ${@link AADB2CFilterPasswordResetHandler} will take care the password reset url and redirect to AAD B2C for
+ * processing password resetting.
  */
 public interface AADB2CFilterScenarioHandler {
     /**
      * Handle different scenario for AAD B2C filter.
      *
-     * @param request       from
-     *                      ${@link AADB2CFilter#doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain)}
-     * @param response      from
-     *                      ${@link AADB2CFilter#doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain)}
-     * @param b2cProperties of ${@link AADB2CProperties} represents customer configuration.
-     * @throws AADB2CAuthenticationException when authentication fails.
-     * @throws IOException                   when redirection fails.
+     * @param request  from
+     *                 ${@link AADB2CFilter#doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain)}
+     * @param response from
+     *                 ${@link AADB2CFilter#doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain)}
+     * @throws ServletException when authentication fails.
+     * @throws IOException      when redirection fails.
      */
-    void handle(HttpServletRequest request, HttpServletResponse response, AADB2CProperties b2cProperties)
-            throws AADB2CAuthenticationException, IOException;
+    void handle(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException, AADB2CAuthenticationException;
+
+    /**
+     * Check if ${@link HttpServletRequest} matches filter scenario, if matches the handler will take action.
+     *
+     * @param request from ${@link AADB2CFilter}.
+     * @return true if scenario matches, or false.
+     */
+    Boolean matches(HttpServletRequest request);
 }

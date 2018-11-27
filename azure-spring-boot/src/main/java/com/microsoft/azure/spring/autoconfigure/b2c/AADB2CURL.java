@@ -55,6 +55,16 @@ public class AADB2CURL {
             "https://%s.b2clogin.com/%s.onmicrosoft.com/v2.0/.well-known/openid-configuration?" +
                     "p=%s";
 
+    private static final String OPENID_PASSWORD_RESET_PATTERN =
+            "https://%s.b2clogin.com/%s.onmicrosoft.com/oauth2/v2.0/authorize?" +
+                    "client_id=%s&" +
+                    "redirect_uri=%s&" +
+                    "response_mode=query&" +
+                    "response_type=code+id_token&" +
+                    "scope=openid&" +
+                    "state=%s&" +
+                    "p=%s";
+
     private static String getUUID() {
         return UUID.randomUUID().toString();
     }
@@ -169,6 +179,27 @@ public class AADB2CURL {
                 properties.getTenant(),
                 properties.getTenant(),
                 properties.getPolicies().getSignUpOrSignIn().getName()
+        );
+    }
+
+    /**
+     * Get the openid sign up or sign in redirect URL based on ${@link AADB2CProperties}, encodes the
+     * requestURL and UUID in state field.
+     *
+     * @param properties  of ${@link AADB2CProperties}.
+     * @param redirectURL from ${@link HttpServletRequest} that user attempt to access.
+     * @return the URL of openid sign up or sign in.
+     */
+    public static String getOpenIdPasswordResetURL(@NonNull AADB2CProperties properties, String redirectURL,
+                                                   @NonNull HttpServletRequest request) {
+        final AADB2CProperties.Policy policy = properties.getPolicies().getPasswordReset();
+        return String.format(OPENID_PASSWORD_RESET_PATTERN,
+                properties.getTenant(),
+                properties.getTenant(),
+                properties.getClientId(),
+                getEncodedURL(toAbsoluteURL(policy.getRedirectURI(), request)),
+                getState(toAbsoluteURL(redirectURL, request)),
+                policy.getName()
         );
     }
 }

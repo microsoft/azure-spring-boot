@@ -5,47 +5,46 @@
  */
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
-import lombok.Getter;
 import lombok.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 public class AADB2CFilter extends OncePerRequestFilter {
 
-    @Getter
-    private final String signUpOrInRedirectURL;
+    private final AADB2CFilterPolicyReplyHandler policyReplyHandler;
 
-    private final AADB2CProperties b2cProperties;
+    private final AADB2CFilterPasswordResetHandler passwordResetHandler;
 
-    private final AADB2CLogoutSuccessHandler logoutSuccessHandler;
+    private final AADB2CFilterDefaultHandler defaultHandler = new AADB2CFilterDefaultHandler();
 
-    public AADB2CFilter(@NonNull AADB2CProperties b2cProperties,
-                        @NonNull AADB2CLogoutSuccessHandler logoutSuccessHandler) {
+    public AADB2CFilter(@NonNull AADB2CFilterPolicyReplyHandler policyReplyHandler,
+                        @Nullable AADB2CFilterPasswordResetHandler passwordResetHandler) {
         super();
 
-        this.logoutSuccessHandler = logoutSuccessHandler;
-        this.b2cProperties = b2cProperties;
-        this.signUpOrInRedirectURL = b2cProperties.getPolicies().getSignUpOrSignIn().getRedirectURI();
-    }
-
-    public String getLogoutSuccessURL() {
-        return this.logoutSuccessHandler.getLogoutSuccessURL();
+        this.policyReplyHandler = policyReplyHandler;
+        this.passwordResetHandler = passwordResetHandler;
     }
 
     @Override
-    public void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
-                                 @NonNull FilterChain chain) throws IOException, ServletException {
+    public void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
+                                 @NotNull FilterChain chain) throws IOException, ServletException {
         try {
-            AADB2CFilterScenario.resolve(request, this).getScenarioHandler().handle(request, response, b2cProperties);
+            if (policyReplyHandler.matches(request)) {
+                policyReplyHandler.handle(request, response, chain);
+            } else if (passwordResetHandler != null && passwordResetHandler.matches(request)) {
+                passwordResetHandler.handle(request, response, chain);
+            } else {
+                defaultHandler.handle(request, response, chain);
+            }
         } catch (AADB2CAuthenticationException e) {
             throw new ServletException("Authentication failed", e);
         }
-
-        chain.doFilter(request, response);
     }
 }

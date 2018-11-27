@@ -5,18 +5,23 @@
  */
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-@Slf4j
-@NoArgsConstructor
-public class AADB2CFilterDefaultHandler implements AADB2CFilterScenarioHandler {
+public class AADB2CFilterDefaultHandler extends AbstractAADB2CFilterScenarioHandler
+        implements AADB2CFilterScenarioHandler {
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AADB2CProperties properties) {
-        log.debug("Currently there is nothing need to do for AADB2CFilterDefaultHandler.");
+    public void handle(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        chain.doFilter(request, response);
+    }
+
+    @Override
+    public Boolean matches(HttpServletRequest request) {
+        return Boolean.TRUE;
     }
 }
