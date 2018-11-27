@@ -148,8 +148,6 @@ public class AADB2CJWTProcessor {
                 throw new BadJWTException("Token expired.");
             } else if (claimsSet.getIssueTime().after(claimsSet.getExpirationTime())) {
                 throw new BadJWTException("Invalid issue time.");
-            } else if (!AADB2CURL.isValidNonce(claimsSet.getClaims().get("nonce").toString())) {
-                throw new BadJWTException("Invalid nonce.");
             }
         }
     }

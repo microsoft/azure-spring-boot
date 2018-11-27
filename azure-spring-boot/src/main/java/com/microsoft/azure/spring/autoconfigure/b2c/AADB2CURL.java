@@ -6,7 +6,6 @@
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
@@ -15,24 +14,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AADB2CURL {
-
-    /**
-     * The ${@link Set} of generated ${@link UUID} for state field.
-     */
-    @Getter
-    private static Set<String> stateIDSet = new ConcurrentSkipListSet<>();
-
-    /**
-     * The ${@link Set} of generated ${@link UUID} for nonce field.
-     */
-    @Getter
-    private static Set<String> nonceIdSet = new ConcurrentSkipListSet<>();
 
     // 'p' is the abbreviation for 'policy'.
     private static final String OPENID_AUTHORIZE_PATTERN =
@@ -55,6 +40,10 @@ public class AADB2CURL {
             "https://%s.b2clogin.com/%s.onmicrosoft.com/v2.0/.well-known/openid-configuration?" +
                     "p=%s";
 
+    public static final String ATTRIBUTE_NONCE = "nonce";
+
+    public static final String ATTRIBUTE_STATE = "state";
+
     private static String getUUID() {
         return UUID.randomUUID().toString();
     }
@@ -65,14 +54,6 @@ public class AADB2CURL {
         } catch (UnsupportedEncodingException e) {
             throw new AADB2CConfigurationException("failed to encode url: " + url, e);
         }
-    }
-
-    public static Boolean isValidState(String uuid) {
-        return stateIDSet.contains(uuid);
-    }
-
-    public static Boolean isValidNonce(String uuid) {
-        return nonceIdSet.contains(uuid);
     }
 
     public static String toAbsoluteURL(String url, @NonNull HttpServletRequest request) {
@@ -103,20 +84,20 @@ public class AADB2CURL {
      * @param requestURL from ${@link HttpServletRequest} that user attempt to access.
      * @return the encoded state String.
      */
-    private static String getState(String requestURL) {
-        final String uuid = getUUID();
+    private static String getState(HttpServletRequest request, String requestURL) {
+        final String state = toAbsoluteURL(requestURL, request);
 
-        stateIDSet.add(uuid);
+        request.getSession().setAttribute(ATTRIBUTE_STATE, state);
 
-        return String.join("-", uuid, getEncodedURL(requestURL));
+        return state;
     }
 
-    private static String getNonce() {
-        final String uuid = getUUID();
+    private static String getNonce(HttpServletRequest request) {
+        final String nonce = getUUID();
 
-        nonceIdSet.add(uuid);
+        request.getSession().setAttribute(ATTRIBUTE_NONCE, nonce);
 
-        return uuid;
+        return nonce;
     }
 
     /**
@@ -129,14 +110,17 @@ public class AADB2CURL {
      */
     public static String getOpenIdSignUpOrSignInURL(@NonNull AADB2CProperties properties, String requestURL,
                                                     @NonNull HttpServletRequest request) {
+        final String nonce = getNonce(request);
+        final String state = getState(request, requestURL);
         final AADB2CProperties.Policy policy = properties.getPolicies().getSignUpOrSignIn();
+
         return String.format(OPENID_AUTHORIZE_PATTERN,
                 properties.getTenant(),
                 properties.getTenant(),
                 properties.getClientId(),
                 getEncodedURL(toAbsoluteURL(policy.getRedirectURI(), request)),
-                getState(toAbsoluteURL(requestURL, request)),
-                getNonce(),
+                state,
+                nonce,
                 policy.getName()
         );
     }

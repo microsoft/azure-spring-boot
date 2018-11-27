@@ -7,7 +7,6 @@ package com.microsoft.azure.spring.autoconfigure.b2c;
 
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jwt.JWTClaimsSet;
-import io.jsonwebtoken.lang.Assert;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +17,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -47,33 +46,27 @@ public class AADB2CFilterSignUpOrInHandler extends AbstractAADB2CFilterScenarioH
      * @return the instance of ${@link AADB2CJWTProcessor}.
      */
     private AADB2CJWTProcessor getAADB2CJwtProcessor(@URL String url, @NonNull AADB2CProperties properties) {
-        // TODO(pan): url should exclude state and nonce UUID part.
         return URL_TO_JWT_PARSER.computeIfAbsent(url, k -> new AADB2CJWTProcessor(k, properties));
     }
 
-    /**
-     * Validate the reply state from AAD B2C, the state compose of tow parts with format 'UUID-RequestURL',
-     * for example: 461e6d45-37cf-4a8f-9fd8-086b98c8abfb-http://localhost:8080/
-     *
-     * @param state encoded in policy URL and replied by AAD B2C.
-     * @return the request URL.
-     */
-    private String validateState(String state) throws AADB2CAuthenticationException {
-        final int uuidLength = UUID.randomUUID().toString().length();
+    private void validateState(String state, HttpServletRequest request) throws AADB2CAuthenticationException {
+//        Assert.hasText(state, "state should contains text.");
+//
+//        final String requestURL = request.getSession().getAttribute(AADB2CURL.ATTRIBUTE_STATE).toString();
+//
+//        if (!state.equals(requestURL)) {
+//            throw new AADB2CAuthenticationException("The reply state has unexpected content: " + state);
+//        }
+    }
 
-        Assert.hasText(state, "state should contains text.");
-        Assert.isTrue(state.length() > uuidLength, "");
-
-        final String replyUUID = state.substring(0, uuidLength);
-        final String requestURL = state.substring(uuidLength + 1);
-
-        log.debug("Decode state to UUID {}, request URL {}.", replyUUID, requestURL);
-
-        if (!AADB2CURL.isValidState(replyUUID)) {
-            throw new AADB2CAuthenticationException("Invalid UUID from reply state.");
-        }
-
-        return requestURL;
+    private void validateNonce(String nonce, HttpServletRequest request) throws AADB2CAuthenticationException {
+//        Assert.hasText(nonce, "nonce should contains text.");
+//
+//        final String expectedNonce = request.getSession().getAttribute(AADB2CURL.ATTRIBUTE_NONCE).toString();
+//
+//        if (!nonce.equals(expectedNonce)) {
+//            throw new AADB2CAuthenticationException("The claim nonce has unexpected content: " + nonce);
+//        }
     }
 
     private boolean isAuthenticated(Authentication auth) {
@@ -93,18 +86,21 @@ public class AADB2CFilterSignUpOrInHandler extends AbstractAADB2CFilterScenarioH
         final String code = request.getParameter(PARAMETER_CODE);
 
         if (StringUtils.hasText(idToken) && StringUtils.hasText(code)) {
-            final String requestURL = validateState(request.getParameter(PARAMETER_STATE));
             final String url = AADB2CURL.getOpenIdSignUpOrInConfigurationURL(properties);
             final Pair<JWSObject, JWTClaimsSet> jwtToken = getAADB2CJwtProcessor(url, properties).validate(idToken);
             final UserPrincipal principal = new UserPrincipal(jwtToken, code);
+            final String state = request.getParameter(PARAMETER_STATE);
+
+            validateState(state, request);
+            validateNonce(principal.getNonce(), request);
 
             final Authentication auth = new PreAuthenticatedAuthenticationToken(principal, null);
             auth.setAuthenticated(true);
 
             SecurityContextHolder.getContext().setAuthentication(auth);
 
-            redirectStrategy.sendRedirect(request, response, requestURL);
-            log.debug("Authenticated user {}, will redirect to {}.", principal.getDisplayName(), requestURL);
+            redirectStrategy.sendRedirect(request, response, state);
+            log.debug("Authenticated user {}, will redirect to {}.", principal.getDisplayName(), state);
         }
     }
 
