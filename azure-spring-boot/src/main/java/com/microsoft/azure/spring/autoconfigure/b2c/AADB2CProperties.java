@@ -30,6 +30,8 @@ public class AADB2CProperties {
 
     private static final String PASSWORD_RESET = "password-reset";
 
+    private static final String PROFILE_EDIT = "profile-edit";
+
     /**
      * We do not use ${@link String#format(String, Object...)}
      * as it's not real constant, which cannot be referenced in annotation.
@@ -38,17 +40,25 @@ public class AADB2CProperties {
 
     public static final String POLICY_SIGN_UP_OR_SIGN_IN_NAME = POLICY_SIGN_UP_OR_SIGN_IN + ".name";
 
-    public static final String POLICY_SIGN_UP_OR_SIGN_IN_REDIRECT_URL = POLICY_SIGN_UP_OR_SIGN_IN + ".redirect-uri";
+    public static final String POLICY_SIGN_UP_OR_SIGN_IN_REPLY_URL = POLICY_SIGN_UP_OR_SIGN_IN + ".reply-url";
 
     private static final String POLICY_PASSWORD_RESET = POLICIES + "." + PASSWORD_RESET;
 
+    private static final String POLICY_PROFILE_EDIT = POLICIES + "." + PROFILE_EDIT;
+
     public static final String POLICY_PASSWORD_RESET_NAME = POLICY_PASSWORD_RESET + ".name";
 
-    public static final String POLICY_PASSWORD_RESET_REDIRECT_URL = POLICY_PASSWORD_RESET + ".redirect-uri";
+    public static final String POLICY_PASSWORD_RESET_REPLY_URL = POLICY_PASSWORD_RESET + ".reply-url";
+
+    public static final String POLICY_PROFILE_EDIT_NAME = POLICY_PROFILE_EDIT + ".name";
+
+    public static final String POLICY_PROFILE_EDIT_REPLY_URL = POLICY_PROFILE_EDIT + ".reply-url";
 
     public static final String PASSWORD_RESET_URL = "password-reset-url";
 
     public static final String LOGOUT_SUCCESS_URL = "logout-success-url";
+
+    public static final String PROFILE_EDIT_URL = "profile-edit-url";
 
     /**
      * The name of the b2c tenant that created.
@@ -70,6 +80,10 @@ public class AADB2CProperties {
     @Setter
     @JsonProperty(PASSWORD_RESET_URL)
     private String passwordResetUrl;
+
+    @Setter
+    @JsonProperty(PROFILE_EDIT_URL)
+    private String profileEditUrl;
 
     /**
      * The all polices that created under b2c tenant.
@@ -94,6 +108,12 @@ public class AADB2CProperties {
         @JsonProperty(PASSWORD_RESET)
         private Policy passwordReset = new Policy();
 
+        /**
+         * The password-reset policy that created under b2c tenant.
+         */
+        @JsonProperty(PROFILE_EDIT)
+        private Policy profileEdit = new Policy();
+
         // TODO(pan): will add more policies like sign-in, sign-up, profile-editing and password-reset.
     }
 
@@ -110,9 +130,9 @@ public class AADB2CProperties {
         private String name;
 
         /**
-         * The redirect URI that configured under b2c tenant.
+         * The reply URL that configured under b2c tenant.
          */
-        @NotBlank(message = "redirect URI should not be blank")
-        private String redirectURI;
+        @URL(message = "reply URL should not be blank")
+        private String replyURL;
     }
 }

@@ -6,6 +6,7 @@
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.util.StringUtils;
 
@@ -23,7 +24,7 @@ public abstract class AbstractAADB2CFilterScenarioHandler {
 
     protected static final String PARAMETER_ERROR_DESCRIPTION = "error_description";
 
-    protected void validateAuthentication(HttpServletRequest request) throws AADB2CAuthenticationException {
+    protected void validatePolicyReply(HttpServletRequest request) throws AADB2CAuthenticationException {
         if (StringUtils.hasText(request.getParameter(PARAMETER_ERROR))) {
             final String code = request.getParameter(PARAMETER_ERROR);
             final String description = request.getParameter(PARAMETER_ERROR_DESCRIPTION);
@@ -44,7 +45,11 @@ public abstract class AbstractAADB2CFilterScenarioHandler {
         }
     }
 
-    protected boolean isNotAuthenticated(Authentication auth) {
-        return !isAuthenticated(auth);
+    protected void updateAuthentication() {
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth != null) {
+            auth.setAuthenticated(isAuthenticated(auth));
+        }
     }
 }

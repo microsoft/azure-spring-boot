@@ -20,14 +20,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-public class AADB2CFilterPasswordResetHandler extends AbstractAADB2CFilterScenarioHandler
+public class AADB2CFilterProfileEditHandler extends AbstractAADB2CFilterScenarioHandler
         implements AADB2CFilterScenarioHandler {
 
     private final AADB2CProperties b2cProperties;
 
     private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-    public AADB2CFilterPasswordResetHandler(@NonNull AADB2CProperties b2cProperties) {
+    public AADB2CFilterProfileEditHandler(@NonNull AADB2CProperties b2cProperties) {
         this.b2cProperties = b2cProperties;
     }
 
@@ -38,7 +38,7 @@ public class AADB2CFilterPasswordResetHandler extends AbstractAADB2CFilterScenar
             return refererURL;
         }
 
-        return b2cProperties.getPolicies().getPasswordReset().getReplyURL();
+        return b2cProperties.getPolicies().getProfileEdit().getReplyURL();
     }
 
     @Override
@@ -48,22 +48,21 @@ public class AADB2CFilterPasswordResetHandler extends AbstractAADB2CFilterScenar
 
         if (super.isAuthenticated(auth)) {
             final String refererURL = getRefererURL(request);
-            final String url = AADB2CURL.getOpenIdPasswordResetURL(b2cProperties, refererURL, request);
+            final String url = AADB2CURL.getOpenIdProfileEditURL(b2cProperties, refererURL, request);
 
-            auth.setAuthenticated(false);
             redirectStrategy.sendRedirect(request, response, url);
 
-            log.debug("Redirect authenticated user to password reset URL: {}.", url);
+            log.debug("Redirect authenticated user to profile edit URL: {}.", url);
         } else {
-            throw new AADB2CAuthenticationException("Authentication is required for password resetting.");
+            throw new AADB2CAuthenticationException("Authentication is required for profile editing.");
         }
     }
 
     @Override
     public Boolean matches(HttpServletRequest request) {
         final String requestURL = request.getRequestURL().toString();
-        final String passwordResetURL = b2cProperties.getPasswordResetUrl();
+        final String profileEditURL = b2cProperties.getProfileEditUrl();
 
-        return HttpMethod.GET.matches(request.getMethod()) && requestURL.equals(passwordResetURL);
+        return HttpMethod.GET.matches(request.getMethod()) && requestURL.equals(profileEditURL);
     }
 }
