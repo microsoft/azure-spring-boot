@@ -32,7 +32,7 @@ public class AADB2CLogoutSuccessHandler implements LogoutSuccessHandler {
             throws IOException {
         redirectStrategy.sendRedirect(request, response, AADB2CURL.getOpenIdLogoutURL(b2cProperties, request));
 
-        log.debug("Redirect to AAD B2C for expiring token, after that AAD B2C will redirect to URL {}.",
+        log.debug("Redirect to AAD B2C for invalidating token. After that AAD B2C will redirect to URL {}.",
                 b2cProperties.getLogoutSuccessUrl());
     }
 }
