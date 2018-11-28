@@ -23,8 +23,7 @@ public class KeyCertReaderFactory {
 
         switch (extension) {
             case PFX_EXTENSION:
-                readerMap.putIfAbsent(PFX_EXTENSION, new PfxCertReader());
-                return readerMap.get(PFX_EXTENSION);
+                return readerMap.computeIfAbsent(PFX_EXTENSION, k -> new PfxCertReader());
             default:
                 throw new IllegalStateException(String.format(NOT_SUPPORTED_CERT, extension));
         }

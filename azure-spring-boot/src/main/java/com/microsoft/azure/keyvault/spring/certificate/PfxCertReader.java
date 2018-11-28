@@ -34,10 +34,7 @@ public class PfxCertReader implements KeyCertReader {
                     final X509Certificate certificate = (X509Certificate) store.getCertificate(alias);
                     final PrivateKey key = (PrivateKey) store.getKey(alias, passwordArray);
 
-                    keyCert = new KeyCert(null, null);
-                    keyCert.setCertificate(certificate);
-                    keyCert.setKey(key);
-
+                    keyCert = new KeyCert(certificate, key);
                     break;
                 }
             }

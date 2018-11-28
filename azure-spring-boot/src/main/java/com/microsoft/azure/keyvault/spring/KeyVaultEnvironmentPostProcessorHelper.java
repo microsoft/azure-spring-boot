@@ -96,10 +96,10 @@ class KeyVaultEnvironmentPostProcessorHelper {
         }
 
         if (this.environment.containsProperty(Constants.AZURE_CLIENTID) &&
-                this.environment.containsProperty(Constants.AZURE_KEYVAULT_CERTIFICAT_PATH)) {
+                this.environment.containsProperty(Constants.AZURE_KEYVAULT_CERTIFICATE_PATH)) {
             // Password can be empty
-            final String certPwd = this.environment.getProperty(Constants.AZURE_KEYVAULT_CERTIFICAT_PASSWORD);
-            final String certPath = getProperty(this.environment, Constants.AZURE_KEYVAULT_CERTIFICAT_PATH);
+            final String certPwd = this.environment.getProperty(Constants.AZURE_KEYVAULT_CERTIFICATE_PASSWORD);
+            final String certPath = getProperty(this.environment, Constants.AZURE_KEYVAULT_CERTIFICATE_PATH);
             final Resource certResource = new DefaultResourceLoader().getResource(certPath);
 
             LOG.debug(String.format("Read certificate from %s...", certPath));

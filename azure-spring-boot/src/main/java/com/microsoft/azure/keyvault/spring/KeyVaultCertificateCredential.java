@@ -63,8 +63,10 @@ public class KeyVaultCertificateCredential extends KeyVaultCredentials {
 
             return authResult.getAccessToken();
         } catch (MalformedURLException | InterruptedException | ExecutionException | TimeoutException e) {
-            log.error("Failed to do authentication", e);
-            throw new IllegalStateException(e);
+            final String errMsg = String.format("Failed to authenticate with Key Vault using certificate %s",
+                    certFileName);
+            log.error(errMsg, e);
+            throw new IllegalStateException(errMsg, e);
         }
     }
 }

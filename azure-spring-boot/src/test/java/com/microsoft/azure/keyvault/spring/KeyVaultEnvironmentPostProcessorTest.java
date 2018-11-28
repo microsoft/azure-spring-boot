@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.microsoft.azure.keyvault.spring.Constants.AZURE_CLIENTID;
-import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_CERTIFICAT_PATH;
+import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_CERTIFICATE_PATH;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
@@ -93,7 +93,7 @@ public class KeyVaultEnvironmentPostProcessorTest {
     @Test
     public void testGetCredentialsWhenPFXCertConfigured() {
         testProperties.put(AZURE_CLIENTID, "aaaa-bbbb-cccc-dddd");
-        testProperties.put(AZURE_KEYVAULT_CERTIFICAT_PATH, "fake-cert.pfx");
+        testProperties.put(AZURE_KEYVAULT_CERTIFICATE_PATH, "fake-cert.pfx");
 
         propertySources.addLast(new MapPropertySource("Test_Properties", testProperties));
         keyVaultEnvironmentPostProcessorHelper = new KeyVaultEnvironmentPostProcessorHelper(environment);
