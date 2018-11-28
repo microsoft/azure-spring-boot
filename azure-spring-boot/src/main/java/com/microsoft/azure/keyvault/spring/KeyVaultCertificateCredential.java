@@ -12,9 +12,9 @@ import com.microsoft.azure.keyvault.authentication.KeyVaultCredentials;
 import com.microsoft.azure.keyvault.spring.certificate.KeyCert;
 import com.microsoft.azure.keyvault.spring.certificate.KeyCertReader;
 import com.microsoft.azure.keyvault.spring.certificate.KeyCertReaderFactory;
-import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
+import org.springframework.util.Assert;
 
 import java.net.MalformedURLException;
 import java.security.PrivateKey;
