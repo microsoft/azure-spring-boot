@@ -12,6 +12,7 @@ import com.microsoft.azure.keyvault.authentication.KeyVaultCredentials;
 import com.microsoft.azure.keyvault.spring.certificate.KeyCert;
 import com.microsoft.azure.keyvault.spring.certificate.KeyCertReader;
 import com.microsoft.azure.keyvault.spring.certificate.KeyCertReaderFactory;
+import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 
@@ -32,19 +33,21 @@ public class KeyVaultCertificateCredential extends KeyVaultCredentials {
 
     public KeyVaultCertificateCredential(String clientId, Resource certResource, String certPassword,
                                          long timeoutInSeconds) {
+        Assert.isTrue(certResource.exists(), String.format("Certificate file %s should exist.",
+                certResource.getFilename()));
+
         this.clientId = clientId;
         this.certResource = certResource;
         this.certPassword = certPassword;
         this.timeoutInSeconds = timeoutInSeconds <= 0 ? DEFAULT_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS : timeoutInSeconds;
     }
 
+    public KeyVaultCertificateCredential(String clientId, Resource certResource, String certPassword) {
+        this(clientId, certResource, certPassword, DEFAULT_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS);
+    }
+
     @Override
     public String doAuthenticate(String authorization, String resource, String scope) {
-        if (!certResource.exists()) {
-            throw new IllegalStateException(String.format("Certificate file %s not found.",
-                    certResource.getFilename()));
-        }
-
         final String certFileName = certResource.getFilename();
         final KeyCertReader certReader = KeyCertReaderFactory.getReader(certFileName);
 
