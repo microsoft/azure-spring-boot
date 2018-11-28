@@ -8,6 +8,7 @@ package com.microsoft.azure.spring.autoconfigure.b2c;
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * AAD B2C filter scenario handler will handle different scenario when redirect from AAD B2C back to
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  * spring security context if success, or take care the error response and throw exception.
  * <p>
  * ${@link AADB2CFilterLogoutSuccessHandler} will obtain the result from AAD B2C, it will do nothing if success,
- * or warn the user that the token failed to expire.
+ * or warn the user that the token is expired.
  */
 public interface AADB2CFilterScenarioHandler {
     /**
@@ -31,7 +32,9 @@ public interface AADB2CFilterScenarioHandler {
      * @param response      from
      *                      ${@link AADB2CFilter#doFilterInternal(HttpServletRequest, HttpServletResponse, FilterChain)}
      * @param b2cProperties of ${@link AADB2CProperties} represents customer configuration.
+     * @throws AADB2CAuthenticationException when authentication fails.
+     * @throws IOException                   when redirection fails.
      */
     void handle(HttpServletRequest request, HttpServletResponse response, AADB2CProperties b2cProperties)
-            throws AADB2CAuthenticationException;
+            throws AADB2CAuthenticationException, IOException;
 }

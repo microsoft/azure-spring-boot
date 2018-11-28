@@ -40,6 +40,10 @@ public class AADB2CURL {
             "https://%s.b2clogin.com/%s.onmicrosoft.com/v2.0/.well-known/openid-configuration?" +
                     "p=%s";
 
+    public static final String ATTRIBUTE_NONCE = "nonce";
+
+    public static final String ATTRIBUTE_STATE = "state";
+
     private static String getUUID() {
         return UUID.randomUUID().toString();
     }
@@ -80,8 +84,20 @@ public class AADB2CURL {
      * @param requestURL from ${@link HttpServletRequest} that user attempt to access.
      * @return the encoded state String.
      */
-    private static String getState(String requestURL) {
-        return String.join("-", getUUID(), getEncodedURL(requestURL));
+    private static String getState(HttpServletRequest request, String requestURL) {
+        final String state = toAbsoluteURL(requestURL, request);
+
+        request.getSession().setAttribute(ATTRIBUTE_STATE, state);
+
+        return state;
+    }
+
+    private static String getNonce(HttpServletRequest request) {
+        final String nonce = getUUID();
+
+        request.getSession().setAttribute(ATTRIBUTE_NONCE, nonce);
+
+        return nonce;
     }
 
     /**
@@ -94,14 +110,17 @@ public class AADB2CURL {
      */
     public static String getOpenIdSignUpOrSignInURL(@NonNull AADB2CProperties properties, String requestURL,
                                                     @NonNull HttpServletRequest request) {
+        final String nonce = getNonce(request);
+        final String state = getState(request, requestURL);
         final AADB2CProperties.Policy policy = properties.getPolicies().getSignUpOrSignIn();
+
         return String.format(OPENID_AUTHORIZE_PATTERN,
                 properties.getTenant(),
                 properties.getTenant(),
                 properties.getClientId(),
                 getEncodedURL(toAbsoluteURL(policy.getRedirectURI(), request)),
-                getState(toAbsoluteURL(requestURL, request)),
-                getUUID(),
+                state,
+                nonce,
                 policy.getName()
         );
     }
