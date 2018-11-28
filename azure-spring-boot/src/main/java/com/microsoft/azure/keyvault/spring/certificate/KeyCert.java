@@ -7,15 +7,13 @@ package com.microsoft.azure.keyvault.spring.certificate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
 @Getter
-@Setter
 @AllArgsConstructor
 public class KeyCert {
-    private X509Certificate certificate;
-    private PrivateKey key;
+    private final X509Certificate certificate;
+    private final PrivateKey key;
 }
