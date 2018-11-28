@@ -36,7 +36,7 @@ public class AADB2CFilterSignUpOrInHandler extends AbstractAADB2CFilterScenarioH
     /**
      * Mapping configuration URL to ${@link AADB2CJWTProcessor}.
      */
-    private static final ConcurrentMap<String, AADB2CJWTProcessor> URL_TO_JWT_PARSER = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, AADB2CJWTProcessor> urlToJWTParser = new ConcurrentHashMap<>();
 
     /**
      * Get cached instance of ${@link AADB2CJWTProcessor} from given url, or create new one.
@@ -46,7 +46,7 @@ public class AADB2CFilterSignUpOrInHandler extends AbstractAADB2CFilterScenarioH
      * @return the instance of ${@link AADB2CJWTProcessor}.
      */
     private AADB2CJWTProcessor getAADB2CJwtProcessor(@URL String url, @NonNull AADB2CProperties properties) {
-        return URL_TO_JWT_PARSER.computeIfAbsent(url, k -> new AADB2CJWTProcessor(k, properties));
+        return urlToJWTParser.computeIfAbsent(url, k -> new AADB2CJWTProcessor(k, properties));
     }
 
     private void validateState(String state, HttpServletRequest request) throws AADB2CAuthenticationException {
