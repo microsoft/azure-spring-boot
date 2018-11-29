@@ -21,7 +21,7 @@ import java.io.IOException;
  * and ${@link org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken} for
  * spring security context if success, or take care the error response and throw exception.
  * <p>
- * ${@link AADB2CFilterPasswordResetHandler} will take care the password reset url and redirect to AAD B2C for
+ * ${@link AADB2CFilterPasswordResetHandler} will take care of the password reset url and redirect to AAD B2C for
  * processing password resetting.
  */
 public interface AADB2CFilterScenarioHandler {

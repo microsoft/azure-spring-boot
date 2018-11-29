@@ -51,7 +51,7 @@ public class AADB2CProperties {
     public static final String LOGOUT_SUCCESS_URL = "logout-success-url";
 
     /**
-     * The name of the b2c tenant that created.
+     * The name of the b2c tenant.
      */
     @NotBlank(message = "tenant name should not be blank")
     private String tenant;
@@ -72,7 +72,7 @@ public class AADB2CProperties {
     private String passwordResetUrl;
 
     /**
-     * The all polices that created under b2c tenant.
+     * The all polices which is created under b2c tenant.
      */
     @JsonProperty(POLICIES)
     private Policies policies = new Policies();
@@ -83,13 +83,13 @@ public class AADB2CProperties {
     public static class Policies {
 
         /**
-         * The sign-up-or-sign-in policy that created under b2c tenant.
+         * The sign-up-or-sign-in policy which is created under b2c tenant.
          */
         @JsonProperty(SIGN_UP_OR_SIGN_IN)
         private Policy signUpOrSignIn = new Policy();
 
         /**
-         * The password-reset policy that created under b2c tenant.
+         * The password-reset policy which is created under b2c tenant.
          */
         @JsonProperty(PASSWORD_RESET)
         private Policy passwordReset = new Policy();
@@ -104,13 +104,13 @@ public class AADB2CProperties {
     public static class Policy {
 
         /**
-         * The name of policy that created under b2c tenant.
+         * The name of policy which is created under b2c tenant.
          */
         @NotBlank(message = "policy name should not be blank")
         private String name;
 
         /**
-         * The redirect URI that configured under b2c tenant.
+         * The redirect URI which is configured under b2c tenant.
          */
         @NotBlank(message = "redirect URI should not be blank")
         private String redirectURI;
