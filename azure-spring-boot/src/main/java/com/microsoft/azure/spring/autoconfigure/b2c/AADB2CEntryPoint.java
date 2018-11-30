@@ -42,7 +42,7 @@ public class AADB2CEntryPoint implements AuthenticationEntryPoint {
 
         final String redirectURL = AADB2CURL.getOpenIdSignUpOrSignInURL(b2cProperties, requestURL, request);
 
-        log.debug("Authentication is required to access URL {}.", requestURL);
+        log.debug("Authentication is required to access URL {}. Redirecting to {}.", requestURL, redirectURL);
 
         redirectStrategy.sendRedirect(request, response, redirectURL);
     }

@@ -19,8 +19,6 @@ import java.io.IOException;
 @Slf4j
 public class AADB2CLogoutSuccessHandler implements LogoutSuccessHandler {
 
-    private String logoutSuccessURL;
-
     private final AADB2CProperties b2cProperties;
 
     private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
@@ -29,33 +27,13 @@ public class AADB2CLogoutSuccessHandler implements LogoutSuccessHandler {
         this.b2cProperties = b2cProperties;
     }
 
-    /**
-     * Get the logout success URL.
-     *
-     * @return the URL of logout success.
-     */
-    public String getLogoutSuccessURL() {
-        if (logoutSuccessURL != null) {
-            return logoutSuccessURL;
-        } else {
-            return b2cProperties.getPolicies().getSignUpOrSignIn().getRedirectURI();
-        }
-    }
-
-    public AADB2CLogoutSuccessHandler with(String logoutSuccessURL) {
-        this.logoutSuccessURL = logoutSuccessURL;
-
-        return this;
-    }
-
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException {
-        final String redirectURL = AADB2CURL.getOpenIdLogoutURL(b2cProperties, getLogoutSuccessURL(), request);
-
         log.debug("Redirect to AAD B2C for invalidating token. After that AAD B2C will redirect to URL {}.",
-                getLogoutSuccessURL());
+                b2cProperties.getLogoutSuccessUrl());
 
-        redirectStrategy.sendRedirect(request, response, redirectURL);
+        redirectStrategy.sendRedirect(request, response, AADB2CURL.getOpenIdLogoutURL(b2cProperties, request));
+
     }
 }

@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -27,6 +28,8 @@ public class AADB2CProperties {
 
     private static final String SIGN_UP_OR_SIGN_IN = "sign-up-or-sign-in";
 
+    private static final String PASSWORD_RESET = "password-reset";
+
     /**
      * We do not use ${@link String#format(String, Object...)}
      * as it's not real constant, which cannot be referenced in annotation.
@@ -37,8 +40,18 @@ public class AADB2CProperties {
 
     public static final String POLICY_SIGN_UP_OR_SIGN_IN_REDIRECT_URL = POLICY_SIGN_UP_OR_SIGN_IN + ".redirect-uri";
 
+    private static final String POLICY_PASSWORD_RESET = POLICIES + "." + PASSWORD_RESET;
+
+    public static final String POLICY_PASSWORD_RESET_NAME = POLICY_PASSWORD_RESET + ".name";
+
+    public static final String POLICY_PASSWORD_RESET_REDIRECT_URL = POLICY_PASSWORD_RESET + ".redirect-uri";
+
+    public static final String PASSWORD_RESET_URL = "password-reset-url";
+
+    public static final String LOGOUT_SUCCESS_URL = "logout-success-url";
+
     /**
-     * The name of the b2c tenant that created.
+     * The name of the b2c tenant.
      */
     @NotBlank(message = "tenant name should not be blank")
     private String tenant;
@@ -49,8 +62,17 @@ public class AADB2CProperties {
     @NotBlank(message = "client ID should not be blank")
     private String clientId;
 
+    @URL
+    @Setter
+    @JsonProperty(LOGOUT_SUCCESS_URL)
+    private String logoutSuccessUrl;
+
+    @Setter
+    @JsonProperty(PASSWORD_RESET_URL)
+    private String passwordResetUrl;
+
     /**
-     * The all polices that created under b2c tenant.
+     * The all polices which is created under b2c tenant.
      */
     @JsonProperty(POLICIES)
     private Policies policies = new Policies();
@@ -61,10 +83,16 @@ public class AADB2CProperties {
     public static class Policies {
 
         /**
-         * The sign-up-or-sign-in policies that created under b2c tenant.
+         * The sign-up-or-sign-in policy which is created under b2c tenant.
          */
         @JsonProperty(SIGN_UP_OR_SIGN_IN)
         private Policy signUpOrSignIn = new Policy();
+
+        /**
+         * The password-reset policy which is created under b2c tenant.
+         */
+        @JsonProperty(PASSWORD_RESET)
+        private Policy passwordReset = new Policy();
 
         // TODO(pan): will add more policies like sign-in, sign-up, profile-editing and password-reset.
     }
@@ -76,13 +104,13 @@ public class AADB2CProperties {
     public static class Policy {
 
         /**
-         * The name of policy that created under b2c tenant.
+         * The name of policy which is created under b2c tenant.
          */
         @NotBlank(message = "policy name should not be blank")
         private String name;
 
         /**
-         * The redirect URI that configured under b2c tenant.
+         * The redirect URI which is configured under b2c tenant.
          */
         @NotBlank(message = "redirect URI should not be blank")
         private String redirectURI;

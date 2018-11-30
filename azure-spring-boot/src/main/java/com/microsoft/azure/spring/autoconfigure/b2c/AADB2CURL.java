@@ -40,6 +40,16 @@ public class AADB2CURL {
             "https://%s.b2clogin.com/%s.onmicrosoft.com/v2.0/.well-known/openid-configuration?" +
                     "p=%s";
 
+    private static final String OPENID_PASSWORD_RESET_PATTERN =
+            "https://%s.b2clogin.com/%s.onmicrosoft.com/oauth2/v2.0/authorize?" +
+                    "client_id=%s&" +
+                    "redirect_uri=%s&" +
+                    "response_mode=query&" +
+                    "response_type=code+id_token&" +
+                    "scope=openid&" +
+                    "state=%s&" +
+                    "p=%s";
+
     public static final String ATTRIBUTE_NONCE = "nonce";
 
     public static final String ATTRIBUTE_STATE = "state";
@@ -128,16 +138,14 @@ public class AADB2CURL {
     /**
      * Get the openid logout URL based on ${@link AADB2CProperties}.
      *
-     * @param properties  of ${@link AADB2CProperties}.
-     * @param redirectURL from ${@link AADB2CLogoutSuccessHandler#getLogoutSuccessURL()}.
+     * @param properties of ${@link AADB2CProperties}.
      * @return the URL of openid logout.
      */
-    public static String getOpenIdLogoutURL(@NonNull AADB2CProperties properties, String redirectURL,
-                                            @NonNull HttpServletRequest request) {
+    public static String getOpenIdLogoutURL(@NonNull AADB2CProperties properties, @NonNull HttpServletRequest request) {
         return String.format(OPENID_LOGOUT_PATTERN,
                 properties.getTenant(),
                 properties.getTenant(),
-                getEncodedURL(toAbsoluteURL(redirectURL, request)),
+                getEncodedURL(toAbsoluteURL(properties.getLogoutSuccessUrl(), request)),
                 properties.getPolicies().getSignUpOrSignIn().getName()
         );
     }
@@ -153,6 +161,29 @@ public class AADB2CURL {
                 properties.getTenant(),
                 properties.getTenant(),
                 properties.getPolicies().getSignUpOrSignIn().getName()
+        );
+    }
+
+    /**
+     * Get the openid sign up or sign in redirect URL based on ${@link AADB2CProperties}, encodes the
+     * requestURL and UUID in state field.
+     *
+     * @param properties  of ${@link AADB2CProperties}.
+     * @param redirectURL from ${@link HttpServletRequest} that user attempt to access.
+     * @return the URL of openid sign up or sign in.
+     */
+    public static String getOpenIdPasswordResetURL(@NonNull AADB2CProperties properties, String redirectURL,
+                                                   @NonNull HttpServletRequest request) {
+        final String state = getState(request, redirectURL);
+        final AADB2CProperties.Policy policy = properties.getPolicies().getPasswordReset();
+
+        return String.format(OPENID_PASSWORD_RESET_PATTERN,
+                properties.getTenant(),
+                properties.getTenant(),
+                properties.getClientId(),
+                getEncodedURL(toAbsoluteURL(policy.getRedirectURI(), request)),
+                state,
+                policy.getName()
         );
     }
 }
