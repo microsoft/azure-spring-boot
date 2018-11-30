@@ -40,10 +40,6 @@ public class AADB2CURL {
             "https://%s.b2clogin.com/%s.onmicrosoft.com/v2.0/.well-known/openid-configuration?" +
                     "p=%s";
 
-    private static final String OPENID_PASSWORD_RESET_PATTERN = OPENID_AUTHORIZE_PATTERN;
-
-    private static final String OPENID_PROFILE_EDIT_PATTERN = OPENID_AUTHORIZE_PATTERN;
-
     public static final String ATTRIBUTE_NONCE = "nonce";
 
     public static final String ATTRIBUTE_STATE = "state";

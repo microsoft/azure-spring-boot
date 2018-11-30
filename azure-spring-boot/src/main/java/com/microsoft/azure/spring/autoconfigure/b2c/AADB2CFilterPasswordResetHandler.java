@@ -55,7 +55,7 @@ public class AADB2CFilterPasswordResetHandler extends AbstractAADB2CFilterScenar
 
             log.debug("Redirect authenticated user to password reset URL: {}.", url);
         } else {
-            throw new AADB2CAuthenticationException("Authentication is required for password resetting.");
+            throw new AADB2CAuthenticationException("Authentication is required when password reset.");
         }
     }
 
