@@ -52,14 +52,13 @@ public class KeyVaultCertificateCredential extends KeyVaultCredentials {
         final KeyCertReader certReader = KeyCertReaderFactory.getReader(certFileName);
 
         final KeyCert keyCert = certReader.read(certResource, certPassword);
-        final PrivateKey privateKey = keyCert.getKey();
 
         try {
             final AuthenticationContext context = new AuthenticationContext(authorization, false,
                     Executors.newSingleThreadExecutor());
 
-            final AsymmetricKeyCredential asymmetricKeyCredential = AsymmetricKeyCredential.create(clientId, privateKey,
-                    keyCert.getCertificate());
+            final AsymmetricKeyCredential asymmetricKeyCredential = AsymmetricKeyCredential.create(clientId,
+                    keyCert.getKey(), keyCert.getCertificate());
 
             final AuthenticationResult authResult = context.acquireToken(resource, asymmetricKeyCredential, null)
                             .get(timeoutInSeconds, TimeUnit.SECONDS);
