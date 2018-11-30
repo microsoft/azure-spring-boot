@@ -82,6 +82,9 @@ public class StorageAutoConfiguration {
         if (packageNames.length > 1) {
             customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
         }
+
+        customTelemetryProperties.putIfAbsent(TelemetryData.ACCOUNT_NAME, properties.getAccountName());
+
         telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
 }
