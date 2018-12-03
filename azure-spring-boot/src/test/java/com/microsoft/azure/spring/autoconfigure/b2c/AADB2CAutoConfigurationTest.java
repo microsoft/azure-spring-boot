@@ -17,7 +17,7 @@ public class AADB2CAutoConfigurationTest {
     private static final String TEST_TENANT = "https://fake-tenant";
     private static final String TEST_CLIENT_ID = "fake-client-id";
     private static final String TEST_SIGN_UP_OR_IN_NAME = "fake-sign-in-or-up";
-    private static final String TEST_SIGN_UP_OR_IN_REDIRECT_URL = "https://fake-redirect-url";
+    private static final String TEST_SIGN_UP_OR_IN_REPLY_URL = "https://fake-reply-url";
     private static final String TEST_LOGOUT_SUCCESS_URL = "https://fake-logout-success-url";
 
     private static final String TENANT_PREFIX = String.format("%s.%s", PREFIX, "tenant");
@@ -25,8 +25,8 @@ public class AADB2CAutoConfigurationTest {
     private static final String LOGOUT_SUCCESS_URL_PREFIX = String.format("%s.%s", PREFIX, LOGOUT_SUCCESS_URL);
     private static final String SIGN_UP_OR_SIGN_IN_NAME_PREFIX =
             String.format("%s.%s", PREFIX, POLICY_SIGN_UP_OR_SIGN_IN_NAME);
-    private static final String SIGN_UP_OR_SIGN_IN_REDIRECT_URL_PREFIX =
-            String.format("%s.%s", PREFIX, POLICY_SIGN_UP_OR_SIGN_IN_REDIRECT_URL);
+    private static final String SIGN_UP_OR_SIGN_IN_REPLY_URL_PREFIX =
+            String.format("%s.%s", PREFIX, POLICY_SIGN_UP_OR_SIGN_IN_REPLY_URL);
 
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(AADB2CAutoConfiguration.class))
@@ -35,7 +35,7 @@ public class AADB2CAutoConfigurationTest {
                     String.format("%s=%s", CLIENT_ID_PREFIX, TEST_CLIENT_ID),
                     String.format("%s=%s", LOGOUT_SUCCESS_URL_PREFIX, TEST_LOGOUT_SUCCESS_URL),
                     String.format("%s=%s", SIGN_UP_OR_SIGN_IN_NAME_PREFIX, TEST_SIGN_UP_OR_IN_NAME),
-                    String.format("%s=%s", SIGN_UP_OR_SIGN_IN_REDIRECT_URL_PREFIX, TEST_SIGN_UP_OR_IN_REDIRECT_URL)
+                    String.format("%s=%s", SIGN_UP_OR_SIGN_IN_REPLY_URL_PREFIX, TEST_SIGN_UP_OR_IN_REPLY_URL)
             );
 
     @Test
@@ -59,7 +59,7 @@ public class AADB2CAutoConfigurationTest {
             final AADB2CProperties.Policies policies = properties.getPolicies();
 
             assertThat(policies.getSignUpOrSignIn().getName()).isEqualTo(TEST_SIGN_UP_OR_IN_NAME);
-            assertThat(policies.getSignUpOrSignIn().getRedirectURI()).isEqualTo(TEST_SIGN_UP_OR_IN_REDIRECT_URL);
+            assertThat(policies.getSignUpOrSignIn().getReplyURL()).isEqualTo(TEST_SIGN_UP_OR_IN_REPLY_URL);
         });
     }
 

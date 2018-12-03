@@ -34,6 +34,5 @@ public class AADB2CLogoutSuccessHandler implements LogoutSuccessHandler {
                 b2cProperties.getLogoutSuccessUrl());
 
         redirectStrategy.sendRedirect(request, response, AADB2CURL.getOpenIdLogoutURL(b2cProperties, request));
-
     }
 }

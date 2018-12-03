@@ -40,16 +40,6 @@ public class AADB2CURL {
             "https://%s.b2clogin.com/%s.onmicrosoft.com/v2.0/.well-known/openid-configuration?" +
                     "p=%s";
 
-    private static final String OPENID_PASSWORD_RESET_PATTERN =
-            "https://%s.b2clogin.com/%s.onmicrosoft.com/oauth2/v2.0/authorize?" +
-                    "client_id=%s&" +
-                    "redirect_uri=%s&" +
-                    "response_mode=query&" +
-                    "response_type=code+id_token&" +
-                    "scope=openid&" +
-                    "state=%s&" +
-                    "p=%s";
-
     public static final String ATTRIBUTE_NONCE = "nonce";
 
     public static final String ATTRIBUTE_STATE = "state";
@@ -110,29 +100,58 @@ public class AADB2CURL {
         return nonce;
     }
 
-    /**
-     * Get the openid sign up or sign in redirect URL based on ${@link AADB2CProperties}, encodes the
-     * requestURL and UUID in state field.
-     *
-     * @param properties of ${@link AADB2CProperties}.
-     * @param requestURL from ${@link HttpServletRequest} that user attempt to access.
-     * @return the URL of openid sign up or sign in.
-     */
-    public static String getOpenIdSignUpOrSignInURL(@NonNull AADB2CProperties properties, String requestURL,
-                                                    @NonNull HttpServletRequest request) {
+    private static String getOpenIdAuthorizeURL(AADB2CProperties properties, AADB2CProperties.Policy policy,
+                                                String redirectURL, HttpServletRequest request) {
         final String nonce = getNonce(request);
-        final String state = getState(request, requestURL);
-        final AADB2CProperties.Policy policy = properties.getPolicies().getSignUpOrSignIn();
+        final String state = getState(request, redirectURL);
 
         return String.format(OPENID_AUTHORIZE_PATTERN,
                 properties.getTenant(),
                 properties.getTenant(),
                 properties.getClientId(),
-                getEncodedURL(toAbsoluteURL(policy.getRedirectURI(), request)),
+                getEncodedURL(toAbsoluteURL(policy.getReplyURL(), request)),
                 state,
                 nonce,
                 policy.getName()
         );
+    }
+
+    /**
+     * Get the openid sign up or sign in URL based on ${@link AADB2CProperties}, within redirectURL in state field.
+     *
+     * @param properties  of ${@link AADB2CProperties}.
+     * @param redirectURL from ${@link HttpServletRequest} that user attempt to access.
+     * @return the URL of openid sign up or sign in.
+     */
+    public static String getOpenIdSignUpOrSignInURL(@NonNull AADB2CProperties properties, String redirectURL,
+                                                    @NonNull HttpServletRequest request) {
+        return getOpenIdAuthorizeURL(properties, properties.getPolicies().getSignUpOrSignIn(), redirectURL, request);
+    }
+
+    /**
+     * Get the openid sign up or sign in URL based on ${@link AADB2CProperties}, within redirectURL in state field.
+     *
+     * @param properties  of ${@link AADB2CProperties}.
+     * @param redirectURL from ${@link HttpServletRequest} that user attempt to access.
+     * @param request     from ${@link HttpServletRequest}.
+     * @return the URL of openid password reset.
+     */
+    public static String getOpenIdPasswordResetURL(@NonNull AADB2CProperties properties, String redirectURL,
+                                                   @NonNull HttpServletRequest request) {
+        return getOpenIdAuthorizeURL(properties, properties.getPolicies().getPasswordReset(), redirectURL, request);
+    }
+
+    /**
+     * Get the openid profile edit URL based on ${@link AADB2CProperties}, within redirectURL in state field.
+     *
+     * @param properties  of ${@link AADB2CProperties}.
+     * @param redirectURL from ${@link HttpServletRequest} that user attempt to access.
+     * @param request     from ${@link HttpServletRequest}.
+     * @return the URL of openid profile edit.
+     */
+    public static String getOpenIdProfileEditURL(@NonNull AADB2CProperties properties, String redirectURL,
+                                                 @NonNull HttpServletRequest request) {
+        return getOpenIdAuthorizeURL(properties, properties.getPolicies().getProfileEdit(), redirectURL, request);
     }
 
     /**
@@ -151,9 +170,9 @@ public class AADB2CURL {
     }
 
     /**
-     * Get the openid configuration URL based on ${@link AADB2CProperties}
+     * Get the openid configuration URL based on ${@link AADB2CProperties}.
      *
-     * @param properties of ${@link AADB2CProperties}
+     * @param properties of ${@link AADB2CProperties}.
      * @return the URL of openid configuration.
      */
     public static String getOpenIdSignUpOrInConfigurationURL(@NonNull AADB2CProperties properties) {
@@ -161,29 +180,6 @@ public class AADB2CURL {
                 properties.getTenant(),
                 properties.getTenant(),
                 properties.getPolicies().getSignUpOrSignIn().getName()
-        );
-    }
-
-    /**
-     * Get the openid sign up or sign in redirect URL based on ${@link AADB2CProperties}, encodes the
-     * requestURL and UUID in state field.
-     *
-     * @param properties  of ${@link AADB2CProperties}.
-     * @param redirectURL from ${@link HttpServletRequest} that user attempt to access.
-     * @return the URL of openid sign up or sign in.
-     */
-    public static String getOpenIdPasswordResetURL(@NonNull AADB2CProperties properties, String redirectURL,
-                                                   @NonNull HttpServletRequest request) {
-        final String state = getState(request, redirectURL);
-        final AADB2CProperties.Policy policy = properties.getPolicies().getPasswordReset();
-
-        return String.format(OPENID_PASSWORD_RESET_PATTERN,
-                properties.getTenant(),
-                properties.getTenant(),
-                properties.getClientId(),
-                getEncodedURL(toAbsoluteURL(policy.getRedirectURI(), request)),
-                state,
-                policy.getName()
         );
     }
 }

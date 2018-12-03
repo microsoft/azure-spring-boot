@@ -17,6 +17,8 @@ public class AADB2CFilterDefaultHandler extends AbstractAADB2CFilterScenarioHand
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+        updateAuthentication();
+
         chain.doFilter(request, response);
     }
 

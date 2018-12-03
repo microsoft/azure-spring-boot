@@ -23,7 +23,7 @@ import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.*;
         "client-id",
         LOGOUT_SUCCESS_URL,
         POLICY_SIGN_UP_OR_SIGN_IN_NAME,
-        POLICY_SIGN_UP_OR_SIGN_IN_REDIRECT_URL
+        POLICY_SIGN_UP_OR_SIGN_IN_REPLY_URL
 })
 @EnableConfigurationProperties(AADB2CProperties.class)
 public class AADB2CAutoConfiguration {
@@ -55,18 +55,30 @@ public class AADB2CAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public AADB2CFilter aadB2CFilter(AADB2CFilterPolicyReplyHandler policyReply,
-                                     @Autowired(required = false) AADB2CFilterPasswordResetHandler passwordReset) {
-        return new AADB2CFilter(policyReply, passwordReset);
+                                     @Autowired(required = false) AADB2CFilterPasswordResetHandler passwordReset,
+                                     @Autowired(required = false) AADB2CFilterProfileEditHandler profileEdit) {
+        return new AADB2CFilter(policyReply, passwordReset, profileEdit);
     }
 
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = AADB2CProperties.PREFIX, value = {
             POLICY_PASSWORD_RESET_NAME,
-            POLICY_PASSWORD_RESET_REDIRECT_URL,
+            POLICY_PASSWORD_RESET_REPLY_URL,
             PASSWORD_RESET_URL
     })
     public AADB2CFilterPasswordResetHandler passwordResetHandler() {
         return new AADB2CFilterPasswordResetHandler(b2cProperties);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = AADB2CProperties.PREFIX, value = {
+            POLICY_PROFILE_EDIT_NAME,
+            POLICY_PROFILE_EDIT_REPLY_URL,
+            PROFILE_EDIT_URL
+    })
+    public AADB2CFilterProfileEditHandler profileEditHandler() {
+        return new AADB2CFilterProfileEditHandler(b2cProperties);
     }
 }

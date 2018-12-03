@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.FilterChain;
@@ -75,58 +76,68 @@ public class AADB2CFilterPolicyReplyHandler extends AbstractAADB2CFilterScenario
 //        }
     }
 
-    private void handleAuthentication(HttpServletRequest request, HttpServletResponse response)
+    private void handlePolicyReplyAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AADB2CAuthenticationException, IOException {
         final String idToken = request.getParameter(PARAMETER_ID_TOKEN);
         final String code = request.getParameter(PARAMETER_CODE);
 
-        if (StringUtils.hasText(idToken) && StringUtils.hasText(code)) {
-            final String url = AADB2CURL.getOpenIdSignUpOrInConfigurationURL(b2cProperties);
-            final Pair<JWSObject, JWTClaimsSet> jwtToken = getAADB2CJwtProcessor(url, b2cProperties).validate(idToken);
-            final UserPrincipal principal = new UserPrincipal(jwtToken, code);
-            final String state = request.getParameter(PARAMETER_STATE);
+        Assert.hasText(idToken, "idToken should contain text.");
+        Assert.hasText(code, "code should contain text.");
 
-            validateState(state, request);
-            validateNonce(principal.getNonce(), request);
+        final String url = AADB2CURL.getOpenIdSignUpOrInConfigurationURL(b2cProperties);
+        final Pair<JWSObject, JWTClaimsSet> jwtToken = getAADB2CJwtProcessor(url, b2cProperties).validate(idToken);
+        final UserPrincipal principal = new UserPrincipal(jwtToken, code);
+        final String state = request.getParameter(PARAMETER_STATE);
 
-            final Authentication auth = new PreAuthenticatedAuthenticationToken(principal, null);
-            auth.setAuthenticated(true);
+        validateState(state, request);
+        validateNonce(principal.getNonce(), request);
 
-            SecurityContextHolder.getContext().setAuthentication(auth);
-            redirectStrategy.sendRedirect(request, response, state);
+        final Authentication auth = new PreAuthenticatedAuthenticationToken(principal, null);
+        auth.setAuthenticated(true);
 
-            log.debug("User {} is authenticated. Redirecting to {}.", principal.getDisplayName(), state);
-        }
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        redirectStrategy.sendRedirect(request, response, state);
+
+        log.debug("User {} is authenticated. Redirecting to {}.", principal.getDisplayName(), state);
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws AADB2CAuthenticationException, IOException, ServletException {
-        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        if (super.isNotAuthenticated(auth)) {
-            if (auth != null) {
-                auth.setAuthenticated(false);
-                log.debug("User {} is not authenticated.", ((UserPrincipal) auth.getPrincipal()).getDisplayName());
-            }
-
-            super.validateAuthentication(request);
-            this.handleAuthentication(request, response);
-        }
+        super.validatePolicyReply(request);
+        this.handlePolicyReplyAuthentication(request, response);
 
         chain.doFilter(request, response);
+    }
+
+    private boolean isPolicyReplyURL(@URL String requestURL) {
+        final String signUpOrInRedirectURL = b2cProperties.getPolicies().getSignUpOrSignIn().getReplyURL();
+        final AADB2CProperties.Policy passwordReset = b2cProperties.getPolicies().getPasswordReset();
+        final AADB2CProperties.Policy profileEdit = b2cProperties.getPolicies().getProfileEdit();
+
+        if (requestURL.equals(signUpOrInRedirectURL)) {
+            return true;
+        } else if (passwordReset != null && requestURL.equals(passwordReset.getReplyURL())) {
+            return true;
+        } else if (profileEdit != null && requestURL.equals(profileEdit.getReplyURL())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public Boolean matches(HttpServletRequest request) {
         final String requestURL = request.getRequestURL().toString();
-        final String signUpOrInRedirectURL = b2cProperties.getPolicies().getSignUpOrSignIn().getRedirectURI();
-        final String passwordResetRedirectURL = b2cProperties.getPolicies().getPasswordReset().getRedirectURI();
+        final String idToken = request.getParameter(PARAMETER_ID_TOKEN);
+        final String error = request.getParameter(PARAMETER_ERROR);
 
-        if (!HttpMethod.GET.matches(request.getMethod())) {
+        if (!StringUtils.hasText(idToken) && !StringUtils.hasText(error)) {
+            return false;
+        } else if (!HttpMethod.GET.matches(request.getMethod())) {
             return false;
         } else {
-            return requestURL.equals(signUpOrInRedirectURL) || requestURL.equals(passwordResetRedirectURL);
+            return isPolicyReplyURL(requestURL);
         }
     }
 }

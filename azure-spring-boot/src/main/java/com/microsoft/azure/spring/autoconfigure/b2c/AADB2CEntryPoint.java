@@ -37,7 +37,7 @@ public class AADB2CEntryPoint implements AuthenticationEntryPoint {
         // By default, request URL will be '/error' when exception handling, here handle this endpoint to
         // policy redirect URL instead of redirect to '/error' directly.
         if (url.getPath().equalsIgnoreCase("/error")) {
-            requestURL = this.b2cProperties.getPolicies().getSignUpOrSignIn().getRedirectURI();
+            requestURL = this.b2cProperties.getPolicies().getSignUpOrSignIn().getReplyURL();
         }
 
         final String redirectURL = AADB2CURL.getOpenIdSignUpOrSignInURL(b2cProperties, requestURL, request);
