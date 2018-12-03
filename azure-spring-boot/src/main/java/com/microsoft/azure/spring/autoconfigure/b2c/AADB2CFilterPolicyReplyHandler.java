@@ -129,10 +129,10 @@ public class AADB2CFilterPolicyReplyHandler extends AbstractAADB2CFilterScenario
     @Override
     public Boolean matches(HttpServletRequest request) {
         final String requestURL = request.getRequestURL().toString();
-        final String id_token = request.getParameter(PARAMETER_ID_TOKEN);
+        final String idToken = request.getParameter(PARAMETER_ID_TOKEN);
         final String error = request.getParameter(PARAMETER_ERROR);
 
-        if (!StringUtils.hasText(id_token) && !StringUtils.hasText(error)) {
+        if (!StringUtils.hasText(idToken) && !StringUtils.hasText(error)) {
             return false;
         } else if (!HttpMethod.GET.matches(request.getMethod())) {
             return false;
