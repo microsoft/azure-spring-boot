@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Please sign in</title>
+</head>
+<body>
+
+<h1>AAD B2C with Spring Security</h1>
+<div>
+    <form style="display:inline" method="post" action="/login" th:if="${authenticated=='false'}">
+        <button class="btn btn-md btn-primary btn-block" type="submit">Sign in/up</button>
+    </form>
+
+    <form style="display:inline" method="get" action="/logout" th:if="${authenticated=='true'}">
+        <button class="btn btn-md btn-primary btn-block" type="submit">Log out</button>
+    </form>
+
+    <form style="display:inline" method="get" action="/password-reset" th:if="${authenticated=='true'}">
+        <button class="btn btn-md btn-primary btn-block" type="submit">Password reset</button>
+    </form>
+
+    <form style="display:inline" method="get" action="/profile-edit" th:if="${authenticated=='true'}">
+        <button class="btn btn-md btn-primary btn-block" type="submit">Profile edit</button>
+    </form>
+
+    <form style="display:inline" method="get" action="/greeting">
+        <button class="btn btn-md btn-primary btn-block" type="submit">Greeting</button>
+    </form>
+</div>
+
+<div th:if="${authenticated=='true'}">
+    <br/>
+    Hi <span style="font-weight: bold; color: darkred" th:text="${name}"></span>, login successfully.
+    email: <span style="font-weight: bold; color: darkorange" th:text="${email}"></span>,
+    city: <span style="font-weight: bold; color: cyan" th:text="${city}"></span>,
+    country: <span style="font-weight: bold; color: fuchsia" th:text="${country}"></span>.
+    <span style="font-weight: bold; color: purple" th:if="${idProvider!=null}">Login from: </span>
+    <span style="font-weight: bold; color: chartreuse" th:text="${idProvider}" th:if="${idProvider!=null}"></span>
+</div>
+
+</body>
+</html>
