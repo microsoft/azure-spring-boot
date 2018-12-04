@@ -15,7 +15,6 @@ import org.springframework.security.web.RedirectStrategy;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URL;
 
 @Slf4j
 public class AADB2CEntryPoint implements AuthenticationEntryPoint {
@@ -31,15 +30,7 @@ public class AADB2CEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e)
             throws IOException {
-        String requestURL = request.getRequestURL().toString();
-        final URL url = new URL(requestURL);
-
-        // By default, request URL will be '/error' when exception handling, here handle this endpoint to
-        // policy redirect URL instead of redirect to '/error' directly.
-        if (url.getPath().equalsIgnoreCase("/error")) {
-            requestURL = this.b2cProperties.getPolicies().getSignUpOrSignIn().getReplyURL();
-        }
-
+        final String requestURL = request.getRequestURL().toString();
         final String redirectURL = AADB2CURL.getOpenIdSignUpOrSignInURL(b2cProperties, requestURL, request);
 
         log.debug("Authentication is required to access URL {}. Redirecting to {}.", requestURL, redirectURL);
