@@ -8,27 +8,26 @@
     <title>Greetings</title>
 </head>
 <body>
-<h1>Greetings from AAD B2C</h1>
+<h1>Greeting Page</h1>
 <div class="container">
+    <form style="display:inline" method="get" action="/home">
+        <button class="btn btn-md btn-primary btn-block" type="submit">Home</button>
+    </form>
+
     <form style="display:inline" method="get" action="/logout">
         <button class="btn btn-md btn-primary btn-block" type="submit">Log out</button>
     </form>
 
-    <form style="display:inline" method="get" action="/">
-        <button class="btn btn-md btn-primary btn-block" type="submit">Home</button>
-    </form>
-
-    <form style="display:inline" method="get" action="/password-reset" th:if="${authenticated=='true'}">
+    <form style="display:inline" method="get" action="/password-reset">
         <button class="btn btn-md btn-primary btn-block" type="submit">Password reset</button>
     </form>
 
-    <form style="display:inline" method="get" action="/profile-edit" th:if="${authenticated=='true'}">
+    <form style="display:inline" method="get" action="/profile-edit">
         <button class="btn btn-md btn-primary btn-block" type="submit">Profile edit</button>
     </form>
-
 </div>
 
-<div style="display:inline">
+<div>
     <br/>
     Hi <span style="font-weight: bold; color: darkred" th:text="${name}"></span>, login successfully.
     email: <span style="font-weight: bold; color: darkorange" th:text="${email}"></span>,

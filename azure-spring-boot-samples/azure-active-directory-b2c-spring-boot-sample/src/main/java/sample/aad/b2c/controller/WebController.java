@@ -24,18 +24,18 @@ public class WebController {
             model.addAttribute("email", principal.getEmails().get(0));
             model.addAttribute("city", principal.getCity());
             model.addAttribute("country", principal.getCountryOrRegion());
-            model.addAttribute("authenticated", "true");
             model.addAttribute("idProvider", principal.getIdentityProvider());
+            model.addAttribute("authenticated", "true");
         } else {
             model.addAttribute("authenticated", "false");
         }
     }
 
     @GetMapping(value = "/")
-    public String home(Model model, PreAuthenticatedAuthenticationToken token) {
+    public String index(Model model, PreAuthenticatedAuthenticationToken token) {
         initializeModel(model, token);
 
-        return "home";
+        return "index";
     }
 
     @GetMapping(value = "/greeting")
@@ -43,5 +43,12 @@ public class WebController {
         initializeModel(model, token);
 
         return "greeting";
+    }
+
+    @GetMapping(value = "/home")
+    public String home(Model model, PreAuthenticatedAuthenticationToken token) {
+        initializeModel(model, token);
+
+        return "home";
     }
 }

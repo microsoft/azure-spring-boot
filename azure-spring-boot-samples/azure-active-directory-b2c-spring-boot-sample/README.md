@@ -14,7 +14,7 @@ To make the sample work, some changes about url is required. Please replace the 
 
 | Placeholder                             | URL                                   |
 | :-------------------------------------- | :----------------------               |
-| `${your-policy-reply-url}`              | `http://localhost:8080/`              |
+| `${your-policy-reply-url}`              | `http://localhost:8080/home`          |
 | `${your-logout-success-url}`            | `http://localhost:8080/`              |
 | `${your-url-to-process-password-reset}` | `http://localhost:8080/password-reset`|
 | `${your-url-to-process-profile-edit}`   | `http://localhost:8080/profile-edit`  |
@@ -58,7 +58,7 @@ azure:
 
 ### Check the authentication with policies.
 	
-1. Access `http://localhost:8080/` as home page.
+1. Access `http://localhost:8080/` as index page.
 2. Sign up/in.
 3. Access greeting button.
 4. Logout.
