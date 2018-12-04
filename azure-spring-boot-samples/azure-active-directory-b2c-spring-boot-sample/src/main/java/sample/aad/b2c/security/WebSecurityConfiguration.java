@@ -41,7 +41,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .exceptionHandling()
+                .httpBasic()
                 .authenticationEntryPoint(aadb2CEntryPoint)
                 .and()
                 .logout()
