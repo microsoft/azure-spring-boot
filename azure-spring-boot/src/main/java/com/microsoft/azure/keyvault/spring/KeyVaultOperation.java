@@ -66,9 +66,7 @@ public class KeyVaultOperation {
             return replacedSecretNamesMap.get(replacedSecretName);
         } else {
             final SecretBundle secretBundle = this.keyVaultClient.getSecret(this.vaultUri, replacedSecretName);
-            final String value = secretBundle.value();
-            replacedSecretNamesMap.put(replacedSecretName, value);
-            return value;
+            return secretBundle.value();
         }
     }
 
