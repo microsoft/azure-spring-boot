@@ -5,6 +5,7 @@
  */
 package sample.gremlin;
 
+import com.google.common.collect.Lists;
 import com.microsoft.spring.data.gremlin.common.GremlinFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -46,7 +47,7 @@ public class GremlinApplication implements CommandLineRunner {
         Assert.isTrue(foundPerson.isPresent(), "optional of Person should be present");
         Assert.state(foundPerson.get().equals(person), "should be the equals");
 
-        final List<Person> foundPersons = this.repository.findByNameAndLevel(person.getName(), person.getLevel());
+        final List<Person> foundPersons = Lists.newArrayList(this.repository.findAll());
         Assert.isTrue(foundPersons.size() == 1, "should be only one element");
         Assert.state(foundPersons.get(0).getId().equals(person.getId()), "should be the same id");
 

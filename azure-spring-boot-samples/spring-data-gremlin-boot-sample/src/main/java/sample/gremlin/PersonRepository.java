@@ -7,9 +7,8 @@ package sample.gremlin;
 
 import com.microsoft.spring.data.gremlin.repository.GremlinRepository;
 
-import java.util.List;
-
 public interface PersonRepository extends GremlinRepository<Person, String> {
 
-    List<Person> findByNameAndLevel(String name, int level);
+// TODO(pan): will enable this after gremlin add lookup strategy.
+//    List<Person> findByNameAndLevel(String name, int level);
 }

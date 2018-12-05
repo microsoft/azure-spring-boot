@@ -7,9 +7,8 @@ package com.microsoft.azure.spring.autoconfigure.gremlin.domain;
 
 import com.microsoft.spring.data.gremlin.repository.GremlinRepository;
 
-import java.util.List;
-
 public interface UserRepository extends GremlinRepository<User, String> {
 
-    List<User> findByNameAndEnabled(String name, Boolean enabled);
+// TODO(pan): will enable this after gremlin add lookup strategy.
+//    List<User> findByNameAndEnabled(String name, Boolean enabled);
 }
