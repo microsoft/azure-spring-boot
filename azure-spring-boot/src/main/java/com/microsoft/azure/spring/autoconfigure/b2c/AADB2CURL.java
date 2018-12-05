@@ -8,12 +8,18 @@ package com.microsoft.azure.spring.autoconfigure.b2c;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -39,6 +45,10 @@ public class AADB2CURL {
     private static final String OPENID_CONFIGURATION_PATTERN =
             "https://%s.b2clogin.com/%s.onmicrosoft.com/v2.0/.well-known/openid-configuration?" +
                     "p=%s";
+
+    private static final String STATE_REQUEST_URL = "request-url";
+
+    private static final String STATE_PROPERTY_SEPARATOR = ":";
 
     public static final String ATTRIBUTE_NONCE = "nonce";
 
@@ -78,14 +88,35 @@ public class AADB2CURL {
         }
     }
 
+    public static String getStateRequestUrl(String state) throws AADB2CAuthenticationException {
+        Assert.hasText(state, "state should contain text.");
+
+        final List<String> stateProperties = Arrays.asList(state.split(STATE_PROPERTY_SEPARATOR));
+
+        Assert.isTrue(stateProperties.size() > 1, "state properties should contain 2 or more elements.");
+        Assert.isTrue(stateProperties.get(0).equals(STATE_REQUEST_URL), "property should be " + STATE_REQUEST_URL);
+
+        final String requestURL = stateProperties.get(1);
+
+        if (StringUtils.hasText(requestURL)) {
+            final byte[] decodedURL = Base64.getDecoder().decode(requestURL.getBytes(StandardCharsets.UTF_8));
+            return new String(decodedURL, StandardCharsets.UTF_8);
+        }
+
+        throw new AADB2CAuthenticationException("The reply state has unexpected content: " + state);
+    }
+
     /**
-     * Take state's format as UUID-RequestURI when redirect to sign-in URL.
+     * Take state's format as '${@link AADB2CURL#STATE_REQUEST_URL}:RequestURL', the RequestURL
+     * will be base64 encoded.
      *
      * @param requestURL from ${@link HttpServletRequest} that user attempt to access.
      * @return the encoded state String.
      */
     private static String getState(HttpServletRequest request, String requestURL) {
-        final String state = toAbsoluteURL(requestURL, request);
+        final String url = toAbsoluteURL(requestURL, request);
+        final String encodedURL = Base64.getEncoder().encodeToString(url.getBytes(StandardCharsets.UTF_8));
+        final String state = String.format("%s:%s", STATE_REQUEST_URL, encodedURL);
 
         request.getSession().setAttribute(ATTRIBUTE_STATE, state);
 

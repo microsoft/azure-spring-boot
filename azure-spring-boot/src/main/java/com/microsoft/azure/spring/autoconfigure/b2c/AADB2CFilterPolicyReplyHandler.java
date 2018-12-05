@@ -57,23 +57,23 @@ public class AADB2CFilterPolicyReplyHandler extends AbstractAADB2CFilterScenario
     }
 
     private void validateState(String state, HttpServletRequest request) throws AADB2CAuthenticationException {
-//        Assert.hasText(state, "state should contains text.");
-//
-//        final String requestURL = request.getSession().getAttribute(AADB2CURL.ATTRIBUTE_STATE).toString();
-//
-//        if (!state.equals(requestURL)) {
-//            throw new AADB2CAuthenticationException("The reply state has unexpected content: " + state);
-//        }
+        Assert.hasText(state, "state should contains text.");
+
+        final String sessionState = request.getSession().getAttribute(AADB2CURL.ATTRIBUTE_STATE).toString();
+
+        if (!state.equals(sessionState)) {
+            throw new AADB2CAuthenticationException("The reply state has unexpected content: " + state);
+        }
     }
 
     private void validateNonce(String nonce, HttpServletRequest request) throws AADB2CAuthenticationException {
-//        Assert.hasText(nonce, "nonce should contains text.");
-//
-//        final String expectedNonce = request.getSession().getAttribute(AADB2CURL.ATTRIBUTE_NONCE).toString();
-//
-//        if (!nonce.equals(expectedNonce)) {
-//            throw new AADB2CAuthenticationException("The claim nonce has unexpected content: " + nonce);
-//        }
+        Assert.hasText(nonce, "nonce should contains text.");
+
+        final String expectedNonce = request.getSession().getAttribute(AADB2CURL.ATTRIBUTE_NONCE).toString();
+
+        if (!nonce.equals(expectedNonce)) {
+            throw new AADB2CAuthenticationException("The claim nonce has unexpected content: " + nonce);
+        }
     }
 
     private void handlePolicyReplyAuthentication(HttpServletRequest request, HttpServletResponse response)
@@ -94,11 +94,12 @@ public class AADB2CFilterPolicyReplyHandler extends AbstractAADB2CFilterScenario
 
         final Authentication auth = new PreAuthenticatedAuthenticationToken(principal, null);
         auth.setAuthenticated(true);
-
         SecurityContextHolder.getContext().setAuthentication(auth);
-        redirectStrategy.sendRedirect(request, response, state);
 
-        log.debug("User {} is authenticated. Redirecting to {}.", principal.getDisplayName(), state);
+        final String requestURL = AADB2CURL.getStateRequestUrl(state);
+        redirectStrategy.sendRedirect(request, response, requestURL);
+
+        log.debug("User {} is authenticated. Redirecting to {}.", principal.getDisplayName(), requestURL);
     }
 
     @Override
