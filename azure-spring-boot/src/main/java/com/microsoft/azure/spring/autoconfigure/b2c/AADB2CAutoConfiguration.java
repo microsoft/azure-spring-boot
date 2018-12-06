@@ -7,6 +7,7 @@ package com.microsoft.azure.spring.autoconfigure.b2c;
 
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -56,8 +57,9 @@ public class AADB2CAutoConfiguration {
     @ConditionalOnMissingBean
     public AADB2CFilter aadB2CFilter(AADB2CFilterPolicyReplyHandler policyReply,
                                      @Autowired(required = false) AADB2CFilterPasswordResetHandler passwordReset,
-                                     @Autowired(required = false) AADB2CFilterProfileEditHandler profileEdit) {
-        return new AADB2CFilter(policyReply, passwordReset, profileEdit);
+                                     @Autowired(required = false) AADB2CFilterProfileEditHandler profileEdit,
+                                     @Autowired(required = false) AADB2CFilterForgotPasswordHandler forgotPassword) {
+        return new AADB2CFilter(policyReply, passwordReset, profileEdit, forgotPassword);
     }
 
     @Bean
@@ -80,5 +82,12 @@ public class AADB2CAutoConfiguration {
     })
     public AADB2CFilterProfileEditHandler profileEditHandler() {
         return new AADB2CFilterProfileEditHandler(b2cProperties);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnBean(AADB2CFilterPasswordResetHandler.class)
+    public AADB2CFilterForgotPasswordHandler forgotPasswordHandler() {
+        return new AADB2CFilterForgotPasswordHandler(b2cProperties);
     }
 }

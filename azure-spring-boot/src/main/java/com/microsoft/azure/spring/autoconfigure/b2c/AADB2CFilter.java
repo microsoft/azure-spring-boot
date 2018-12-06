@@ -24,23 +24,30 @@ public class AADB2CFilter extends OncePerRequestFilter {
 
     private final AADB2CFilterProfileEditHandler profileEditHandler;
 
+    private final AADB2CFilterForgotPasswordHandler forgotPasswordHandler;
+
     private final AADB2CFilterDefaultHandler defaultHandler = new AADB2CFilterDefaultHandler();
+
 
     public AADB2CFilter(@NonNull AADB2CFilterPolicyReplyHandler policyReplyHandler,
                         @Nullable AADB2CFilterPasswordResetHandler passwordResetHandler,
-                        @Nullable AADB2CFilterProfileEditHandler profileEditHandler) {
+                        @Nullable AADB2CFilterProfileEditHandler profileEditHandler,
+                        @Nullable AADB2CFilterForgotPasswordHandler forgotPasswordHandler) {
         super();
 
         this.policyReplyHandler = policyReplyHandler;
         this.passwordResetHandler = passwordResetHandler;
         this.profileEditHandler = profileEditHandler;
+        this.forgotPasswordHandler = forgotPasswordHandler;
     }
 
     @Override
     public void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
                                  @NotNull FilterChain chain) throws IOException, ServletException {
         try {
-            if (policyReplyHandler.matches(request)) {
+            if (forgotPasswordHandler != null && forgotPasswordHandler.matches(request)) {
+                forgotPasswordHandler.handle(request, response, chain);
+            } else if (policyReplyHandler.matches(request)) {
                 policyReplyHandler.handle(request, response, chain);
             } else if (passwordResetHandler != null && passwordResetHandler.matches(request)) {
                 passwordResetHandler.handle(request, response, chain);

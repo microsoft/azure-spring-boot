@@ -101,11 +101,22 @@ public class AADB2CFilterPolicyReplyHandler extends AbstractAADB2CFilterScenario
         log.debug("User {} is authenticated. Redirecting to {}.", principal.getDisplayName(), state);
     }
 
+    private void validatePolicyReply(HttpServletRequest request) throws AADB2CAuthenticationException {
+        final String code = request.getParameter(PARAMETER_ERROR);
+
+        if (StringUtils.hasText(request.getParameter(PARAMETER_ERROR))) {
+            final String description = request.getParameter(PARAMETER_ERROR_DESCRIPTION);
+            final String message = String.format("%s:%s.", code, description);
+
+            throw new AADB2CAuthenticationException("Authentication failure: " + message);
+        }
+    }
+
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws AADB2CAuthenticationException, IOException, ServletException {
-        super.validatePolicyReply(request);
-        this.handlePolicyReplyAuthentication(request, response);
+        validatePolicyReply(request);
+        handlePolicyReplyAuthentication(request, response);
 
         chain.doFilter(request, response);
     }
