@@ -31,6 +31,7 @@ import java.util.HashMap;
 public class StorageAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(StorageAutoConfiguration.class);
     private static final String BLOB_URL = "http://%s.blob.core.windows.net";
+    private static final String BLOB_Https_URL = "https://%s.blob.core.windows.net";
     private static final String USER_AGENT_PREFIX = "spring-storage/";
 
     private final StorageProperties properties;
@@ -53,7 +54,7 @@ public class StorageAutoConfiguration {
 
         final SharedKeyCredentials credentials = new SharedKeyCredentials(properties.getAccountName(),
                 properties.getAccountKey());
-        final URL blobUrl = new URL(String.format(BLOB_URL, properties.getAccountName()));
+        final URL blobUrl = properties.isEnableHttps() ? new URL(String.format(BLOB_Https_URL, properties.getAccountName())) : new URL(String.format(BLOB_URL, properties.getAccountName()));
         final PipelineOptions pipelineOptions = buildOptions(options);
         final ServiceURL serviceURL = new ServiceURL(blobUrl, StorageURL.createPipeline(credentials, pipelineOptions));
 

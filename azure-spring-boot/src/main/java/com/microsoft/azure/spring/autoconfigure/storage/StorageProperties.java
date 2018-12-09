@@ -32,4 +32,8 @@ public class StorageProperties {
     @Getter
     @Setter
     private boolean allowTelemetry = true;
+    
+    @Getter
+    @Setter
+    private boolean enableHttps = true;
 }
