@@ -35,5 +35,5 @@ public class StorageProperties {
     
     @Getter
     @Setter
-    private boolean enableHttps = true;
+    private boolean enableHttps = false;
 }
