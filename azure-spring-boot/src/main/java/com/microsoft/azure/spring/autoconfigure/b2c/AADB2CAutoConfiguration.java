@@ -49,12 +49,14 @@ public class AADB2CAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = PREFIX, value = SESSION_STATE_LESS, havingValue = "false", matchIfMissing = true)
     public AADB2CFilterPolicyReplyHandler policyReplyHandler() {
         return new AADB2CFilterPolicyReplyHandler(b2cProperties);
     }
 
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = PREFIX, value = SESSION_STATE_LESS, havingValue = "false", matchIfMissing = true)
     public AADB2CFilter aadB2CFilter(AADB2CFilterPolicyReplyHandler policyReply,
                                      @Autowired(required = false) AADB2CFilterPasswordResetHandler passwordReset,
                                      @Autowired(required = false) AADB2CFilterProfileEditHandler profileEdit,
@@ -64,6 +66,7 @@ public class AADB2CAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnBean(AADB2CFilterPolicyReplyHandler.class)
     @ConditionalOnProperty(prefix = AADB2CProperties.PREFIX, value = {
             POLICY_PASSWORD_RESET_NAME,
             POLICY_PASSWORD_RESET_REPLY_URL,
@@ -75,6 +78,7 @@ public class AADB2CAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnBean(AADB2CFilterPolicyReplyHandler.class)
     @ConditionalOnProperty(prefix = AADB2CProperties.PREFIX, value = {
             POLICY_PROFILE_EDIT_NAME,
             POLICY_PROFILE_EDIT_REPLY_URL,
@@ -86,8 +90,15 @@ public class AADB2CAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnBean(AADB2CFilterPasswordResetHandler.class)
+    @ConditionalOnBean({AADB2CFilterPasswordResetHandler.class, AADB2CFilterPolicyReplyHandler.class})
     public AADB2CFilterForgotPasswordHandler forgotPasswordHandler() {
         return new AADB2CFilterForgotPasswordHandler(b2cProperties);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = PREFIX, value = SESSION_STATE_LESS, havingValue = "true")
+    public AADB2CSessionStatelessFilter aadb2CSessionStatelessFilter(AADB2CProperties properties) {
+        return new AADB2CSessionStatelessFilter(properties);
     }
 }

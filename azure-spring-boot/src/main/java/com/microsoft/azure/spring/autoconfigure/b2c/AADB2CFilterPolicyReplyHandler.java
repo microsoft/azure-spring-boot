@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CURL.*;
+
 @Slf4j
 public class AADB2CFilterPolicyReplyHandler extends AbstractAADB2CFilterScenarioHandler
         implements AADB2CFilterScenarioHandler {
@@ -102,21 +104,10 @@ public class AADB2CFilterPolicyReplyHandler extends AbstractAADB2CFilterScenario
         log.debug("User {} is authenticated. Redirecting to {}.", principal.getDisplayName(), requestURL);
     }
 
-    private void validatePolicyReply(HttpServletRequest request) throws AADB2CAuthenticationException {
-        final String code = request.getParameter(PARAMETER_ERROR);
-
-        if (StringUtils.hasText(request.getParameter(PARAMETER_ERROR))) {
-            final String description = request.getParameter(PARAMETER_ERROR_DESCRIPTION);
-            final String message = String.format("%s:%s.", code, description);
-
-            throw new AADB2CAuthenticationException("Authentication failure: " + message);
-        }
-    }
-
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws AADB2CAuthenticationException, IOException, ServletException {
-        validatePolicyReply(request);
+        AADB2CURL.validateReplyRequest(request);
         handlePolicyReplyAuthentication(request, response);
 
         chain.doFilter(request, response);

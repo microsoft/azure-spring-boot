@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CURL.PARAMETER_ERROR_DESCRIPTION;
+
 /**
  * This handler will take care of the url with error and error description query. It is the workaround
  * for AAD B2C sign in page cannot redirect users to password reset policy or default password reset page.

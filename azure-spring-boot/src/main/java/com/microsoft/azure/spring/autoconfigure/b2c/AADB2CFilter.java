@@ -28,7 +28,6 @@ public class AADB2CFilter extends OncePerRequestFilter {
 
     private final AADB2CFilterDefaultHandler defaultHandler = new AADB2CFilterDefaultHandler();
 
-
     public AADB2CFilter(@NonNull AADB2CFilterPolicyReplyHandler policyReplyHandler,
                         @Nullable AADB2CFilterPasswordResetHandler passwordResetHandler,
                         @Nullable AADB2CFilterProfileEditHandler profileEditHandler,
