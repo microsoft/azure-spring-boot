@@ -47,58 +47,70 @@ public class AADB2CAutoConfiguration {
         return new AADB2CLogoutSuccessHandler(b2cProperties);
     }
 
-    @Bean
-    @ConditionalOnMissingBean
+    @Configuration
     @ConditionalOnProperty(prefix = PREFIX, value = SESSION_STATE_LESS, havingValue = "false", matchIfMissing = true)
-    public AADB2CFilterPolicyReplyHandler policyReplyHandler() {
-        return new AADB2CFilterPolicyReplyHandler(b2cProperties);
+    public static class OpenIdSessionAutoConfiguration {
+
+        private final AADB2CProperties b2cProperties;
+
+        public OpenIdSessionAutoConfiguration(@NonNull AADB2CProperties b2cProperties) {
+            this.b2cProperties = b2cProperties;
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public AADB2CFilterPolicyReplyHandler policyReplyHandler() {
+            return new AADB2CFilterPolicyReplyHandler(b2cProperties);
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        @ConditionalOnProperty(prefix = AADB2CProperties.PREFIX, value = {
+                POLICY_PASSWORD_RESET_NAME,
+                POLICY_PASSWORD_RESET_REPLY_URL,
+                PASSWORD_RESET_URL
+        })
+        public AADB2CFilterPasswordResetHandler passwordResetHandler() {
+            return new AADB2CFilterPasswordResetHandler(b2cProperties);
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        @ConditionalOnProperty(prefix = AADB2CProperties.PREFIX, value = {
+                POLICY_PROFILE_EDIT_NAME,
+                POLICY_PROFILE_EDIT_REPLY_URL,
+                PROFILE_EDIT_URL
+        })
+        public AADB2CFilterProfileEditHandler profileEditHandler() {
+            return new AADB2CFilterProfileEditHandler(b2cProperties);
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        @ConditionalOnBean(AADB2CFilterPasswordResetHandler.class)
+        public AADB2CFilterForgotPasswordHandler forgotPasswordHandler() {
+            return new AADB2CFilterForgotPasswordHandler(b2cProperties);
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public AADB2CFilter aadB2CFilter(
+                AADB2CFilterPolicyReplyHandler policyReply,
+                @Autowired(required = false) AADB2CFilterPasswordResetHandler passwordReset,
+                @Autowired(required = false) AADB2CFilterProfileEditHandler profileEdit,
+                @Autowired(required = false) AADB2CFilterForgotPasswordHandler forgotPassword) {
+            return new AADB2CFilter(policyReply, passwordReset, profileEdit, forgotPassword);
+        }
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = PREFIX, value = SESSION_STATE_LESS, havingValue = "false", matchIfMissing = true)
-    public AADB2CFilter aadB2CFilter(AADB2CFilterPolicyReplyHandler policyReply,
-                                     @Autowired(required = false) AADB2CFilterPasswordResetHandler passwordReset,
-                                     @Autowired(required = false) AADB2CFilterProfileEditHandler profileEdit,
-                                     @Autowired(required = false) AADB2CFilterForgotPasswordHandler forgotPassword) {
-        return new AADB2CFilter(policyReply, passwordReset, profileEdit, forgotPassword);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnBean(AADB2CFilterPolicyReplyHandler.class)
-    @ConditionalOnProperty(prefix = AADB2CProperties.PREFIX, value = {
-            POLICY_PASSWORD_RESET_NAME,
-            POLICY_PASSWORD_RESET_REPLY_URL,
-            PASSWORD_RESET_URL
-    })
-    public AADB2CFilterPasswordResetHandler passwordResetHandler() {
-        return new AADB2CFilterPasswordResetHandler(b2cProperties);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnBean(AADB2CFilterPolicyReplyHandler.class)
-    @ConditionalOnProperty(prefix = AADB2CProperties.PREFIX, value = {
-            POLICY_PROFILE_EDIT_NAME,
-            POLICY_PROFILE_EDIT_REPLY_URL,
-            PROFILE_EDIT_URL
-    })
-    public AADB2CFilterProfileEditHandler profileEditHandler() {
-        return new AADB2CFilterProfileEditHandler(b2cProperties);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    @ConditionalOnBean({AADB2CFilterPasswordResetHandler.class, AADB2CFilterPolicyReplyHandler.class})
-    public AADB2CFilterForgotPasswordHandler forgotPasswordHandler() {
-        return new AADB2CFilterForgotPasswordHandler(b2cProperties);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
+    @Configuration
     @ConditionalOnProperty(prefix = PREFIX, value = SESSION_STATE_LESS, havingValue = "true")
-    public AADB2CSessionStatelessFilter aadb2CSessionStatelessFilter(AADB2CProperties properties) {
-        return new AADB2CSessionStatelessFilter(properties);
+    public static class OpenIdSessionStatelessAutoConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean
+        public AADB2CSessionStatelessFilter aadb2CSessionStatelessFilter(AADB2CProperties properties) {
+            return new AADB2CSessionStatelessFilter(properties);
+        }
     }
 }
