@@ -1,0 +1,26 @@
+server:
+  port: 8080
+azure:
+  activedirectory:
+    b2c:
+      tenant: ${your-tenant-name}
+      client-id: ${your-application-id}
+      policies:
+        sign-up-or-sign-in: # Required
+          name: ${your-policy-name}
+          reply-url: ${your-policy-reply-url}
+        password-reset:     # Optional
+          name: ${your-policy-name}
+          reply-url: ${your-policy-reply-url}
+        profile-edit:       # Optional
+          name: ${your-policy-name}
+          reply-url: ${your-policy-reply-url}
+
+      # Only absolute URL is supported in following configuration
+      logout-success-url: ${your-logout-success-url}            # Required
+      password-reset-url: ${your-url-to-process-password-reset} # Optional
+      profile-edit-url: ${your-url-to-process-profile-edit}     # Optional
+
+logging:
+  level:
+    com.microsoft.azure.spring.autoconfigure.b2c: DEBUG
