@@ -107,10 +107,30 @@ public class AADB2CAutoConfiguration {
     @ConditionalOnProperty(prefix = PREFIX, value = SESSION_STATE_LESS, havingValue = "true")
     public static class OpenIdSessionStatelessAutoConfiguration {
 
+        private final AADB2CProperties b2cProperties;
+
+        public OpenIdSessionStatelessAutoConfiguration(@NonNull AADB2CProperties b2cProperties) {
+            this.b2cProperties = b2cProperties;
+        }
+
         @Bean
         @ConditionalOnMissingBean
-        public AADB2CSessionStatelessFilter aadb2CSessionStatelessFilter(AADB2CProperties properties) {
-            return new AADB2CSessionStatelessFilter(properties);
+        public AADB2CStatelessFilterPolicyReplyHandler statelessPolicyReplyHandler() {
+            return new AADB2CStatelessFilterPolicyReplyHandler(b2cProperties);
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public AADB2CStatelessFilterAuthenticationHandler statelessAuthenticationHandler() {
+            return new AADB2CStatelessFilterAuthenticationHandler(b2cProperties);
+        }
+
+        @Bean
+        @ConditionalOnMissingBean
+        public AADB2CStatelessFilter aadB2CSessionStatelessFilter(
+                @Autowired AADB2CStatelessFilterPolicyReplyHandler policyReplyHandler,
+                @Autowired AADB2CStatelessFilterAuthenticationHandler authenticationHandler) {
+            return new AADB2CStatelessFilter(policyReplyHandler, authenticationHandler);
         }
     }
 }

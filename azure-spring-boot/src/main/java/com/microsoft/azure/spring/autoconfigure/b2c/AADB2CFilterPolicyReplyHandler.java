@@ -12,11 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -93,15 +90,12 @@ public class AADB2CFilterPolicyReplyHandler extends AbstractAADB2CFilterScenario
 
         validateState(state, request);
         validateNonce(principal.getNonce(), request);
-
-        final Authentication auth = new PreAuthenticatedAuthenticationToken(principal, null);
-        auth.setAuthenticated(true);
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        super.updateSecurityContext(principal);
 
         final String requestURL = AADB2CURL.getStateRequestUrl(state);
         redirectStrategy.sendRedirect(request, response, requestURL);
 
-        log.debug("User {} is authenticated. Redirecting to {}.", principal.getDisplayName(), requestURL);
+        log.debug("Redirecting to {}.", principal.getDisplayName(), requestURL);
     }
 
     @Override
@@ -111,22 +105,6 @@ public class AADB2CFilterPolicyReplyHandler extends AbstractAADB2CFilterScenario
         handlePolicyReplyAuthentication(request, response);
 
         chain.doFilter(request, response);
-    }
-
-    private boolean isPolicyReplyURL(@URL String requestURL) {
-        final String signUpOrInRedirectURL = b2cProperties.getPolicies().getSignUpOrSignIn().getReplyURL();
-        final AADB2CProperties.Policy passwordReset = b2cProperties.getPolicies().getPasswordReset();
-        final AADB2CProperties.Policy profileEdit = b2cProperties.getPolicies().getProfileEdit();
-
-        if (requestURL.equals(signUpOrInRedirectURL)) {
-            return true;
-        } else if (passwordReset != null && requestURL.equals(passwordReset.getReplyURL())) {
-            return true;
-        } else if (profileEdit != null && requestURL.equals(profileEdit.getReplyURL())) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     @Override
@@ -140,7 +118,7 @@ public class AADB2CFilterPolicyReplyHandler extends AbstractAADB2CFilterScenario
         } else if (!HttpMethod.GET.matches(request.getMethod())) {
             return false;
         } else {
-            return isPolicyReplyURL(requestURL);
+            return super.isPolicyReplyURL(requestURL, b2cProperties);
         }
     }
 }
