@@ -12,6 +12,7 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,6 +34,9 @@ public class AADB2CLogoutSuccessHandler implements LogoutSuccessHandler {
         log.debug("Redirect to AAD B2C for invalidating token. After that AAD B2C will redirect to URL {}.",
                 b2cProperties.getLogoutSuccessUrl());
 
+        response.addCookie(new Cookie(AADB2CURL.PARAMETER_ID_TOKEN, ""));
+
         redirectStrategy.sendRedirect(request, response, AADB2CURL.getOpenIdLogoutURL(b2cProperties, request));
     }
+
 }

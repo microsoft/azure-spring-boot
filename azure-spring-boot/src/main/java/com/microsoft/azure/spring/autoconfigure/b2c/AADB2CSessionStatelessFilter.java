@@ -63,8 +63,9 @@ public class AADB2CSessionStatelessFilter extends OncePerRequestFilter {
         response.addCookie(new Cookie(PARAMETER_ID_TOKEN, idToken));
 
         updateSecurityContext(principal);
-
         redirectStrategy.sendRedirect(request, response, request.getRequestURL().toString());
+
+        log.debug("Redirecting to {}.", principal.getDisplayName(), request.getRequestURL().toString());
     }
 
     private void doAuthenticationFilter(HttpServletRequest request) throws AADB2CAuthenticationException {
