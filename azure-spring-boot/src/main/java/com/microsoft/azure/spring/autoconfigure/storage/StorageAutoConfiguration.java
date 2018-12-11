@@ -55,15 +55,18 @@ public class StorageAutoConfiguration {
         final SharedKeyCredentials credentials = new SharedKeyCredentials(properties.getAccountName(),
                 properties.getAccountKey());
         
-        
-        final URL blobUrl = properties.isEnableHttps() ? 
-        new URL(String.format(BLOB_HTTPS_URL, properties.getAccountName())) : 
-        new URL(String.format(BLOB_URL, properties.getAccountName()));
-        
+        final URL blobUrl = getURL();
         final PipelineOptions pipelineOptions = buildOptions(options);
         final ServiceURL serviceURL = new ServiceURL(blobUrl, StorageURL.createPipeline(credentials, pipelineOptions));
 
         return serviceURL;
+    }
+    
+    private URL getURL() throws MalformedURLException{
+        if (properties.isEnableHttps()){
+            return new URL(String.format(BLOB_HTTPS_URL, properties.getAccountName()));
+        }
+        return new URL(String.format(BLOB_URL, properties.getAccountName())); 
     }
 
     private PipelineOptions buildOptions(PipelineOptions fromOptions) {
