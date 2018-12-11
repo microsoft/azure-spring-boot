@@ -51,10 +51,8 @@ public class StorageAutoConfiguration {
             MalformedURLException {
         LOG.debug("Creating ServiceURL bean...");
         trackCustomEvent();
-
         final SharedKeyCredentials credentials = new SharedKeyCredentials(properties.getAccountName(),
                 properties.getAccountKey());
-        
         final URL blobUrl = getURL();
         final PipelineOptions pipelineOptions = buildOptions(options);
         final ServiceURL serviceURL = new ServiceURL(blobUrl, StorageURL.createPipeline(credentials, pipelineOptions));
