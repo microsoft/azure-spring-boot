@@ -13,6 +13,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
@@ -35,6 +37,8 @@ public class AADB2CSessionStatelessFilter extends OncePerRequestFilter {
 
     private static final String AUTH_TYPE = "Bearer";
 
+    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+
     public AADB2CSessionStatelessFilter(@NonNull AADB2CProperties b2cProperties) {
         final String openIdConfigURL = AADB2CURL.getOpenIdSignUpOrInConfigurationURL(b2cProperties);
         this.aadb2CJWTProcessor = new AADB2CJWTProcessor(openIdConfigURL, b2cProperties);
@@ -49,7 +53,7 @@ public class AADB2CSessionStatelessFilter extends OncePerRequestFilter {
     }
 
     private void doReplyIdTokenFilter(HttpServletRequest request, HttpServletResponse response)
-            throws AADB2CAuthenticationException {
+            throws AADB2CAuthenticationException, IOException {
         final String idToken = request.getParameter(PARAMETER_ID_TOKEN);
         final String code = request.getParameter(PARAMETER_CODE);
         final Pair<JWSObject, JWTClaimsSet> jwtToken = aadb2CJWTProcessor.validate(idToken);
@@ -59,6 +63,8 @@ public class AADB2CSessionStatelessFilter extends OncePerRequestFilter {
         response.addCookie(new Cookie(PARAMETER_ID_TOKEN, idToken));
 
         updateSecurityContext(principal);
+
+        redirectStrategy.sendRedirect(request, response, request.getRequestURL().toString());
     }
 
     private void doAuthenticationFilter(HttpServletRequest request) throws AADB2CAuthenticationException {
