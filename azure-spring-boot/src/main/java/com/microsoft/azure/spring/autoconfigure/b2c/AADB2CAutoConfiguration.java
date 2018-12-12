@@ -6,7 +6,6 @@
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
 import lombok.NonNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -29,22 +28,69 @@ import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.*;
 @EnableConfigurationProperties(AADB2CProperties.class)
 public class AADB2CAutoConfiguration {
 
-    private final AADB2CProperties b2cProperties;
+    private final AADB2CProperties properties;
 
-    public AADB2CAutoConfiguration(@NonNull AADB2CProperties b2cProperties) {
-        this.b2cProperties = b2cProperties;
+    public AADB2CAutoConfiguration(@NonNull AADB2CProperties properties) {
+        this.properties = properties;
     }
 
     @Bean
     @ConditionalOnMissingBean
     public AADB2CEntryPoint aadB2CEntryPoint() {
-        return new AADB2CEntryPoint(b2cProperties);
+        return new AADB2CEntryPoint(properties);
     }
 
     @Bean
     @ConditionalOnMissingBean
     public AADB2CLogoutSuccessHandler aadB2CLogoutSuccessHandler() {
-        return new AADB2CLogoutSuccessHandler(b2cProperties);
+        return new AADB2CLogoutSuccessHandler(properties);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public AADB2CFilterScenarioHandlerChain aadB2CFilterScenarioChain() {
+        return new AADB2CFilterScenarioHandlerChain();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = AADB2CProperties.PREFIX, value = {
+            POLICY_PROFILE_EDIT_NAME,
+            POLICY_PROFILE_EDIT_REPLY_URL,
+            PROFILE_EDIT_URL
+    })
+    public AADB2CFilterProfileEditHandler profileEditHandler(AADB2CFilterScenarioHandlerChain handlerChain) {
+        final AADB2CFilterProfileEditHandler handler = new AADB2CFilterProfileEditHandler(properties);
+
+        handlerChain.addHandler(handler);
+
+        return handler;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = AADB2CProperties.PREFIX, value = {
+            POLICY_PASSWORD_RESET_NAME,
+            POLICY_PASSWORD_RESET_REPLY_URL,
+            PASSWORD_RESET_URL
+    })
+    public AADB2CFilterPasswordResetHandler passwordResetHandler(AADB2CFilterScenarioHandlerChain handlerChain) {
+        final AADB2CFilterPasswordResetHandler handler = new AADB2CFilterPasswordResetHandler(properties);
+
+        handlerChain.addHandler(handler);
+
+        return handler;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnBean(AADB2CFilterPasswordResetHandler.class)
+    public AADB2CFilterForgotPasswordHandler forgotPasswordHandler(AADB2CFilterScenarioHandlerChain handlerChain) {
+        final AADB2CFilterForgotPasswordHandler handler = new AADB2CFilterForgotPasswordHandler(properties);
+
+        handlerChain.addHandler(handler);
+
+        return handler;
     }
 
     @Configuration
@@ -53,53 +99,28 @@ public class AADB2CAutoConfiguration {
 
         private final AADB2CProperties b2cProperties;
 
-        public OpenIdSessionAutoConfiguration(@NonNull AADB2CProperties b2cProperties) {
+        private final AADB2CFilterScenarioHandlerChain handlerChain;
+
+        public OpenIdSessionAutoConfiguration(@NonNull AADB2CProperties b2cProperties,
+                                              @NonNull AADB2CFilterScenarioHandlerChain handlerChain) {
             this.b2cProperties = b2cProperties;
+            this.handlerChain = handlerChain;
         }
 
         @Bean
         @ConditionalOnMissingBean
         public AADB2CFilterPolicyReplyHandler policyReplyHandler() {
-            return new AADB2CFilterPolicyReplyHandler(b2cProperties);
+            final AADB2CFilterPolicyReplyHandler policyReply = new AADB2CFilterPolicyReplyHandler(b2cProperties);
+
+            handlerChain.addHandler(policyReply);
+
+            return policyReply;
         }
 
         @Bean
         @ConditionalOnMissingBean
-        @ConditionalOnProperty(prefix = AADB2CProperties.PREFIX, value = {
-                POLICY_PASSWORD_RESET_NAME,
-                POLICY_PASSWORD_RESET_REPLY_URL,
-                PASSWORD_RESET_URL
-        })
-        public AADB2CFilterPasswordResetHandler passwordResetHandler() {
-            return new AADB2CFilterPasswordResetHandler(b2cProperties);
-        }
-
-        @Bean
-        @ConditionalOnMissingBean
-        @ConditionalOnProperty(prefix = AADB2CProperties.PREFIX, value = {
-                POLICY_PROFILE_EDIT_NAME,
-                POLICY_PROFILE_EDIT_REPLY_URL,
-                PROFILE_EDIT_URL
-        })
-        public AADB2CFilterProfileEditHandler profileEditHandler() {
-            return new AADB2CFilterProfileEditHandler(b2cProperties);
-        }
-
-        @Bean
-        @ConditionalOnMissingBean
-        @ConditionalOnBean(AADB2CFilterPasswordResetHandler.class)
-        public AADB2CFilterForgotPasswordHandler forgotPasswordHandler() {
-            return new AADB2CFilterForgotPasswordHandler(b2cProperties);
-        }
-
-        @Bean
-        @ConditionalOnMissingBean
-        public AADB2CFilter aadB2CFilter(
-                AADB2CFilterPolicyReplyHandler policyReply,
-                @Autowired(required = false) AADB2CFilterPasswordResetHandler passwordReset,
-                @Autowired(required = false) AADB2CFilterProfileEditHandler profileEdit,
-                @Autowired(required = false) AADB2CFilterForgotPasswordHandler forgotPassword) {
-            return new AADB2CFilter(policyReply, passwordReset, profileEdit, forgotPassword);
+        public AADB2CFilter aadB2CFilter() {
+            return new AADB2CFilter(handlerChain);
         }
     }
 
@@ -107,30 +128,40 @@ public class AADB2CAutoConfiguration {
     @ConditionalOnProperty(prefix = PREFIX, value = SESSION_STATE_LESS, havingValue = "true")
     public static class OpenIdSessionStatelessAutoConfiguration {
 
-        private final AADB2CProperties b2cProperties;
+        private final AADB2CProperties properties;
 
-        public OpenIdSessionStatelessAutoConfiguration(@NonNull AADB2CProperties b2cProperties) {
-            this.b2cProperties = b2cProperties;
+        private final AADB2CFilterScenarioHandlerChain handlerChain;
+
+        public OpenIdSessionStatelessAutoConfiguration(@NonNull AADB2CProperties properties,
+                                                       @NonNull AADB2CFilterScenarioHandlerChain handlerChain) {
+            this.properties = properties;
+            this.handlerChain = handlerChain;
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public AADB2CStatelessFilterPolicyReplyHandler statelessPolicyReplyHandler() {
-            return new AADB2CStatelessFilterPolicyReplyHandler(b2cProperties);
+        public AADB2CStatelessPolicyReplyHandler statelessPolicyReplyHandler() {
+            final AADB2CStatelessPolicyReplyHandler handler = new AADB2CStatelessPolicyReplyHandler(properties);
+
+            handlerChain.addHandler(handler);
+
+            return handler;
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public AADB2CStatelessFilterAuthenticationHandler statelessAuthenticationHandler() {
-            return new AADB2CStatelessFilterAuthenticationHandler(b2cProperties);
+        public AADB2CStatelessAuthenticationHandler statelessAuthenticationHandler() {
+            final AADB2CStatelessAuthenticationHandler handler = new AADB2CStatelessAuthenticationHandler(properties);
+
+            handlerChain.addHandler(handler);
+
+            return handler;
         }
 
         @Bean
         @ConditionalOnMissingBean
-        public AADB2CStatelessFilter aadB2CSessionStatelessFilter(
-                @Autowired AADB2CStatelessFilterPolicyReplyHandler policyReplyHandler,
-                @Autowired AADB2CStatelessFilterAuthenticationHandler authenticationHandler) {
-            return new AADB2CStatelessFilter(policyReplyHandler, authenticationHandler);
+        public AADB2CStatelessFilter aadB2CSessionStatelessFilter() {
+            return new AADB2CStatelessFilter(handlerChain);
         }
     }
 }

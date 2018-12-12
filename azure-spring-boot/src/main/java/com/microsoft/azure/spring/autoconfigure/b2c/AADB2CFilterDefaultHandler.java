@@ -5,20 +5,22 @@
  */
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
+import org.springframework.util.Assert;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AADB2CFilterDefaultHandler extends AbstractAADB2CFilterScenarioHandler
-        implements AADB2CFilterScenarioHandler {
+public class AADB2CFilterDefaultHandler extends AbstractAADB2CFilterScenarioHandler {
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+    protected void handleInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        updateAuthentication();
+        Assert.isTrue(matches(request), "Filter handler should match the scenario.");
 
+        updateAuthentication();
         chain.doFilter(request, response);
     }
 

@@ -20,8 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-public class AADB2CFilterPasswordResetHandler extends AbstractAADB2CFilterScenarioHandler
-        implements AADB2CFilterScenarioHandler {
+public class AADB2CFilterPasswordResetHandler extends AbstractAADB2CFilterScenarioHandler {
 
     private final AADB2CProperties b2cProperties;
 
@@ -42,17 +41,19 @@ public class AADB2CFilterPasswordResetHandler extends AbstractAADB2CFilterScenar
     }
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+    public void handleInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws AADB2CAuthenticationException, IOException {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (super.isAuthenticated(auth)) {
+        if (super.isAuthenticated(auth) || b2cProperties.isSessionStateless()) {
             final String refererURL = getRefererURL(request);
             final String url = AADB2CURL.getOpenIdPasswordResetURL(b2cProperties, refererURL, request);
 
-            auth.setAuthenticated(false);
-            redirectStrategy.sendRedirect(request, response, url);
+            if (auth != null) {
+                auth.setAuthenticated(false);
+            }
 
+            redirectStrategy.sendRedirect(request, response, url);
             log.debug("Redirect authenticated user to password reset URL: {}.", url);
         } else {
             throw new AADB2CAuthenticationException("Authentication is required when password reset.");

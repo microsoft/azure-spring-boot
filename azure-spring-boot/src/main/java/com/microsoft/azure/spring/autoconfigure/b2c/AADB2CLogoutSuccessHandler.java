@@ -34,7 +34,7 @@ public class AADB2CLogoutSuccessHandler implements LogoutSuccessHandler {
         log.debug("Redirect to AAD B2C for invalidating token. After that AAD B2C will redirect to URL {}.",
                 b2cProperties.getLogoutSuccessUrl());
 
-        if (b2cProperties.getSessionStateless()) {
+        if (b2cProperties.isSessionStateless()) {
             response.addCookie(new Cookie(AADB2CURL.PARAMETER_ID_TOKEN, ""));
         }
 

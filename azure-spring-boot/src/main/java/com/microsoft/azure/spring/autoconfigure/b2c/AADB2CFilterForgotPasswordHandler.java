@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.FilterChain;
@@ -26,8 +27,7 @@ import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CURL.PARAMETER_E
  * This class will be removed after AAD B2C fix that issue.
  */
 @Slf4j
-public class AADB2CFilterForgotPasswordHandler extends AbstractAADB2CFilterScenarioHandler implements
-        AADB2CFilterScenarioHandler {
+public class AADB2CFilterForgotPasswordHandler extends AbstractAADB2CFilterScenarioHandler {
 
     private final AADB2CProperties b2cProperties;
 
@@ -40,7 +40,10 @@ public class AADB2CFilterForgotPasswordHandler extends AbstractAADB2CFilterScena
     }
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException {
+    protected void handleInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws IOException {
+        Assert.isTrue(matches(request), "Filter handler should match the scenario.");
+
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth != null) {

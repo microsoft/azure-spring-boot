@@ -19,6 +19,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @Validated
+@NoArgsConstructor
 @ConfigurationProperties(prefix = AADB2CProperties.PREFIX)
 public class AADB2CProperties {
 
@@ -63,7 +64,6 @@ public class AADB2CProperties {
     public static final String PROFILE_EDIT_URL = "profile-edit-url";
 
     public static final String SESSION_STATE_LESS = "session-stateless";
-
 
     /**
      * The name of the b2c tenant.
@@ -144,5 +144,9 @@ public class AADB2CProperties {
          */
         @URL(message = "reply URL should not be blank")
         private String replyURL;
+    }
+
+    public boolean isSessionStateless() {
+        return this.sessionStateless;
     }
 }

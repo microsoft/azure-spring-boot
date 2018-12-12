@@ -5,15 +5,27 @@
  */
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 @Slf4j
-public abstract class AbstractAADB2CFilterScenarioHandler {
+public abstract class AbstractAADB2CFilterScenarioHandler implements AADB2CFilterScenarioHandler {
+
+    @Getter
+    @Setter
+    protected AADB2CFilterScenarioHandler successor = null;
 
     protected boolean isAuthenticated(Authentication auth) {
         if (auth == null) {
@@ -57,4 +69,17 @@ public abstract class AbstractAADB2CFilterScenarioHandler {
 
         log.debug("User {} is authenticated.", principal.getDisplayName());
     }
+
+    @Override
+    public void handle(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws AADB2CAuthenticationException, IOException, ServletException {
+        if (matches(request)) {
+            handleInternal(request, response, chain);
+        } else if (successor != null) {
+            successor.handle(request, response, chain);
+        }
+    }
+
+    protected abstract void handleInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws AADB2CAuthenticationException, IOException, ServletException;
 }

@@ -20,30 +20,23 @@ import java.io.IOException;
 @Slf4j
 public class AADB2CStatelessFilter extends OncePerRequestFilter {
 
-    private final AADB2CStatelessFilterPolicyReplyHandler policyReplyHandler;
+    private final AADB2CFilterScenarioHandlerChain handlerChain;
 
-    private final AADB2CStatelessFilterAuthenticationHandler authenticationHandler;
+    public AADB2CStatelessFilter(@NonNull AADB2CFilterScenarioHandlerChain handlerChain) {
+        super();
 
-    public AADB2CStatelessFilter(@NonNull AADB2CStatelessFilterPolicyReplyHandler policyReplyHandler,
-                                 @NonNull AADB2CStatelessFilterAuthenticationHandler authenticationHandler) {
-        this.policyReplyHandler = policyReplyHandler;
-        this.authenticationHandler = authenticationHandler;
+        this.handlerChain = handlerChain;
     }
 
     @Override
     public void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
                                  @NotNull FilterChain chain) throws IOException, ServletException {
         try {
-            if (policyReplyHandler.matches(request)) {
-                policyReplyHandler.handle(request, response, chain);
-            } else if (authenticationHandler.matches(request)) {
-                authenticationHandler.handle(request, response, chain);
-            }
+            handlerChain.handle(request, response, chain);
         } catch (AADB2CAuthenticationException e) {
-            throw new ServletException("Validate reply url reqest failure.", e);
+            throw new ServletException("Validate reply url failure.", e);
         }
 
-        chain.doFilter(request, response);
         SecurityContextHolder.getContext().setAuthentication(null);
     }
 }
