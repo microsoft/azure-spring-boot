@@ -60,8 +60,8 @@ public class StorageAutoConfiguration {
         return serviceURL;
     }
     
-    private URL getURL() throws MalformedURLException{
-        if (properties.isEnableHttps()){
+    private URL getURL() throws MalformedURLException {
+        if (properties.isEnableHttps()) {
             return new URL(String.format(BLOB_HTTPS_URL, properties.getAccountName()));
         }
         return new URL(String.format(BLOB_URL, properties.getAccountName())); 
