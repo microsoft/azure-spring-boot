@@ -15,7 +15,8 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StorageAutoConfigurationTest {
-    private static final String BLOB_URL = "http://%s.blob.core.windows.net";
+    private static final String BLOB_HTTP_URL = "http://%s.blob.core.windows.net";
+    private static final String BLOB_HTTPS_URL = "https://%s.blob.core.windows.net";
     private static final String ACCOUNT_KEY = "ZmFrZUFjY291bnRLZXk="; /* Base64 encoded for string fakeAccountKey */
     private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(StorageAutoConfiguration.class));
@@ -31,7 +32,16 @@ public class StorageAutoConfigurationTest {
                 "azure.storage.account-key=" + ACCOUNT_KEY)
                 .run(context -> {
                     final ServiceURL serviceURL = context.getBean(ServiceURL.class);
-                    final String blobUrl = String.format(BLOB_URL, "fakeStorageAccountName");
+                    final String blobUrl = String.format(BLOB_HTTP_URL, "fakeStorageAccountName");
+                    assertThat(serviceURL).isNotNull();
+                    assertThat(serviceURL.toURL().toString()).isEqualTo(blobUrl);
+                });
+        
+        contextRunner.withPropertyValues("azure.storage.account-name=fakeStorageAccountName",
+                "azure.storage.account-key=" + ACCOUNT_KEY, "azure.storage.enable-https=true")
+                .run(context -> {
+                    final ServiceURL serviceURL = context.getBean(ServiceURL.class);
+                    final String blobUrl = String.format(BLOB_HTTPS_URL, "fakeStorageAccountName");
                     assertThat(serviceURL).isNotNull();
                     assertThat(serviceURL.toURL().toString()).isEqualTo(blobUrl);
                 });

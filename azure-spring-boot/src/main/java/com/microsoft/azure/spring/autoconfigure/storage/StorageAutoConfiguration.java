@@ -31,6 +31,7 @@ import java.util.HashMap;
 public class StorageAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(StorageAutoConfiguration.class);
     private static final String BLOB_URL = "http://%s.blob.core.windows.net";
+    private static final String BLOB_HTTPS_URL = "https://%s.blob.core.windows.net";
     private static final String USER_AGENT_PREFIX = "spring-storage/";
 
     private final StorageProperties properties;
@@ -50,14 +51,20 @@ public class StorageAutoConfiguration {
             MalformedURLException {
         LOG.debug("Creating ServiceURL bean...");
         trackCustomEvent();
-
         final SharedKeyCredentials credentials = new SharedKeyCredentials(properties.getAccountName(),
                 properties.getAccountKey());
-        final URL blobUrl = new URL(String.format(BLOB_URL, properties.getAccountName()));
+        final URL blobUrl = getURL();
         final PipelineOptions pipelineOptions = buildOptions(options);
         final ServiceURL serviceURL = new ServiceURL(blobUrl, StorageURL.createPipeline(credentials, pipelineOptions));
 
         return serviceURL;
+    }
+    
+    private URL getURL() throws MalformedURLException {
+        if (properties.isEnableHttps()) {
+            return new URL(String.format(BLOB_HTTPS_URL, properties.getAccountName()));
+        }
+        return new URL(String.format(BLOB_URL, properties.getAccountName())); 
     }
 
     private PipelineOptions buildOptions(PipelineOptions fromOptions) {
