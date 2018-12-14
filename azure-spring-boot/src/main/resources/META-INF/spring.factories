@@ -9,6 +9,7 @@ com.microsoft.azure.spring.autoconfigure.mediaservices.MediaServicesAutoConfigur
 com.microsoft.azure.spring.autoconfigure.servicebus.ServiceBusAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.storage.StorageAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationFilterAutoConfiguration,\
+com.microsoft.azure.spring.autoconfigure.aad.AADAppRoleAuthenticationFilterAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.aad.AADOAuth2AutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.metrics.AzureMonitorMetricsExportAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.sqlserver.AlwaysEncryptedAutoConfiguration

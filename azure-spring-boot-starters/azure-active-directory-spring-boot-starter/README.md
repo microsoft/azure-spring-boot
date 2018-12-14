@@ -91,6 +91,36 @@ private AADAuthenticationFilter aadAuthFilter;
 * Role-based Authorization with annotation `@PreAuthorize("hasRole('GROUP_NAME')")`
 * Role-based Authorization with method `isMemberOf()`
 
+##### Authenticate stateless APIs using AAD app roles
+Please refer to [azure-active-directory-spring-boot-app-role-sample](../../azure-spring-boot-samples/azure-active-directory-spring-boot-app-role-sample/README.md) 
+for how to integrate Spring Security and Azure AD with its `appRole` feature. This scenario fits best 
+for stateless Spring backends exposing an API to SPAs ([OAuth 2.0 implicit grant flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/v1-oauth2-implicit-grant-flow)) 
+or other service-to-service access using the [client credentials grant flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/v1-oauth2-client-creds-grant-flow)
+
+Configure your application properties:
+
+```properties
+azure.aad.app-role.client-id=xxxxxx-your-client-id-xxxxxx
+```
+
+Autowire the appRole filter and attach it to the filter chain:
+```java
+    @Autowired
+    private AADAppRoleAuthenticationFilter appRoleAuthFilter;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        [...]
+        http.addFilterBefore(appRoleAuthFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+```
+
+* Role-based Authorization with annotation `@PreAuthorize("hasRole('rolename')")`
+* Role-based Authorization with method `isMemberOf()`
+
+The roles you want to use within your application have to be [set up in the manifest of your
+application registration](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-add-app-roles-in-azure-ad-apps).
+
 #### Allow telemetry
 Microsoft would like to collect data about how users use this Spring boot starter.
 Microsoft uses this information to improve our tooling experience. Participation is voluntary.

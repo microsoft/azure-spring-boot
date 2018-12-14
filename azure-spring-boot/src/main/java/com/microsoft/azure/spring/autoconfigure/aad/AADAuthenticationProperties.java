@@ -36,7 +36,6 @@ public class AADAuthenticationProperties {
     /**
      * Azure AD groups.
      */
-    @NotEmpty
     private List<String> activeDirectoryGroups;
 
     /**
