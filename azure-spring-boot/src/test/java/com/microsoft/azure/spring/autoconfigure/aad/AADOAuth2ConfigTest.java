@@ -12,11 +12,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AADOAuth2ConfigTest {
     private static final String AAD_OAUTH2_MINIMUM_PROPS = "aad-backend-oauth2-minimum.properties";
@@ -66,10 +72,52 @@ public class AADOAuth2ConfigTest {
         testContext.getBean(OAuth2UserService.class);
     }
 
-    private AnnotationConfigWebApplicationContext initTestContext() {
+    @Test
+    public void testEndpointsPropertiesLoadAndOverridable() {
+        testContext = initTestContext("azure.service.endpoints.global.aadKeyDiscoveryUri=https://test/",
+                "azure.service.endpoints.global.aadSigninUri=https://test/",
+                "azure.service.endpoints.global.aadGraphApiUri=https://test/",
+                "azure.service.endpoints.global.aadKeyDiscoveryUri=https://test/",
+                "azure.service.endpoints.global.aadMembershipRestUri=https://test/");
+
+
+        final Environment environment = testContext.getEnvironment();
+        assertThat(environment.getProperty("azure.service.endpoints.global.aadSigninUri"))
+                .isEqualTo("https://test/");
+        assertThat(environment.getProperty("azure.service.endpoints.global.aadGraphApiUri"))
+                .isEqualTo("https://test/");
+        assertThat(environment.getProperty("azure.service.endpoints.global.aadKeyDiscoveryUri"))
+                .isEqualTo("https://test/");
+        assertThat(environment.getProperty("azure.service.endpoints.global.aadMembershipRestUri"))
+                .isEqualTo("https://test/");
+        final ServiceEndpointsProperties serviceEndpointsProperties =
+                testContext.getBean(ServiceEndpointsProperties.class);
+        assertThat(serviceEndpointsProperties)
+                .isNotNull().extracting(ServiceEndpointsProperties::getEndpoints).isNotEmpty();
+        final Map<String, ServiceEndpoints> endpoints = serviceEndpointsProperties.getEndpoints();
+        assertThat(endpoints).hasSize(2);
+        assertThat(endpoints.get("cn")).isNotNull()
+                .extracting(ServiceEndpoints::getAadGraphApiUri, ServiceEndpoints::getAadKeyDiscoveryUri,
+                        ServiceEndpoints::getAadMembershipRestUri, ServiceEndpoints::getAadSigninUri)
+                .containsExactly("https://graph.chinacloudapi.cn/",
+                        "https://login.partner.microsoftonline.cn/common/discovery/keys",
+                        "https://graph.chinacloudapi.cn/me/memberOf?api-version=1.6",
+                        "https://login.partner.microsoftonline.cn/");
+        assertThat(endpoints.get("global")).isNotNull()
+                .extracting(ServiceEndpoints::getAadGraphApiUri, ServiceEndpoints::getAadKeyDiscoveryUri,
+                        ServiceEndpoints::getAadMembershipRestUri, ServiceEndpoints::getAadSigninUri)
+                .containsExactly("https://test/", "https://test/", "https://test/", "https://test/");
+
+    }
+
+    private AnnotationConfigWebApplicationContext initTestContext(String... environment) {
         final AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
 
         context.getEnvironment().getPropertySources().addFirst(testPropResource);
+        context.getEnvironment().getPropertySources().addLast(testPropResource);
+        if (environment.length > 0) {
+            TestPropertySourceUtils.addInlinedPropertiesToEnvironment(context, environment);
+        }
         context.register(AADOAuth2AutoConfiguration.class);
         context.refresh();
 
