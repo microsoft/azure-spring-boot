@@ -11,6 +11,7 @@ import com.microsoft.aad.adal4j.AuthenticationContext;
 import com.microsoft.aad.adal4j.AuthenticationResult;
 import com.microsoft.aad.adal4j.ClientCredential;
 import com.microsoft.aad.adal4j.UserAssertion;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -24,6 +25,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class AzureADGraphClient {
     private static final SimpleGrantedAuthority DEFAULT_AUTHORITY = new SimpleGrantedAuthority("ROLE_USER");
     private static final String DEFAULE_ROLE_PREFIX = "ROLE_";
@@ -66,6 +68,7 @@ public class AzureADGraphClient {
             });
         }
 
+        log.debug("Extracted UserGroups - {}", lUserGroups);
         return lUserGroups;
     }
 
@@ -103,7 +106,7 @@ public class AzureADGraphClient {
         final ClientCredential credential = new ClientCredential(clientId, clientSecret);
         final UserAssertion assertion = new UserAssertion(idToken);
 
-        AuthenticationResult result = null;
+        AuthenticationResult result;
         ExecutorService service = null;
         try {
             service = Executors.newFixedThreadPool(1);
