@@ -106,7 +106,7 @@ public class AzureADGraphClient {
         final ClientCredential credential = new ClientCredential(clientId, clientSecret);
         final UserAssertion assertion = new UserAssertion(idToken);
 
-        AuthenticationResult result;
+        final AuthenticationResult result;
         ExecutorService service = null;
         try {
             service = Executors.newFixedThreadPool(1);
