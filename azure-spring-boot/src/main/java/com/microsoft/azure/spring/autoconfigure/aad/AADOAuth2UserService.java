@@ -29,13 +29,11 @@ public class AADOAuth2UserService implements OAuth2UserService<OidcUserRequest, 
     private static final String DEFAULT_USERNAME_ATTR_NAME = "name";
 
     private final AADAuthenticationProperties aadAuthProps;
-    private final ServiceEndpointsProperties serviceEndpointsProps;
     private final AzureADGraphClient graphClient;
 
     public AADOAuth2UserService(AADAuthenticationProperties aadAuthProps,
-                                ServiceEndpointsProperties serviceEndpointsProps, AzureADGraphClient graphClient) {
+                                AzureADGraphClient graphClient) {
         this.aadAuthProps = aadAuthProps;
-        this.serviceEndpointsProps = serviceEndpointsProps;
         this.graphClient = graphClient;
     }
 

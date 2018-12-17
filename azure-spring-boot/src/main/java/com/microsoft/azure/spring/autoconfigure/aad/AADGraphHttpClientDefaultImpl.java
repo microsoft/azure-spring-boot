@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See LICENSE in the project root for
+ * license information.
+ */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
 import lombok.RequiredArgsConstructor;
@@ -57,7 +62,7 @@ public class AADGraphHttpClientDefaultImpl implements AADGraphHttpClient {
                 stringBuilder.append(line);
             }
             return stringBuilder.toString();
-        } catch (Exception e) {
+        } catch (IOException e) {
             try (BufferedReader errorStream = new BufferedReader(
                     new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
                 log.error("Could not read response from Membership URI  - Error Response - {}", errorStream, e);

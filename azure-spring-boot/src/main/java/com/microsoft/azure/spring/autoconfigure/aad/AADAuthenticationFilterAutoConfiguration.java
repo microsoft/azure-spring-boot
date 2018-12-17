@@ -75,7 +75,8 @@ public class AADAuthenticationFilterAutoConfiguration {
     @Scope(BeanDefinition.SCOPE_SINGLETON)
     @ConditionalOnMissingBean(AADGraphHttpClient.class)
     public AADGraphHttpClient aadHttpClient() {
-        return new AADGraphHttpClientDefaultImpl(serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment()));
+        return new AADGraphHttpClientDefaultImpl(serviceEndpointsProps.getServiceEndpoints(
+                aadAuthProps.getEnvironment()));
     }
 
     @Bean

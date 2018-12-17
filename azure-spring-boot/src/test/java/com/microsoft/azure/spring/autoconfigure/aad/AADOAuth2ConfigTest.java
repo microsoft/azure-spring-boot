@@ -69,8 +69,9 @@ public class AADOAuth2ConfigTest {
     private AnnotationConfigWebApplicationContext initTestContext() {
         final AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
 
-        context.getEnvironment().getPropertySources().addLast(testPropResource);
+        context.getEnvironment().getPropertySources().addFirst(testPropResource);
         context.register(AADOAuth2AutoConfiguration.class);
+        context.register(AADAuthenticationFilterAutoConfiguration.class);
         context.refresh();
 
         return context;
