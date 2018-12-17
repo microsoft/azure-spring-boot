@@ -7,8 +7,12 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 
 import com.microsoft.aad.adal4j.ClientCredential;
 import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.jwk.source.RemoteJWKSet;
 import com.nimbusds.jose.proc.BadJOSEException;
+import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jose.util.ResourceRetriever;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -23,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.concurrent.ExecutionException;
 
@@ -37,7 +42,6 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
 
     private AADAuthenticationProperties aadAuthProps;
     private ServiceEndpointsProperties serviceEndpointsProps;
-    private ResourceRetriever resourceRetriever;
     private UserPrincipalManager principalManager;
 
     public AADAuthenticationFilter(AADAuthenticationProperties aadAuthProps,
@@ -45,14 +49,19 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                                    ResourceRetriever resourceRetriever) {
         this.aadAuthProps = aadAuthProps;
         this.serviceEndpointsProps = serviceEndpointsProps;
-        this.resourceRetriever = resourceRetriever;
-        this.principalManager = new UserPrincipalManager(
-                serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment()), resourceRetriever);
+        try {
+            final JWKSource<SecurityContext> keySource = new RemoteJWKSet<>(new URL(serviceEndpointsProps
+                    .getServiceEndpoints(aadAuthProps.getEnvironment()).getAadKeyDiscoveryUri()), resourceRetriever);
+            this.principalManager = new UserPrincipalManager(keySource);
+        } catch (MalformedURLException e) {
+            log.error("Failed to parse active directory key discovery uri.", e);
+            throw new IllegalStateException("Failed to parse active directory key discovery uri.", e);
+        }
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader(TOKEN_HEADER);
 
@@ -83,7 +92,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                 }
 
                 final Authentication authentication = new PreAuthenticatedAuthenticationToken(
-                            principal, null, client.convertGroupsToGrantedAuthorities(principal.getUserGroups()));
+                        principal, null, client.convertGroupsToGrantedAuthorities(principal.getUserGroups()));
 
                 authentication.setAuthenticated(true);
                 log.info("Request token verification success. {}", authentication);
