@@ -71,7 +71,6 @@ public class AADOAuth2ConfigTest {
 
         context.getEnvironment().getPropertySources().addFirst(testPropResource);
         context.register(AADOAuth2AutoConfiguration.class);
-        context.register(AADAuthenticationFilterAutoConfiguration.class);
         context.refresh();
 
         return context;

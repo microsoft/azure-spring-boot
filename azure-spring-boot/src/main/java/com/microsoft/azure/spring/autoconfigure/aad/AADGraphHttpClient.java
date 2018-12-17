@@ -7,7 +7,7 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 
 
 /**
- * Defines a class used to make HTTP calls within the Azure Spring Boot Starter.
+ * Defines a class used to make HTTP calls within the Azure Spring Boot Starter to the Azure Graph API.
  */
 public interface AADGraphHttpClient {
 

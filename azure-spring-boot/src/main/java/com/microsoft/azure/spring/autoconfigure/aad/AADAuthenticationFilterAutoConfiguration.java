@@ -17,10 +17,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
 import org.springframework.util.ClassUtils;
 
 import java.util.HashMap;
@@ -30,6 +27,7 @@ import java.util.HashMap;
 @ConditionalOnProperty(prefix = "azure.activedirectory", value = {"client-id", "client-secret"})
 @EnableConfigurationProperties({AADAuthenticationProperties.class, ServiceEndpointsProperties.class})
 @PropertySource(value = "classpath:serviceEndpoints.properties")
+@Import(AADGraphHttpClientConfiguration.class)
 public class AADAuthenticationFilterAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationProperties.class);
 
@@ -66,26 +64,12 @@ public class AADAuthenticationFilterAutoConfiguration {
     @Bean
     @Scope(BeanDefinition.SCOPE_SINGLETON)
     @ConditionalOnMissingBean(ResourceRetriever.class)
-    public ResourceRetriever getJWTResourceRetriever() {
+    public ResourceRetriever getJWTResourceRetriever(AADAuthenticationProperties aadAuthProps) {
         return new DefaultResourceRetriever(aadAuthProps.getJwtConnectTimeout(), aadAuthProps.getJwtReadTimeout(),
                 aadAuthProps.getJwtSizeLimit());
     }
 
-    @Bean
-    @Scope(BeanDefinition.SCOPE_SINGLETON)
-    @ConditionalOnMissingBean(AADGraphHttpClient.class)
-    public AADGraphHttpClient aadHttpClient() {
-        return new AADGraphHttpClientDefaultImpl(serviceEndpointsProps.getServiceEndpoints(
-                aadAuthProps.getEnvironment()));
-    }
 
-    @Bean
-    @Scope(BeanDefinition.SCOPE_SINGLETON)
-    @ConditionalOnMissingBean
-    public AzureADGraphClient azureADGraphClient(AADGraphHttpClient aaaHttpClient) {
-        return new AzureADGraphClient(new ClientCredential(aadAuthProps.getClientId(), aadAuthProps.getClientSecret()),
-                aadAuthProps, serviceEndpointsProps, aaaHttpClient);
-    }
 
 
     private void trackCustomEvent() {
