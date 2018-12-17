@@ -23,6 +23,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @ConditionalOnProperty(prefix = "azure.activedirectory", value = "tenant-id")
 @PropertySource("classpath:/aad-oauth2-common.properties")
+@PropertySource(value = "classpath:serviceEndpoints.properties")
 @EnableConfigurationProperties({AADAuthenticationProperties.class, ServiceEndpointsProperties.class})
 public class AADOAuth2AutoConfiguration {
     private final AADAuthenticationProperties aadAuthProps;
