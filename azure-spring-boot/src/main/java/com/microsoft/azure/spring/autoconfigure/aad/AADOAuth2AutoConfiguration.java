@@ -5,9 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.microsoft.aad.adal4j.ClientCredential;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,13 +20,11 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 @EnableConfigurationProperties({AADAuthenticationProperties.class, ServiceEndpointsProperties.class})
 @Import(AADGraphHttpClientConfiguration.class)
 public class AADOAuth2AutoConfiguration {
-    private final AADAuthenticationProperties aadAuthProps;
-    private final ServiceEndpointsProperties serviceEndpointsProps;
 
-    public AADOAuth2AutoConfiguration(AADAuthenticationProperties aadAuthProperties,
-                                      ServiceEndpointsProperties serviceEndpointsProps) {
+    private final AADAuthenticationProperties aadAuthProps;
+
+    public AADOAuth2AutoConfiguration(AADAuthenticationProperties aadAuthProperties) {
         this.aadAuthProps = aadAuthProperties;
-        this.serviceEndpointsProps = serviceEndpointsProps;
     }
 
     @Bean
