@@ -16,7 +16,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
@@ -24,20 +23,18 @@ import java.nio.file.Files;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserPrincipalTest {
-    private AzureADGraphClient graphClientMock;
 
-    @Mock
+    private AzureADGraphClient graphClient;
     private ClientCredential credential;
-
-    @Mock
     private AADAuthenticationProperties aadAuthProps;
 
     @Mock
@@ -46,27 +43,27 @@ public class UserPrincipalTest {
     @Mock
     private AADGraphHttpClient aadGraphHttpClient;
 
+
     @Before
-    public void setup() {
-        this.graphClientMock = new AzureADGraphClient(credential,
-                aadAuthProps, endpointsProps, aadGraphHttpClient);
+    public void setUp() throws Exception {
+        credential = new ClientCredential("test", "password");
+        aadAuthProps = new AADAuthenticationProperties();
     }
 
     @Test
     public void getAuthoritiesByUserGroups() throws Exception {
-        final List<UserGroup> userGroups = new ArrayList<>();
-        userGroups.add(new UserGroup("this is group1", "group1"));
+
+
+        aadAuthProps.setActiveDirectoryGroups(Collections.singletonList("group1"));
+        this.graphClient = new AzureADGraphClient(credential,
+                aadAuthProps, endpointsProps, aadGraphHttpClient);
 
         doReturn(Constants.USERGROUPS_JSON)
-                .when(aadGraphHttpClient.getMemberships(Constants.BEARER_TOKEN));
-        when(graphClientMock.getGroups(Constants.BEARER_TOKEN)).thenReturn(userGroups);
-
+                .when(aadGraphHttpClient).getMemberships(Constants.BEARER_TOKEN);
         final Collection<? extends GrantedAuthority> authorities =
-                graphClientMock.getGrantedAuthorities(Constants.BEARER_TOKEN);
+                graphClient.getGrantedAuthorities(Constants.BEARER_TOKEN);
 
-        Assert.assertTrue(authorities.contains(new SimpleGrantedAuthority("ROLE_group1")));
-        Assert.assertFalse(authorities.contains(new SimpleGrantedAuthority("ROLE_group2")));
-        Assert.assertFalse(authorities.contains(new SimpleGrantedAuthority("ROLE_group3")));
+      assertThat(authorities).extracting(GrantedAuthority::getAuthority).containsExactly("ROLE_group1");
     }
 
     @Test
@@ -74,8 +71,8 @@ public class UserPrincipalTest {
         doReturn(Constants.USERGROUPS_JSON)
                 .when(aadGraphHttpClient.getMemberships(Constants.BEARER_TOKEN));
 
-        final List<UserGroup> groups = graphClientMock.getGroups(Constants.BEARER_TOKEN);
-        final List<UserGroup> targetedGroups = new ArrayList<UserGroup>();
+        final List<UserGroup> groups = graphClient.getGroups(Constants.BEARER_TOKEN);
+        final List<UserGroup> targetedGroups = new ArrayList<>();
         targetedGroups.add(new UserGroup("12345678-7baf-48ce-96f4-a2d60c26391e", "group1"));
         targetedGroups.add(new UserGroup("12345678-e757-4474-b9c4-3f00a9ac17a0", "group2"));
         targetedGroups.add(new UserGroup("12345678-86a4-4237-aeb0-60bad29c1de0", "group3"));
