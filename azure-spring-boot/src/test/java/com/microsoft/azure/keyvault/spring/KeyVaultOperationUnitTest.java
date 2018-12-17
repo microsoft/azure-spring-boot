@@ -39,7 +39,7 @@ public class KeyVaultOperationUnitTest {
     @Before
     public void setup() {
 
-        PagedList<SecretItem> mockResult = new PagedList<SecretItem>() {
+        final PagedList<SecretItem> mockResult = new PagedList<SecretItem>() {
             @Override
             public Page<SecretItem> nextPage(String s) throws RestException, IOException {
                 return new MockPage();
