@@ -19,10 +19,11 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -30,9 +31,10 @@ public class KeyVaultOperationUnitTest {
 
     private static final String testPropertyName1 = "testPropertyName1";
     private static final String fakeVaultUri = "https://fake.vault.com";
+
     @Mock
-    KeyVaultClient keyVaultClient;
-    KeyVaultOperation keyVaultOperation;
+    private KeyVaultClient keyVaultClient;
+    private KeyVaultOperation keyVaultOperation;
 
     @Before
     public void setup() {
@@ -40,8 +42,7 @@ public class KeyVaultOperationUnitTest {
         PagedList<SecretItem> mockResult = new PagedList<SecretItem>() {
             @Override
             public Page<SecretItem> nextPage(String s) throws RestException, IOException {
-                final MockPage page = new MockPage();
-                return page;
+                return new MockPage();
             }
         };
 
@@ -87,7 +88,7 @@ public class KeyVaultOperationUnitTest {
         @Override
         public List<SecretItem> items() {
             mockSecretItem.withId("testPropertyName1");
-            return Arrays.asList(mockSecretItem);
+            return Collections.singletonList(mockSecretItem);
         }
     }
 }
