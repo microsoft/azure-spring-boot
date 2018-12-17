@@ -22,9 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 public class AADB2CStatelessFilterAuthenticationHandler extends AbstractAADB2CFilterScenarioHandler
         implements AADB2CFilterScenarioHandler {
 
-    private static final String AUTH_TYPE = "Bearer";
+    private static final String AUTH_TYPE = "Bearer ";
 
-    private static final String AUTH_HEADER = "Authentication";
+    private static final String AUTH_HEADER = "Authorization";
 
     private final AADB2CJWTProcessor jwtProcessor;
 
@@ -37,9 +37,9 @@ public class AADB2CStatelessFilterAuthenticationHandler extends AbstractAADB2CFi
     private void handleAuthenticationHeader(HttpServletRequest request, HttpServletResponse response)
             throws AADB2CAuthenticationException {
         final String authHeader = request.getHeader(AUTH_HEADER);
-        Assert.isTrue(authHeader.startsWith(AUTH_TYPE), "Unexpected authentication type: " + authHeader);
+        Assert.isTrue(authHeader.startsWith(AUTH_TYPE), "Authorization token must start with " + AUTH_TYPE);
 
-        final String idToken = authHeader.substring(AUTH_TYPE.length() + 1);
+        final String idToken = authHeader.substring(AUTH_TYPE.length());
         final Pair<JWSObject, JWTClaimsSet> jwtToken = jwtProcessor.validate(idToken);
         final UserPrincipal principal = new UserPrincipal(jwtToken, null);
 
@@ -59,7 +59,7 @@ public class AADB2CStatelessFilterAuthenticationHandler extends AbstractAADB2CFi
 
     @Override
     public Boolean matches(HttpServletRequest request) {
-        final String authHeader = request.getHeader("Authentication");
+        final String authHeader = request.getHeader(AUTH_HEADER);
 
         return StringUtils.hasText(authHeader) && authHeader.startsWith(AUTH_TYPE);
     }
