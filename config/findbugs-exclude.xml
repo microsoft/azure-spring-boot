@@ -9,4 +9,10 @@
     <Bug pattern="UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD"/>
     <Bug pattern="RE_POSSIBLE_UNINTENDED_PATTERN"/>
 
+    <Match>
+        <Class name="com.microsoft.azure.spring.autoconfigure.b2c.AADB2CStatelessFilterPolicyReplyHandler"/>
+        <Method name="handlePolicyReplyIdToken"/>
+        <Bug pattern="HRS_REQUEST_PARAMETER_TO_COOKIE"/>
+    </Match>
+
 </FindBugsFilter>

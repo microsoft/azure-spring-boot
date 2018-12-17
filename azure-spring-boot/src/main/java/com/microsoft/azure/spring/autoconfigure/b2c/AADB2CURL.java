@@ -25,6 +25,18 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AADB2CURL {
 
+    public static final String PARAMETER_CODE = "code";
+
+    public static final String PARAMETER_ID_TOKEN = "id_token";
+
+    public static final String PARAMETER_STATE = "state";
+
+    public static final String PARAMETER_ERROR = "error";
+
+    public static final String PARAMETER_ERROR_DESCRIPTION = "error_description";
+
+    public static final String HEADER_AUTHENTICATION = "Authentication";
+
     // 'p' is the abbreviation for 'policy'.
     private static final String OPENID_AUTHORIZE_PATTERN =
             "https://%s.b2clogin.com/%s.onmicrosoft.com/oauth2/v2.0/authorize?" +
@@ -212,5 +224,22 @@ public class AADB2CURL {
                 properties.getTenant(),
                 properties.getPolicies().getSignUpOrSignIn().getName()
         );
+    }
+
+    /**
+     * Validate the error and description from reply url request.
+     *
+     * @param request of ${@link HttpServletRequest}.
+     * @throws AADB2CAuthenticationException when there is error in reply url query.
+     */
+    public static void validateReplyRequest(@NonNull HttpServletRequest request) throws AADB2CAuthenticationException {
+        final String code = request.getParameter(PARAMETER_ERROR);
+
+        if (StringUtils.hasText(request.getParameter(PARAMETER_ERROR))) {
+            final String description = request.getParameter(PARAMETER_ERROR_DESCRIPTION);
+            final String message = String.format("%s:%s.", code, description);
+
+            throw new AADB2CAuthenticationException("Authentication failure: " + message);
+        }
     }
 }

@@ -62,6 +62,8 @@ public class AADB2CProperties {
 
     public static final String PROFILE_EDIT_URL = "profile-edit-url";
 
+    public static final String SESSION_STATE_LESS = "session-stateless";
+
 
     /**
      * The name of the b2c tenant.
@@ -74,6 +76,12 @@ public class AADB2CProperties {
      */
     @NotBlank(message = "client ID should not be blank")
     private String clientId;
+
+    /**
+     * Indicate if use session creation STATELESS policy, disabled by default.
+     */
+    @JsonProperty(SESSION_STATE_LESS)
+    private Boolean sessionStateless = false;
 
     @URL
     @Setter
