@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.microsoft.aad.adal4j.ClientCredential;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.proc.BadJOSEException;
 import com.nimbusds.jose.util.ResourceRetriever;
@@ -35,17 +34,13 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
     private static final String TOKEN_HEADER = "Authorization";
     private static final String TOKEN_TYPE = "Bearer ";
 
-    private AADAuthenticationProperties aadAuthProps;
-    private ServiceEndpointsProperties serviceEndpointsProps;
-    private ResourceRetriever resourceRetriever;
-    private UserPrincipalManager principalManager;
+    private final UserPrincipalManager principalManager;
+    private final AzureADGraphClient graphClient;
 
     public AADAuthenticationFilter(AADAuthenticationProperties aadAuthProps,
                                    ServiceEndpointsProperties serviceEndpointsProps,
-                                   ResourceRetriever resourceRetriever) {
-        this.aadAuthProps = aadAuthProps;
-        this.serviceEndpointsProps = serviceEndpointsProps;
-        this.resourceRetriever = resourceRetriever;
+                                   ResourceRetriever resourceRetriever, AzureADGraphClient azureADGraphClient) {
+        this.graphClient = azureADGraphClient;
         this.principalManager = new UserPrincipalManager(
                 serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment()), resourceRetriever);
     }
@@ -64,26 +59,21 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                 String graphApiToken = (String) request
                         .getSession().getAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN);
 
-                final ClientCredential credential =
-                        new ClientCredential(aadAuthProps.getClientId(), aadAuthProps.getClientSecret());
-
-                final AzureADGraphClient client =
-                        new AzureADGraphClient(credential, aadAuthProps, serviceEndpointsProps);
-
                 if (principal == null || graphApiToken == null || graphApiToken.isEmpty()) {
                     principal = principalManager.buildUserPrincipal(idToken);
 
                     final String tenantId = principal.getClaim().toString();
-                    graphApiToken = client.acquireTokenForGraphApi(idToken, tenantId).getAccessToken();
+                    graphApiToken = graphClient.acquireTokenForGraphApi(idToken, tenantId).getAccessToken();
 
-                    principal.setUserGroups(client.getGroups(graphApiToken));
+                    principal.setUserGroups(graphClient.getGroups(graphApiToken));
 
                     request.getSession().setAttribute(CURRENT_USER_PRINCIPAL, principal);
                     request.getSession().setAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN, graphApiToken);
                 }
 
                 final Authentication authentication = new PreAuthenticatedAuthenticationToken(
-                            principal, null, client.convertGroupsToGrantedAuthorities(principal.getUserGroups()));
+                            principal, null,
+                        graphClient.convertGroupsToGrantedAuthorities(principal.getUserGroups()));
 
                 authentication.setAuthenticated(true);
                 log.info("Request token verification success. {}", authentication);
@@ -93,6 +83,9 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                 throw new ServletException(ex);
             } catch (ServiceUnavailableException | InterruptedException | ExecutionException ex) {
                 log.error("Failed to acquire graph api token.", ex);
+                throw new ServletException(ex);
+            } catch (AADGraphHttpClientException ex) {
+                log.error("Failed to get Membership for User");
                 throw new ServletException(ex);
             }
         }

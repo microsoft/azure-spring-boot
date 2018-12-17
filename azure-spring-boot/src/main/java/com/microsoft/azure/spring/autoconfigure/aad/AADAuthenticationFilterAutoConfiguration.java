@@ -5,6 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import com.microsoft.aad.adal4j.ClientCredential;
 import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.nimbusds.jose.util.DefaultResourceRetriever;
@@ -47,15 +48,19 @@ public class AADAuthenticationFilterAutoConfiguration {
     /**
      * Declare AADAuthenticationFilter bean.
      *
+     * @param resourceResolve    - {@link ResourceRetriever} to handle getting the JWT.
+     * @param azureADGraphClient - Used to interact with the Graph API.
      * @return AADAuthenticationFilter bean
      */
     @Bean
     @Scope(BeanDefinition.SCOPE_SINGLETON)
     @ConditionalOnMissingBean(AADAuthenticationFilter.class)
-    public AADAuthenticationFilter azureADJwtTokenFilter() {
+    public AADAuthenticationFilter azureADJwtTokenFilter(ResourceRetriever resourceResolve,
+                                                         AzureADGraphClient azureADGraphClient) {
         LOG.info("AzureADJwtTokenFilter Constructor.");
         trackCustomEvent();
-        return new AADAuthenticationFilter(aadAuthProps, serviceEndpointsProps, getJWTResourceRetriever());
+        return new AADAuthenticationFilter(aadAuthProps, serviceEndpointsProps,
+                resourceResolve, azureADGraphClient);
     }
 
     @Bean
@@ -65,6 +70,22 @@ public class AADAuthenticationFilterAutoConfiguration {
         return new DefaultResourceRetriever(aadAuthProps.getJwtConnectTimeout(), aadAuthProps.getJwtReadTimeout(),
                 aadAuthProps.getJwtSizeLimit());
     }
+
+    @Bean
+    @Scope(BeanDefinition.SCOPE_SINGLETON)
+    @ConditionalOnMissingBean(AADGraphHttpClient.class)
+    public AADGraphHttpClient aadHttpClient() {
+        return new AADGraphHttpClientDefaultImpl(serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment()));
+    }
+
+    @Bean
+    @Scope(BeanDefinition.SCOPE_SINGLETON)
+    @ConditionalOnMissingBean
+    public AzureADGraphClient azureADGraphClient(AADGraphHttpClient aaaHttpClient) {
+        return new AzureADGraphClient(new ClientCredential(aadAuthProps.getClientId(), aadAuthProps.getClientSecret()),
+                aadAuthProps, serviceEndpointsProps, aaaHttpClient);
+    }
+
 
     private void trackCustomEvent() {
         final HashMap<String, String> customTelemetryProperties = new HashMap<>();

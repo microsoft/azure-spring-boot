@@ -32,7 +32,7 @@ public class AADOAuth2AutoConfiguration {
 
     @Bean
     @ConditionalOnProperty(prefix = "azure.activedirectory", value = "active-directory-groups")
-    public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
-        return new AADOAuth2UserService(aadAuthProps, serviceEndpointsProps);
+    public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService(AzureADGraphClient graphClient) {
+        return new AADOAuth2UserService(aadAuthProps, serviceEndpointsProps, graphClient);
     }
 }
