@@ -11,18 +11,12 @@ import com.microsoft.aad.adal4j.AuthenticationContext;
 import com.microsoft.aad.adal4j.AuthenticationResult;
 import com.microsoft.aad.adal4j.ClientCredential;
 import com.microsoft.aad.adal4j.UserAssertion;
-import com.nimbusds.oauth2.sdk.http.HTTPResponse;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.naming.ServiceUnavailableException;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -35,56 +29,28 @@ public class AzureADGraphClient {
     private static final String DEFAULE_ROLE_PREFIX = "ROLE_";
     private static final String REQUEST_ID_SUFFIX = "aadfeed5";
 
-    private String clientId;
-    private String clientSecret;
-    private List<String> aadTargetGroups;
-    private ServiceEndpoints serviceEndpoints;
+    private final String clientId;
+    private final String clientSecret;
+    private final List<String> aadTargetGroups;
+    private final ServiceEndpoints serviceEndpoints;
+    private final AADGraphHttpClient aadGraphHttpClient;
 
     public AzureADGraphClient(ClientCredential clientCredential, AADAuthenticationProperties aadAuthProps,
-                              ServiceEndpointsProperties serviceEndpointsProps) {
+                              ServiceEndpointsProperties serviceEndpointsProps, AADGraphHttpClient aadGraphHttpClient) {
         this.clientId = clientCredential.getClientId();
         this.clientSecret = clientCredential.getClientSecret();
         this.aadTargetGroups = aadAuthProps.getActiveDirectoryGroups();
+        this.aadGraphHttpClient = aadGraphHttpClient;
         this.serviceEndpoints = serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment());
     }
 
-    private String getUserMembershipsV1(String accessToken) throws IOException {
-        final URL url = new URL(serviceEndpoints.getAadMembershipRestUri());
 
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        // Set the appropriate header fields in the request header.
-        conn.setRequestProperty("api-version", "1.6");
-        conn.setRequestProperty("Authorization", accessToken);
-        conn.setRequestProperty("Accept", "application/json;odata=minimalmetadata");
-        final String responseInJson = getResponseStringFromConn(conn);
-        final int responseCode = conn.getResponseCode();
-        if (responseCode == HTTPResponse.SC_OK) {
-            return responseInJson;
-        } else {
-            throw new IllegalStateException("Response is not " + HTTPResponse.SC_OK +
-                    ", response json: " + responseInJson);
-        }
-    }
-
-    private static String getResponseStringFromConn(HttpURLConnection conn) throws IOException {
-
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
-            final StringBuilder stringBuffer = new StringBuilder();
-            String line = "";
-            while ((line = reader.readLine()) != null) {
-                stringBuffer.append(line);
-            }
-            return stringBuffer.toString();
-        }
-    }
-
-    public List<UserGroup> getGroups(String graphApiToken) throws IOException {
+    public List<UserGroup> getGroups(String graphApiToken) throws IOException, AADGraphHttpClientException {
         return loadUserGroups(graphApiToken);
     }
 
-    private List<UserGroup> loadUserGroups(String graphApiToken) throws IOException {
-        final String responseInJson = getUserMembershipsV1(graphApiToken);
+    private List<UserGroup> loadUserGroups(String graphApiToken) throws IOException, AADGraphHttpClientException {
+        final String responseInJson = aadGraphHttpClient.getMemberships(graphApiToken);
         final List<UserGroup> lUserGroups = new ArrayList<>();
         final ObjectMapper objectMapper = JacksonObjectMapperFactory.getInstance();
         final JsonNode rootNode = objectMapper.readValue(responseInJson, JsonNode.class);
@@ -103,7 +69,7 @@ public class AzureADGraphClient {
         return lUserGroups;
     }
 
-    public Set<GrantedAuthority> getGrantedAuthorities(String graphApiToken) throws IOException {
+    public Set<GrantedAuthority> getGrantedAuthorities(String graphApiToken) throws IOException, AADGraphHttpClientException {
         // Fetch the authority information from the protected resource using accessToken
         final List<UserGroup> groups = getGroups(graphApiToken);
 

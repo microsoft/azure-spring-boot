@@ -7,12 +7,10 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 
 import com.nimbusds.jose.jwk.source.RemoteJWKSet;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
-
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @Validated
 @ConfigurationProperties("azure.activedirectory")
@@ -22,7 +20,7 @@ public class AADAuthenticationProperties {
     /**
      * Azure service environment/region name, e.g., cn, global
      */
-    private String environment;
+    private String environment = DEFAULT_SERVICE_ENVIRONMENT;
     /**
      * Registered application ID in Azure AD.
      * Must be configured when OAuth2 authentication is done in front end
@@ -58,7 +56,7 @@ public class AADAuthenticationProperties {
     }
 
     public String getEnvironment() {
-        return StringUtils.isEmpty(environment) ? DEFAULT_SERVICE_ENVIRONMENT : environment;
+        return environment;
     }
 
     public void setEnvironment(String environment) {
@@ -85,7 +83,7 @@ public class AADAuthenticationProperties {
         return activeDirectoryGroups;
     }
 
-    public void setactiveDirectoryGroups(List<String> activeDirectoryGroups) {
+    public void setActiveDirectoryGroups(List<String> activeDirectoryGroups) {
         this.activeDirectoryGroups = activeDirectoryGroups;
     }
 
