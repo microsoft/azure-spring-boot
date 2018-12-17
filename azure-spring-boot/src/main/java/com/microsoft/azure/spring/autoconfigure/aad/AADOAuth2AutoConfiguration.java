@@ -22,17 +22,16 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 @EnableConfigurationProperties({AADAuthenticationProperties.class, ServiceEndpointsProperties.class})
 public class AADOAuth2AutoConfiguration {
     private AADAuthenticationProperties aadAuthProps;
-    private ServiceEndpointsProperties serviceEndpointsProps;
 
-    public AADOAuth2AutoConfiguration(AADAuthenticationProperties aadAuthProperties,
-                                      ServiceEndpointsProperties serviceEndpointsProps) {
+    public AADOAuth2AutoConfiguration(AADAuthenticationProperties aadAuthProperties) {
         this.aadAuthProps = aadAuthProperties;
-        this.serviceEndpointsProps = serviceEndpointsProps;
     }
 
     @Bean
     @ConditionalOnProperty(prefix = "azure.activedirectory", value = "active-directory-groups")
     public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService(AzureADGraphClient graphClient) {
-        return new AADOAuth2UserService(aadAuthProps, serviceEndpointsProps, graphClient);
+        return new AADOAuth2UserService(aadAuthProps, graphClient);
     }
+
+
 }
