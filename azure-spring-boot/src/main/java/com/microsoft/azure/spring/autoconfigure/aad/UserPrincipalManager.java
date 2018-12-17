@@ -16,9 +16,10 @@ import com.nimbusds.jose.proc.JWSVerificationKeySelector;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.proc.*;
-import com.sun.jersey.core.util.Base64;
 
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
+import java.util.Base64;
 
 public class UserPrincipalManager {
 
@@ -30,7 +31,8 @@ public class UserPrincipalManager {
     }
 
     public UserPrincipal buildUserPrincipal(String idToken) throws ParseException, JOSEException, BadJOSEException {
-        final JWSHeader jwsHeader = JWSHeader.parse(Base64.base64Decode(idToken.substring(0, idToken.indexOf("."))));
+        final JWSHeader jwsHeader = JWSHeader.parse(new String(
+                Base64.getDecoder().decode(idToken.substring(0, idToken.indexOf("."))), StandardCharsets.UTF_8));
         final ConfigurableJWTProcessor<SecurityContext> validator = getAadJwtTokenValidator(jwsHeader);
         final JWTClaimsSet jwtClaimsSet = validator.process(idToken, null);
         final JWTClaimsSetVerifier<SecurityContext> verifier = validator.getJWTClaimsSetVerifier();
