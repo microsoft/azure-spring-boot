@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.microsoft.aad.adal4j.ClientCredential;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +31,7 @@ public class AADGraphHttpClientConfiguration {
     public AzureADGraphClient azureADGraphClient(AADGraphHttpClient aaaHttpClient,
                                                  AADAuthenticationProperties aadAuthProps,
                                                  ServiceEndpointsProperties serviceEndpointsProps) {
-        return new AzureADGraphClient(new ClientCredential(aadAuthProps.getClientId(), aadAuthProps.getClientSecret()),
+        return new AzureADGraphClient(aadAuthProps.getClientId(), aadAuthProps.getClientSecret(),
                 aadAuthProps, serviceEndpointsProps, aaaHttpClient);
     }
 

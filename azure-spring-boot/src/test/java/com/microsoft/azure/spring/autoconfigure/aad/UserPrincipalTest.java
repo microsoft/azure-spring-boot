@@ -32,7 +32,6 @@ import static org.mockito.Mockito.doReturn;
 public class UserPrincipalTest {
 
     private AzureADGraphClient graphClient;
-    private ClientCredential credential;
     private AADAuthenticationProperties aadAuthProps;
 
     @Mock
@@ -44,7 +43,6 @@ public class UserPrincipalTest {
 
     @Before
     public void setUp() throws Exception {
-        credential = new ClientCredential("test", "password");
         aadAuthProps = new AADAuthenticationProperties();
     }
 
@@ -114,7 +112,7 @@ public class UserPrincipalTest {
      */
     private void setupGraphClient(List<String> expectedGroups) {
         aadAuthProps.setActiveDirectoryGroups(expectedGroups);
-        this.graphClient = new AzureADGraphClient(credential,
+        this.graphClient = new AzureADGraphClient("test", "password",
                 aadAuthProps, endpointsProps, aadGraphHttpClient);
     }
 }
