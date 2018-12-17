@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.util.Assert;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -17,13 +18,13 @@ import org.springframework.web.client.RestTemplate;
  * prior to injection.
  */
 @Slf4j
-public class AADGraphHTTPClientRestTemplateImplGraph implements AADGraphHttpClient {
+public class AADGraphHTTPClientRestTemplateImpl implements AADGraphHttpClient {
 
 
     private final ServiceEndpoints serviceEndpoints;
     private final RestTemplate restTemplate;
 
-    public AADGraphHTTPClientRestTemplateImplGraph
+    public AADGraphHTTPClientRestTemplateImpl
             (ServiceEndpoints serviceEndpoints,
              RestTemplateBuilder builder) {
         Assert.notNull(builder, "No RestTemplateBuilder Supplied.");
@@ -41,17 +42,25 @@ public class AADGraphHTTPClientRestTemplateImplGraph implements AADGraphHttpClie
 
         final HttpEntity httpEntity = new HttpEntity(httpHeaders);
 
-        final ResponseEntity<String> response = restTemplate.exchange(serviceEndpoints.getAadMembershipRestUri(),
-                HttpMethod.GET, httpEntity, String.class);
+        try {
+            final ResponseEntity<String> response = restTemplate.exchange(serviceEndpoints.getAadMembershipRestUri(),
+                    HttpMethod.GET, httpEntity, String.class);
 
-        final HttpStatus statusCode = response.getStatusCode();
-        if (!statusCode.is2xxSuccessful()) {
-            log.error("Response code was not 200. Status Code - {} Headers - {} Response - {}", statusCode
-                    , response.getHeaders(), response.getHeaders());
+            final HttpStatus statusCode = response.getStatusCode();
+            if (!statusCode.is2xxSuccessful()) {
+                log.error("Response code was not 200. Status Code - {} Headers - {} Response - {}", statusCode
+                        , response.getHeaders(), response.getHeaders());
+                throw new AADGraphHttpClientException(String.format("Failed to get Membership for User. " +
+                        "Response Status Code - %s", statusCode));
+            } else {
+                return response.getBody();
+            }
+        } catch (RestClientResponseException e) {
+            final int rawStatusCode = e.getRawStatusCode();
+            log.error("Response code was not 200. Status Code - {} Headers - {} Response - {}", rawStatusCode
+                    , e.getResponseHeaders(), e.getResponseBodyAsString());
             throw new AADGraphHttpClientException(String.format("Failed to get Membership for User. " +
-                    "Response Status Code - %s", statusCode));
-        } else {
-            return response.getBody();
+                    "Response Status Code - %s", rawStatusCode));
         }
     }
 }
