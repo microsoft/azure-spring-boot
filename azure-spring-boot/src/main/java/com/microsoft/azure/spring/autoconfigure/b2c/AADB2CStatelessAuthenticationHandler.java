@@ -23,7 +23,7 @@ import java.io.IOException;
 @Slf4j
 public class AADB2CStatelessAuthenticationHandler extends AbstractAADB2CFilterScenarioHandler {
 
-    private static final String AUTH_TYPE = "Bearer";
+    private static final String AUTH_TYPE = "Bearer ";
 
     private static final String AUTH_HEADER = "Authentication";
 
@@ -38,9 +38,9 @@ public class AADB2CStatelessAuthenticationHandler extends AbstractAADB2CFilterSc
     private void handleAuthenticationHeader(HttpServletRequest request, HttpServletResponse response)
             throws AADB2CAuthenticationException {
         final String authHeader = request.getHeader(AUTH_HEADER);
-        Assert.isTrue(authHeader.startsWith(AUTH_TYPE), "Unexpected authentication type: " + authHeader);
+        Assert.isTrue(authHeader.startsWith(AUTH_TYPE), "Authorization token must start with " + AUTH_TYPE);
 
-        final String idToken = authHeader.substring(AUTH_TYPE.length() + 1);
+        final String idToken = authHeader.substring(AUTH_TYPE.length());
         final Pair<JWSObject, JWTClaimsSet> jwtToken = jwtProcessor.validate(idToken);
         final UserPrincipal principal = new UserPrincipal(jwtToken, null);
 
@@ -62,7 +62,7 @@ public class AADB2CStatelessAuthenticationHandler extends AbstractAADB2CFilterSc
 
     @Override
     public Boolean matches(HttpServletRequest request) {
-        final String authHeader = request.getHeader("Authentication");
+        final String authHeader = request.getHeader(AUTH_HEADER);
 
         return StringUtils.hasText(authHeader) && authHeader.startsWith(AUTH_TYPE);
     }

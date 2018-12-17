@@ -35,7 +35,7 @@ public class AADB2CURL {
 
     public static final String PARAMETER_ERROR_DESCRIPTION = "error_description";
 
-    public static final String HEADER_AUTHENTICATION = "Authentication";
+    public static final String HEADER_AUTHENTICATION = "Authorization";
 
     // 'p' is the abbreviation for 'policy'.
     private static final String OPENID_AUTHORIZE_PATTERN =
