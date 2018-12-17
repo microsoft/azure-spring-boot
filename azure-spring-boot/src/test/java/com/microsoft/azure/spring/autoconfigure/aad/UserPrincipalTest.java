@@ -8,7 +8,6 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 import com.microsoft.aad.adal4j.ClientCredential;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jwt.JWTClaimsSet;
-import org.hamcrest.collection.IsIterableContainingInAnyOrder;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,12 +20,11 @@ import org.springframework.util.StringUtils;
 import java.io.*;
 import java.nio.file.Files;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doReturn;
 
 
@@ -54,30 +52,29 @@ public class UserPrincipalTest {
     public void getAuthoritiesByUserGroups() throws Exception {
 
 
-        aadAuthProps.setActiveDirectoryGroups(Collections.singletonList("group1"));
-        this.graphClient = new AzureADGraphClient(credential,
-                aadAuthProps, endpointsProps, aadGraphHttpClient);
+        setupGraphClient(Collections.singletonList("group1"));
 
         doReturn(Constants.USERGROUPS_JSON)
                 .when(aadGraphHttpClient).getMemberships(Constants.BEARER_TOKEN);
         final Collection<? extends GrantedAuthority> authorities =
                 graphClient.getGrantedAuthorities(Constants.BEARER_TOKEN);
 
-      assertThat(authorities).extracting(GrantedAuthority::getAuthority).containsExactly("ROLE_group1");
+        assertThat(authorities).extracting(GrantedAuthority::getAuthority).containsExactly("ROLE_group1");
     }
+
 
     @Test
     public void getGroups() throws Exception {
+        setupGraphClient(Constants.TARGETED_GROUPS);
+
         doReturn(Constants.USERGROUPS_JSON)
-                .when(aadGraphHttpClient.getMemberships(Constants.BEARER_TOKEN));
+                .when(aadGraphHttpClient).getMemberships(Constants.BEARER_TOKEN);
 
         final List<UserGroup> groups = graphClient.getGroups(Constants.BEARER_TOKEN);
-        final List<UserGroup> targetedGroups = new ArrayList<>();
-        targetedGroups.add(new UserGroup("12345678-7baf-48ce-96f4-a2d60c26391e", "group1"));
-        targetedGroups.add(new UserGroup("12345678-e757-4474-b9c4-3f00a9ac17a0", "group2"));
-        targetedGroups.add(new UserGroup("12345678-86a4-4237-aeb0-60bad29c1de0", "group3"));
 
-        Assert.assertThat(groups, IsIterableContainingInAnyOrder.containsInAnyOrder(groups.toArray()));
+
+        assertThat(groups).hasSize(3).extracting(UserGroup::getDisplayName)
+                .containsExactly("group1", "group2", "group3");
     }
 
     @Test
@@ -87,7 +84,7 @@ public class UserPrincipalTest {
         try (final FileOutputStream fileOutputStream = new FileOutputStream(tmpOutputFile);
              final ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
              final FileInputStream fileInputStream = new FileInputStream(tmpOutputFile);
-             final ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);){
+             final ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);) {
 
             final JWSObject jwsObject = JWSObject.parse(Constants.JWT_TOKEN);
             final JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject("fake-subject").build();
@@ -104,8 +101,20 @@ public class UserPrincipalTest {
             Assert.assertTrue("Serialized UserPrincipal claims not empty.",
                     serializedPrincipal.getClaims().size() > 0);
         } finally {
-                Files.deleteIfExists(tmpOutputFile.toPath());
+            Files.deleteIfExists(tmpOutputFile.toPath());
 
         }
+    }
+
+    /**
+     * Sets up a new {@link AzureADGraphClient}. Before initialization
+     * sets expected groups on the aadAuthProps.
+     *
+     * @param expectedGroups - groups that should extracted from the member of call.
+     */
+    private void setupGraphClient(List<String> expectedGroups) {
+        aadAuthProps.setActiveDirectoryGroups(expectedGroups);
+        this.graphClient = new AzureADGraphClient(credential,
+                aadAuthProps, endpointsProps, aadGraphHttpClient);
     }
 }
