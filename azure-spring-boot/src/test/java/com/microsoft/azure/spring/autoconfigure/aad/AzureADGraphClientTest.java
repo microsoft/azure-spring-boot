@@ -5,14 +5,12 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.microsoft.aad.adal4j.ClientCredential;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -23,14 +21,9 @@ import java.util.Set;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-@PrepareForTest(AzureADGraphClient.class)
 public class AzureADGraphClientTest {
 
     private AzureADGraphClient adGraphClient;
-
-    @Mock
-    private ClientCredential credential;
-
     @Mock
     private AADAuthenticationProperties aadAuthProps;
 
@@ -45,7 +38,7 @@ public class AzureADGraphClientTest {
         final List<String> activeDirectoryGroups = new ArrayList<>();
         activeDirectoryGroups.add("Test_Group");
         when(aadAuthProps.getActiveDirectoryGroups()).thenReturn(activeDirectoryGroups);
-        adGraphClient = new AzureADGraphClient(credential, aadAuthProps, endpointsProps, aadGraphHttpClient);
+        adGraphClient = new AzureADGraphClient("abc", "password", aadAuthProps, endpointsProps, aadGraphHttpClient);
     }
 
     @Test

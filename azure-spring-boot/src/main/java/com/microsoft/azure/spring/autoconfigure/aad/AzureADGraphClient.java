@@ -37,10 +37,10 @@ public class AzureADGraphClient {
     private final ServiceEndpoints serviceEndpoints;
     private final AADGraphHttpClient aadGraphHttpClient;
 
-    public AzureADGraphClient(ClientCredential clientCredential, AADAuthenticationProperties aadAuthProps,
+    public AzureADGraphClient(String clientId, String clientSecret, AADAuthenticationProperties aadAuthProps,
                               ServiceEndpointsProperties serviceEndpointsProps, AADGraphHttpClient aadGraphHttpClient) {
-        this.clientId = clientCredential.getClientId();
-        this.clientSecret = clientCredential.getClientSecret();
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
         this.aadTargetGroups = aadAuthProps.getActiveDirectoryGroups();
         this.aadGraphHttpClient = aadGraphHttpClient;
         this.serviceEndpoints = serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment());
