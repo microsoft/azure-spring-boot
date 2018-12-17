@@ -28,12 +28,12 @@ public class AADGraphHttpClientDefaultImpl implements AADGraphHttpClient {
     @Override
     public String getMemberships(String accessToken) throws AADGraphHttpClientException {
         HttpURLConnection conn = null;
-         try {
+        try {
             final URL url = new URL(serviceEndpoints.getAadMembershipRestUri());
             conn = (HttpURLConnection) url.openConnection();
             // Set the appropriate header fields in the request header.
             conn.setRequestProperty("api-version", "1.6");
-            conn.setRequestProperty("Authorization", "Bearer" + accessToken);
+            conn.setRequestProperty("Authorization", accessToken);
             conn.setRequestProperty("Accept", "application/json;odata=minimalmetadata");
             final String responseInJson = getResponseStringFromConn(conn);
             final int responseCode = conn.getResponseCode();
@@ -56,21 +56,26 @@ public class AADGraphHttpClientDefaultImpl implements AADGraphHttpClient {
     private String getResponseStringFromConn(HttpURLConnection conn) throws AADGraphHttpClientException {
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
-            final StringBuilder stringBuilder = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line);
-            }
-            return stringBuilder.toString();
+            return buildString(reader);
         } catch (IOException e) {
             try (BufferedReader errorStream = new BufferedReader(
                     new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
-                log.error("Could not read response from Membership URI  - Error Response - {}", errorStream, e);
+                final String error = buildString(errorStream);
+                log.error("Could not read response from Membership URI  - Error Response - {}", error, e);
                 throw new AADGraphHttpClientException("Failed to read response from Membership call", e);
             } catch (IOException errorStreamException) {
                 throw new AADGraphHttpClientException("Failed to read Error Stream from Membership call",
                         errorStreamException);
             }
         }
+    }
+
+    private String buildString(BufferedReader errorStream) throws IOException {
+        final StringBuilder stringBuilder = new StringBuilder();
+        String line;
+        while ((line = errorStream.readLine()) != null) {
+            stringBuilder.append(line);
+        }
+        return stringBuilder.toString();
     }
 }

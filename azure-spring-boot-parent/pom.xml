@@ -35,7 +35,8 @@
         <powermock.api.mockito2.version>1.7.0</powermock.api.mockito2.version>
         <azuremonitor.micrometer.registry.version>1.1.0</azuremonitor.micrometer.registry.version>
         <micrometer.core.version>1.1.0</micrometer.core.version>
-        <spring-boot-actuator-autoconfigure.version>2.0.3.RELEASE</spring-boot-actuator-autoconfigure.version>
+        <spring-boot-actuator-autoconfigure.version>${spring.boot.version}</spring-boot-actuator-autoconfigure.version>
+        <wiremock-standalone.version>2.19.0</wiremock-standalone.version>
     </properties>
 
     <profiles>
@@ -76,16 +77,6 @@
                 <version>${mockito.core.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.powermock</groupId>
-                <artifactId>powermock-module-junit4</artifactId>
-                <version>${powermock.junit4.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.powermock</groupId>
-                <artifactId>powermock-api-mockito2</artifactId>
-                <version>${powermock.api.mockito2.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>io.micrometer</groupId>
                 <artifactId>micrometer-registry-azure-monitor</artifactId>
                 <version>${azuremonitor.micrometer.registry.version}</version>
@@ -105,6 +96,11 @@
                         <artifactId>micrometer-core</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.github.tomakehurst</groupId>
+                <artifactId>wiremock-standalone</artifactId>
+                <version>${wiremock-standalone.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -223,8 +219,6 @@
                             <exclude>com/microsoft/azure/spring/boot/autoconfigure/common/GetHashMac.class</exclude>
                             <exclude>com/microsoft/azure/**/Constants.class</exclude>
                             <exclude>com/microsoft/azure/**/AzureADJwtTokenFilter.class</exclude>
-                            <exclude>com/microsoft/azure/**/AzureADGraphClient.class</exclude>
-                            <exclude>com/microsoft/azure/**/Userprincipal.class</exclude>
                         </excludes>
                     </instrumentation>
                 </configuration>
