@@ -8,8 +8,6 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 import com.microsoft.aad.adal4j.ClientCredential;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jwt.JWTClaimsSet;
-import org.apache.commons.io.IOUtils;
-import org.hamcrest.collection.IsIterableContainingInAnyOrder;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,9 +16,7 @@ import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
@@ -30,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.powermock.api.mockito.PowerMockito.doReturn;
 
 @RunWith(PowerMockRunner.class)
@@ -40,7 +38,6 @@ public class UserPrincipalTest {
     @Mock
     private ClientCredential credential;
 
-    @Mock
     private AADAuthenticationProperties aadAuthProps;
 
     @Mock
@@ -48,25 +45,25 @@ public class UserPrincipalTest {
 
     @Before
     public void setup() {
+        aadAuthProps = new AADAuthenticationProperties();
         this.graphClientMock = PowerMockito.spy(new AzureADGraphClient(credential, aadAuthProps, endpointsProps));
     }
 
     @Test
     public void getAuthoritiesByUserGroups() throws Exception {
-        final List<UserGroup> userGroups = new ArrayList<UserGroup>();
+        final List<UserGroup> userGroups = new ArrayList<>();
         userGroups.add(new UserGroup("this is group1", "group1"));
 
         doReturn(Constants.USERGROUPS_JSON)
                 .when(graphClientMock, "getUserMembershipsV1", Constants.BEARER_TOKEN);
         PowerMockito.when(graphClientMock.getGroups(Constants.BEARER_TOKEN)).thenReturn(userGroups);
-        Whitebox.setInternalState(graphClientMock, "aadTargetGroups", Constants.TARGETED_GROUPS);
+
+        aadAuthProps.setActiveDirectoryGroups(Constants.TARGETED_GROUPS);
 
         final Collection<? extends GrantedAuthority> authorities =
                 graphClientMock.getGrantedAuthorities(Constants.BEARER_TOKEN);
 
-        Assert.assertTrue(authorities.contains(new SimpleGrantedAuthority("ROLE_group1")));
-        Assert.assertFalse(authorities.contains(new SimpleGrantedAuthority("ROLE_group2")));
-        Assert.assertFalse(authorities.contains(new SimpleGrantedAuthority("ROLE_group3")));
+        assertThat(authorities).hasSize(1).extracting(GrantedAuthority::getAuthority).containsExactly("ROLE_group1");
     }
 
     @Test
@@ -75,12 +72,10 @@ public class UserPrincipalTest {
                 .when(graphClientMock, "getUserMembershipsV1", Constants.BEARER_TOKEN);
 
         final List<UserGroup> groups = graphClientMock.getGroups(Constants.BEARER_TOKEN);
-        final List<UserGroup> targetedGroups = new ArrayList<UserGroup>();
-        targetedGroups.add(new UserGroup("12345678-7baf-48ce-96f4-a2d60c26391e", "group1"));
-        targetedGroups.add(new UserGroup("12345678-e757-4474-b9c4-3f00a9ac17a0", "group2"));
-        targetedGroups.add(new UserGroup("12345678-86a4-4237-aeb0-60bad29c1de0", "group3"));
-
-        Assert.assertThat(groups, IsIterableContainingInAnyOrder.containsInAnyOrder(groups.toArray()));
+        assertThat(groups).hasSize(3).extracting(UserGroup::getObjectID, UserGroup::getDisplayName)
+                .containsExactly(tuple("12345678-7baf-48ce-96f4-a2d60c26391e", "group1"),
+                        tuple("12345678-e757-4474-b9c4-3f00a9ac17a0", "group2"),
+                        tuple("12345678-86a4-4237-aeb0-60bad29c1de0", "group3"));
     }
 
     @Test
@@ -107,9 +102,7 @@ public class UserPrincipalTest {
             Assert.assertTrue("Serialized UserPrincipal claims not empty.",
                     serializedPrincipal.getClaims().size() > 0);
         } finally {
-            if (tmpOutputFile != null) {
-                Files.deleteIfExists(tmpOutputFile.toPath());
-            }
+            Files.deleteIfExists(tmpOutputFile.toPath());
         }
     }
 }

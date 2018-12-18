@@ -35,16 +35,16 @@ public class AzureADGraphClient {
     private static final String DEFAULE_ROLE_PREFIX = "ROLE_";
     private static final String REQUEST_ID_SUFFIX = "aadfeed5";
 
-    private String clientId;
-    private String clientSecret;
-    private List<String> aadTargetGroups;
-    private ServiceEndpoints serviceEndpoints;
+    private final String clientId;
+    private final String clientSecret;
+    private final ServiceEndpoints serviceEndpoints;
+    private final AADAuthenticationProperties aadAuthenticationProperties;
 
     public AzureADGraphClient(ClientCredential clientCredential, AADAuthenticationProperties aadAuthProps,
                               ServiceEndpointsProperties serviceEndpointsProps) {
         this.clientId = clientCredential.getClientId();
         this.clientSecret = clientCredential.getClientSecret();
-        this.aadTargetGroups = aadAuthProps.getActiveDirectoryGroups();
+        this.aadAuthenticationProperties = aadAuthProps;
         this.serviceEndpoints = serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment());
     }
 
@@ -92,8 +92,10 @@ public class AzureADGraphClient {
 
         if (valuesNode != null) {
             valuesNode.forEach(valueNode -> {
-                if (valueNode != null && valueNode.get("objectType").asText().equals("Group")) {
-                    final String objectID = valueNode.get("objectId").asText();
+                if (valueNode != null && valueNode.get(aadAuthenticationProperties.getUserGroup().getKey()).asText()
+                        .equals(aadAuthenticationProperties.getUserGroup().getValue())) {
+                    final String objectID = valueNode.
+                            get(aadAuthenticationProperties.getUserGroup().getObjectIDKey()).asText();
                     final String displayName = valueNode.get("displayName").asText();
                     lUserGroups.add(new UserGroup(objectID, displayName));
                 }
@@ -120,7 +122,9 @@ public class AzureADGraphClient {
     public Set<GrantedAuthority> convertGroupsToGrantedAuthorities(final List<UserGroup> groups) {
         // Map the authority information to one or more GrantedAuthority's and add it to mappedAuthorities
         final Set<GrantedAuthority> mappedAuthorities = groups.stream()
-                .filter(group -> aadTargetGroups.contains(group.getDisplayName()))
+                .filter(group -> aadAuthenticationProperties.getUserGroup().getAllowedGroups()
+                        .contains(group.getDisplayName())
+                        || aadAuthenticationProperties.getActiveDirectoryGroups().contains(group.getDisplayName()))
                 .map(userGroup -> new SimpleGrantedAuthority(DEFAULE_ROLE_PREFIX + userGroup.getDisplayName()))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
         if (mappedAuthorities.isEmpty()) {
