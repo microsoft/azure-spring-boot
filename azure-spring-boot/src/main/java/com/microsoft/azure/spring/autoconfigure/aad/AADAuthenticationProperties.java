@@ -39,14 +39,29 @@ public class AADAuthenticationProperties {
     @NotEmpty
     private List<String> activeDirectoryGroups;
 
+    /**
+     * Connection Timeout for the JWKSet Remote URL call.
+     */
     private int jwtConnectTimeout = RemoteJWKSet.DEFAULT_HTTP_CONNECT_TIMEOUT; /* milliseconds */
 
+    /**
+     * Read Timeout for the JWKSet Remote URL call.
+     */
     private int jwtReadTimeout = RemoteJWKSet.DEFAULT_HTTP_READ_TIMEOUT; /* milliseconds */
 
+    /**
+     * Size limit in Bytes of the JWKSet Remote URL call.
+     */
     private int jwtSizeLimit = RemoteJWKSet.DEFAULT_HTTP_SIZE_LIMIT; /* bytes */
 
+    /**
+     * Azure Tenant ID.
+     */
     private String tenantId;
 
+    /**
+     * If Telemetry events should be published to Azure AD.
+     */
     private boolean allowTelemetry = true;
 
     public boolean isAllowTelemetry() {
