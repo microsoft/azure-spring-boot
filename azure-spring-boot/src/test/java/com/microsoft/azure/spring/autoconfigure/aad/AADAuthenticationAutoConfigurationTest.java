@@ -8,6 +8,10 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
+import org.springframework.core.env.Environment;
+
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AADAuthenticationAutoConfigurationTest {
@@ -25,5 +29,42 @@ public class AADAuthenticationAutoConfigurationTest {
             assertThat(azureADJwtTokenFilter).isNotNull();
             assertThat(azureADJwtTokenFilter).isExactlyInstanceOf(AADAuthenticationFilter.class);
         });
+    }
+
+    @Test
+    public void serviceEndpointsCanBeOverriden() {
+        this.contextRunner.withPropertyValues("azure.service.endpoints.global.aadKeyDiscoveryUri=https://test/",
+                "azure.service.endpoints.global.aadSigninUri=https://test/",
+                "azure.service.endpoints.global.aadGraphApiUri=https://test/",
+                "azure.service.endpoints.global.aadKeyDiscoveryUri=https://test/",
+                "azure.service.endpoints.global.aadMembershipRestUri=https://test/")
+                .run(context -> {
+                    final Environment environment = context.getEnvironment();
+                    assertThat(environment.getProperty("azure.service.endpoints.global.aadSigninUri"))
+                            .isEqualTo("https://test/");
+                    assertThat(environment.getProperty("azure.service.endpoints.global.aadGraphApiUri"))
+                            .isEqualTo("https://test/");
+                    assertThat(environment.getProperty("azure.service.endpoints.global.aadKeyDiscoveryUri"))
+                            .isEqualTo("https://test/");
+                    assertThat(environment.getProperty("azure.service.endpoints.global.aadMembershipRestUri"))
+                            .isEqualTo("https://test/");
+                    final ServiceEndpointsProperties serviceEndpointsProperties =
+                            context.getBean(ServiceEndpointsProperties.class);
+                    assertThat(serviceEndpointsProperties)
+                            .isNotNull().extracting(ServiceEndpointsProperties::getEndpoints).isNotEmpty();
+                    final Map<String, ServiceEndpoints> endpoints = serviceEndpointsProperties.getEndpoints();
+                    assertThat(endpoints).hasSize(2);
+                    assertThat(endpoints.get("cn")).isNotNull()
+                            .extracting(ServiceEndpoints::getAadGraphApiUri, ServiceEndpoints::getAadKeyDiscoveryUri,
+                                    ServiceEndpoints::getAadMembershipRestUri, ServiceEndpoints::getAadSigninUri)
+                            .containsExactly("https://graph.chinacloudapi.cn/",
+                                    "https://login.partner.microsoftonline.cn/common/discovery/keys",
+                                    "https://graph.chinacloudapi.cn/me/memberOf?api-version=1.6",
+                                    "https://login.partner.microsoftonline.cn/");
+                    assertThat(endpoints.get("global")).isNotNull()
+                            .extracting(ServiceEndpoints::getAadGraphApiUri, ServiceEndpoints::getAadKeyDiscoveryUri,
+                                    ServiceEndpoints::getAadMembershipRestUri, ServiceEndpoints::getAadSigninUri)
+                            .containsExactly("https://test/", "https://test/", "https://test/", "https://test/");
+                });
     }
 }
