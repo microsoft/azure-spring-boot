@@ -42,8 +42,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                                    ServiceEndpointsProperties serviceEndpointsProps,
                                    ResourceRetriever resourceRetriever, AzureADGraphClient azureADGraphClient) {
         this.graphClient = azureADGraphClient;
-        this.principalManager = new UserPrincipalManager(
-                serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment()), resourceRetriever);
+        this.principalManager = new UserPrincipalManager(serviceEndpointsProps, aadAuthProps, resourceRetriever);
     }
 
     @Override

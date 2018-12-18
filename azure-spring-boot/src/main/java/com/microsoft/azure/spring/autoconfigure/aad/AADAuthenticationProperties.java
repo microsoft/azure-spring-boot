@@ -7,10 +7,12 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 
 import com.nimbusds.jose.jwk.source.RemoteJWKSet;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
+
+import javax.validation.constraints.NotEmpty;
 
 @Validated
 @ConfigurationProperties("azure.activedirectory")
@@ -56,7 +58,7 @@ public class AADAuthenticationProperties {
     }
 
     public String getEnvironment() {
-        return environment;
+        return StringUtils.isEmpty(environment) ? DEFAULT_SERVICE_ENVIRONMENT : environment;
     }
 
     public void setEnvironment(String environment) {
@@ -83,7 +85,7 @@ public class AADAuthenticationProperties {
         return activeDirectoryGroups;
     }
 
-    public void setActiveDirectoryGroups(List<String> activeDirectoryGroups) {
+    public void setactiveDirectoryGroups(List<String> activeDirectoryGroups) {
         this.activeDirectoryGroups = activeDirectoryGroups;
     }
 
