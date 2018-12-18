@@ -113,8 +113,7 @@ public class AADOAuth2ConfigTest {
     private AnnotationConfigWebApplicationContext initTestContext(String... environment) {
         final AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
 
-        context.getEnvironment().getPropertySources().addFirst(testPropResource);
-        context.getEnvironment().getPropertySources().addFirst(testPropResource);
+        context.getEnvironment().getPropertySources().addLast(testPropResource);
         if (environment.length > 0) {
             TestPropertySourceUtils.addInlinedPropertiesToEnvironment(context, environment);
         }

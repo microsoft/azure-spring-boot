@@ -37,6 +37,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
     private final UserPrincipalManager principalManager;
     private final AzureADGraphClient graphClient;
 
+
     public AADAuthenticationFilter(AADAuthenticationProperties aadAuthProps,
                                    ServiceEndpointsProperties serviceEndpointsProps,
                                    ResourceRetriever resourceRetriever, AzureADGraphClient azureADGraphClient) {
@@ -47,7 +48,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader(TOKEN_HEADER);
 
