@@ -110,7 +110,7 @@ public class UserPrincipalTest {
      * @param expectedGroups - groups that should extracted from the member of call.
      */
     private void setupGraphClient(List<String> expectedGroups) {
-        aadAuthProps.setActiveDirectoryGroups(expectedGroups);
+        aadAuthProps.setactiveDirectoryGroups(expectedGroups);
         this.graphClient = new AzureADGraphClient("test", "password",
                 aadAuthProps, endpointsProps, aadGraphHttpClient);
     }
