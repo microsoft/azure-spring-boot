@@ -37,7 +37,6 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
 
     private AADAuthenticationProperties aadAuthProps;
     private ServiceEndpointsProperties serviceEndpointsProps;
-    private ResourceRetriever resourceRetriever;
     private UserPrincipalManager principalManager;
 
     public AADAuthenticationFilter(AADAuthenticationProperties aadAuthProps,
@@ -45,14 +44,12 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                                    ResourceRetriever resourceRetriever) {
         this.aadAuthProps = aadAuthProps;
         this.serviceEndpointsProps = serviceEndpointsProps;
-        this.resourceRetriever = resourceRetriever;
-        this.principalManager = new UserPrincipalManager(
-                serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment()), resourceRetriever);
+        this.principalManager = new UserPrincipalManager(serviceEndpointsProps, aadAuthProps, resourceRetriever);
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader(TOKEN_HEADER);
 
@@ -83,7 +80,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                 }
 
                 final Authentication authentication = new PreAuthenticatedAuthenticationToken(
-                            principal, null, client.convertGroupsToGrantedAuthorities(principal.getUserGroups()));
+                        principal, null, client.convertGroupsToGrantedAuthorities(principal.getUserGroups()));
 
                 authentication.setAuthenticated(true);
                 log.info("Request token verification success. {}", authentication);
