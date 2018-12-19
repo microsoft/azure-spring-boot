@@ -23,13 +23,6 @@
             <artifactId>azure-active-directory-spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- Workaround the dependency conflict between adal4j and spring security. -->
-        <dependency>
-            <groupId>com.nimbusds</groupId>
-            <artifactId>oauth2-oidc-sdk</artifactId>
-            <version>5.64.4</version>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
