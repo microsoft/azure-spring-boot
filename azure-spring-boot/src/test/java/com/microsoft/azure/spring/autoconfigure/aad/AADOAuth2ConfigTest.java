@@ -92,8 +92,9 @@ public class AADOAuth2ConfigTest {
                 .isEqualTo("https://test/");
         final ServiceEndpointsProperties serviceEndpointsProperties =
                 testContext.getBean(ServiceEndpointsProperties.class);
-        assertThat(serviceEndpointsProperties)
-                .isNotNull().extracting(ServiceEndpointsProperties::getEndpoints).isNotEmpty();
+        assertThat(serviceEndpointsProperties).isNotNull();
+        assertThat(serviceEndpointsProperties.getEndpoints()).isNotEmpty();
+
         final Map<String, ServiceEndpoints> endpoints = serviceEndpointsProperties.getEndpoints();
         assertThat(endpoints).hasSize(2);
         assertThat(endpoints.get("cn")).isNotNull()
