@@ -21,8 +21,7 @@ public class GremlinProperties {
     @NotEmpty
     private String endpoint;
 
-    @NotEmpty
-    private String port;
+    private int port;
 
     @NotEmpty
     private String username;
@@ -31,4 +30,6 @@ public class GremlinProperties {
     private String password;
 
     private boolean telemetryAllowed = true;
+
+    private boolean sslEnabled = true;
 }

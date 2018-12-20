@@ -30,6 +30,12 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!--Cloud Foundry support-->
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
