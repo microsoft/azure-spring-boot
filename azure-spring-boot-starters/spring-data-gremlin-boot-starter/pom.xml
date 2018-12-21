@@ -29,5 +29,9 @@
             <groupId>com.microsoft.spring.data.gremlin</groupId>
             <artifactId>spring-data-gremlin</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
     </dependencies>
 </project>
