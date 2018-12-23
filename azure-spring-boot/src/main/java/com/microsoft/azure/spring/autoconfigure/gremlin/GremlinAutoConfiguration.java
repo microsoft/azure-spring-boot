@@ -7,10 +7,13 @@ package com.microsoft.azure.spring.autoconfigure.gremlin;
 
 import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
+import com.microsoft.spring.data.gremlin.common.GremlinConfig;
 import com.microsoft.spring.data.gremlin.common.GremlinFactory;
 import com.microsoft.spring.data.gremlin.conversion.MappingGremlinConverter;
 import com.microsoft.spring.data.gremlin.mapping.GremlinMappingContext;
 import com.microsoft.spring.data.gremlin.query.GremlinTemplate;
+import com.microsoft.spring.data.gremlin.telemetry.EmptyTracker;
+import com.microsoft.spring.data.gremlin.telemetry.TelemetryTracker;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -56,15 +59,30 @@ public class GremlinAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    public TelemetryTracker getTelemetryTracker() {
+        if (getGremlinConfig().isTelemetryAllowed()) {
+            return new TelemetryTracker();
+        }
+
+        return new EmptyTracker();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public GremlinConfig getGremlinConfig() {
+        return GremlinConfig.builder(properties.getEndpoint(), properties.getUsername(), properties.getPassword())
+                .port(properties.getPort())
+                .sslEnabled(properties.isSslEnabled())
+                .telemetryAllowed(properties.isTelemetryAllowed())
+                .build();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
     public GremlinFactory gremlinFactory() {
         this.trackCustomEvent();
 
-        final String endpoint = this.properties.getEndpoint();
-        final String port = this.properties.getPort();
-        final String username = this.properties.getUsername();
-        final String password = this.properties.getPassword();
-
-        return new GremlinFactory(endpoint, port, username, password);
+        return new GremlinFactory(getGremlinConfig());
     }
 
     @Bean
