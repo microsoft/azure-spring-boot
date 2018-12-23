@@ -33,7 +33,7 @@ public class AADAuthenticationAutoConfigurationTest {
     }
 
     @Test
-    public void serviceEndpointsCanBeOverriden() {
+    public void serviceEndpointsCanBeOverridden() {
         this.contextRunner.withPropertyValues("azure.service.endpoints.global.aadKeyDiscoveryUri=https://test/",
                 "azure.service.endpoints.global.aadSigninUri=https://test/",
                 "azure.service.endpoints.global.aadGraphApiUri=https://test/",
@@ -51,8 +51,9 @@ public class AADAuthenticationAutoConfigurationTest {
                             .isEqualTo("https://test/");
                     final ServiceEndpointsProperties serviceEndpointsProperties =
                             context.getBean(ServiceEndpointsProperties.class);
-                    assertThat(serviceEndpointsProperties)
-                            .isNotNull().extracting(ServiceEndpointsProperties::getEndpoints).isNotEmpty();
+                    assertThat(serviceEndpointsProperties).isNotNull();
+                    assertThat(serviceEndpointsProperties.getEndpoints()).isNotEmpty();
+
                     final Map<String, ServiceEndpoints> endpoints = serviceEndpointsProperties.getEndpoints();
                     assertThat(endpoints).hasSize(2);
                     assertThat(endpoints.get("cn")).isNotNull()

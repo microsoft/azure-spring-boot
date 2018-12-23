@@ -49,14 +49,29 @@ public class AADAuthenticationProperties {
     private List<String> activeDirectoryGroups = new ArrayList<>();
 
 
+    /**
+     * Connection Timeout for the JWKSet Remote URL call.
+     */
     private int jwtConnectTimeout = RemoteJWKSet.DEFAULT_HTTP_CONNECT_TIMEOUT; /* milliseconds */
 
+    /**
+     * Read Timeout for the JWKSet Remote URL call.
+     */
     private int jwtReadTimeout = RemoteJWKSet.DEFAULT_HTTP_READ_TIMEOUT; /* milliseconds */
 
+    /**
+     * Size limit in Bytes of the JWKSet Remote URL call.
+     */
     private int jwtSizeLimit = RemoteJWKSet.DEFAULT_HTTP_SIZE_LIMIT; /* bytes */
 
+    /**
+     * Azure Tenant ID.
+     */
     private String tenantId;
 
+    /**
+     * If Telemetry events should be published to Azure AD.
+     */
     private boolean allowTelemetry = true;
 
     @DeprecatedConfigurationProperty(reason = "Configuration moved to UserGroup class to keep UserGroup properties "

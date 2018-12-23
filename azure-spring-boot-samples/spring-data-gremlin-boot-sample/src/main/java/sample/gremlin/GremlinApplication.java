@@ -5,7 +5,7 @@
  */
 package sample.gremlin;
 
-import com.microsoft.spring.data.gremlin.common.GremlinFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,25 +15,15 @@ import org.springframework.util.Assert;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @SpringBootApplication
 public class GremlinApplication implements CommandLineRunner {
-
-    @Autowired
-    private GremlinFactory factory;
 
     @Autowired
     private PersonRepository repository;
 
     public static void main(String[] args) {
         SpringApplication.run(GremlinApplication.class, args);
-    }
-
-    private void closeClusterConnection() {
-        if (this.factory.getGremlinCluster().isClosed() || this.factory.getGremlinCluster().isClosing()) {
-            return;
-        }
-
-        this.factory.getGremlinCluster().closeAsync();
     }
 
     public void run(String... vars) {
@@ -46,10 +36,12 @@ public class GremlinApplication implements CommandLineRunner {
         Assert.isTrue(foundPerson.isPresent(), "optional of Person should be present");
         Assert.state(foundPerson.get().equals(person), "should be the equals");
 
+        log.info("Find users by id: {}", foundPerson.get().toString());
+
         final List<Person> foundPersons = this.repository.findByNameAndLevel(person.getName(), person.getLevel());
         Assert.isTrue(foundPersons.size() == 1, "should be only one element");
         Assert.state(foundPersons.get(0).getId().equals(person.getId()), "should be the same id");
 
-        this.closeClusterConnection();
+        log.info("Find users by name and level: {}", foundPersons.get(0).toString());
     }
 }
