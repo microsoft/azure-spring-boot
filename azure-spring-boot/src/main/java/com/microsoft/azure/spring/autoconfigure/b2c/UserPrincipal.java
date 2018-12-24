@@ -15,10 +15,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @ToString
@@ -127,7 +124,7 @@ public class UserPrincipal implements Serializable {
         this.expireDate = jwtClaimsSet.getExpirationTime();
         this.notValidBeforeDate = jwtClaimsSet.getNotBeforeTime();
         this.issueAtDate = jwtClaimsSet.getIssueTime();
-        this.claim = jwtClaimsSet.getClaims();
+        this.claim = new HashMap<>(jwtClaimsSet.getClaims());
         this.code = code;
 
         this.userObjectId = jwtClaimsSet.getSubject(); // Subject populates the object ID of the user in the directory.
