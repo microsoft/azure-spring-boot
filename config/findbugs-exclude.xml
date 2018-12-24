@@ -10,7 +10,7 @@
     <Bug pattern="RE_POSSIBLE_UNINTENDED_PATTERN"/>
 
     <Match>
-        <Class name="com.microsoft.azure.spring.autoconfigure.b2c.AADB2CStatelessFilterPolicyReplyHandler"/>
+        <Class name="com.microsoft.azure.spring.autoconfigure.b2c.AADB2CStatelessPolicyReplyHandler"/>
         <Method name="handlePolicyReplyIdToken"/>
         <Bug pattern="HRS_REQUEST_PARAMETER_TO_COOKIE"/>
     </Match>

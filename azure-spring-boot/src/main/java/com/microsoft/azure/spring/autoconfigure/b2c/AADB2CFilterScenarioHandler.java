@@ -45,4 +45,8 @@ public interface AADB2CFilterScenarioHandler {
      * @return true if scenario matches, or false.
      */
     Boolean matches(HttpServletRequest request);
+
+    AADB2CFilterScenarioHandler getSuccessor();
+
+    void setSuccessor(AADB2CFilterScenarioHandler handler);
 }

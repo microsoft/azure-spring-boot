@@ -19,10 +19,9 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @Validated
+@NoArgsConstructor
 @ConfigurationProperties(prefix = AADB2CProperties.PREFIX)
 public class AADB2CProperties {
-
-    public static final String PREFIX = "azure.activedirectory.b2c";
 
     private static final String POLICIES = "policies";
 
@@ -32,19 +31,21 @@ public class AADB2CProperties {
 
     private static final String PROFILE_EDIT = "profile-edit";
 
+    private static final String POLICY_PASSWORD_RESET = POLICIES + "." + PASSWORD_RESET;
+
+    private static final String POLICY_PROFILE_EDIT = POLICIES + "." + PROFILE_EDIT;
+
     /**
      * We do not use ${@link String#format(String, Object...)}
      * as it's not real constant, which cannot be referenced in annotation.
      */
     private static final String POLICY_SIGN_UP_OR_SIGN_IN = POLICIES + "." + SIGN_UP_OR_SIGN_IN;
 
+    public static final String PREFIX = "azure.activedirectory.b2c";
+
     public static final String POLICY_SIGN_UP_OR_SIGN_IN_NAME = POLICY_SIGN_UP_OR_SIGN_IN + ".name";
 
     public static final String POLICY_SIGN_UP_OR_SIGN_IN_REPLY_URL = POLICY_SIGN_UP_OR_SIGN_IN + ".reply-url";
-
-    private static final String POLICY_PASSWORD_RESET = POLICIES + "." + PASSWORD_RESET;
-
-    private static final String POLICY_PROFILE_EDIT = POLICIES + "." + PROFILE_EDIT;
 
     public static final String POLICY_PASSWORD_RESET_NAME = POLICY_PASSWORD_RESET + ".name";
 
@@ -63,7 +64,6 @@ public class AADB2CProperties {
     public static final String PROFILE_EDIT_URL = "profile-edit-url";
 
     public static final String SESSION_STATE_LESS = "session-stateless";
-
 
     /**
      * The name of the b2c tenant.
@@ -101,6 +101,10 @@ public class AADB2CProperties {
      */
     @JsonProperty(POLICIES)
     private Policies policies = new Policies();
+
+    public boolean isSessionStatelessEnabled() {
+        return this.sessionStateless;
+    }
 
     @Getter
     @Validated

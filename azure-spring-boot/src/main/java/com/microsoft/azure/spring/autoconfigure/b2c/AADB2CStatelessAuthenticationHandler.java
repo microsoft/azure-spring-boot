@@ -14,21 +14,22 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Slf4j
-public class AADB2CStatelessFilterAuthenticationHandler extends AbstractAADB2CFilterScenarioHandler
-        implements AADB2CFilterScenarioHandler {
+public class AADB2CStatelessAuthenticationHandler extends AbstractAADB2CFilterScenarioHandler {
 
     private static final String AUTH_TYPE = "Bearer ";
 
-    private static final String AUTH_HEADER = "Authorization";
+    private static final String AUTH_HEADER = "Authentication";
 
     private final AADB2CJWTProcessor jwtProcessor;
 
-    public AADB2CStatelessFilterAuthenticationHandler(@NonNull AADB2CProperties b2cProperties) {
+    public AADB2CStatelessAuthenticationHandler(@NonNull AADB2CProperties b2cProperties) {
         final String openIdConfigURL = AADB2CURL.getOpenIdSignUpOrInConfigurationURL(b2cProperties);
 
         this.jwtProcessor = new AADB2CJWTProcessor(openIdConfigURL, b2cProperties);
@@ -51,10 +52,12 @@ public class AADB2CStatelessFilterAuthenticationHandler extends AbstractAADB2CFi
     }
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws AADB2CAuthenticationException {
+    public void handleInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws AADB2CAuthenticationException, IOException, ServletException {
         AADB2CURL.validateReplyRequest(request);
         handleAuthenticationHeader(request, response);
+
+        chain.doFilter(request, response);
     }
 
     @Override

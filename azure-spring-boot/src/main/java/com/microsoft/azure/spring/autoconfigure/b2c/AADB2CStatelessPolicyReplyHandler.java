@@ -17,6 +17,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,8 +26,7 @@ import java.io.IOException;
 import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CURL.*;
 
 @Slf4j
-public class AADB2CStatelessFilterPolicyReplyHandler extends AbstractAADB2CFilterScenarioHandler
-        implements AADB2CFilterScenarioHandler {
+public class AADB2CStatelessPolicyReplyHandler extends AbstractAADB2CFilterScenarioHandler {
 
     private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
@@ -34,7 +34,7 @@ public class AADB2CStatelessFilterPolicyReplyHandler extends AbstractAADB2CFilte
 
     private final AADB2CJWTProcessor jwtProcessor;
 
-    public AADB2CStatelessFilterPolicyReplyHandler(@NonNull AADB2CProperties b2cProperties) {
+    public AADB2CStatelessPolicyReplyHandler(@NonNull AADB2CProperties b2cProperties) {
         final String openIdConfigURL = AADB2CURL.getOpenIdSignUpOrInConfigurationURL(b2cProperties);
 
         this.b2cProperties = b2cProperties;
@@ -62,10 +62,12 @@ public class AADB2CStatelessFilterPolicyReplyHandler extends AbstractAADB2CFilte
     }
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws AADB2CAuthenticationException, IOException {
+    public void handleInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws AADB2CAuthenticationException, IOException, ServletException {
         AADB2CURL.validateReplyRequest(request);
         handlePolicyReplyIdToken(request, response);
+
+        chain.doFilter(request, response);
     }
 
     @Override

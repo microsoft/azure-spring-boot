@@ -20,8 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-public class AADB2CFilterProfileEditHandler extends AbstractAADB2CFilterScenarioHandler
-        implements AADB2CFilterScenarioHandler {
+public class AADB2CFilterProfileEditHandler extends AbstractAADB2CFilterScenarioHandler {
 
     private final AADB2CProperties b2cProperties;
 
@@ -42,11 +41,11 @@ public class AADB2CFilterProfileEditHandler extends AbstractAADB2CFilterScenario
     }
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+    public void handleInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws AADB2CAuthenticationException, IOException {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (super.isAuthenticated(auth)) {
+        if (super.isAuthenticated(auth) || b2cProperties.isSessionStatelessEnabled()) {
             final String refererURL = getRefererURL(request);
             final String url = AADB2CURL.getOpenIdProfileEditURL(b2cProperties, refererURL, request);
 
