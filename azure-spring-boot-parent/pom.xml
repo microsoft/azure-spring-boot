@@ -33,8 +33,8 @@
         <mockito.core.version>2.8.9</mockito.core.version>
         <powermock.junit4.version>1.7.0</powermock.junit4.version>
         <powermock.api.mockito2.version>1.7.0</powermock.api.mockito2.version>
-        <azuremonitor.micrometer.registry.version>1.1.0</azuremonitor.micrometer.registry.version>
-        <micrometer.core.version>1.1.0</micrometer.core.version>
+        <azuremonitor.micrometer.registry.version>1.1.1</azuremonitor.micrometer.registry.version>
+        <micrometer.core.version>1.1.1</micrometer.core.version>
         <spring-boot-actuator-autoconfigure.version>2.1.0.RELEASE</spring-boot-actuator-autoconfigure.version>
         <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
         <commons-io.version>2.3</commons-io.version>
