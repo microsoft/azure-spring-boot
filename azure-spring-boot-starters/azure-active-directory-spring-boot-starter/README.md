@@ -92,9 +92,11 @@ private AADAuthenticationFilter aadAuthFilter;
 * Role-based Authorization with method `isMemberOf()`
 
 #### Allow telemetry
-Microsoft would like to collect data about how users use this Spring boot starter. Microsoft uses this information to improve our tooling experience. Participation is voluntary. If you don't want to participate, just simply disable it by setting below configuration in `application.properties`.
+Microsoft would like to collect data about how users use this Spring boot starter.
+Microsoft uses this information to improve our tooling experience. Participation is voluntary.
+If you don't want to participate, just simply disable it by setting below configuration in `application.properties`.
 ```properties
-azure.mediaservices.allow-telemetry=false
+azure.activedirectory.allow-telemetry=false
 ```
 Find more information about Azure Service Privacy Statement, please check [Microsoft Online Services Privacy Statement](https://www.microsoft.com/en-us/privacystatement/OnlineServices/Default.aspx). 
 
