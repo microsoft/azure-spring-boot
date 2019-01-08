@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 
 @Configuration
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Scope;
 @ConditionalOnProperty(prefix = "azure.aad.app-role", value = {"client-id"})
 @EnableConfigurationProperties({AADAppRoleAuthenticationProperties.class,
     ServiceEndpointsProperties.class})
+@PropertySource(value = "classpath:serviceEndpoints.properties")
 public class AADAppRoleAuthenticationFilterAutoConfiguration {
 
     private final AADAppRoleAuthenticationProperties authenticationProperties;
