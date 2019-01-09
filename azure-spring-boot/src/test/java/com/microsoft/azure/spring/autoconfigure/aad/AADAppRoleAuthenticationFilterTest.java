@@ -52,15 +52,15 @@ public class AADAppRoleAuthenticationFilterTest {
 
     public static final String TOKEN = "dummy-token";
 
-    final private UserPrincipalManager userPrincipalManager;
-    final private HttpServletRequest request;
-    final private HttpServletResponse response;
-    final private FilterChain filterChain;
-    final private SecurityContext securityContext;
-    final private ArgumentCaptor<Authentication> authenticationArgumentCaptor;
-    final private SimpleGrantedAuthority roleAdmin;
-    final private SimpleGrantedAuthority roleUser;
-    final private AADAppRoleAuthenticationFilter filter;
+    private final UserPrincipalManager userPrincipalManager;
+    private final HttpServletRequest request;
+    private final HttpServletResponse response;
+    private final FilterChain filterChain;
+    private final SecurityContext securityContext;
+    private final ArgumentCaptor<Authentication> authenticationArgumentCaptor;
+    private final SimpleGrantedAuthority roleAdmin;
+    private final SimpleGrantedAuthority roleUser;
+    private final AADAppRoleAuthenticationFilter filter;
 
     private UserPrincipal createUserPrincipal(Collection<String> roles) {
         final JSONArray claims = new JSONArray();
