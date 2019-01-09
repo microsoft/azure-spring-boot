@@ -51,14 +51,12 @@ public class AADAppRoleAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith(TOKEN_TYPE)) {
             try {
                 final String token = authHeader.replace(TOKEN_TYPE, "");
-
                 final UserPrincipal principal = principalManager.buildUserPrincipal(token);
                 final JSONArray roles = Optional.ofNullable((JSONArray) principal.getClaims().get("roles"))
                     .filter(r -> !r.isEmpty())
                     .orElse(DEFAULT_ROLE_CLAIM);
                 final Authentication authentication = new PreAuthenticatedAuthenticationToken(
                     principal, null, rolesToGrantedAuthorities(roles));
-
                 authentication.setAuthenticated(true);
                 log.info("Request token verification success. {}", authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);

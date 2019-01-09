@@ -32,7 +32,6 @@ public class AADAppRoleAuthenticationFilterAutoConfiguration {
     }
 
     @Bean
-    @Scope("singleton")
     @ConditionalOnMissingBean(UserPrincipalManager.class)
     public UserPrincipalManager userPrincipalManager(
         ServiceEndpointsProperties serviceEndpointsProps, AADAppRoleAuthenticationProperties aadAuthProps,
@@ -41,14 +40,12 @@ public class AADAppRoleAuthenticationFilterAutoConfiguration {
     }
 
     @Bean
-    @Scope("singleton")
     @ConditionalOnMissingBean(AADAppRoleAuthenticationFilter.class)
     public AADAppRoleAuthenticationFilter authFilter(UserPrincipalManager userPrincipalManager) {
         return new AADAppRoleAuthenticationFilter(userPrincipalManager);
     }
 
     @Bean
-    @Scope("singleton")
     @ConditionalOnMissingBean(ResourceRetriever.class)
     public ResourceRetriever getJWTResourceRetriever() {
         return new DefaultResourceRetriever(authenticationProperties.getJwtConnectTimeout(),

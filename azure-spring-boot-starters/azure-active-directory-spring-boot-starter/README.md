@@ -111,7 +111,10 @@ Autowire the appRole filter and attach it to the filter chain:
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         [...]
-        http.addFilterBefore(appRoleAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http.csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .addFilterBefore(appRoleAuthFilter, UsernamePasswordAuthenticationFilter.class);
     }
 ```
 
