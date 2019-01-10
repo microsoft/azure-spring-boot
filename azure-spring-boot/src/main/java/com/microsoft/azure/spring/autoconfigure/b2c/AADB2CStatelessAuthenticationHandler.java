@@ -25,7 +25,7 @@ public class AADB2CStatelessAuthenticationHandler extends AbstractAADB2CFilterSc
 
     private static final String AUTH_TYPE = "Bearer ";
 
-    private static final String AUTH_HEADER = "Authentication";
+    private static final String AUTH_HEADER = "Authorization";
 
     private final AADB2CJWTProcessor jwtProcessor;
 
