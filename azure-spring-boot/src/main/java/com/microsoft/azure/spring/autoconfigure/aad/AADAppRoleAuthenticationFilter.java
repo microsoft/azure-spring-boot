@@ -47,6 +47,7 @@ public class AADAppRoleAuthenticationFilter extends OncePerRequestFilter {
         FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader(TOKEN_HEADER);
+        boolean cleanupRequired = false;
 
         if (authHeader != null && authHeader.startsWith(TOKEN_TYPE)) {
             try {
@@ -60,6 +61,7 @@ public class AADAppRoleAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setAuthenticated(true);
                 log.info("Request token verification success. {}", authentication);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                cleanupRequired = true;
             } catch (BadJWTException ex) {
                 log.warn("Invalid JWT: " + ex.getMessage());
                 throw new ServletException(ex);
@@ -69,7 +71,14 @@ public class AADAppRoleAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        filterChain.doFilter(request, response);
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            if (cleanupRequired) {
+                //Clear context after execution
+                SecurityContextHolder.clearContext();
+            }
+        }
     }
 
     protected Set<SimpleGrantedAuthority> rolesToGrantedAuthorities(JSONArray roles) {
