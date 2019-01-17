@@ -11,6 +11,7 @@ import com.microsoft.aad.adal4j.AuthenticationContext;
 import com.microsoft.aad.adal4j.AuthenticationResult;
 import com.microsoft.aad.adal4j.ClientCredential;
 import com.microsoft.aad.adal4j.UserAssertion;
+import com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationProperties.UserGroupProperties;
 import com.nimbusds.oauth2.sdk.http.HTTPResponse;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,6 +30,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class AzureADGraphClient {
     private static final SimpleGrantedAuthority DEFAULT_AUTHORITY = new SimpleGrantedAuthority("ROLE_USER");
@@ -91,18 +93,31 @@ public class AzureADGraphClient {
         final JsonNode valuesNode = rootNode.get("value");
 
         if (valuesNode != null) {
-            valuesNode.forEach(valueNode -> {
-                if (valueNode != null && valueNode.get(aadAuthenticationProperties.getUserGroup().getKey()).asText()
-                        .equals(aadAuthenticationProperties.getUserGroup().getValue())) {
-                    final String objectID = valueNode.
-                            get(aadAuthenticationProperties.getUserGroup().getObjectIDKey()).asText();
-                    final String displayName = valueNode.get("displayName").asText();
-                    lUserGroups.add(new UserGroup(objectID, displayName));
-                }
-            });
+
+            lUserGroups
+                    .addAll(StreamSupport.stream(valuesNode.spliterator(), false).filter(this::isMatchingUserGroupKey)
+                            .map(node -> {
+                                final String objectID = node.
+                                        get(aadAuthenticationProperties.getUserGroup().getObjectIDKey()).asText();
+                                final String displayName = node.get("displayName").asText();
+                                return new UserGroup(objectID, displayName);
+                            }).collect(Collectors.toList()));
+
         }
 
         return lUserGroups;
+    }
+
+    /**
+     * Checks that the JSON Node is a valid User Group to extract User Groups from
+     *
+     * @param node - json node to look for a key/value to equate against the {@link UserGroupProperties}
+     *
+     * @return true if the json node contains the correct key, and expected value to identify a user group.
+     */
+    private boolean isMatchingUserGroupKey(final JsonNode node) {
+        return node.get(aadAuthenticationProperties.getUserGroup().getKey()).asText()
+                .equals(aadAuthenticationProperties.getUserGroup().getValue());
     }
 
     public Set<GrantedAuthority> getGrantedAuthorities(String graphApiToken) throws IOException {
@@ -121,10 +136,7 @@ public class AzureADGraphClient {
      */
     public Set<GrantedAuthority> convertGroupsToGrantedAuthorities(final List<UserGroup> groups) {
         // Map the authority information to one or more GrantedAuthority's and add it to mappedAuthorities
-        final Set<GrantedAuthority> mappedAuthorities = groups.stream()
-                .filter(group -> aadAuthenticationProperties.getUserGroup().getAllowedGroups()
-                        .contains(group.getDisplayName())
-                        || aadAuthenticationProperties.getActiveDirectoryGroups().contains(group.getDisplayName()))
+        final Set<GrantedAuthority> mappedAuthorities = groups.stream().filter(this::isValidUserGroupToGrantAuthority)
                 .map(userGroup -> new SimpleGrantedAuthority(DEFAULE_ROLE_PREFIX + userGroup.getDisplayName()))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
         if (mappedAuthorities.isEmpty()) {
@@ -132,6 +144,22 @@ public class AzureADGraphClient {
         }
 
         return mappedAuthorities;
+    }
+
+    /**
+     * Determines if this is a valid {@link UserGroup} to build to a GrantedAuthority.
+     * <p>
+     * If the {@link UserGroupProperties#getAllowedGroups()} or the {@link
+     * AADAuthenticationProperties#getActiveDirectoryGroups()} contains the {@link UserGroup#getDisplayName()} return
+     * true.
+     *
+     * @param group - User Group to check if valid to grant an authority to.
+     *
+     * @return true if either of the allowed-groups or active-directory-groups contains the UserGroup display name
+     */
+    private boolean isValidUserGroupToGrantAuthority(final UserGroup group) {
+        return aadAuthenticationProperties.getUserGroup().getAllowedGroups().contains(group.getDisplayName())
+                || aadAuthenticationProperties.getActiveDirectoryGroups().contains(group.getDisplayName());
     }
 
     public AuthenticationResult acquireTokenForGraphApi(String idToken, String tenantId)
@@ -157,8 +185,7 @@ public class AzureADGraphClient {
         }
 
         if (result == null) {
-            throw new ServiceUnavailableException(
-                    "unable to acquire on-behalf-of token for client " + clientId);
+            throw new ServiceUnavailableException("unable to acquire on-behalf-of token for client " + clientId);
         }
         return result;
     }
