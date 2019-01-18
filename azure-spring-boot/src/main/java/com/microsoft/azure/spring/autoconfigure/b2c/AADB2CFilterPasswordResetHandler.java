@@ -45,7 +45,7 @@ public class AADB2CFilterPasswordResetHandler extends AbstractAADB2CFilterScenar
             throws AADB2CAuthenticationException, IOException {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (super.isAuthenticated(auth) || b2cProperties.isSessionStatelessEnabled()) {
+        if (super.isAuthenticated(auth)) {
             final String refererURL = getRefererURL(request);
             final String url = AADB2CURL.getOpenIdPasswordResetURL(b2cProperties, refererURL, request);
 
