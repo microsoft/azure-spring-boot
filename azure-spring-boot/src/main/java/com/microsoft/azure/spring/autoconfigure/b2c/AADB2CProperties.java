@@ -77,12 +77,6 @@ public class AADB2CProperties {
     @NotBlank(message = "client ID should not be blank")
     private String clientId;
 
-    /**
-     * Indicate if use session creation STATELESS policy, disabled by default.
-     */
-    @JsonProperty(SESSION_STATE_LESS)
-    private Boolean sessionStateless = false;
-
     @URL
     @Setter
     @JsonProperty(LOGOUT_SUCCESS_URL)
@@ -101,10 +95,6 @@ public class AADB2CProperties {
      */
     @JsonProperty(POLICIES)
     private Policies policies = new Policies();
-
-    public boolean isSessionStatelessEnabled() {
-        return this.sessionStateless;
-    }
 
     @Getter
     @Validated

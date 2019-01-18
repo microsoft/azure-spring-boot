@@ -94,7 +94,6 @@ public class AADB2CAutoConfiguration {
     }
 
     @Configuration
-    @ConditionalOnProperty(prefix = PREFIX, value = SESSION_STATE_LESS, havingValue = "false", matchIfMissing = true)
     public static class OpenIdSessionAutoConfiguration {
 
         private final AADB2CProperties b2cProperties;
@@ -121,47 +120,6 @@ public class AADB2CAutoConfiguration {
         @ConditionalOnMissingBean
         public AADB2CFilter aadB2CFilter() {
             return new AADB2CFilter(handlerChain);
-        }
-    }
-
-    @Configuration
-    @ConditionalOnProperty(prefix = PREFIX, value = SESSION_STATE_LESS, havingValue = "true")
-    public static class OpenIdSessionStatelessAutoConfiguration {
-
-        private final AADB2CProperties properties;
-
-        private final AADB2CFilterScenarioHandlerChain handlerChain;
-
-        public OpenIdSessionStatelessAutoConfiguration(@NonNull AADB2CProperties properties,
-                                                       @NonNull AADB2CFilterScenarioHandlerChain handlerChain) {
-            this.properties = properties;
-            this.handlerChain = handlerChain;
-        }
-
-        @Bean
-        @ConditionalOnMissingBean
-        public AADB2CStatelessPolicyReplyHandler statelessPolicyReplyHandler() {
-            final AADB2CStatelessPolicyReplyHandler handler = new AADB2CStatelessPolicyReplyHandler(properties);
-
-            handlerChain.addHandler(handler);
-
-            return handler;
-        }
-
-        @Bean
-        @ConditionalOnMissingBean
-        public AADB2CStatelessAuthenticationHandler statelessAuthenticationHandler() {
-            final AADB2CStatelessAuthenticationHandler handler = new AADB2CStatelessAuthenticationHandler(properties);
-
-            handlerChain.addHandler(handler);
-
-            return handler;
-        }
-
-        @Bean
-        @ConditionalOnMissingBean
-        public AADB2CStatelessFilter aadB2CSessionStatelessFilter() {
-            return new AADB2CStatelessFilter(handlerChain);
         }
     }
 }
