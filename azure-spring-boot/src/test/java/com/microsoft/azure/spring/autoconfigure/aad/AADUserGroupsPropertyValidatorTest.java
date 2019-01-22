@@ -8,56 +8,43 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import java.util.Collections;
-import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class AADUserGroupsPropertyValidatorTest {
 
-    private AADUserGroupsPropertyValidator aadUserGroupsPropertyValidator;
     private AADAuthenticationProperties aadAuthenticationProperties;
-    private Validator validator;
 
     @Before
     public void setUp() {
-        aadUserGroupsPropertyValidator = new AADUserGroupsPropertyValidator();
         aadAuthenticationProperties = new AADAuthenticationProperties();
-        validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
     @Test
     public void isValidNoGroupsDefined() {
-        assertThat(aadUserGroupsPropertyValidator.isValid(aadAuthenticationProperties, null)).isFalse();
-    }
-
-    @Test
-    public void isValidThrowsValidationException() {
-        final Set<ConstraintViolation<AADAuthenticationProperties>> violations = validator
-                .validate(aadAuthenticationProperties);
-        assertThat(violations).isNotEmpty().hasSize(1).extracting(ConstraintViolation::getMessage)
-                .containsExactly("azure.activedirectory.user-group.allowed-groups cannot be empty.");
+        assertThatCode(() -> aadAuthenticationProperties.validateUserGroupProperties())
+                .isInstanceOf(IllegalStateException.class).hasMessage(
+                "One of the User Group Properties must be populated. "
+                        + "Please populate azure.activedirectory.user-group.allowed-groups");
     }
 
     @Test
     public void isValidDeprecatedPropertySet() {
         aadAuthenticationProperties.setActiveDirectoryGroups(Collections.singletonList("user-group"));
-        assertThat(aadUserGroupsPropertyValidator.isValid(aadAuthenticationProperties, null)).isTrue();
+        assertThatCode(() -> aadAuthenticationProperties.validateUserGroupProperties()).doesNotThrowAnyException();
     }
 
     @Test
     public void isValidUserGroupPropertySet() {
         aadAuthenticationProperties.getUserGroup().setAllowedGroups(Collections.singletonList("user-group"));
-        assertThat(aadUserGroupsPropertyValidator.isValid(aadAuthenticationProperties, null)).isTrue();
+        assertThatCode(() -> aadAuthenticationProperties.validateUserGroupProperties()).doesNotThrowAnyException();
     }
 
     @Test
     public void isValidBothUserGroupPropertiesSet() {
         aadAuthenticationProperties.setActiveDirectoryGroups(Collections.singletonList("user-group"));
         aadAuthenticationProperties.getUserGroup().setAllowedGroups(Collections.singletonList("user-group"));
-        assertThat(aadUserGroupsPropertyValidator.isValid(aadAuthenticationProperties, null)).isTrue();
+        assertThatCode(() -> aadAuthenticationProperties.validateUserGroupProperties()).doesNotThrowAnyException();
     }
 }

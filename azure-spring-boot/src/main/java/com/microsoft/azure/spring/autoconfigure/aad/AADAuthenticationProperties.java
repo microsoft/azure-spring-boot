@@ -11,12 +11,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
 
+import javax.annotation.PostConstruct;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
 @Validated
 @ConfigurationProperties("azure.activedirectory")
-@ValidUserGroupProperties
 @Data
 public class AADAuthenticationProperties {
 
@@ -96,19 +97,34 @@ public class AADAuthenticationProperties {
          * Key of the JSON Node to get from the Azure AD response object that will be checked to contain the {@code
          * azure.activedirectory.user-group.value}  to signify that this node is a valid {@code UserGroup}.
          */
+        @NotEmpty
         private String key = "objectType";
 
         /**
          * Value of the JSON Node identified by the {@code azure.activedirectory.user-group.key} to validate the JSON
          * Node is a UserGroup.
          */
+        @NotEmpty
         private String value = "Group";
 
         /**
          * Key of the JSON Node containing the Azure Object ID for the {@code UserGroup}.
          */
+        @NotEmpty
         private String objectIDKey = "objectId";
 
     }
+
+    /**
+     * Validates at least one of the user group properties are populated.
+     */
+    @PostConstruct
+    public void validateUserGroupProperties() {
+        if (this.activeDirectoryGroups.isEmpty() && this.getUserGroup().getAllowedGroups().isEmpty()) {
+            throw new IllegalStateException("One of the User Group Properties must be populated. "
+                    + "Please populate azure.activedirectory.user-group.allowed-groups");
+        }
+    }
+
 
 }
