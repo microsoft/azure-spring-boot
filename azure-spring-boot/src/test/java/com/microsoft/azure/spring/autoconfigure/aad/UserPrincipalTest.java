@@ -5,82 +5,100 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.microsoft.aad.adal4j.ClientCredential;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jwt.JWTClaimsSet;
-import org.apache.commons.io.IOUtils;
-import org.hamcrest.collection.IsIterableContainingInAnyOrder;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 
-import static org.powermock.api.mockito.PowerMockito.doReturn;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(AzureADGraphClient.class)
+
 public class UserPrincipalTest {
     private AzureADGraphClient graphClientMock;
 
-    @Mock
+    @Rule
+    public WireMockRule wireMockRule = new WireMockRule(9519);
+
     private ClientCredential credential;
-
-    @Mock
     private AADAuthenticationProperties aadAuthProps;
-
-    @Mock
     private ServiceEndpointsProperties endpointsProps;
+    private String accessToken;
+
 
     @Before
     public void setup() {
-        this.graphClientMock = PowerMockito.spy(new AzureADGraphClient(credential, aadAuthProps, endpointsProps));
+        accessToken = Constants.BEARER_TOKEN;
+        aadAuthProps = new AADAuthenticationProperties();
+        endpointsProps = new ServiceEndpointsProperties();
+        final ServiceEndpoints serviceEndpoints = new ServiceEndpoints();
+        serviceEndpoints.setAadMembershipRestUri("http://localhost:9519/memberOf");
+        endpointsProps.getEndpoints().put("global", serviceEndpoints);
+        credential = new ClientCredential("client", "pass");
     }
+
 
     @Test
     public void getAuthoritiesByUserGroups() throws Exception {
-        final List<UserGroup> userGroups = new ArrayList<UserGroup>();
-        userGroups.add(new UserGroup("this is group1", "group1"));
+        aadAuthProps.setactiveDirectoryGroups(Collections.singletonList("group1"));
+        this.graphClientMock = new AzureADGraphClient(credential, aadAuthProps, endpointsProps);
 
-        doReturn(Constants.USERGROUPS_JSON)
-                .when(graphClientMock, "getUserMembershipsV1", Constants.BEARER_TOKEN);
-        PowerMockito.when(graphClientMock.getGroups(Constants.BEARER_TOKEN)).thenReturn(userGroups);
-        Whitebox.setInternalState(graphClientMock, "aadTargetGroups", Constants.TARGETED_GROUPS);
+
+        stubFor(get(urlEqualTo("/memberOf"))
+                .withHeader("Accept", equalTo("application/json;odata=minimalmetadata"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(Constants.USERGROUPS_JSON)));
 
         final Collection<? extends GrantedAuthority> authorities =
                 graphClientMock.getGrantedAuthorities(Constants.BEARER_TOKEN);
 
-        Assert.assertTrue(authorities.contains(new SimpleGrantedAuthority("ROLE_group1")));
-        Assert.assertFalse(authorities.contains(new SimpleGrantedAuthority("ROLE_group2")));
-        Assert.assertFalse(authorities.contains(new SimpleGrantedAuthority("ROLE_group3")));
+        assertThat(authorities).isNotEmpty().extracting(GrantedAuthority::getAuthority).containsExactly("ROLE_group1");
+
+        verify(getRequestedFor(urlMatching("/memberOf"))
+                .withHeader("Authorization", equalTo(accessToken))
+                .withHeader("Accept", equalTo("application/json;odata=minimalmetadata"))
+                .withHeader("api-version", equalTo("1.6")));
     }
 
     @Test
     public void getGroups() throws Exception {
-        doReturn(Constants.USERGROUPS_JSON)
-                .when(graphClientMock, "getUserMembershipsV1", Constants.BEARER_TOKEN);
 
-        final List<UserGroup> groups = graphClientMock.getGroups(Constants.BEARER_TOKEN);
-        final List<UserGroup> targetedGroups = new ArrayList<UserGroup>();
-        targetedGroups.add(new UserGroup("12345678-7baf-48ce-96f4-a2d60c26391e", "group1"));
-        targetedGroups.add(new UserGroup("12345678-e757-4474-b9c4-3f00a9ac17a0", "group2"));
-        targetedGroups.add(new UserGroup("12345678-86a4-4237-aeb0-60bad29c1de0", "group3"));
 
-        Assert.assertThat(groups, IsIterableContainingInAnyOrder.containsInAnyOrder(groups.toArray()));
+        aadAuthProps.setactiveDirectoryGroups(Arrays.asList("group1", "group2", "group3"));
+        this.graphClientMock = new AzureADGraphClient(credential, aadAuthProps, endpointsProps);
+
+        stubFor(get(urlEqualTo("/memberOf"))
+                .withHeader("Accept", equalTo("application/json;odata=minimalmetadata"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(Constants.USERGROUPS_JSON)));
+
+        final Collection<? extends GrantedAuthority> authorities =
+                graphClientMock.getGrantedAuthorities(Constants.BEARER_TOKEN);
+
+        assertThat(authorities).isNotEmpty().extracting(GrantedAuthority::getAuthority).containsExactly("ROLE_group1"
+                , "ROLE_group2", "ROLE_group3");
+
+        verify(getRequestedFor(urlMatching("/memberOf"))
+                .withHeader("Authorization", equalTo(accessToken))
+                .withHeader("Accept", equalTo("application/json;odata=minimalmetadata"))
+                .withHeader("api-version", equalTo("1.6")));
     }
 
     @Test
@@ -90,7 +108,7 @@ public class UserPrincipalTest {
         try (final FileOutputStream fileOutputStream = new FileOutputStream(tmpOutputFile);
              final ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
              final FileInputStream fileInputStream = new FileInputStream(tmpOutputFile);
-             final ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);){
+             final ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);) {
 
             final JWSObject jwsObject = JWSObject.parse(Constants.JWT_TOKEN);
             final JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject("fake-subject").build();
@@ -107,9 +125,7 @@ public class UserPrincipalTest {
             Assert.assertTrue("Serialized UserPrincipal claims not empty.",
                     serializedPrincipal.getClaims().size() > 0);
         } finally {
-            if (tmpOutputFile != null) {
-                Files.deleteIfExists(tmpOutputFile.toPath());
-            }
+            Files.deleteIfExists(tmpOutputFile.toPath());
         }
     }
 }

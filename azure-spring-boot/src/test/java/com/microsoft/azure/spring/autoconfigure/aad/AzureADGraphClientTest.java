@@ -5,27 +5,23 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
+import com.microsoft.aad.adal4j.ClientCredential;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import com.microsoft.aad.adal4j.ClientCredential;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(AzureADGraphClient.class)
+import static org.mockito.Mockito.when;
+
+@RunWith(MockitoJUnitRunner.class)
 public class AzureADGraphClientTest {
 
     private AzureADGraphClient adGraphClient;
@@ -44,7 +40,7 @@ public class AzureADGraphClientTest {
         final List<String> activeDirectoryGroups = new ArrayList<>();
         activeDirectoryGroups.add("Test_Group");
         when(aadAuthProps.getActiveDirectoryGroups()).thenReturn(activeDirectoryGroups);
-        adGraphClient = PowerMockito.spy(new AzureADGraphClient(credential, aadAuthProps, endpointsProps));
+        adGraphClient = new AzureADGraphClient(credential, aadAuthProps, endpointsProps);
     }
 
      @Test
