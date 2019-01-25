@@ -63,8 +63,9 @@ public class AADAppRoleAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 cleanupRequired = true;
             } catch (BadJWTException ex) {
-                log.warn("Invalid JWT: " + ex.getMessage());
-                throw new ServletException(ex);
+                final String errorMessage = "Invalid JWT. Either expired or not yet valid. " + ex.getMessage();
+                log.warn(errorMessage);
+                throw new ServletException(errorMessage, ex);
             } catch (ParseException | BadJOSEException | JOSEException ex) {
                 log.error("Failed to initialize UserPrincipal.", ex);
                 throw new ServletException(ex);
