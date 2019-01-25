@@ -63,6 +63,12 @@ public class AADAuthenticationProperties {
      */
     private boolean allowTelemetry = true;
 
+    /**
+     * If <code>true</code> activates the stateless auth filter {@link AADAppRoleAuthenticationFilter}. Default is
+     * <code>false</code> which activates {@link AADAuthenticationFilter}.
+     */
+    private Boolean sessionStateless = false;
+
     public boolean isAllowTelemetry() {
         return allowTelemetry;
     }
@@ -133,5 +139,13 @@ public class AADAuthenticationProperties {
 
     public void setJwtSizeLimit(int jwtSizeLimit) {
         this.jwtSizeLimit = jwtSizeLimit;
+    }
+
+    public Boolean getSessionStateless() {
+        return sessionStateless;
+    }
+
+    public void setSessionStateless(Boolean sessionStateless) {
+        this.sessionStateless = sessionStateless;
     }
 }
