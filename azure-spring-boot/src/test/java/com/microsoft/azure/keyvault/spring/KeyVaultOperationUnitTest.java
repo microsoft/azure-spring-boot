@@ -11,13 +11,11 @@ import com.microsoft.azure.keyvault.KeyVaultClient;
 import com.microsoft.azure.keyvault.models.SecretBundle;
 import com.microsoft.azure.keyvault.models.SecretItem;
 import com.microsoft.rest.RestException;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -30,30 +28,45 @@ import static org.mockito.Mockito.when;
 public class KeyVaultOperationUnitTest {
 
     private static final String testPropertyName1 = "testPropertyName1";
+
     private static final String fakeVaultUri = "https://fake.vault.com";
+
+    private static final String TEST_SPRING_RELAXED_BINDING_NAME_0 = "acme.my-project.person.first-name";
+
+    private static final String TEST_SPRING_RELAXED_BINDING_NAME_1 = "acme.myProject.person.firstName";
+
+    private static final String TEST_SPRING_RELAXED_BINDING_NAME_2 = "acme.my_project.person.first_name";
+
+    private static final String TEST_SPRING_RELAXED_BINDING_NAME_3 = "ACME_MYPROJECT_PERSON_FIRSTNAME";
+
+    private static final String TEST_AZURE_KEYVAULT_NAME = "acme-myproject-person-firstname";
+
+    private static final List<String> TEST_SPRING_RELAXED_BINDING_NAMES = Arrays.asList(
+            TEST_SPRING_RELAXED_BINDING_NAME_0,
+            TEST_SPRING_RELAXED_BINDING_NAME_1,
+            TEST_SPRING_RELAXED_BINDING_NAME_2,
+            TEST_SPRING_RELAXED_BINDING_NAME_3
+    );
 
     @Mock
     private KeyVaultClient keyVaultClient;
     private KeyVaultOperation keyVaultOperation;
 
-    @Before
-    public void setup() {
-
+    public void setupSecretBundle(String id, String value) {
         final PagedList<SecretItem> mockResult = new PagedList<SecretItem>() {
             @Override
-            public Page<SecretItem> nextPage(String s) throws RestException, IOException {
+            public Page<SecretItem> nextPage(String s) throws RestException {
                 return new MockPage();
             }
         };
 
         final SecretItem secretItem = new SecretItem();
-        secretItem.withId(testPropertyName1);
+        secretItem.withId(id);
         mockResult.add(secretItem);
 
         final SecretBundle secretBundle = new SecretBundle();
-        secretBundle.withValue(testPropertyName1);
-        secretBundle.withId(testPropertyName1);
 
+        secretBundle.withId(id).withValue(value);
 
         when(keyVaultClient.listSecrets(anyString())).thenReturn(mockResult);
         when(keyVaultClient.getSecret(anyString(), anyString())).thenReturn(secretBundle);
@@ -63,17 +76,28 @@ public class KeyVaultOperationUnitTest {
 
     @Test
     public void testGet() {
-        final String result = (String) keyVaultOperation.get(testPropertyName1);
+        setupSecretBundle(testPropertyName1, testPropertyName1);
 
-        assertThat(result).isEqualTo(testPropertyName1);
+        assertThat(keyVaultOperation.get(testPropertyName1)).isEqualToIgnoringCase(testPropertyName1);
     }
 
     @Test
     public void testList() {
+        setupSecretBundle(testPropertyName1, testPropertyName1);
+
         final String[] result = keyVaultOperation.list();
 
         assertThat(result.length).isEqualTo(1);
-        assertThat(result[0]).isEqualTo(testPropertyName1);
+        assertThat(result[0]).isEqualToIgnoringCase(testPropertyName1);
+    }
+
+    @Test
+    public void setTestSpringRelaxedBindingNames() {
+        setupSecretBundle(TEST_AZURE_KEYVAULT_NAME, TEST_AZURE_KEYVAULT_NAME);
+
+        TEST_SPRING_RELAXED_BINDING_NAMES.forEach(
+                n -> assertThat(keyVaultOperation.get(n)).isEqualTo(TEST_AZURE_KEYVAULT_NAME)
+        );
     }
 
     class MockPage implements Page<SecretItem> {
