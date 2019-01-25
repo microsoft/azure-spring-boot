@@ -92,9 +92,9 @@ public class AADAppRoleAuthenticationFilterTest {
             @Override
             public void doFilter(ServletRequest request, ServletResponse response)
                 throws IOException, ServletException {
-                SecurityContext context = SecurityContextHolder.getContext();
+                final SecurityContext context = SecurityContextHolder.getContext();
                 assertNotNull(context);
-                Authentication authentication = context.getAuthentication();
+                final Authentication authentication = context.getAuthentication();
                 assertNotNull(authentication);
                 assertTrue("User should be authenticated!", authentication.isAuthenticated());
                 assertEquals(dummyPrincipal, authentication.getPrincipal());
@@ -133,9 +133,9 @@ public class AADAppRoleAuthenticationFilterTest {
             @Override
             public void doFilter(ServletRequest request, ServletResponse response)
                 throws IOException, ServletException {
-                SecurityContext context = SecurityContextHolder.getContext();
+                final SecurityContext context = SecurityContextHolder.getContext();
                 assertNotNull(context);
-                Authentication authentication = context.getAuthentication();
+                final Authentication authentication = context.getAuthentication();
                 assertNotNull(authentication);
                 assertTrue("User should be authenticated!", authentication.isAuthenticated());
                 final SimpleGrantedAuthority expectedDefaultRole = new SimpleGrantedAuthority("ROLE_USER");
