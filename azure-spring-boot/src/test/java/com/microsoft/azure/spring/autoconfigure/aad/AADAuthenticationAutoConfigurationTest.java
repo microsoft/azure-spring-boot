@@ -71,10 +71,12 @@ public class AADAuthenticationAutoConfigurationTest {
     }
 
     @Test
-    public void testUserGroupPropertiesAreOverriden() {
+    public void testUserGroupPropertiesAreOverridden() {
+
         contextRunner.withPropertyValues("azure.activedirectory.user-group.allowed-groups=another_group,third_group",
                 "azure.activedirectory.user-group.key=key", "azure.activedirectory.user-group.value=value",
                 "azure.activedirectory.user-group.object-id-key=objidk").run(context -> {
+
             assertThat(context.getBean(AADAuthenticationProperties.class)).isNotNull();
 
             final UserGroupProperties userGroupProperties = context
@@ -84,9 +86,8 @@ public class AADAuthenticationAutoConfigurationTest {
                     .extracting(UserGroupProperties::getKey, UserGroupProperties::getValue,
                             UserGroupProperties::getObjectIDKey).containsExactly("key", "value", "objidk");
 
-            assertThat(userGroupProperties.getAllowedGroups())
+            assertThat(userGroupProperties.getAllowedGroups()).isNotEmpty()
                     .hasSize(2).containsExactly("another_group", "third_group");
-
         });
 
     }
