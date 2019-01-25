@@ -7,6 +7,7 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,24 +31,20 @@ import java.util.Collections;
 import java.util.Set;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.minidev.json.JSONArray;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(SecurityContextHolder.class)
 public class AADAppRoleAuthenticationFilterTest {
 
     public static final String TOKEN = "dummy-token";
@@ -55,8 +52,6 @@ public class AADAppRoleAuthenticationFilterTest {
     private final UserPrincipalManager userPrincipalManager;
     private final HttpServletRequest request;
     private final HttpServletResponse response;
-    private final FilterChain filterChain;
-    private final SecurityContext securityContext;
     private final ArgumentCaptor<Authentication> authenticationArgumentCaptor;
     private final SimpleGrantedAuthority roleAdmin;
     private final SimpleGrantedAuthority roleUser;
@@ -78,8 +73,6 @@ public class AADAppRoleAuthenticationFilterTest {
         userPrincipalManager = mock(UserPrincipalManager.class);
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
-        filterChain = mock(FilterChain.class);
-        securityContext = mock(SecurityContext.class);
         authenticationArgumentCaptor = ArgumentCaptor.forClass(Authentication.class);
         roleAdmin = new SimpleGrantedAuthority("ROLE_admin");
         roleUser = new SimpleGrantedAuthority("ROLE_user");
@@ -89,23 +82,31 @@ public class AADAppRoleAuthenticationFilterTest {
     @Test
     public void testDoFilterGoodCase()
         throws ParseException, JOSEException, BadJOSEException, ServletException, IOException {
-        PowerMockito.mockStatic(SecurityContextHolder.class);
         final UserPrincipal dummyPrincipal = createUserPrincipal(Arrays.asList("user", "admin"));
 
         when(request.getHeader(Constants.TOKEN_HEADER)).thenReturn("Bearer " + TOKEN);
         when(userPrincipalManager.buildUserPrincipal(TOKEN)).thenReturn(dummyPrincipal);
-        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+
+        //Check in subsequent filter that authentication is available!
+        final FilterChain filterChain = new FilterChain() {
+            @Override
+            public void doFilter(ServletRequest request, ServletResponse response)
+                throws IOException, ServletException {
+                SecurityContext context = SecurityContextHolder.getContext();
+                assertNotNull(context);
+                Authentication authentication = context.getAuthentication();
+                assertNotNull(authentication);
+                assertTrue("User should be authenticated!", authentication.isAuthenticated());
+                assertEquals(dummyPrincipal, authentication.getPrincipal());
+                Assertions.assertThat((Collection<SimpleGrantedAuthority>) authentication.getAuthorities())
+                    .containsExactlyInAnyOrder(roleAdmin, roleUser);
+            }
+        };
 
         filter.doFilterInternal(request, response, filterChain);
 
         verify(userPrincipalManager).buildUserPrincipal(TOKEN);
-        verify(securityContext).setAuthentication(authenticationArgumentCaptor.capture());
-        final Authentication authentication = authenticationArgumentCaptor.getValue();
-        assertNotNull(authentication);
-        assertTrue("User should be authenticated!", authentication.isAuthenticated());
-        assertEquals(dummyPrincipal, authentication.getPrincipal());
-        Assertions.assertThat((Collection<SimpleGrantedAuthority>) authentication.getAuthorities())
-            .containsExactlyInAnyOrder(roleAdmin, roleUser);
+        assertNull("Authentication has not been cleaned up!", SecurityContextHolder.getContext().getAuthentication());
     }
 
     @Test(expected = ServletException.class)
@@ -115,30 +116,38 @@ public class AADAppRoleAuthenticationFilterTest {
         when(request.getHeader(Constants.TOKEN_HEADER)).thenReturn("Bearer " + TOKEN);
         when(userPrincipalManager.buildUserPrincipal(any())).thenThrow(new BadJWTException("bad token"));
 
-        filter.doFilterInternal(request, response, filterChain);
+        filter.doFilterInternal(request, response, null);
     }
 
     @Test
     public void testDoFilterAddsDefaultRole()
         throws ParseException, JOSEException, BadJOSEException, ServletException, IOException {
-        PowerMockito.mockStatic(SecurityContextHolder.class);
 
         final UserPrincipal dummyPrincipal = createUserPrincipal(Collections.emptyList());
 
         when(request.getHeader(Constants.TOKEN_HEADER)).thenReturn("Bearer " + TOKEN);
         when(userPrincipalManager.buildUserPrincipal(TOKEN)).thenReturn(dummyPrincipal);
-        when(SecurityContextHolder.getContext()).thenReturn(securityContext);
+
+        //Check in subsequent filter that authentication is available and default roles are filled.
+        final FilterChain filterChain = new FilterChain() {
+            @Override
+            public void doFilter(ServletRequest request, ServletResponse response)
+                throws IOException, ServletException {
+                SecurityContext context = SecurityContextHolder.getContext();
+                assertNotNull(context);
+                Authentication authentication = context.getAuthentication();
+                assertNotNull(authentication);
+                assertTrue("User should be authenticated!", authentication.isAuthenticated());
+                final SimpleGrantedAuthority expectedDefaultRole = new SimpleGrantedAuthority("ROLE_USER");
+                Assertions.assertThat((Collection<SimpleGrantedAuthority>) authentication.getAuthorities())
+                    .containsExactlyInAnyOrder(expectedDefaultRole);
+            }
+        };
 
         filter.doFilterInternal(request, response, filterChain);
 
         verify(userPrincipalManager).buildUserPrincipal(TOKEN);
-        verify(securityContext).setAuthentication(authenticationArgumentCaptor.capture());
-        final Authentication authentication = authenticationArgumentCaptor.getValue();
-        assertNotNull(authentication);
-        assertTrue("User should be authenticated!", authentication.isAuthenticated());
-        final SimpleGrantedAuthority expectedDefaultRole = new SimpleGrantedAuthority("ROLE_USER");
-        Assertions.assertThat((Collection<SimpleGrantedAuthority>) authentication.getAuthorities())
-            .containsExactlyInAnyOrder(expectedDefaultRole);
+        assertNull("Authentication has not been cleaned up!", SecurityContextHolder.getContext().getAuthentication());
     }
 
 
