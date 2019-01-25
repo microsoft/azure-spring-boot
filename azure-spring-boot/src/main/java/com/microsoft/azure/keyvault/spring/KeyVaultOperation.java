@@ -76,7 +76,7 @@ public class KeyVaultOperation {
      * </table>
      * But azure keyvault only allows ^[0-9a-zA-Z-]+$ and case insensitive, so there must be some conversion
      * between spring names and azure keyvault names.
-     * For example, the stated below 4 properties should be convert to acme-myproject-person-firstname in keyvault.
+     * For example, the 4 properties stated above should be convert to acme-myproject-person-firstname in keyvault.
      *
      * @param property of secret instance.
      * @return the value of secret with given name or null.
