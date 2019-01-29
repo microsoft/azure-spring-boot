@@ -195,6 +195,12 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!-- TEST-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
