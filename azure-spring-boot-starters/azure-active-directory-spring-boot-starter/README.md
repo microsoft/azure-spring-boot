@@ -92,18 +92,37 @@ private AADAuthenticationFilter aadAuthFilter;
 * Role-based Authorization with method `isMemberOf()`
 
 ##### Authenticate stateless APIs using AAD app roles
-Please refer to [azure-active-directory-spring-boot-app-role-sample](../../azure-spring-boot-samples/azure-active-directory-spring-boot-app-role-sample/README.md) 
-for how to integrate Spring Security and Azure AD with its `appRole` feature. This scenario fits best 
-for stateless Spring backends exposing an API to SPAs ([OAuth 2.0 implicit grant flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/v1-oauth2-implicit-grant-flow)) 
-or other service-to-service access using the [client credentials grant flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/v1-oauth2-client-creds-grant-flow)
+This scenario fits best for stateless Spring backends exposing an API to SPAs ([OAuth 2.0 implicit grant flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/v1-oauth2-implicit-grant-flow)) 
+or service-to-service access using the [client credentials grant flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/v1-oauth2-client-creds-grant-flow).
 
-Configure your application properties:
+The stateless processing can be activated with the `azure.activedirectory.session-stateless` property. 
+The authorization is using the [AAD AppRole feature](https://docs.microsoft.com/en-us/azure/architecture/multitenant-identity/app-roles#roles-using-azure-ad-app-roles),
+so instead of using the `groups` claim the token has a `roles` claim which contains roles [configured in your manifest](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-add-app-roles-in-azure-ad-apps#examples). 
+
+Configure your `application properties`:
 
 ```properties
-azure.aad.app-role.client-id=xxxxxx-your-client-id-xxxxxx
+azure.activedirectory.session-stateless=true
+azure.activedirectory.client-id=xxxxxx-your-client-id-xxxxxx
 ```
 
-Autowire the appRole filter and attach it to the filter chain:
+Define your roles in your application registration manifest: 
+```json
+  "appRoles": [
+    {
+      "allowedMemberTypes": [
+        "User"
+      ],
+      "displayName": "My demo",
+      "id": "00000000-0000-0000-0000-000000000000",
+      "isEnabled": true,
+      "description": "My demo role.",
+      "value": "MY_ROLE"
+    }
+  ],
+```
+
+Autowire the auth filter and attach it to the filter chain:
 ```java
     @Autowired
     private AADAppRoleAuthenticationFilter appRoleAuthFilter;
@@ -118,7 +137,7 @@ Autowire the appRole filter and attach it to the filter chain:
     }
 ```
 
-* Role-based Authorization with annotation `@PreAuthorize("hasRole('rolename')")`
+* Role-based Authorization with annotation `@PreAuthorize("hasRole('MY_ROLE')")`
 * Role-based Authorization with method `isMemberOf()`
 
 The roles you want to use within your application have to be [set up in the manifest of your
