@@ -6,23 +6,33 @@
 package com.microsoft.azure.spring.autoconfigure.aad;
 
 import com.nimbusds.jose.jwk.source.RemoteJWKSet;
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.util.StringUtils;
+import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
-
+import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
+import java.util.List;
 
 @Validated
 @ConfigurationProperties("azure.activedirectory")
+@Data
 public class AADAuthenticationProperties {
+
     private static final String DEFAULT_SERVICE_ENVIRONMENT = "global";
+
+    /**
+     * Default UserGroup configuration.
+     */
+    private UserGroupProperties userGroup = new UserGroupProperties();
+
 
     /**
      * Azure service environment/region name, e.g., cn, global
      */
-    private String environment;
+    private String environment = DEFAULT_SERVICE_ENVIRONMENT;
     /**
      * Registered application ID in Azure AD.
      * Must be configured when OAuth2 authentication is done in front end
@@ -33,10 +43,12 @@ public class AADAuthenticationProperties {
      * Must be configured when OAuth2 authentication is done in front end
      */
     private String clientSecret;
+
     /**
      * Azure AD groups.
      */
-    private List<String> activeDirectoryGroups;
+    private List<String> activeDirectoryGroups = new ArrayList<>();
+
 
     /**
      * Connection Timeout for the JWKSet Remote URL call.
@@ -69,83 +81,56 @@ public class AADAuthenticationProperties {
      */
     private Boolean sessionStateless = false;
 
-    public boolean isAllowTelemetry() {
-        return allowTelemetry;
-    }
-
-    public void setAllowTelemetry(boolean allowTelemetry) {
-        this.allowTelemetry = allowTelemetry;
-    }
-
-    public String getEnvironment() {
-        return StringUtils.isEmpty(environment) ? DEFAULT_SERVICE_ENVIRONMENT : environment;
-    }
-
-    public void setEnvironment(String environment) {
-        this.environment = environment;
-    }
-
-    public String getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
-    }
-
-    public String getClientSecret() {
-        return clientSecret;
-    }
-
-    public void setClientSecret(String clientSecret) {
-        this.clientSecret = clientSecret;
-    }
-
+    @DeprecatedConfigurationProperty(reason = "Configuration moved to UserGroup class to keep UserGroup properties "
+            + "together", replacement = "azure.activedirectory.user-group.allowed-groups")
     public List<String> getActiveDirectoryGroups() {
         return activeDirectoryGroups;
     }
+    /**
+     * Properties dedicated to changing the behavior of how the groups are mapped from the Azure AD response. Depending
+     * on the graph API used the object will not be the same.
+     */
+    @Data
+    public static class UserGroupProperties {
 
-    public void setactiveDirectoryGroups(List<String> activeDirectoryGroups) {
-        this.activeDirectoryGroups = activeDirectoryGroups;
+        /**
+         * Expected UserGroups that an authority will be granted to if found in the response from the MemeberOf Graph
+         * API Call.
+         */
+        private List<String> allowedGroups = new ArrayList<>();
+
+        /**
+         * Key of the JSON Node to get from the Azure AD response object that will be checked to contain the {@code
+         * azure.activedirectory.user-group.value}  to signify that this node is a valid {@code UserGroup}.
+         */
+        @NotEmpty
+        private String key = "objectType";
+
+        /**
+         * Value of the JSON Node identified by the {@code azure.activedirectory.user-group.key} to validate the JSON
+         * Node is a UserGroup.
+         */
+        @NotEmpty
+        private String value = "Group";
+
+        /**
+         * Key of the JSON Node containing the Azure Object ID for the {@code UserGroup}.
+         */
+        @NotEmpty
+        private String objectIDKey = "objectId";
+
     }
 
-    public String getTenantId() {
-        return tenantId;
+    /**
+     * Validates at least one of the user group properties are populated.
+     */
+    @PostConstruct
+    public void validateUserGroupProperties() {
+        if (this.activeDirectoryGroups.isEmpty() && this.getUserGroup().getAllowedGroups().isEmpty()) {
+            throw new IllegalStateException("One of the User Group Properties must be populated. "
+                    + "Please populate azure.activedirectory.user-group.allowed-groups");
+        }
     }
 
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
-    }
 
-    public int getJwtConnectTimeout() {
-        return jwtConnectTimeout;
-    }
-
-    public void setJwtConnectTimeout(int jwtConnectTimeout) {
-        this.jwtConnectTimeout = jwtConnectTimeout;
-    }
-
-    public int getJwtReadTimeout() {
-        return jwtReadTimeout;
-    }
-
-    public void setJwtReadTimeout(int jwtReadTimeout) {
-        this.jwtReadTimeout = jwtReadTimeout;
-    }
-
-    public int getJwtSizeLimit() {
-        return jwtSizeLimit;
-    }
-
-    public void setJwtSizeLimit(int jwtSizeLimit) {
-        this.jwtSizeLimit = jwtSizeLimit;
-    }
-
-    public Boolean getSessionStateless() {
-        return sessionStateless;
-    }
-
-    public void setSessionStateless(Boolean sessionStateless) {
-        this.sessionStateless = sessionStateless;
-    }
 }

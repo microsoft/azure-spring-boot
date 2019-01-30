@@ -12,6 +12,7 @@ import org.springframework.core.env.Environment;
 
 import java.util.Map;
 
+import static com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationProperties.UserGroupProperties;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AADAuthenticationAutoConfigurationTest {
@@ -67,5 +68,27 @@ public class AADAuthenticationAutoConfigurationTest {
                                     ServiceEndpoints::getAadMembershipRestUri, ServiceEndpoints::getAadSigninUri)
                             .containsExactly("https://test/", "https://test/", "https://test/", "https://test/");
                 });
+    }
+
+    @Test
+    public void testUserGroupPropertiesAreOverridden() {
+
+        contextRunner.withPropertyValues("azure.activedirectory.user-group.allowed-groups=another_group,third_group",
+                "azure.activedirectory.user-group.key=key", "azure.activedirectory.user-group.value=value",
+                "azure.activedirectory.user-group.object-id-key=objidk").run(context -> {
+
+            assertThat(context.getBean(AADAuthenticationProperties.class)).isNotNull();
+
+            final UserGroupProperties userGroupProperties = context
+                    .getBean(AADAuthenticationProperties.class).getUserGroup();
+
+            assertThat(userGroupProperties).hasNoNullFieldsOrProperties()
+                    .extracting(UserGroupProperties::getKey, UserGroupProperties::getValue,
+                            UserGroupProperties::getObjectIDKey).containsExactly("key", "value", "objidk");
+
+            assertThat(userGroupProperties.getAllowedGroups()).isNotEmpty()
+                    .hasSize(2).containsExactly("another_group", "third_group");
+        });
+
     }
 }
