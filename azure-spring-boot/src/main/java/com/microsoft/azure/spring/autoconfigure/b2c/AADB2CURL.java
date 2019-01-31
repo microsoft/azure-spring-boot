@@ -9,35 +9,59 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AADB2CURL {
 
-    private static final String AUTHORIZATION_URI_PATTERN =
+    private static final String AUTHORIZATION_URL_PATTERN =
             "https://%s.b2clogin.com/%s.onmicrosoft.com/oauth2/v2.0/authorize";
 
-    private static final String TOKEN_URI_PATTERN =
+    private static final String TOKEN_URL_PATTERN =
             "https://%s.b2clogin.com/%s.onmicrosoft.com/oauth2/v2.0/token?p=%s";
 
-    private static final String JWKSET_URI_PATTERN =
+    private static final String JWKSET_URL_PATTERN =
             "https://%s.b2clogin.com/%s.onmicrosoft.com/discovery/v2.0/keys?p=%s";
 
-    public static String getAuthorizationUri(String tenant) {
+    private static final String END_SESSION_URL_PATTERN =
+            "https://%s.b2clogin.com/%s.onmicrosoft.com/oauth2/v2.0/logout?post_logout_redirect_uri=%s&p=%s";
+
+    public static String getAuthorizationUrl(String tenant) {
         Assert.hasText(tenant, "tenant should have text.");
 
-        return String.format(AUTHORIZATION_URI_PATTERN, tenant, tenant);
+        return String.format(AUTHORIZATION_URL_PATTERN, tenant, tenant);
     }
 
-    public static String getTokenUri(String tenant, String policyName) {
+    public static String getTokenUrl(String tenant, String policyName) {
         Assert.hasText(tenant, "tenant should have text.");
         Assert.hasText(policyName, "policy name should have text.");
 
-        return String.format(TOKEN_URI_PATTERN, tenant, tenant, policyName);
+        return String.format(TOKEN_URL_PATTERN, tenant, tenant, policyName);
     }
 
-    public static String getJwkSetUri(String tenant, String policyName) {
+    public static String getJwkSetUrl(String tenant, String policyName) {
         Assert.hasText(tenant, "tenant should have text.");
         Assert.hasText(policyName, "policy name should have text.");
 
-        return String.format(JWKSET_URI_PATTERN, tenant, tenant, policyName);
+        return String.format(JWKSET_URL_PATTERN, tenant, tenant, policyName);
+    }
+
+    public static String getEndSessionUrl(String tenant, String logoutUrl, String policyName) {
+        Assert.hasText(tenant, "tenant should have text.");
+        Assert.hasText(logoutUrl, "logoutUrl should have text.");
+        Assert.hasText(policyName, "policy name should have text.");
+
+        return String.format(END_SESSION_URL_PATTERN, tenant, tenant, getEncodedURL(logoutUrl), policyName);
+    }
+
+    private static String getEncodedURL(String url) {
+        Assert.hasText(url, "url should have text.");
+
+        try {
+            return URLEncoder.encode(url, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new AADB2CConfigurationException("failed to encode url: " + url, e);
+        }
     }
 }
