@@ -39,7 +39,6 @@ import net.minidev.json.JSONArray;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -52,7 +51,6 @@ public class AADAppRoleAuthenticationFilterTest {
     private final UserPrincipalManager userPrincipalManager;
     private final HttpServletRequest request;
     private final HttpServletResponse response;
-    private final ArgumentCaptor<Authentication> authenticationArgumentCaptor;
     private final SimpleGrantedAuthority roleAdmin;
     private final SimpleGrantedAuthority roleUser;
     private final AADAppRoleAuthenticationFilter filter;
@@ -73,7 +71,6 @@ public class AADAppRoleAuthenticationFilterTest {
         userPrincipalManager = mock(UserPrincipalManager.class);
         request = mock(HttpServletRequest.class);
         response = mock(HttpServletResponse.class);
-        authenticationArgumentCaptor = ArgumentCaptor.forClass(Authentication.class);
         roleAdmin = new SimpleGrantedAuthority("ROLE_admin");
         roleUser = new SimpleGrantedAuthority("ROLE_user");
         filter = new AADAppRoleAuthenticationFilter(userPrincipalManager);
@@ -116,7 +113,7 @@ public class AADAppRoleAuthenticationFilterTest {
         when(request.getHeader(Constants.TOKEN_HEADER)).thenReturn("Bearer " + TOKEN);
         when(userPrincipalManager.buildUserPrincipal(any())).thenThrow(new BadJWTException("bad token"));
 
-        filter.doFilterInternal(request, response, null);
+        filter.doFilterInternal(request, response, mock(FilterChain.class));
     }
 
     @Test
