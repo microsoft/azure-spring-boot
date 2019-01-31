@@ -58,6 +58,12 @@ public class AADB2CAutoConfiguration {
         return new AADB2CAuthorizationRequestResolver(repository, properties);
     }
 
+    @Bean
+    @ConditionalOnMissingBean
+    public AADB2CLogoutSuccessHandler b2cLogoutSuccessHandler() {
+        return new AADB2CLogoutSuccessHandler(properties);
+    }
+
     @Configuration
     @ConditionalOnProperty(prefix = PREFIX, value = "oidc-enabled", havingValue = "true", matchIfMissing = true)
     public static class AADB2COidcAutoConfiguration {
@@ -84,9 +90,9 @@ public class AADB2CAutoConfiguration {
                     .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                     .redirectUriTemplate(policy.getReplyURL())
                     .scope(properties.getClientId(), "openid")
-                    .authorizationUri(AADB2CURL.getAuthorizationUri(properties.getTenant()))
-                    .tokenUri(AADB2CURL.getTokenUri(properties.getTenant(), policy.getName()))
-                    .jwkSetUri(AADB2CURL.getJwkSetUri(properties.getTenant(), policy.getName()))
+                    .authorizationUri(AADB2CURL.getAuthorizationUrl(properties.getTenant()))
+                    .tokenUri(AADB2CURL.getTokenUrl(properties.getTenant(), policy.getName()))
+                    .jwkSetUri(AADB2CURL.getJwkSetUrl(properties.getTenant(), policy.getName()))
                     .userNameAttributeName("name")
                     .clientName(CLIENT_NAME)
                     .build();

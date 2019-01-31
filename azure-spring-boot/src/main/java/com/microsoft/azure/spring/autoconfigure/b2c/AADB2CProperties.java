@@ -34,6 +34,8 @@ public class AADB2CProperties {
 
     private static final String POLICY_SIGN_UP_OR_SIGN_IN = POLICIES + ".sign-up-or-sign-in";
 
+    public static final String DEFAULT_LOGOUT_SUCCESS_URL = "http://localhost:8080/login?logout";
+
     public static final String PREFIX = "azure.activedirectory.b2c";
 
     public static final String LOGOUT_SUCCESS_URL = "logout-success-url";
@@ -79,7 +81,7 @@ public class AADB2CProperties {
     private String clientSecret;
 
     @URL(message = "reply URL should not be blank")
-    private String logoutSuccessUrl;
+    private String logoutSuccessUrl = DEFAULT_LOGOUT_SUCCESS_URL;
 
     @URL(message = "reply URL should not be blank")
     private String passwordResetProcessUrl;
@@ -101,7 +103,7 @@ public class AADB2CProperties {
     }
 
     @NonNull
-    public String getPolicySignUpOrSignInReplyUrlPath() {
+    public String getLoginProcessingUrl() {
         return getReplyURLPath(policies.getSignUpOrSignIn().replyURL);
     }
 
