@@ -1,0 +1,13 @@
+azure:
+  activedirectory:
+    b2c:
+      tenant: ${your-tenant-name}
+      oidc-enabled: true
+      client-id: ${your-client-id}
+      client-secret: ${your-client-secret}
+      reply-url: ${your-reply-url-from-aad} # should be absolute url.
+      logout-success-url: ${you-logout-success-url}
+      policies:
+        sign-up-or-sign-in: ${your-sign-up-or-in-policy-value}
+        profile-edit: ${your-profile-edit-policy-value}
+        password-reset: ${your-password-reset-policy-value}
