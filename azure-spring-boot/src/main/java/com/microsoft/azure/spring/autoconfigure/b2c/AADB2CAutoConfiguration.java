@@ -18,6 +18,10 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.*;
 
@@ -30,9 +34,7 @@ import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.*;
                 "client-id",
                 "client-secret",
                 "reply-url",
-                POLICY_SIGN_UP_OR_SIGN_IN,
-                POLICY_PASSWORD_RESET,
-                POLICY_PROFILE_EDIT
+                POLICY_SIGN_UP_OR_SIGN_IN
         }
 )
 @EnableConfigurationProperties(AADB2CProperties.class)
@@ -70,14 +72,22 @@ public class AADB2CAutoConfiguration {
             this.properties = properties;
         }
 
+        private void addB2CClientRegistration(@NonNull List<ClientRegistration> registrations, String policeValue) {
+            if (StringUtils.hasText(policeValue)) {
+                registrations.add(b2cClientRegistration(policeValue));
+            }
+        }
+
         @Bean
         @ConditionalOnMissingBean
         public ClientRegistrationRepository clientRegistrationRepository() {
-            return new InMemoryClientRegistrationRepository(
-                    b2cClientRegistration(properties.getPolicies().getSignUpOrSignIn()),
-                    b2cClientRegistration(properties.getPolicies().getProfileEdit()),
-                    b2cClientRegistration(properties.getPolicies().getPasswordReset())
-            );
+            final List<ClientRegistration> registrations = new ArrayList<>();
+
+            addB2CClientRegistration(registrations, properties.getPolicies().getSignUpOrSignIn());
+            addB2CClientRegistration(registrations, properties.getPolicies().getProfileEdit());
+            addB2CClientRegistration(registrations, properties.getPolicies().getPasswordReset());
+
+            return new InMemoryClientRegistrationRepository(registrations);
         }
 
         private ClientRegistration b2cClientRegistration(String policyValue) {

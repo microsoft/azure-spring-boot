@@ -101,13 +101,11 @@ public class AADB2CProperties {
         /**
          * The profile-edit policy which is created under b2c tenant.
          */
-        @NotBlank(message = "profile-edit value should not be blank")
         private String profileEdit;
 
         /**
          * The password-reset policy which is created under b2c tenant.
          */
-        @NotBlank(message = "password-reset value should not be blank")
         private String passwordReset;
     }
 }
