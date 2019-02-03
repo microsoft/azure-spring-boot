@@ -15,11 +15,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
-
-import java.util.UUID;
+import org.springframework.util.Assert;
 
 import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.*;
 
@@ -31,16 +29,14 @@ import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.*;
                 "tenant",
                 "client-id",
                 "client-secret",
-                POLICY_SIGN_UP_OR_SIGN_IN_NAME,
-                POLICY_SIGN_UP_OR_SIGN_IN_REPLY_URL
+                "reply-url",
+                POLICY_SIGN_UP_OR_SIGN_IN,
+                POLICY_PASSWORD_RESET,
+                POLICY_PROFILE_EDIT
         }
 )
 @EnableConfigurationProperties(AADB2CProperties.class)
 public class AADB2CAutoConfiguration {
-
-    private static final String CLIENT_NAME = "aad-b2c";
-
-    private static final String REGISTRATION_ID = "aad-b2c-" + UUID.randomUUID();
 
     private final ClientRegistrationRepository repository;
 
@@ -54,8 +50,8 @@ public class AADB2CAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public OAuth2AuthorizationRequestResolver b2cOAuth2AuthorizationRequestResolver() {
-        return new AADB2CAuthorizationRequestResolver(repository, properties);
+    public AADB2CAuthorizationRequestResolver b2cOAuth2AuthorizationRequestResolver() {
+        return new AADB2CAuthorizationRequestResolver(repository);
     }
 
     @Bean
@@ -77,24 +73,28 @@ public class AADB2CAutoConfiguration {
         @Bean
         @ConditionalOnMissingBean
         public ClientRegistrationRepository clientRegistrationRepository() {
-            return new InMemoryClientRegistrationRepository(this.b2cOIDCClientRegistration());
+            return new InMemoryClientRegistrationRepository(
+                    b2cClientRegistration(properties.getPolicies().getSignUpOrSignIn()),
+                    b2cClientRegistration(properties.getPolicies().getProfileEdit()),
+                    b2cClientRegistration(properties.getPolicies().getPasswordReset())
+            );
         }
 
-        private ClientRegistration b2cOIDCClientRegistration() {
-            final AADB2CProperties.Policy policy = properties.getPolicies().getSignUpOrSignIn();
+        private ClientRegistration b2cClientRegistration(String policyValue) {
+            Assert.hasText(policyValue, "value should contains text.");
 
-            return ClientRegistration.withRegistrationId(REGISTRATION_ID)
+            return ClientRegistration.withRegistrationId(policyValue) // Use policy value as registration Id.
                     .clientId(properties.getClientId())
                     .clientSecret(properties.getClientSecret())
                     .clientAuthenticationMethod(ClientAuthenticationMethod.POST)
                     .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                    .redirectUriTemplate(policy.getReplyURL())
+                    .redirectUriTemplate(properties.getReplyUrl())
                     .scope(properties.getClientId(), "openid")
                     .authorizationUri(AADB2CURL.getAuthorizationUrl(properties.getTenant()))
-                    .tokenUri(AADB2CURL.getTokenUrl(properties.getTenant(), policy.getName()))
-                    .jwkSetUri(AADB2CURL.getJwkSetUrl(properties.getTenant(), policy.getName()))
+                    .tokenUri(AADB2CURL.getTokenUrl(properties.getTenant(), policyValue))
+                    .jwkSetUri(AADB2CURL.getJwkSetUrl(properties.getTenant(), policyValue))
                     .userNameAttributeName("name")
-                    .clientName(CLIENT_NAME)
+                    .clientName(policyValue)
                     .build();
         }
     }

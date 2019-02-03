@@ -28,33 +28,17 @@ public class AADB2CProperties {
      * We do not use ${@link String#format(String, Object...)}
      * as it's not real constant, which cannot be referenced in annotation.
      */
-    private static final String POLICY_PASSWORD_RESET = POLICIES + ".password-reset";
+    public static final String POLICY_PASSWORD_RESET = POLICIES + ".password-reset";
 
-    private static final String POLICY_PROFILE_EDIT = POLICIES + ".profile-edit";
+    public static final String POLICY_PROFILE_EDIT = POLICIES + ".profile-edit";
 
-    private static final String POLICY_SIGN_UP_OR_SIGN_IN = POLICIES + ".sign-up-or-sign-in";
+    public static final String POLICY_SIGN_UP_OR_SIGN_IN = POLICIES + ".sign-up-or-sign-in";
 
-    public static final String DEFAULT_LOGOUT_SUCCESS_URL = "http://localhost:8080/login?logout";
+    public static final String DEFAULT_LOGOUT_SUCCESS_URL = "http://localhost:8080/login";
 
     public static final String PREFIX = "azure.activedirectory.b2c";
 
     public static final String LOGOUT_SUCCESS_URL = "logout-success-url";
-
-    public static final String POLICY_SIGN_UP_OR_SIGN_IN_NAME = POLICY_SIGN_UP_OR_SIGN_IN + ".name";
-
-    public static final String POLICY_SIGN_UP_OR_SIGN_IN_REPLY_URL = POLICY_SIGN_UP_OR_SIGN_IN + ".reply-url";
-
-    public static final String POLICY_PASSWORD_RESET_NAME = POLICY_PASSWORD_RESET + ".name";
-
-    public static final String POLICY_PASSWORD_RESET_REPLY_URL = POLICY_PASSWORD_RESET + ".reply-url";
-
-    public static final String POLICY_PROFILE_EDIT_NAME = POLICY_PROFILE_EDIT + ".name";
-
-    public static final String POLICY_PROFILE_EDIT_REPLY_URL = POLICY_PROFILE_EDIT + ".reply-url";
-
-    public static final String PASSWORD_RESET_PROCESS_URL = "password-reset-process-url";
-
-    public static final String PROFILE_EDIT_PROCESS_URL = "profile-edit-process-url";
 
     /**
      * The name of the b2c tenant.
@@ -75,19 +59,16 @@ public class AADB2CProperties {
     private String clientId;
 
     /**
-     * The application ID that registered under b2c tenant.
+     * The application secret that registered under b2c tenant.
      */
     @NotBlank(message = "client secret should not be blank")
     private String clientSecret;
 
-    @URL(message = "reply URL should not be blank")
+    @URL(message = "reply URL should be valid URL")
+    private String replyUrl;
+
+    @URL(message = "reply URL should be valid URL")
     private String logoutSuccessUrl = DEFAULT_LOGOUT_SUCCESS_URL;
-
-    @URL(message = "reply URL should not be blank")
-    private String passwordResetProcessUrl;
-
-    @URL(message = "reply URL should not be blank")
-    private String profileEditProcessUrl;
 
     /**
      * The all polices which is created under b2c tenant.
@@ -104,10 +85,11 @@ public class AADB2CProperties {
 
     @NonNull
     public String getLoginProcessingUrl() {
-        return getReplyURLPath(policies.getSignUpOrSignIn().replyURL);
+        return getReplyURLPath(replyUrl);
     }
 
     @Getter
+    @Setter
     @Validated
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     protected static class Policies {
@@ -115,35 +97,19 @@ public class AADB2CProperties {
         /**
          * The sign-up-or-sign-in policy which is created under b2c tenant.
          */
-        private Policy signUpOrSignIn = new Policy();
+        @NotBlank(message = "policy name should not be blank")
+        private String signUpOrSignIn;
 
         /**
          * The password-reset policy which is created under b2c tenant.
-         */
-        private Policy passwordReset = new Policy();
-
-        /**
-         * The password-reset policy which is created under b2c tenant.
-         */
-        private Policy profileEdit = new Policy();
-    }
-
-    @Getter
-    @Setter
-    @Validated
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    protected static class Policy {
-
-        /**
-         * The name of policy which is created under b2c tenant.
          */
         @NotBlank(message = "policy name should not be blank")
-        private String name;
+        private String passwordReset;
 
         /**
-         * The redirect URI which is configured under b2c tenant.
+         * The password-reset policy which is created under b2c tenant.
          */
-        @URL(message = "reply URL should not be blank")
-        private String replyURL;
+        @NotBlank(message = "policy name should not be blank")
+        private String profileEdit;
     }
 }

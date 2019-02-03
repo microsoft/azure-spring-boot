@@ -25,10 +25,10 @@ public class AADB2CLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
     }
 
     private String getAADB2CEndSessionUrl() {
-        final AADB2CProperties.Policy policy = properties.getPolicies().getSignUpOrSignIn();
+        final String policyValue = properties.getPolicies().getSignUpOrSignIn();
         final String logoutSuccessUrl = properties.getLogoutSuccessUrl();
 
-        return AADB2CURL.getEndSessionUrl(properties.getTenant(), logoutSuccessUrl, policy.getName());
+        return AADB2CURL.getEndSessionUrl(properties.getTenant(), logoutSuccessUrl, policyValue);
     }
 
     @Override
