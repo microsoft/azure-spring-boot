@@ -38,8 +38,6 @@ public class AADB2CProperties {
 
     public static final String PREFIX = "azure.activedirectory.b2c";
 
-    public static final String LOGOUT_SUCCESS_URL = "logout-success-url";
-
     /**
      * The name of the b2c tenant.
      */
@@ -67,7 +65,7 @@ public class AADB2CProperties {
     @URL(message = "reply URL should be valid URL")
     private String replyUrl;
 
-    @URL(message = "reply URL should be valid URL")
+    @URL(message = "logout success should be valid URL")
     private String logoutSuccessUrl = DEFAULT_LOGOUT_SUCCESS_URL;
 
     /**
@@ -97,19 +95,19 @@ public class AADB2CProperties {
         /**
          * The sign-up-or-sign-in policy which is created under b2c tenant.
          */
-        @NotBlank(message = "policy name should not be blank")
+        @NotBlank(message = "sign-up-or-in value should not be blank")
         private String signUpOrSignIn;
 
         /**
-         * The password-reset policy which is created under b2c tenant.
+         * The profile-edit policy which is created under b2c tenant.
          */
-        @NotBlank(message = "policy name should not be blank")
-        private String passwordReset;
+        @NotBlank(message = "profile-edit value should not be blank")
+        private String profileEdit;
 
         /**
          * The password-reset policy which is created under b2c tenant.
          */
-        @NotBlank(message = "policy name should not be blank")
-        private String profileEdit;
+        @NotBlank(message = "password-reset value should not be blank")
+        private String passwordReset;
     }
 }
