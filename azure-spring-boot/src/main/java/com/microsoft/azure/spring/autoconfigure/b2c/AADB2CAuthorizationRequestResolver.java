@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequest
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -33,14 +34,33 @@ public class AADB2CAuthorizationRequestResolver implements OAuth2AuthorizationRe
 
     private final OAuth2AuthorizationRequestResolver defaultResolver;
 
+    private final String passwordResetPolicyValue;
+
     public AADB2CAuthorizationRequestResolver(@NonNull ClientRegistrationRepository repository) {
+        this.passwordResetPolicyValue = null;
+        this.defaultResolver = new DefaultOAuth2AuthorizationRequestResolver(repository, REQUEST_BASE_URI);
+    }
+
+    public AADB2CAuthorizationRequestResolver(@NonNull ClientRegistrationRepository repository,
+                                              @Nullable String passwordResetPolicyValue) {
+        this.passwordResetPolicyValue = passwordResetPolicyValue;
         this.defaultResolver = new DefaultOAuth2AuthorizationRequestResolver(repository, REQUEST_BASE_URI);
     }
 
     @Override
     public OAuth2AuthorizationRequest resolve(@NonNull HttpServletRequest request) {
-        if (requestMatcher.matches(request)) {
-            return getB2CAuthorizationRequest(defaultResolver.resolve(request), getRegistrationId(request));
+        return resolve(request, getRegistrationId(request));
+    }
+
+    @Override
+    public OAuth2AuthorizationRequest resolve(@NonNull HttpServletRequest request, String registrationId) {
+        if (StringUtils.hasText(passwordResetPolicyValue) && isForgotPasswordAuthorizationRequest(request)) {
+            final OAuth2AuthorizationRequest authRequest = defaultResolver.resolve(request, passwordResetPolicyValue);
+            return getB2CAuthorizationRequest(authRequest, passwordResetPolicyValue);
+        }
+
+        if (StringUtils.hasText(registrationId) && requestMatcher.matches(request)) {
+            return getB2CAuthorizationRequest(defaultResolver.resolve(request), registrationId);
         }
 
         return null;
@@ -67,22 +87,25 @@ public class AADB2CAuthorizationRequestResolver implements OAuth2AuthorizationRe
         return OAuth2AuthorizationRequest.from(request).additionalParameters(parameters).build();
     }
 
-    @Override
-    public OAuth2AuthorizationRequest resolve(@NonNull HttpServletRequest request, String registrationId) {
-        Assert.hasText(registrationId, "registrationId should have text.");
-
-        if (requestMatcher.matches(request)) {
-            return getB2CAuthorizationRequest(defaultResolver.resolve(request), registrationId);
-        }
-
-        return null;
-    }
-
     private String getRegistrationId(HttpServletRequest request) {
         if (requestMatcher.matches(request)) {
             return requestMatcher.extractUriTemplateVariables(request).get(REGISTRATION_ID_NAME);
         }
 
         return null;
+    }
+
+    // Handle the forgot password of sign-up-or-in page cannot redirect user to password-reset page.
+    // The B2C service will enhance that, and then related code will be removed.
+    private boolean isForgotPasswordAuthorizationRequest(@NonNull HttpServletRequest request) {
+        final String error = request.getParameter("error");
+        final String description = request.getParameter("error_description");
+
+        if ("access_denied".equals(error)) {
+            Assert.hasText(description, "description should contain text.");
+            return description.startsWith("AADB2C90118:");
+        }
+
+        return false;
     }
 }
