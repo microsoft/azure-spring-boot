@@ -63,6 +63,8 @@ public class AADB2CAuthorizationRequestResolver implements OAuth2AuthorizationRe
             return getB2CAuthorizationRequest(defaultResolver.resolve(request), registrationId);
         }
 
+        // Return null may not be the good practice, but we need to align with oauth2.client.web
+        // DefaultOAuth2AuthorizationRequestResolver.
         return null;
     }
 

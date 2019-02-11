@@ -23,7 +23,8 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.*;
+import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.POLICY_SIGN_UP_OR_SIGN_IN;
+import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.PREFIX;
 
 @Configuration
 @ConditionalOnWebApplication
