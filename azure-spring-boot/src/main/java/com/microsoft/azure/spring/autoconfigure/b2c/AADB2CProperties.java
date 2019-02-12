@@ -73,6 +73,11 @@ public class AADB2CProperties {
      */
     private Policies policies = new Policies();
 
+    /**
+     * Telemetry data will be collected if true, or disable data collection.
+     */
+    private boolean allowTelemetry = true;
+
     private String getReplyURLPath(@URL String replyURL) {
         try {
             return new java.net.URL(replyURL).getPath();

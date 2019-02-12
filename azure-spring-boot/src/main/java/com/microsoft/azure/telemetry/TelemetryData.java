@@ -11,4 +11,5 @@ public class TelemetryData {
     public static final String PROJECT_VERSION = "version";
     public static final String SERVICE_NAME = "serviceName";
     public static final String ACCOUNT_NAME = "accountName";
+    public static final String TENANT_NAME = "tenantName";
 }

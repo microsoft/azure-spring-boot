@@ -5,6 +5,8 @@
  */
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
+import com.microsoft.azure.telemetry.TelemetryData;
+import com.microsoft.azure.telemetry.TelemetryProxy;
 import lombok.NonNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -18,10 +20,13 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.POLICY_SIGN_UP_OR_SIGN_IN;
 import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.PREFIX;
@@ -49,6 +54,8 @@ public class AADB2CAutoConfiguration {
                                    @NonNull AADB2CProperties properties) {
         this.repository = repository;
         this.properties = properties;
+
+        trackCustomEvent(properties.isAllowTelemetry());
     }
 
     @Bean
@@ -61,6 +68,18 @@ public class AADB2CAutoConfiguration {
     @ConditionalOnMissingBean
     public AADB2CLogoutSuccessHandler b2cLogoutSuccessHandler() {
         return new AADB2CLogoutSuccessHandler(properties);
+    }
+
+    private void trackCustomEvent(boolean isAllowTelemetry) {
+        if (isAllowTelemetry) {
+            final TelemetryProxy telemetryProxy = new TelemetryProxy(true);
+            final Map<String, String> events = new HashMap<>();
+
+            events.put(TelemetryData.SERVICE_NAME, getClass().getPackage().getName().replaceAll("\\w+\\.", ""));
+            events.put(TelemetryData.TENANT_NAME, properties.getTenant());
+
+            telemetryProxy.trackEvent(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
+        }
     }
 
     @Configuration
