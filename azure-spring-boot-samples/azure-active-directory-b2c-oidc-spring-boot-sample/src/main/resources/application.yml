@@ -1,5 +1,3 @@
-server:
-  port: 8080
 azure:
   activedirectory:
     b2c:
@@ -21,6 +19,3 @@ azure:
       password-reset-url: ${your-url-to-process-password-reset} # Optional
       profile-edit-url: ${your-url-to-process-profile-edit}     # Optional
 
-logging:
-  level:
-    com.microsoft.azure.spring.autoconfigure.b2c: DEBUG

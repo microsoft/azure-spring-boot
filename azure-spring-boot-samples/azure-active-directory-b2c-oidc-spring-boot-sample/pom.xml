@@ -14,8 +14,8 @@
     <artifactId>azure-active-directory-b2c-spring-boot-sample</artifactId>
     <packaging>jar</packaging>
 
-    <name>Azure AD B2C Spring Security 5 Integration Spring Boot Sample</name>
-    <description>Azure AD B2C Spring Security 5 Integration Spring Boot Sample</description>
+    <name>Azure AD B2C OIDC Spring Security 5 Integration Spring Boot Sample</name>
+    <description>Azure AD B2C OIDC Spring Security 5 Integration Spring Boot Sample</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
     <dependencies>
@@ -34,11 +34,6 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-
         <!-- This dependency will replace to starter after available -->
         <dependency>
             <groupId>com.microsoft.azure</groupId>
@@ -46,10 +41,14 @@
             <version>2.0.8-SNAPSHOT</version>
         </dependency>
 
-        <!-- This dependency will replace to starter after available -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
 
         <dependency>

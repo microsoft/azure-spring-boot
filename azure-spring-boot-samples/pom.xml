@@ -142,6 +142,7 @@
     </build>
 
     <modules>
+        <module>azure-active-directory-b2c-oidc-spring-boot-sample</module>
         <module>azure-active-directory-spring-boot-backend-sample</module>
         <module>azure-active-directory-spring-boot-sample</module>
         <module>azure-cosmosdb-spring-boot-sample</module>
@@ -151,6 +152,5 @@
         <module>azure-storage-spring-boot-sample</module>
         <module>azure-cloud-foundry-service-sample</module>
         <module>spring-data-gremlin-boot-sample</module>
-        <module>azure-active-directory-b2c-spring-boot-sample</module>
     </modules>
 </project>

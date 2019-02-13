@@ -1,27 +1,27 @@
-### How to configure
+## How to configure
 
-#### Create your Azure Active Directory B2C Tenant
+### Create your Azure Active Directory B2C tenant
 
-Follow the guide of [AAD B2C tenant creation](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-tutorials-web-app).
+Follow the guide of [AAD B2C tenant creation](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-tenant).
 
-#### Register your Azure Active Directory B2C and create polices
+### Register your Azure Active Directory B2C application
 
-Follow the guide of [AAD B2C application registry and policies creation](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-tutorials-web-app)
+Follow the guide of [AAD B2C application registry](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-register-applications).
+Please make sure that your b2c application `reply URL` contains  `http://localhost:8080/home`.
 
-#### Configure application.yml
+### Create user flows
 
-To make the sample work, some changes about url is required. Please replace the placeholder as follow:
+Follow the guide of [AAD B2C user flows creation](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-tutorials-web-app).
 
-| Placeholder                             | URL                                   |
-| :-------------------------------------- | :----------------------               |
-| `${your-policy-reply-url}`              | `http://localhost:8080/home`          |
-| `${your-logout-success-url}`            | `http://localhost:8080/`              |
-| `${your-url-to-process-password-reset}` | `http://localhost:8080/password-reset`|
-| `${your-url-to-process-profile-edit}`   | `http://localhost:8080/profile-edit`  |
+### Configure application.yml
+
+1. Fill in `${your-tenant-name}` and `${your-client-id}` from Azure AD B2C portal `Applications`.
+2. Fill in `${your-policy-name}` and `${your-policy-reply-url}` from the portal `User flows` for each policy.
+3. Replace `${your-logout-sucess-url}` to `http://localhost:8080/`.
+4. Replace `${your-url-to-process-password-reset}` to `http://localhost:8080/password-reset` if necessary.
+5. Replace `${your-url-to-process-profile-edit}` to `http://localhost:8080/profile-edit` if necessary.
 
 ```yaml
-server:
-  port: 8080
 azure:
   activedirectory:
     b2c:
@@ -46,17 +46,17 @@ azure:
 
 ### How to run
 
-   - Use Maven 
+* Maven 
 
-     ```
-     # Under azure-spring-boot project root directory
-     mvn clean install -DskipTests
-     cd azure-spring-boot-samples
-     cd azure-active-directory-b2c-spring-boot-sample
-     mvn spring-boot:run
-     ```
+```
+# Under azure-spring-boot project root directory
+mvn clean install -DskipTests
+cd azure-spring-boot-samples
+cd azure-active-directory-b2c-oidc-spring-boot-sample
+mvn spring-boot:run
+```
 
-### Check the authentication with policies.
+### Validation
 	
 1. Access `http://localhost:8080/` as index page.
 2. Sign up/in.
