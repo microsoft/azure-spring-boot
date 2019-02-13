@@ -17,7 +17,7 @@ Follow the guide of [AAD B2C user flows creation](https://docs.microsoft.com/en-
 
 1. Fill in `${your-tenant-name}` and `${your-client-id}` from Azure AD B2C portal `Applications`.
 2. Fill in `${your-policy-name}` and `${your-policy-reply-url}` from the portal `User flows` for each policy.
-3. Replace `${your-logout-sucess-url}` to `http://localhost:8080/`.
+3. Replace `${your-logout-success-url}` to `http://localhost:8080/`.
 4. Replace `${your-url-to-process-password-reset}` to `http://localhost:8080/password-reset` if necessary.
 5. Replace `${your-url-to-process-profile-edit}` to `http://localhost:8080/profile-edit` if necessary.
 
