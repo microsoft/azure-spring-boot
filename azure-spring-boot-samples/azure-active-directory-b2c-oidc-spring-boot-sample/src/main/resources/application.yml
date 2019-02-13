@@ -9,5 +9,5 @@ azure:
       logout-success-url: ${you-logout-success-url}
       policies:
         sign-up-or-sign-in: ${your-sign-up-or-in-policy-value}
-        profile-edit: ${your-profile-edit-policy-value}
-        password-reset: ${your-password-reset-policy-value}
+        profile-edit: ${your-profile-edit-policy-value}     # optional
+        password-reset: ${your-password-reset-policy-value} # optional
