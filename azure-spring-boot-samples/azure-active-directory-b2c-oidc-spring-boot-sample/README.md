@@ -7,7 +7,7 @@ Follow the guide of [AAD B2C tenant creation](https://docs.microsoft.com/en-us/a
 ### Register your Azure Active Directory B2C application
 
 Follow the guide of [AAD B2C application registry](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-register-applications).
-Please make sure that your b2c application `reply URL` contains  `http://localhost:8080/home`.
+Please make sure that your b2c application `reply URL` contains `http://localhost:8080/home`.
 
 ### Create user flows
 
