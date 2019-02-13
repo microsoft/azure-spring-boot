@@ -5,6 +5,8 @@
  */
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
+import com.microsoft.azure.telemetry.TelemetryData;
+import com.microsoft.azure.telemetry.TelemetryProxy;
 import lombok.NonNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -13,6 +15,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.ClassUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.*;
 
@@ -32,6 +38,20 @@ public class AADB2CAutoConfiguration {
 
     public AADB2CAutoConfiguration(@NonNull AADB2CProperties properties) {
         this.properties = properties;
+
+        trackCustomEvent(properties.isAllowTelemetry());
+    }
+
+    private void trackCustomEvent(boolean isAllowTelemetry) {
+        if (isAllowTelemetry) {
+            final TelemetryProxy telemetryProxy = new TelemetryProxy(true);
+            final Map<String, String> events = new HashMap<>();
+
+            events.put(TelemetryData.SERVICE_NAME, getClass().getPackage().getName().replaceAll("\\w+\\.", ""));
+            events.put(TelemetryData.TENANT_NAME, properties.getTenant());
+
+            telemetryProxy.trackEvent(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
+        }
     }
 
     @Bean

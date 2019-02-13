@@ -96,6 +96,11 @@ public class AADB2CProperties {
     @JsonProperty(POLICIES)
     private Policies policies = new Policies();
 
+    /**
+     * Telemetry data will be collected if true, or disable data collection.
+     */
+    private boolean allowTelemetry = true;
+
     @Getter
     @Validated
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
