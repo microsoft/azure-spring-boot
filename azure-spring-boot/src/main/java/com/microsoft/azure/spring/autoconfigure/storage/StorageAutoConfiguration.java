@@ -24,6 +24,8 @@ import java.net.URL;
 import java.security.InvalidKeyException;
 import java.util.HashMap;
 
+import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
+
 @Configuration
 @ConditionalOnClass(ServiceURL.class)
 @EnableConfigurationProperties(StorageProperties.class)
@@ -59,12 +61,12 @@ public class StorageAutoConfiguration {
 
         return serviceURL;
     }
-    
+
     private URL getURL() throws MalformedURLException {
         if (properties.isEnableHttps()) {
             return new URL(String.format(BLOB_HTTPS_URL, properties.getAccountName()));
         }
-        return new URL(String.format(BLOB_URL, properties.getAccountName())); 
+        return new URL(String.format(BLOB_URL, properties.getAccountName()));
     }
 
     private PipelineOptions buildOptions(PipelineOptions fromOptions) {
@@ -90,7 +92,7 @@ public class StorageAutoConfiguration {
             customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
         }
 
-        customTelemetryProperties.putIfAbsent(TelemetryData.ACCOUNT_NAME, properties.getAccountName());
+        customTelemetryProperties.putIfAbsent(TelemetryData.ACCOUNT_HASH_NAME, sha256Hex(properties.getAccountName()));
 
         telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
