@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.POLICY_SIGN_UP_OR_SIGN_IN;
+import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.USER_FLOW_SIGN_UP_OR_SIGN_IN;
 import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.PREFIX;
 
 @Configuration
@@ -40,7 +40,7 @@ import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.PREF
                 "client-id",
                 "client-secret",
                 "reply-url",
-                POLICY_SIGN_UP_OR_SIGN_IN
+                USER_FLOW_SIGN_UP_OR_SIGN_IN
         }
 )
 @EnableConfigurationProperties(AADB2CProperties.class)
@@ -61,7 +61,7 @@ public class AADB2CAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public AADB2CAuthorizationRequestResolver b2cOAuth2AuthorizationRequestResolver() {
-        return new AADB2CAuthorizationRequestResolver(repository, properties.getPolicies().getPasswordReset());
+        return new AADB2CAuthorizationRequestResolver(repository, properties.getUserFlows().getPasswordReset());
     }
 
     @Bean
@@ -92,9 +92,9 @@ public class AADB2CAutoConfiguration {
             this.properties = properties;
         }
 
-        private void addB2CClientRegistration(@NonNull List<ClientRegistration> registrations, String policeValue) {
-            if (StringUtils.hasText(policeValue)) {
-                registrations.add(b2cClientRegistration(policeValue));
+        private void addB2CClientRegistration(@NonNull List<ClientRegistration> registrations, String userFlow) {
+            if (StringUtils.hasText(userFlow)) {
+                registrations.add(b2cClientRegistration(userFlow));
             }
         }
 
@@ -103,17 +103,17 @@ public class AADB2CAutoConfiguration {
         public ClientRegistrationRepository clientRegistrationRepository() {
             final List<ClientRegistration> registrations = new ArrayList<>();
 
-            addB2CClientRegistration(registrations, properties.getPolicies().getSignUpOrSignIn());
-            addB2CClientRegistration(registrations, properties.getPolicies().getProfileEdit());
-            addB2CClientRegistration(registrations, properties.getPolicies().getPasswordReset());
+            addB2CClientRegistration(registrations, properties.getUserFlows().getSignUpOrSignIn());
+            addB2CClientRegistration(registrations, properties.getUserFlows().getProfileEdit());
+            addB2CClientRegistration(registrations, properties.getUserFlows().getPasswordReset());
 
             return new InMemoryClientRegistrationRepository(registrations);
         }
 
-        private ClientRegistration b2cClientRegistration(String policyValue) {
-            Assert.hasText(policyValue, "value should contains text.");
+        private ClientRegistration b2cClientRegistration(String userFlow) {
+            Assert.hasText(userFlow, "User flow should contains text.");
 
-            return ClientRegistration.withRegistrationId(policyValue) // Use policy value as registration Id.
+            return ClientRegistration.withRegistrationId(userFlow) // Use flow as registration Id.
                     .clientId(properties.getClientId())
                     .clientSecret(properties.getClientSecret())
                     .clientAuthenticationMethod(ClientAuthenticationMethod.POST)
@@ -121,10 +121,10 @@ public class AADB2CAutoConfiguration {
                     .redirectUriTemplate(properties.getReplyUrl())
                     .scope(properties.getClientId(), "openid")
                     .authorizationUri(AADB2CURL.getAuthorizationUrl(properties.getTenant()))
-                    .tokenUri(AADB2CURL.getTokenUrl(properties.getTenant(), policyValue))
-                    .jwkSetUri(AADB2CURL.getJwkSetUrl(properties.getTenant(), policyValue))
+                    .tokenUri(AADB2CURL.getTokenUrl(properties.getTenant(), userFlow))
+                    .jwkSetUri(AADB2CURL.getJwkSetUrl(properties.getTenant(), userFlow))
                     .userNameAttributeName("name")
-                    .clientName(policyValue)
+                    .clientName(userFlow)
                     .build();
         }
     }
