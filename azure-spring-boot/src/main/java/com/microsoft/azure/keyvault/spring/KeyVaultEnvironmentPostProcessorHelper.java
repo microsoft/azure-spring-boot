@@ -111,11 +111,11 @@ class KeyVaultEnvironmentPostProcessorHelper {
         if (this.environment.containsProperty(Constants.AZURE_KEYVAULT_CLIENT_ID)) {
             LOG.debug("Will use MSI credentials for VMs with specified clientId");
             final String clientId = getProperty(this.environment, Constants.AZURE_KEYVAULT_CLIENT_ID);
-            return new MSICredentials(AzureEnvironment.AZURE).withClientId(clientId);
+            return new AzureKeyVaultMSICredential(AzureEnvironment.AZURE, clientId);
         }
 
         LOG.debug("Will use MSI credentials for VM");
-        return new MSICredentials(AzureEnvironment.AZURE);
+        return new AzureKeyVaultMSICredential(AzureEnvironment.AZURE);
     }
 
     private String getProperty(final ConfigurableEnvironment env, final String propertyName) {
