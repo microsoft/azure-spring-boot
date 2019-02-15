@@ -5,9 +5,7 @@
  */
 package sample.aad.security;
 
-import com.microsoft.azure.spring.autoconfigure.b2c.AADB2CAuthorizationRequestResolver;
-import com.microsoft.azure.spring.autoconfigure.b2c.AADB2CLogoutSuccessHandler;
-import com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties;
+import com.microsoft.azure.spring.autoconfigure.b2c.AADB2CAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -15,18 +13,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private AADB2CProperties properties;
+    private AADB2CAuthenticationProvider provider;
 
-    private AADB2CLogoutSuccessHandler logoutSuccessHandler;
-
-    private AADB2CAuthorizationRequestResolver requestResolver;
-
-    public WebSecurityConfiguration(AADB2CProperties properties,
-                                    AADB2CLogoutSuccessHandler logoutSuccessHandler,
-                                    AADB2CAuthorizationRequestResolver requestResolver) {
-        this.properties = properties;
-        this.logoutSuccessHandler = logoutSuccessHandler;
-        this.requestResolver = requestResolver;
+    public WebSecurityConfiguration(AADB2CAuthenticationProvider provider) {
+        this.provider = provider;
     }
 
     @Override
@@ -36,12 +26,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 // Expire the token from b2c side.
-                .logout().logoutSuccessHandler(logoutSuccessHandler)
+                .logout().logoutSuccessHandler(provider.getLogoutSuccessHandler())
                 .and()
                 .oauth2Login()
                 // Customize oauth2 processing url from b2c configuration.
-                .loginProcessingUrl(properties.getLoginProcessingUrl())
+                .loginProcessingUrl(provider.getLoginProcessingUrl())
                 // Customize oauth2 authorization request.
-                .authorizationEndpoint().authorizationRequestResolver(requestResolver);
+                .authorizationEndpoint().authorizationRequestResolver(provider.getAuthorizationRequestResolver());
     }
 }
