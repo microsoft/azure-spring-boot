@@ -22,17 +22,17 @@ import java.net.MalformedURLException;
 @ConfigurationProperties(prefix = AADB2CProperties.PREFIX)
 public class AADB2CProperties {
 
-    private static final String POLICIES = "policies";
+    private static final String USER_FLOWS = "user-flows";
 
     /**
      * We do not use ${@link String#format(String, Object...)}
      * as it's not real constant, which cannot be referenced in annotation.
      */
-    public static final String POLICY_PASSWORD_RESET = POLICIES + ".password-reset";
+    public static final String USER_FLOW_PASSWORD_RESET = USER_FLOWS + ".password-reset";
 
-    public static final String POLICY_PROFILE_EDIT = POLICIES + ".profile-edit";
+    public static final String USER_FLOW_PROFILE_EDIT = USER_FLOWS + ".profile-edit";
 
-    public static final String POLICY_SIGN_UP_OR_SIGN_IN = POLICIES + ".sign-up-or-sign-in";
+    public static final String USER_FLOW_SIGN_UP_OR_SIGN_IN = USER_FLOWS + ".sign-up-or-sign-in";
 
     public static final String DEFAULT_LOGOUT_SUCCESS_URL = "http://localhost:8080/login";
 
@@ -69,9 +69,9 @@ public class AADB2CProperties {
     private String logoutSuccessUrl = DEFAULT_LOGOUT_SUCCESS_URL;
 
     /**
-     * The all polices which is created under b2c tenant.
+     * The all user flows which is created under b2c tenant.
      */
-    private Policies policies = new Policies();
+    private UserFlows userFlows = new UserFlows();
 
     /**
      * Telemetry data will be collected if true, or disable data collection.
@@ -95,21 +95,21 @@ public class AADB2CProperties {
     @Setter
     @Validated
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    protected static class Policies {
+    protected static class UserFlows {
 
         /**
-         * The sign-up-or-sign-in policy which is created under b2c tenant.
+         * The sign-up-or-sign-in user flow which is created under b2c tenant.
          */
         @NotBlank(message = "sign-up-or-in value should not be blank")
         private String signUpOrSignIn;
 
         /**
-         * The profile-edit policy which is created under b2c tenant.
+         * The profile-edit user flow which is created under b2c tenant.
          */
         private String profileEdit;
 
         /**
-         * The password-reset policy which is created under b2c tenant.
+         * The password-reset user flow which is created under b2c tenant.
          */
         private String passwordReset;
     }

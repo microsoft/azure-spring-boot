@@ -34,16 +34,16 @@ public class AADB2CAuthorizationRequestResolver implements OAuth2AuthorizationRe
 
     private final OAuth2AuthorizationRequestResolver defaultResolver;
 
-    private final String passwordResetPolicyValue;
+    private final String passwordResetUserFlow;
 
     public AADB2CAuthorizationRequestResolver(@NonNull ClientRegistrationRepository repository) {
-        this.passwordResetPolicyValue = null;
+        this.passwordResetUserFlow = null;
         this.defaultResolver = new DefaultOAuth2AuthorizationRequestResolver(repository, REQUEST_BASE_URI);
     }
 
     public AADB2CAuthorizationRequestResolver(@NonNull ClientRegistrationRepository repository,
-                                              @Nullable String passwordResetPolicyValue) {
-        this.passwordResetPolicyValue = passwordResetPolicyValue;
+                                              @Nullable String passwordResetUserFlow) {
+        this.passwordResetUserFlow = passwordResetUserFlow;
         this.defaultResolver = new DefaultOAuth2AuthorizationRequestResolver(repository, REQUEST_BASE_URI);
     }
 
@@ -54,9 +54,9 @@ public class AADB2CAuthorizationRequestResolver implements OAuth2AuthorizationRe
 
     @Override
     public OAuth2AuthorizationRequest resolve(@NonNull HttpServletRequest request, String registrationId) {
-        if (StringUtils.hasText(passwordResetPolicyValue) && isForgotPasswordAuthorizationRequest(request)) {
-            final OAuth2AuthorizationRequest authRequest = defaultResolver.resolve(request, passwordResetPolicyValue);
-            return getB2CAuthorizationRequest(authRequest, passwordResetPolicyValue);
+        if (StringUtils.hasText(passwordResetUserFlow) && isForgotPasswordAuthorizationRequest(request)) {
+            final OAuth2AuthorizationRequest authRequest = defaultResolver.resolve(request, passwordResetUserFlow);
+            return getB2CAuthorizationRequest(authRequest, passwordResetUserFlow);
         }
 
         if (StringUtils.hasText(registrationId) && requestMatcher.matches(request)) {
@@ -73,8 +73,8 @@ public class AADB2CAuthorizationRequestResolver implements OAuth2AuthorizationRe
     }
 
     private OAuth2AuthorizationRequest getB2CAuthorizationRequest(@Nullable OAuth2AuthorizationRequest request,
-                                                                  String policyValue) {
-        Assert.hasText(policyValue, "Policy value should contain text.");
+                                                                  String userFlow) {
+        Assert.hasText(userFlow, "User flow should contain text.");
 
         if (request == null) {
             return null;
@@ -84,7 +84,7 @@ public class AADB2CAuthorizationRequestResolver implements OAuth2AuthorizationRe
 
         final Map<String, Object> parameters = new HashMap<>(request.getAdditionalParameters());
 
-        parameters.put("p", policyValue);
+        parameters.put("p", userFlow);
 
         return OAuth2AuthorizationRequest.from(request).additionalParameters(parameters).build();
     }
