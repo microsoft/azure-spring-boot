@@ -11,7 +11,7 @@ Please make sure that your b2c application `reply URL` contains `http://localhos
 
 ### Create user flows
 
-Follow the guide of [AAD B2C user flows creation](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-tutorials-web-app).
+Follow the guide of [AAD B2C user flows creation](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-user-flows).
 
 ### Configure the sample
 
