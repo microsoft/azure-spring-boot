@@ -10,35 +10,10 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 
-import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.PREFIX;
-import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.USER_FLOW_SIGN_UP_OR_SIGN_IN;
+import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CConstants.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public class AADB2CAutoConfigurationTest {
-
-    private static final String TEST_TENANT = "fake-tenant";
-
-    private static final String TEST_CLIENT_ID = "fake-client-id";
-
-    private static final String TEST_CLIENT_SECRET = "fake-client-secret";
-
-    private static final String TEST_REPLY_URL = "http://localhost:8080/index";
-
-    private static final String TEST_SIGN_UP_OR_IN_NAME = "fake-sign-in-or-up";
-
-    private static final String TEST_LOGOUT_SUCCESS_URL = "https://fake-logout-success-url";
-
-    private static final String TENANT = String.format("%s.%s", PREFIX, "tenant");
-
-    private static final String CLIENT_ID = String.format("%s.%s", PREFIX, "client-id");
-
-    private static final String CLIENT_SECRET = String.format("%s.%s", PREFIX, "client-secret");
-
-    private static final String REPLY_URL = String.format("%s.%s", PREFIX, "reply-url");
-
-    private static final String LOGOUT_SUCCESS_URL = String.format("%s.%s", PREFIX, "logout-success-url");
-
-    private static final String SIGN_UP_OR_SIGN_IN = String.format("%s.%s", PREFIX, USER_FLOW_SIGN_UP_OR_SIGN_IN);
 
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(AADB2CAutoConfiguration.class))
