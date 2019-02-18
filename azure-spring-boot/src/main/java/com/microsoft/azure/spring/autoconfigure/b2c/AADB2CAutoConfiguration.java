@@ -28,8 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.USER_FLOW_SIGN_UP_OR_SIGN_IN;
 import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.PREFIX;
+import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.USER_FLOW_SIGN_UP_OR_SIGN_IN;
 
 @Configuration
 @ConditionalOnWebApplication
@@ -68,6 +68,13 @@ public class AADB2CAutoConfiguration {
     @ConditionalOnMissingBean
     public AADB2CLogoutSuccessHandler b2cLogoutSuccessHandler() {
         return new AADB2CLogoutSuccessHandler(properties);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public AADB2COidcLoginConfigurer b2cLoginConfigurer(AADB2CLogoutSuccessHandler handler,
+                                                        AADB2CAuthorizationRequestResolver resolver) {
+        return new AADB2COidcLoginConfigurer(properties, handler, resolver);
     }
 
     private void trackCustomEvent(boolean isAllowTelemetry) {
