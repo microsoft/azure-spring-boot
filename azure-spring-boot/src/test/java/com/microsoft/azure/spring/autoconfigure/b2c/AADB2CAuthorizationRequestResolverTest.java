@@ -5,13 +5,13 @@
  */
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
-import io.jsonwebtoken.lang.Assert;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 import org.springframework.http.HttpMethod;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
 

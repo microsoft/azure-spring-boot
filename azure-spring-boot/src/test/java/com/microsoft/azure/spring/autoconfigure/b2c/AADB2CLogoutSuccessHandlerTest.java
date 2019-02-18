@@ -21,7 +21,7 @@ public class AADB2CLogoutSuccessHandlerTest {
     private AADB2CProperties properties;
 
     @Before
-    public void setup() {
+    public void setUp() {
         properties = new AADB2CProperties();
 
         properties.setTenant(TEST_TENANT);
