@@ -6,20 +6,16 @@
 package com.microsoft.azure.spring.autoconfigure.aad;
 
 import com.microsoft.aad.adal4j.ClientCredential;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AzureADGraphClientTest {
@@ -29,7 +25,6 @@ public class AzureADGraphClientTest {
     @Mock
     private ClientCredential credential;
 
-    @Mock
     private AADAuthenticationProperties aadAuthProps;
 
     @Mock
@@ -39,18 +34,30 @@ public class AzureADGraphClientTest {
     public void setup() throws Exception {
         final List<String> activeDirectoryGroups = new ArrayList<>();
         activeDirectoryGroups.add("Test_Group");
-        when(aadAuthProps.getActiveDirectoryGroups()).thenReturn(activeDirectoryGroups);
+        aadAuthProps = new AADAuthenticationProperties();
+        aadAuthProps.setActiveDirectoryGroups(activeDirectoryGroups);
         adGraphClient = new AzureADGraphClient(credential, aadAuthProps, endpointsProps);
     }
 
      @Test
-     public void testConvetGroupToGrantedAuthorities() {
-         
-         final String groupName = "Test_Group";
-         final UserGroup userGroup = new UserGroup("testId", groupName);
-         final List<UserGroup> userGroups =  new ArrayList<>();
-         userGroups.add(userGroup);
+     public void testConvertGroupToGrantedAuthorities() {
+
+         final List<UserGroup> userGroups = Collections.singletonList(
+                 new UserGroup("testId", "Test_Group"));
+
          final Set<GrantedAuthority> authorities = adGraphClient.convertGroupsToGrantedAuthorities(userGroups);
-         Assert.assertTrue(authorities.contains(new SimpleGrantedAuthority("ROLE_" + groupName)));
+         assertThat(authorities).hasSize(1).extracting(GrantedAuthority::getAuthority)
+                 .containsExactly("ROLE_Test_Group");
      }
+
+    @Test
+    public void testConvertGroupToGrantedAuthoritiesUsingAllowedGroups() {
+        final List<UserGroup> userGroups = Arrays
+                .asList(new UserGroup("testId", "Test_Group"),
+                        new UserGroup("testId", "Another_Group"));
+        aadAuthProps.getUserGroup().getAllowedGroups().add("Another_Group");
+        final Set<GrantedAuthority> authorities = adGraphClient.convertGroupsToGrantedAuthorities(userGroups);
+        assertThat(authorities).hasSize(2).extracting(GrantedAuthority::getAuthority)
+                .containsExactly("ROLE_Test_Group", "ROLE_Another_Group");
+    }
 }
