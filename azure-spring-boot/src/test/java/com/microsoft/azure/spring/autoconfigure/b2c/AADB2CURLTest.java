@@ -11,6 +11,9 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 
 public class AADB2CURLTest {
 
+    /**
+     * Reference pattern see AUTHORIZATION_URL_PATTERN of ${@link AADB2CURL}.
+     */
     @Test
     public void testGetAuthorizationUrl() {
         final String expect = "https://fake-tenant.b2clogin.com/fake-tenant.onmicrosoft.com/oauth2/v2.0/authorize";
@@ -23,6 +26,9 @@ public class AADB2CURLTest {
         AADB2CURL.getAuthorizationUrl("");
     }
 
+    /**
+     * Reference pattern see TOKEN_URL_PATTERN of ${@link AADB2CURL}.
+     */
     @Test
     public void testGetTokenUrl() {
         final String expect = "https://fake-tenant.b2clogin.com/fake-tenant.onmicrosoft.com/oauth2/v2.0/token?p=fake-p";
@@ -35,6 +41,9 @@ public class AADB2CURLTest {
         AADB2CURL.getTokenUrl("", "");
     }
 
+    /**
+     * Reference pattern see JWKSET_URL_PATTERN of ${@link AADB2CURL}.
+     */
     @Test
     public void testGetJwkSetUrl() {
         final String expect = "https://new-tenant.b2clogin.com/new-tenant.onmicrosoft.com/discovery/v2.0/keys?p=new-p";
@@ -47,6 +56,9 @@ public class AADB2CURLTest {
         AADB2CURL.getJwkSetUrl("", "");
     }
 
+    /**
+     * Reference pattern see END_SESSION_URL_PATTERN of ${@link AADB2CURL}.
+     */
     @Test
     public void testGetEndSessionUrl() {
         final String expect = "https://my-tenant.b2clogin.com/my-tenant.onmicrosoft.com/oauth2/v2.0/logout?" +
