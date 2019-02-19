@@ -7,7 +7,7 @@ azure:
       client-secret: ${your-client-secret}
       reply-url: ${your-reply-url-from-aad} # should be absolute url.
       logout-success-url: ${you-logout-success-url}
-      policies:
-        sign-up-or-sign-in: ${your-sign-up-or-in-policy-value}
-        profile-edit: ${your-profile-edit-policy-value}     # optional
-        password-reset: ${your-password-reset-policy-value} # optional
+      user-flows:
+        sign-up-or-sign-in: ${your-sign-up-or-in-user-flow}
+        profile-edit: ${your-profile-edit-user-flow}     # optional
+        password-reset: ${your-password-reset-user-flow} # optional

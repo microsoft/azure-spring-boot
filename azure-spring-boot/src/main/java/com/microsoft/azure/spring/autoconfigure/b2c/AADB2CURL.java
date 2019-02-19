@@ -33,26 +33,26 @@ public class AADB2CURL {
         return String.format(AUTHORIZATION_URL_PATTERN, tenant, tenant);
     }
 
-    public static String getTokenUrl(String tenant, String policyName) {
+    public static String getTokenUrl(String tenant, String userFlow) {
         Assert.hasText(tenant, "tenant should have text.");
-        Assert.hasText(policyName, "policy name should have text.");
+        Assert.hasText(userFlow, "user flow should have text.");
 
-        return String.format(TOKEN_URL_PATTERN, tenant, tenant, policyName);
+        return String.format(TOKEN_URL_PATTERN, tenant, tenant, userFlow);
     }
 
-    public static String getJwkSetUrl(String tenant, String policyName) {
+    public static String getJwkSetUrl(String tenant, String userFlow) {
         Assert.hasText(tenant, "tenant should have text.");
-        Assert.hasText(policyName, "policy name should have text.");
+        Assert.hasText(userFlow, "user flow should have text.");
 
-        return String.format(JWKSET_URL_PATTERN, tenant, tenant, policyName);
+        return String.format(JWKSET_URL_PATTERN, tenant, tenant, userFlow);
     }
 
-    public static String getEndSessionUrl(String tenant, String logoutUrl, String policyName) {
+    public static String getEndSessionUrl(String tenant, String logoutUrl, String userFlow) {
         Assert.hasText(tenant, "tenant should have text.");
         Assert.hasText(logoutUrl, "logoutUrl should have text.");
-        Assert.hasText(policyName, "policy name should have text.");
+        Assert.hasText(userFlow, "user flow should have text.");
 
-        return String.format(END_SESSION_URL_PATTERN, tenant, tenant, getEncodedURL(logoutUrl), policyName);
+        return String.format(END_SESSION_URL_PATTERN, tenant, tenant, getEncodedURL(logoutUrl), userFlow);
     }
 
     private static String getEncodedURL(String url) {

@@ -11,17 +11,23 @@ Please make sure that your b2c application `reply URL` contains `http://localhos
 
 ### Create user flows
 
-Follow the guide of [AAD B2C user flows creation](https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-tutorials-web-app).
+Follow the guide of [AAD B2C user flows creation](https://docs.microsoft.com/en-us/azure/active-directory-b2c/tutorial-create-user-flows).
 
 ### Configure the sample
 
 #### Application.yml
 
-1. Fill in `${your-tenant-name}`, `${your-client-id}` and `${your-client-secret}` from Azure AD B2C portal `Applications`.
-2. Fill in the `${your-sign-up-or-in-policy-value}`, `${your-profile-edit-policy-value}` and
-`${your-password-reset-policy-value}` from the portal `User flows`.
-3. Replace `${your-reply-url}` to `http://localhost:8080/home`.
-4. Replace `${your-logout-success-url}` to `http://localhost:8080/login`.
+1. Fill in `${your-tenant-name}` from Azure AD B2C portal `Overviews` domain name (format may looks like
+`${your-tenant-name}.onmicrosoft.com`).
+2. Select one registered instance under `Applications` from portal, and then:
+    1. Fill in `${your-client-id}` from `Application ID`.
+    2. Fill in `${your-client-secret}` from one of `Keys`.
+3. Select `User flows`, and then:
+    1. Fill in the `${your-sign-up-or-in-user-flow}` with the name of `sign-in-or-up` user flow.
+    2. Fill in the `${your-profile-edit-user-flow}` with the name of `profile-edit` user flow.
+    3. Fill in the `${your-password-reset-user-flow}` with the name of `password-reset` user flow.
+4. Replace `${your-reply-url}` to `http://localhost:8080/home`.
+5. Replace `${your-logout-success-url}` to `http://localhost:8080/login`.
 
 ```yaml
 azure:
@@ -32,14 +38,14 @@ azure:
       client-secret: ${your-client-secret}
       reply-url: ${your-reply-url} # should be absolute url.
       logout-success-url: ${your-logout-success-url}
-      policies:
-        sign-up-or-sign-in: ${your-sign-up-or-in-policy-value}
-        profile-edit: ${your-profile-edit-policy-value}      # optional
-        password-reset: ${your-password-reset-policy-value}  # optional
+      user-flows:
+        sign-up-or-sign-in: ${your-sign-up-or-in-user-flow}
+        profile-edit: ${your-profile-edit-user-flow}      # optional
+        password-reset: ${your-password-reset-user-flow}  # optional
 ```
 
 #### Templates greeting.html and home.html
-1. Fill in the `${your-profile-edit-policy-value}` and `${your-password-reset-policy-value}` from the portal `User flows`.
+1. Fill in the `${your-profile-edit-user-flow}` and `${your-password-reset-user-flow}` from the portal `User flows`.
 Please make sure that these two placeholders should be the same as `application.yml` respectively.
 
 ### How to run
