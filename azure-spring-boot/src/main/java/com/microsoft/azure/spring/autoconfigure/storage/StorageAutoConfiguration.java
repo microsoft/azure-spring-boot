@@ -85,15 +85,11 @@ public class StorageAutoConfiguration {
     }
 
     private void trackCustomEvent() {
-        final HashMap<String, String> customTelemetryProperties = new HashMap<>();
-        final String[] packageNames = this.getClass().getPackage().getName().split("\\.");
+        final HashMap<String, String> events = new HashMap<>();
 
-        if (packageNames.length > 1) {
-            customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
-        }
+        events.put(TelemetryData.SERVICE_NAME, getClass().getPackage().getName().replaceAll("\\w+\\.", ""));
+        events.put(TelemetryData.ACCOUNT_HASH_NAME, sha256Hex(properties.getAccountName()));
 
-        customTelemetryProperties.putIfAbsent(TelemetryData.ACCOUNT_HASH_NAME, sha256Hex(properties.getAccountName()));
-
-        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
+        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), events);
     }
 }

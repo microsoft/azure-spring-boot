@@ -19,9 +19,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 import java.util.HashMap;
+
+import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 @Lazy
 @Configuration
@@ -66,13 +69,24 @@ public class ServiceBusAutoConfiguration {
                 properties.getSubscriptionReceiveMode());
     }
 
-    private void trackCustomEvent() {
-        final HashMap<String, String> customTelemetryProperties = new HashMap<>();
-        final String[] packageNames = this.getClass().getPackage().getName().split("\\.");
+    private String getHashNamespace() {
+        final String namespace = properties.getConnectionString()
+                .replaceFirst("^.*//", "") // emit head 'Endpoint=sb://'
+                .replaceAll("\\..*$", ""); // emit tail '${namespace}.xxx.xxx'
 
-        if (packageNames.length > 1) {
-            customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
-        }
-        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
+        // Namespace can only be letter, number and hyphen, start with letter, end with letter or number,
+        // with length of 6-50.
+        Assert.isTrue(namespace.matches("[a-zA-Z][a-zA-Z-0-9]{4,48}[a-zA-Z0-9]"), "should be valid namespace");
+
+        return sha256Hex(namespace);
+    }
+
+    private void trackCustomEvent() {
+        final HashMap<String, String> events = new HashMap<>();
+
+        events.put(TelemetryData.SERVICE_NAME, getClass().getPackage().getName().replaceAll("\\w+\\.", ""));
+        events.put(TelemetryData.NAMESPACE_HASH_NAME, getHashNamespace());
+
+        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), events);
     }
 }
