@@ -13,13 +13,13 @@ import com.microsoft.azure.servicebus.primitives.ConnectionStringBuilder;
 import com.microsoft.azure.servicebus.primitives.ServiceBusException;
 import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 import java.util.HashMap;
@@ -27,6 +27,7 @@ import java.util.HashMap;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 @Lazy
+@Slf4j
 @Configuration
 @EnableConfigurationProperties(ServiceBusProperties.class)
 @ConditionalOnProperty(prefix = "azure.servicebus", value = "connection-string")
@@ -76,7 +77,9 @@ public class ServiceBusAutoConfiguration {
 
         // Namespace can only be letter, number and hyphen, start with letter, end with letter or number,
         // with length of 6-50.
-        Assert.isTrue(namespace.matches("[a-zA-Z][a-zA-Z-0-9]{4,48}[a-zA-Z0-9]"), "should be valid namespace");
+        if (!namespace.matches("[a-zA-Z][a-zA-Z-0-9]{4,48}[a-zA-Z0-9]")) {
+            log.warn("Unexpected name {}, please check if it's valid name or portal name rule changes.", namespace);
+        }
 
         return sha256Hex(namespace);
     }
