@@ -88,7 +88,7 @@ public class StorageAutoConfiguration {
         final HashMap<String, String> events = new HashMap<>();
 
         events.put(TelemetryData.SERVICE_NAME, getClass().getPackage().getName().replaceAll("\\w+\\.", ""));
-        events.put(TelemetryData.ACCOUNT_HASH_NAME, sha256Hex(properties.getAccountName()));
+        events.put(TelemetryData.HASHED_ACCOUNT_NAME, sha256Hex(properties.getAccountName()));
 
         telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), events);
     }
