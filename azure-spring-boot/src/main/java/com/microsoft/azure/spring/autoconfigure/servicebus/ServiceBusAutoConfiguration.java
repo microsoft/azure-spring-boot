@@ -88,7 +88,7 @@ public class ServiceBusAutoConfiguration {
         final HashMap<String, String> events = new HashMap<>();
 
         events.put(TelemetryData.SERVICE_NAME, getClass().getPackage().getName().replaceAll("\\w+\\.", ""));
-        events.put(TelemetryData.NAMESPACE_HASH_NAME, getHashNamespace());
+        events.put(TelemetryData.HASHED_NAMESPACE, getHashNamespace());
 
         telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), events);
     }
