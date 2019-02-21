@@ -72,6 +72,11 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-active-directory-b2c-spring-boot-starter</artifactId>
+                <version>${azure.spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-cosmosdb-spring-boot-starter</artifactId>
                 <version>${azure.spring.boot.version}</version>
             </dependency>
