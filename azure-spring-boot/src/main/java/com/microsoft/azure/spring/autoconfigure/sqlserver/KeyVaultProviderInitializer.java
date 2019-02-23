@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.sqlserver;
 
-import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.microsoft.sqlserver.jdbc.SQLServerColumnEncryptionAzureKeyVaultProvider;
 import com.microsoft.sqlserver.jdbc.SQLServerColumnEncryptionKeyStoreProvider;
@@ -19,15 +18,18 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KeyVaultProviderInitializer  {
+import static com.microsoft.azure.telemetry.TelemetryData.SERVICE_NAME;
+import static com.microsoft.azure.telemetry.TelemetryData.getClassPackageSimpleName;
+
+public class KeyVaultProviderInitializer {
     private static final Logger LOG = LoggerFactory.getLogger(KeyVaultProviderInitializer.class);
 
     private KeyVaultProperties properties;
     private final TelemetryProxy telemetryProxy;
 
-    public  KeyVaultProviderInitializer(KeyVaultProperties properties) {
+    public KeyVaultProviderInitializer(KeyVaultProperties properties, TelemetryProxy telemetryProxy) {
         this.properties = properties;
-        this.telemetryProxy = new TelemetryProxy(properties.isAllowTelemetry());
+        this.telemetryProxy = telemetryProxy;
         init();
     }
 
@@ -53,13 +55,12 @@ public class KeyVaultProviderInitializer  {
     }
 
     private void trackCustomEvent() {
-        final HashMap<String, String> customTelemetryProperties = new HashMap<>();
+        if (properties.isAllowTelemetry()) {
+            final HashMap<String, String> events = new HashMap<>();
 
-        final String[] packageNames = this.getClass().getPackage().getName().split("\\.");
+            events.put(SERVICE_NAME, getClassPackageSimpleName(KeyVaultProviderInitializer.class));
 
-        if (packageNames.length > 1) {
-            customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
+            telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), events);
         }
-        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
 }

@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
-import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import lombok.NonNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -30,6 +29,7 @@ import java.util.Map;
 
 import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.PREFIX;
 import static com.microsoft.azure.spring.autoconfigure.b2c.AADB2CProperties.USER_FLOW_SIGN_UP_OR_SIGN_IN;
+import static com.microsoft.azure.telemetry.TelemetryData.*;
 
 @Configuration
 @ConditionalOnWebApplication
@@ -50,12 +50,16 @@ public class AADB2CAutoConfiguration {
 
     private final AADB2CProperties properties;
 
+    private final TelemetryProxy telemetryProxy;
+
     public AADB2CAutoConfiguration(@NonNull ClientRegistrationRepository repository,
-                                   @NonNull AADB2CProperties properties) {
+                                   @NonNull AADB2CProperties properties,
+                                   @NonNull TelemetryProxy telemetryProxy) {
         this.repository = repository;
         this.properties = properties;
+        this.telemetryProxy = telemetryProxy;
 
-        trackCustomEvent(properties.isAllowTelemetry());
+        trackCustomEvent();
     }
 
     @Bean
@@ -77,13 +81,12 @@ public class AADB2CAutoConfiguration {
         return new AADB2COidcLoginConfigurer(properties, handler, resolver);
     }
 
-    private void trackCustomEvent(boolean isAllowTelemetry) {
-        if (isAllowTelemetry) {
-            final TelemetryProxy telemetryProxy = new TelemetryProxy(true);
+    private void trackCustomEvent() {
+        if (properties.isAllowTelemetry()) {
             final Map<String, String> events = new HashMap<>();
 
-            events.put(TelemetryData.SERVICE_NAME, getClass().getPackage().getName().replaceAll("\\w+\\.", ""));
-            events.put(TelemetryData.TENANT_NAME, properties.getTenant());
+            events.put(SERVICE_NAME, getClassPackageSimpleName(AADB2CAutoConfiguration.class));
+            events.put(TENANT_NAME, properties.getTenant());
 
             telemetryProxy.trackEvent(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
         }

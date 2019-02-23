@@ -11,7 +11,6 @@ import com.microsoft.azure.servicebus.SubscriptionClient;
 import com.microsoft.azure.servicebus.TopicClient;
 import com.microsoft.azure.servicebus.primitives.ConnectionStringBuilder;
 import com.microsoft.azure.servicebus.primitives.ServiceBusException;
-import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -24,6 +23,7 @@ import org.springframework.util.ClassUtils;
 
 import java.util.HashMap;
 
+import static com.microsoft.azure.telemetry.TelemetryData.*;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 @Lazy
@@ -36,9 +36,9 @@ public class ServiceBusAutoConfiguration {
     private final ServiceBusProperties properties;
     private final TelemetryProxy telemetryProxy;
 
-    public ServiceBusAutoConfiguration(ServiceBusProperties properties) {
+    public ServiceBusAutoConfiguration(ServiceBusProperties properties, TelemetryProxy telemetryProxy) {
         this.properties = properties;
-        this.telemetryProxy = new TelemetryProxy(properties.isAllowTelemetry());
+        this.telemetryProxy = telemetryProxy;
     }
 
     @Bean
@@ -87,8 +87,8 @@ public class ServiceBusAutoConfiguration {
     private void trackCustomEvent() {
         final HashMap<String, String> events = new HashMap<>();
 
-        events.put(TelemetryData.SERVICE_NAME, getClass().getPackage().getName().replaceAll("\\w+\\.", ""));
-        events.put(TelemetryData.HASHED_NAMESPACE, getHashNamespace());
+        events.put(SERVICE_NAME, getClassPackageSimpleName(ServiceBusAutoConfiguration.class));
+        events.put(HASHED_NAMESPACE, getHashNamespace());
 
         telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), events);
     }

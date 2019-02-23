@@ -5,9 +5,9 @@
  */
 package com.microsoft.azure.spring.autoconfigure.sqlserver;
 
+import com.microsoft.azure.telemetry.TelemetryProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -38,8 +38,9 @@ public class AlwaysEncryptedAutoConfiguration {
      */
     @Bean(name = "dataSourceKeyVaultInitializer")
     @ConditionalOnClass(com.microsoft.sqlserver.jdbc.SQLServerDriver.class)
-    public KeyVaultProviderInitializer dataSourceKeyVaultInitializer(KeyVaultProperties properties) {
-        return new KeyVaultProviderInitializer(properties);
+    public KeyVaultProviderInitializer dataSourceKeyVaultInitializer(KeyVaultProperties properties,
+                                                                     TelemetryProxy telemetryProxy) {
+        return new KeyVaultProviderInitializer(properties, telemetryProxy);
     }
 
     @Configuration

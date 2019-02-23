@@ -7,7 +7,6 @@
 package com.microsoft.azure.spring.autoconfigure.storage;
 
 import com.microsoft.azure.storage.blob.*;
-import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +23,7 @@ import java.net.URL;
 import java.security.InvalidKeyException;
 import java.util.HashMap;
 
+import static com.microsoft.azure.telemetry.TelemetryData.*;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 @Configuration
@@ -39,9 +39,9 @@ public class StorageAutoConfiguration {
     private final StorageProperties properties;
     private final TelemetryProxy telemetryProxy;
 
-    public StorageAutoConfiguration(StorageProperties properties) {
+    public StorageAutoConfiguration(StorageProperties properties, TelemetryProxy telemetryProxy) {
         this.properties = properties;
-        this.telemetryProxy = new TelemetryProxy(properties.isAllowTelemetry());
+        this.telemetryProxy = telemetryProxy;
     }
 
     /**
@@ -85,11 +85,13 @@ public class StorageAutoConfiguration {
     }
 
     private void trackCustomEvent() {
-        final HashMap<String, String> events = new HashMap<>();
+        if (properties.isAllowTelemetry()) {
+            final HashMap<String, String> events = new HashMap<>();
 
-        events.put(TelemetryData.SERVICE_NAME, getClass().getPackage().getName().replaceAll("\\w+\\.", ""));
-        events.put(TelemetryData.HASHED_ACCOUNT_NAME, sha256Hex(properties.getAccountName()));
+            events.put(SERVICE_NAME, getClassPackageSimpleName(StorageAutoConfiguration.class));
+            events.put(HASHED_ACCOUNT_NAME, sha256Hex(properties.getAccountName()));
 
-        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), events);
+            telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), events);
+        }
     }
 }

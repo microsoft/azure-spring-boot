@@ -5,6 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
+import com.microsoft.azure.telemetry.TelemetryProxyConfiguration;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
@@ -22,6 +23,7 @@ public class AADB2CAuthorizationRequestResolverTest {
 
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(AADB2CAutoConfiguration.class))
+            .withConfiguration(AutoConfigurations.of(TelemetryProxyConfiguration.class))
             .withPropertyValues(
                     String.format("%s=%s", TENANT, TEST_TENANT),
                     String.format("%s=%s", CLIENT_ID, TEST_CLIENT_ID),
