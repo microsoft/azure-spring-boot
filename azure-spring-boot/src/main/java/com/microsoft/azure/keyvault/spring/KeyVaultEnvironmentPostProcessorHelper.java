@@ -26,6 +26,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -61,8 +62,6 @@ class KeyVaultEnvironmentPostProcessorHelper {
                 .build();
 
         final KeyVaultClient kvClient = new KeyVaultClient(restClient);
-
-        this.trackCustomEvent();
 
         try {
             final MutablePropertySources sources = this.environment.getPropertySources();
@@ -140,6 +139,7 @@ class KeyVaultEnvironmentPostProcessorHelper {
         return env.getProperty(Constants.AZURE_KEYVAULT_ALLOW_TELEMETRY, Boolean.class, true);
     }
 
+    @PostConstruct
     private void trackCustomEvent() {
         if (allowTelemetry(environment)) {
             final Map<String, String> events = new HashMap<>();

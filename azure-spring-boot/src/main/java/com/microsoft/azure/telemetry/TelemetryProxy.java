@@ -27,7 +27,7 @@ public class TelemetryProxy {
 
     private TelemetryClient getTelemetryClient(String instrumentationKey) {
         if (!StringUtils.hasText(instrumentationKey)) {
-            log.warn("Telemetry client instrumentation key must contain text.");
+            log.debug("Telemetry client instrumentation key must contain text.");
             return null;
         }
 

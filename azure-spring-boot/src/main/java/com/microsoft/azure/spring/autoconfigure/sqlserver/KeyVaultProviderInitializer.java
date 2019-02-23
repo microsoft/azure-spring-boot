@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.util.ClassUtils;
 
+import javax.annotation.PostConstruct;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class KeyVaultProviderInitializer {
 
     public void init() {
         LOG.info("initializing DataSource AlwaysEncryption Vault provider");
-        trackCustomEvent();
+
         try {
 
             final SQLServerColumnEncryptionAzureKeyVaultProvider akvProvider =
@@ -54,6 +55,7 @@ public class KeyVaultProviderInitializer {
         }
     }
 
+    @PostConstruct
     private void trackCustomEvent() {
         if (properties.isAllowTelemetry()) {
             final HashMap<String, String> events = new HashMap<>();

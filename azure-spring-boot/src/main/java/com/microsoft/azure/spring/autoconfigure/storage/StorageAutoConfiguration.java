@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ClassUtils;
 
+import javax.annotation.PostConstruct;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.InvalidKeyException;
@@ -52,7 +53,6 @@ public class StorageAutoConfiguration {
     public ServiceURL createServiceUrl(@Autowired(required = false) PipelineOptions options) throws InvalidKeyException,
             MalformedURLException {
         LOG.debug("Creating ServiceURL bean...");
-        trackCustomEvent();
         final SharedKeyCredentials credentials = new SharedKeyCredentials(properties.getAccountName(),
                 properties.getAccountKey());
         final URL blobUrl = getURL();
@@ -84,6 +84,7 @@ public class StorageAutoConfiguration {
         return serviceURL.createContainerURL(properties.getContainerName());
     }
 
+    @PostConstruct
     private void trackCustomEvent() {
         if (properties.isAllowTelemetry()) {
             final HashMap<String, String> events = new HashMap<>();

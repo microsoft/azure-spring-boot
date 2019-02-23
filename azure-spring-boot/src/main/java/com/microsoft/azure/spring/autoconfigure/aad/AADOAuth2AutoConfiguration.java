@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.util.ClassUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,8 +44,6 @@ public class AADOAuth2AutoConfiguration {
         this.aadAuthProps = aadAuthProperties;
         this.serviceEndpointsProps = serviceEndpointsProps;
         this.telemetryProxy = telemetryProxy;
-
-        trackCustomEvent();
     }
 
     @Bean
@@ -53,6 +52,7 @@ public class AADOAuth2AutoConfiguration {
         return new AADOAuth2UserService(aadAuthProps, serviceEndpointsProps);
     }
 
+    @PostConstruct
     private void trackCustomEvent() {
         if (aadAuthProps.isAllowTelemetry()) {
             final Map<String, String> events = new HashMap<>();

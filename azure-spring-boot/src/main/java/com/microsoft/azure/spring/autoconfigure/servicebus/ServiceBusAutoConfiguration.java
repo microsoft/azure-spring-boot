@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.util.ClassUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 
 import static com.microsoft.azure.telemetry.TelemetryData.*;
@@ -45,7 +46,6 @@ public class ServiceBusAutoConfiguration {
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = "azure.servicebus", value = {"queue-name", "queue-receive-mode"})
     public QueueClient queueClient() throws InterruptedException, ServiceBusException {
-        trackCustomEvent();
         return new QueueClient(new ConnectionStringBuilder(properties.getConnectionString(),
                 properties.getQueueName()), properties.getQueueReceiveMode());
     }
@@ -54,7 +54,6 @@ public class ServiceBusAutoConfiguration {
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = "azure.servicebus", value = "topic-name")
     public TopicClient topicClient() throws InterruptedException, ServiceBusException {
-        trackCustomEvent();
         return new TopicClient(new ConnectionStringBuilder(properties.getConnectionString(),
                 properties.getTopicName()));
     }
@@ -64,7 +63,6 @@ public class ServiceBusAutoConfiguration {
     @ConditionalOnProperty(prefix = "azure.servicebus",
             value = {"topic-name", "subscription-name", "subscription-receive-mode"})
     public SubscriptionClient subscriptionClient() throws ServiceBusException, InterruptedException {
-        trackCustomEvent();
         return new SubscriptionClient(new ConnectionStringBuilder(properties.getConnectionString(),
                 properties.getTopicName() + "/subscriptions/" + properties.getSubscriptionName()),
                 properties.getSubscriptionReceiveMode());
@@ -84,6 +82,7 @@ public class ServiceBusAutoConfiguration {
         return sha256Hex(namespace);
     }
 
+    @PostConstruct
     private void trackCustomEvent() {
         final HashMap<String, String> events = new HashMap<>();
 

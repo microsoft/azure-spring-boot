@@ -22,6 +22,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,8 +59,6 @@ public class AADB2CAutoConfiguration {
         this.repository = repository;
         this.properties = properties;
         this.telemetryProxy = telemetryProxy;
-
-        trackCustomEvent();
     }
 
     @Bean
@@ -81,6 +80,7 @@ public class AADB2CAutoConfiguration {
         return new AADB2COidcLoginConfigurer(properties, handler, resolver);
     }
 
+    @PostConstruct
     private void trackCustomEvent() {
         if (properties.isAllowTelemetry()) {
             final Map<String, String> events = new HashMap<>();

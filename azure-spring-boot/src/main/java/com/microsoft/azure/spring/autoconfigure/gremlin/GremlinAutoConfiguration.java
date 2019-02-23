@@ -25,6 +25,7 @@ import org.springframework.data.annotation.Persistent;
 import org.springframework.lang.NonNull;
 import org.springframework.util.ClassUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 
 import static com.microsoft.azure.telemetry.TelemetryData.SERVICE_NAME;
@@ -49,6 +50,7 @@ public class GremlinAutoConfiguration {
         this.telemetryProxy = telemetryProxy;
     }
 
+    @PostConstruct
     private void trackCustomEvent() {
         if (properties.isTelemetryAllowed()) {
             final HashMap<String, String> events = new HashMap<>();
@@ -82,8 +84,6 @@ public class GremlinAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public GremlinFactory gremlinFactory() {
-        this.trackCustomEvent();
-
         return new GremlinFactory(getGremlinConfig());
     }
 

@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -58,7 +59,6 @@ public class MediaServicesAutoConfiguration {
     @Bean
     public MediaContract mediaContract() throws ServiceException, MalformedURLException, URISyntaxException {
         LOG.debug("mediaContract called");
-        trackCustomEvent();
         return createMediaContract();
     }
 
@@ -95,6 +95,7 @@ public class MediaServicesAutoConfiguration {
         return MediaService.create(configuration);
     }
 
+    @PostConstruct
     private void trackCustomEvent() {
         if (properties.isAllowTelemetry()) {
             final HashMap<String, String> events = new HashMap<>();

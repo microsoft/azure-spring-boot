@@ -21,6 +21,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.util.ClassUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,7 +60,6 @@ public class AADAuthenticationFilterAutoConfiguration {
     @ConditionalOnMissingBean(AADAuthenticationFilter.class)
     public AADAuthenticationFilter azureADJwtTokenFilter() {
         LOG.info("AzureADJwtTokenFilter Constructor.");
-        trackCustomEvent();
         return new AADAuthenticationFilter(aadAuthProps, serviceEndpointsProps, getJWTResourceRetriever());
     }
 
@@ -71,6 +71,7 @@ public class AADAuthenticationFilterAutoConfiguration {
                 aadAuthProps.getJwtSizeLimit());
     }
 
+    @PostConstruct
     private void trackCustomEvent() {
         if (aadAuthProps.isAllowTelemetry()) {
             final Map<String, String> events = new HashMap<>();
