@@ -5,6 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.gremlin;
 
+import com.microsoft.azure.telemetry.TelemetryProxyConfiguration;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -15,7 +16,8 @@ import static com.microsoft.azure.spring.autoconfigure.gremlin.PropertiesUtil.*;
 public class GremlinPropertiesUnitTest {
 
     private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(GremlinAutoConfiguration.class));
+            .withConfiguration(AutoConfigurations.of(GremlinAutoConfiguration.class))
+            .withConfiguration(AutoConfigurations.of(TelemetryProxyConfiguration.class));
 
     @Test
     public void testAllProperties() {

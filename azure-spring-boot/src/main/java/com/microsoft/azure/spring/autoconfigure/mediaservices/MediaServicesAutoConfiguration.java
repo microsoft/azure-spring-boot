@@ -6,7 +6,6 @@
 
 package com.microsoft.azure.spring.autoconfigure.mediaservices;
 
-import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.microsoft.windowsazure.exception.ServiceException;
 import com.microsoft.windowsazure.services.media.MediaConfiguration;
@@ -26,6 +25,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -33,11 +33,9 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.microsoft.windowsazure.Configuration.PROPERTY_CONNECT_TIMEOUT;
-import static com.microsoft.windowsazure.Configuration.PROPERTY_READ_TIMEOUT;
-import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_HOST;
-import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_PORT;
-import static com.microsoft.windowsazure.Configuration.PROPERTY_HTTP_PROXY_SCHEME;
+import static com.microsoft.azure.telemetry.TelemetryData.SERVICE_NAME;
+import static com.microsoft.azure.telemetry.TelemetryData.getClassPackageSimpleName;
+import static com.microsoft.windowsazure.Configuration.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -52,15 +50,15 @@ public class MediaServicesAutoConfiguration {
     private final MediaServicesProperties properties;
     private final TelemetryProxy telemetryProxy;
 
-    public MediaServicesAutoConfiguration(MediaServicesProperties mediaServicesProperties) {
+    public MediaServicesAutoConfiguration(MediaServicesProperties mediaServicesProperties,
+                                          TelemetryProxy telemetryProxy) {
         this.properties = mediaServicesProperties;
-        this.telemetryProxy = new TelemetryProxy(mediaServicesProperties.isAllowTelemetry());
+        this.telemetryProxy = telemetryProxy;
     }
 
     @Bean
     public MediaContract mediaContract() throws ServiceException, MalformedURLException, URISyntaxException {
         LOG.debug("mediaContract called");
-        trackCustomEvent();
         return createMediaContract();
     }
 
@@ -97,13 +95,14 @@ public class MediaServicesAutoConfiguration {
         return MediaService.create(configuration);
     }
 
+    @PostConstruct
     private void trackCustomEvent() {
-        final HashMap<String, String> customTelemetryProperties = new HashMap<>();
-        final String[] packageNames = this.getClass().getPackage().getName().split("\\.");
+        if (properties.isAllowTelemetry()) {
+            final HashMap<String, String> events = new HashMap<>();
 
-        if (packageNames.length > 1) {
-            customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
+            events.put(SERVICE_NAME, getClassPackageSimpleName(MediaServicesAutoConfiguration.class));
+
+            telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), events);
         }
-        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
 }

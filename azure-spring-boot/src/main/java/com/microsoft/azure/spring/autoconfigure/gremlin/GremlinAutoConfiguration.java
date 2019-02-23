@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.gremlin;
 
-import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.microsoft.spring.data.gremlin.common.GremlinConfig;
 import com.microsoft.spring.data.gremlin.common.GremlinFactory;
@@ -26,7 +25,11 @@ import org.springframework.data.annotation.Persistent;
 import org.springframework.lang.NonNull;
 import org.springframework.util.ClassUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
+
+import static com.microsoft.azure.telemetry.TelemetryData.SERVICE_NAME;
+import static com.microsoft.azure.telemetry.TelemetryData.getClassPackageSimpleName;
 
 @Configuration
 @ConditionalOnClass({GremlinFactory.class, GremlinTemplate.class, MappingGremlinConverter.class})
@@ -40,21 +43,22 @@ public class GremlinAutoConfiguration {
 
     private final ApplicationContext applicationContext;
 
-    public GremlinAutoConfiguration(@NonNull GremlinProperties properties, @NonNull ApplicationContext context) {
+    public GremlinAutoConfiguration(@NonNull GremlinProperties properties, @NonNull ApplicationContext context,
+                                    TelemetryProxy telemetryProxy) {
         this.properties = properties;
         this.applicationContext = context;
-        this.telemetryProxy = new TelemetryProxy(properties.isTelemetryAllowed());
+        this.telemetryProxy = telemetryProxy;
     }
 
+    @PostConstruct
     private void trackCustomEvent() {
-        final HashMap<String, String> customTelemetryProperties = new HashMap<>();
-        final String[] packageNames = this.getClass().getPackage().getName().split("\\.");
+        if (properties.isTelemetryAllowed()) {
+            final HashMap<String, String> events = new HashMap<>();
 
-        if (packageNames.length > 1) {
-            customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
+            events.put(SERVICE_NAME, getClassPackageSimpleName(GremlinAutoConfiguration.class));
+
+            telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), events);
         }
-
-        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
 
     @Bean
@@ -80,8 +84,6 @@ public class GremlinAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public GremlinFactory gremlinFactory() {
-        this.trackCustomEvent();
-
         return new GremlinFactory(getGremlinConfig());
     }
 
