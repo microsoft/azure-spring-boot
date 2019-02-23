@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.microsoft.azure.telemetry.TelemetryData;
 import com.microsoft.azure.telemetry.TelemetryProxy;
 import com.nimbusds.jose.util.DefaultResourceRetriever;
 import com.nimbusds.jose.util.ResourceRetriever;
@@ -22,7 +21,12 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.util.ClassUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
+import java.util.Map;
+
+import static com.microsoft.azure.telemetry.TelemetryData.SERVICE_NAME;
+import static com.microsoft.azure.telemetry.TelemetryData.getClassPackageSimpleName;
 
 @Configuration
 @ConditionalOnWebApplication
@@ -33,15 +37,17 @@ public class AADAuthenticationFilterAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationProperties.class);
 
     private final AADAuthenticationProperties aadAuthProps;
+
     private final ServiceEndpointsProperties serviceEndpointsProps;
 
     private final TelemetryProxy telemetryProxy;
 
     public AADAuthenticationFilterAutoConfiguration(AADAuthenticationProperties aadAuthFilterProps,
-                                                    ServiceEndpointsProperties serviceEndpointsProps) {
+                                                    ServiceEndpointsProperties serviceEndpointsProps,
+                                                    TelemetryProxy telemetryProxy) {
         this.aadAuthProps = aadAuthFilterProps;
         this.serviceEndpointsProps = serviceEndpointsProps;
-        this.telemetryProxy = new TelemetryProxy(aadAuthFilterProps.isAllowTelemetry());
+        this.telemetryProxy = telemetryProxy;
     }
 
     /**
@@ -54,7 +60,6 @@ public class AADAuthenticationFilterAutoConfiguration {
     @ConditionalOnMissingBean(AADAuthenticationFilter.class)
     public AADAuthenticationFilter azureADJwtTokenFilter() {
         LOG.info("AzureADJwtTokenFilter Constructor.");
-        trackCustomEvent();
         return new AADAuthenticationFilter(aadAuthProps, serviceEndpointsProps, getJWTResourceRetriever());
     }
 
@@ -66,13 +71,14 @@ public class AADAuthenticationFilterAutoConfiguration {
                 aadAuthProps.getJwtSizeLimit());
     }
 
+    @PostConstruct
     private void trackCustomEvent() {
-        final HashMap<String, String> customTelemetryProperties = new HashMap<>();
-        final String[] packageNames = this.getClass().getPackage().getName().split("\\.");
+        if (aadAuthProps.isAllowTelemetry()) {
+            final Map<String, String> events = new HashMap<>();
 
-        if (packageNames.length > 1) {
-            customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
+            events.put(SERVICE_NAME, getClassPackageSimpleName(AADAuthenticationFilterAutoConfiguration.class));
+
+            telemetryProxy.trackEvent(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
         }
-        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
 }

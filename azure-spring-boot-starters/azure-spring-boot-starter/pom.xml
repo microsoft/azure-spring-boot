@@ -48,29 +48,4 @@
         </resources>
     </build>
 
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <activation>
-                <property>
-                    <name>!release</name>
-                </property>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <ai.instrumentkey>fda156f5-2eb8-48ab-8a3c-3e06b3c64b49</ai.instrumentkey>
-            </properties>
-        </profile>
-        <profile>
-            <id>release</id>
-            <activation>
-                <property>
-                    <name>release</name>
-                </property>
-            </activation>
-            <properties>
-                <ai.instrumentkey>${telemetry.instrumentationKey}</ai.instrumentkey>
-            </properties>
-        </profile>
-    </profiles>
 </project>

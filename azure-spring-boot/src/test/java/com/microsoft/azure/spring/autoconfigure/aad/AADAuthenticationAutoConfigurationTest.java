@@ -5,6 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import com.microsoft.azure.telemetry.TelemetryProxyConfiguration;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
@@ -17,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AADAuthenticationAutoConfigurationTest {
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(AADAuthenticationFilterAutoConfiguration.class))
+            .withConfiguration(AutoConfigurations.of(TelemetryProxyConfiguration.class))
             .withPropertyValues("azure.activedirectory.client-id=fake-client-id",
                     "azure.activedirectory.client-secret=fake-client-secret",
                     "azure.activedirectory.active-directory-groups=fake-group",
