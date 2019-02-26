@@ -6,6 +6,7 @@
 
 package com.microsoft.azure.spring.autoconfigure.mediaservices;
 
+import com.microsoft.azure.telemetry.TelemetryProxyConfiguration;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBindException;
@@ -19,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MediaServicesPropertiesTest {
     private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(MediaServicesAutoConfiguration.class))
+            .withConfiguration(AutoConfigurations.of(TelemetryProxyConfiguration.class))
             .withPropertyValues(propPair(TENANT_PROP, TENANT),
                     propPair(CLIENT_ID_PROP, CLIENT_ID),
                     propPair(CLIENT_SECRET_PROP, CLIENT_SECRET),
