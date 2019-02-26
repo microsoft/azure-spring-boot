@@ -78,7 +78,7 @@ public class KeyVaultEnvironmentPostProcessorTest {
 
         final ServiceClientCredentials credentials = keyVaultEnvironmentPostProcessorHelper.getCredentials();
 
-        assertThat(credentials, IsInstanceOf.instanceOf(MSICredentials.class));
+        assertThat(credentials, IsInstanceOf.instanceOf(AzureKeyVaultMSICredential.class));
     }
 
     @Test
@@ -87,7 +87,7 @@ public class KeyVaultEnvironmentPostProcessorTest {
 
         final ServiceClientCredentials credentials = keyVaultEnvironmentPostProcessorHelper.getCredentials();
 
-        assertThat(credentials, IsInstanceOf.instanceOf(MSICredentials.class));
+        assertThat(credentials, IsInstanceOf.instanceOf(AzureKeyVaultMSICredential.class));
     }
 
     @Test
