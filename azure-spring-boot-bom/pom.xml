@@ -46,7 +46,7 @@
     </scm>
 
     <properties>
-        <azure.spring.boot.version>${project.version}</azure.spring.boot.version>
+        <azure.spring.boot.version>2.1.5.BUILD-SNAPSHOT</azure.spring.boot.version>
         <azure.dependencies.bom.version>2.1.0.M2</azure.dependencies.bom.version>
     </properties>
 
