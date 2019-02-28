@@ -29,7 +29,7 @@ public class GremlinPropertiesUnitTest {
                 .withPropertyValues(GREMLIN_TELEMETRY_CONFIG_NOT_ALLOWED)
                 .run(context -> {
                     Assert.assertEquals(context.getBean(GremlinProperties.class).getEndpoint(), ENDPOINT);
-                    Assert.assertEquals(context.getBean(GremlinProperties.class).getPort(), PORT);
+                    Assert.assertEquals(context.getBean(GremlinProperties.class).getPort(), String.valueOf(PORT));
                     Assert.assertEquals(context.getBean(GremlinProperties.class).getUsername(), USERNAME);
                     Assert.assertEquals(context.getBean(GremlinProperties.class).getPassword(), PASSWORD);
                     Assert.assertFalse(context.getBean(GremlinProperties.class).isTelemetryAllowed());

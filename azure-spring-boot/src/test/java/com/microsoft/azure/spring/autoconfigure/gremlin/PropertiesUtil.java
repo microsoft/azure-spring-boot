@@ -12,10 +12,10 @@ public class PropertiesUtil {
     private static final String PROPERTY_PASSWORD = "gremlin.password";
     private static final String PROPERTY_TELEMETRY = "gremlin.telemetryAllowed";
 
-    public static final String ENDPOINT = "pli-gremlin-3-29.gremlin.cosmosdb.azure.com";
-    public static final String PORT = "443";
-    public static final String USERNAME = "/dbs/pli-database/colls/pli-collection";
-    public static final String PASSWORD = "xxxx";
+    public static final String ENDPOINT = "localhost";
+    public static final int PORT = 8090;
+    public static final String USERNAME = "fake-username";
+    public static final String PASSWORD = "fake-passowrd";
 
     public static final String GREMLIN_ENDPOINT_CONFIG = PROPERTY_ENDPOINT + "=" + ENDPOINT;
     public static final String GREMLIN_PORT_CONFIG = PROPERTY_PORT + "=" + PORT;
