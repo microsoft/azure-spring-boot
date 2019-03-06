@@ -5,7 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.b2c;
 
-import com.microsoft.azure.telemetry.TelemetryProxy;
+import com.microsoft.azure.telemetry.TelemetrySender;
 import lombok.NonNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -51,14 +51,10 @@ public class AADB2CAutoConfiguration {
 
     private final AADB2CProperties properties;
 
-    private final TelemetryProxy telemetryProxy;
-
     public AADB2CAutoConfiguration(@NonNull ClientRegistrationRepository repository,
-                                   @NonNull AADB2CProperties properties,
-                                   @NonNull TelemetryProxy telemetryProxy) {
+                                   @NonNull AADB2CProperties properties) {
         this.repository = repository;
         this.properties = properties;
-        this.telemetryProxy = telemetryProxy;
     }
 
     @Bean
@@ -81,14 +77,15 @@ public class AADB2CAutoConfiguration {
     }
 
     @PostConstruct
-    private void trackCustomEvent() {
+    private void sendTelemetry() {
         if (properties.isAllowTelemetry()) {
             final Map<String, String> events = new HashMap<>();
+            final TelemetrySender sender = new TelemetrySender();
 
             events.put(SERVICE_NAME, getClassPackageSimpleName(AADB2CAutoConfiguration.class));
             events.put(TENANT_NAME, properties.getTenant());
 
-            telemetryProxy.trackEvent(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
+            sender.send(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
         }
     }
 

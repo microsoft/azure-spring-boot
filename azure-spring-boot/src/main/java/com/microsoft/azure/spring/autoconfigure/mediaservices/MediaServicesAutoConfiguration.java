@@ -6,7 +6,7 @@
 
 package com.microsoft.azure.spring.autoconfigure.mediaservices;
 
-import com.microsoft.azure.telemetry.TelemetryProxy;
+import com.microsoft.azure.telemetry.TelemetrySender;
 import com.microsoft.windowsazure.exception.ServiceException;
 import com.microsoft.windowsazure.services.media.MediaConfiguration;
 import com.microsoft.windowsazure.services.media.MediaContract;
@@ -30,6 +30,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -48,12 +49,9 @@ public class MediaServicesAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(MediaServicesAutoConfiguration.class);
 
     private final MediaServicesProperties properties;
-    private final TelemetryProxy telemetryProxy;
 
-    public MediaServicesAutoConfiguration(MediaServicesProperties mediaServicesProperties,
-                                          TelemetryProxy telemetryProxy) {
+    public MediaServicesAutoConfiguration(MediaServicesProperties mediaServicesProperties) {
         this.properties = mediaServicesProperties;
-        this.telemetryProxy = telemetryProxy;
     }
 
     @Bean
@@ -96,13 +94,14 @@ public class MediaServicesAutoConfiguration {
     }
 
     @PostConstruct
-    private void trackCustomEvent() {
+    private void sendTelemetry() {
         if (properties.isAllowTelemetry()) {
-            final HashMap<String, String> events = new HashMap<>();
+            final Map<String, String> events = new HashMap<>();
+            final TelemetrySender sender = new TelemetrySender();
 
             events.put(SERVICE_NAME, getClassPackageSimpleName(MediaServicesAutoConfiguration.class));
 
-            telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), events);
+            sender.send(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
         }
     }
 }

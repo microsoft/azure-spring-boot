@@ -6,7 +6,6 @@
 
 package com.microsoft.azure.spring.autoconfigure.sqlserver;
 
-import com.microsoft.azure.telemetry.TelemetryProxyConfiguration;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -36,7 +35,6 @@ public class AlwaysEncryptedAutoConfigurationTest {
                 KeyVaultPropertiesTest.CLIENT_SECRET_PROPERTY + "=secret",
                 "spring.datasource.url=jdbc:sqlserver://xxx")
                 .withUserConfiguration(SQLServerDataSource.class)
-                .withConfiguration(AutoConfigurations.of(TelemetryProxyConfiguration.class))
                 .run((context) ->  {
                     assertThat(context).hasSingleBean(KeyVaultProviderInitializer.class);
                     assertThat(context).hasSingleBean(KeyVaultProperties.class);
