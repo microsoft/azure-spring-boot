@@ -27,17 +27,21 @@ public class TelemetrySender {
 
     private static final int RETRY_LIMIT = 3; // Align the retry times with sdk
 
+    private static final RestTemplate REST_TEMPLATE = new RestTemplate();
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    private static final HttpHeaders HEADERS = new HttpHeaders();
+
+    static {
+        HEADERS.add(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON.toString());
+    }
+
     private ResponseEntity<String> executeRequest(final TelemetryEventData eventData) {
-        final HttpHeaders headers = new HttpHeaders();
-        final ObjectMapper mapper = new ObjectMapper();
-
-        headers.add(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON.toString());
-
         try {
-            final RestTemplate restTemplate = new RestTemplate();
-            final HttpEntity<String> body = new HttpEntity<>(mapper.writeValueAsString(eventData), headers);
+            final HttpEntity<String> body = new HttpEntity<>(MAPPER.writeValueAsString(eventData), HEADERS);
 
-            return restTemplate.exchange(TELEMETRY_TARGET_URL, HttpMethod.POST, body, String.class);
+            return REST_TEMPLATE.exchange(TELEMETRY_TARGET_URL, HttpMethod.POST, body, String.class);
         } catch (Exception ignore) {
             log.warn("Failed to exchange telemetry request, {}.", ignore.getMessage());
         }
