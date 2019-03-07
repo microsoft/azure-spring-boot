@@ -30,9 +30,5 @@
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-media</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>applicationinsights-core</artifactId>
-        </dependency>
     </dependencies>
 </project>
