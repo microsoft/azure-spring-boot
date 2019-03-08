@@ -5,7 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.microsoft.azure.telemetry.TelemetryProxy;
+import com.microsoft.azure.telemetry.TelemetrySender;
 import com.nimbusds.jose.util.DefaultResourceRetriever;
 import com.nimbusds.jose.util.ResourceRetriever;
 import org.slf4j.Logger;
@@ -40,14 +40,10 @@ public class AADAuthenticationFilterAutoConfiguration {
 
     private final ServiceEndpointsProperties serviceEndpointsProps;
 
-    private final TelemetryProxy telemetryProxy;
-
     public AADAuthenticationFilterAutoConfiguration(AADAuthenticationProperties aadAuthFilterProps,
-                                                    ServiceEndpointsProperties serviceEndpointsProps,
-                                                    TelemetryProxy telemetryProxy) {
+                                                    ServiceEndpointsProperties serviceEndpointsProps) {
         this.aadAuthProps = aadAuthFilterProps;
         this.serviceEndpointsProps = serviceEndpointsProps;
-        this.telemetryProxy = telemetryProxy;
     }
 
     /**
@@ -72,13 +68,14 @@ public class AADAuthenticationFilterAutoConfiguration {
     }
 
     @PostConstruct
-    private void trackCustomEvent() {
+    private void sendTelemetry() {
         if (aadAuthProps.isAllowTelemetry()) {
             final Map<String, String> events = new HashMap<>();
+            final TelemetrySender sender = new TelemetrySender();
 
             events.put(SERVICE_NAME, getClassPackageSimpleName(AADAuthenticationFilterAutoConfiguration.class));
 
-            telemetryProxy.trackEvent(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
+            sender.send(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
         }
     }
 }

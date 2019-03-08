@@ -6,7 +6,6 @@
 
 package com.microsoft.azure.spring.autoconfigure.mediaservices;
 
-import com.microsoft.azure.telemetry.TelemetryProxyConfiguration;
 import com.microsoft.windowsazure.exception.ServiceException;
 import com.microsoft.windowsazure.services.media.MediaContract;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -22,7 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MediaServicesAutoConfigurationTest {
     private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(MediaServicesAutoConfiguration.class))
-            .withConfiguration(AutoConfigurations.of(TelemetryProxyConfiguration.class))
             .withPropertyValues(propPair(TENANT_PROP, TENANT),
                     propPair(CLIENT_ID_PROP, CLIENT_ID),
                     propPair(CLIENT_SECRET_PROP, CLIENT_SECRET),
