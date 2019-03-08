@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.sqlserver;
 
-import com.microsoft.azure.telemetry.TelemetryProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -33,14 +32,12 @@ public class AlwaysEncryptedAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AlwaysEncryptedAutoConfiguration.class);
 
     /**
-     *
      * @return post processor bean that initializes KeyVault ofr SQL Driver
      */
     @Bean(name = "dataSourceKeyVaultInitializer")
     @ConditionalOnClass(com.microsoft.sqlserver.jdbc.SQLServerDriver.class)
-    public KeyVaultProviderInitializer dataSourceKeyVaultInitializer(KeyVaultProperties properties,
-                                                                     TelemetryProxy telemetryProxy) {
-        return new KeyVaultProviderInitializer(properties, telemetryProxy);
+    public KeyVaultProviderInitializer dataSourceKeyVaultInitializer(KeyVaultProperties properties) {
+        return new KeyVaultProviderInitializer(properties);
     }
 
     @Configuration
@@ -52,7 +49,7 @@ public class AlwaysEncryptedAutoConfiguration {
         public DataSourceProperties dataSourceProperties() {
             LOG.info("Setting AlwaysEncrypted url flag");
             // Set Property to enable Encryption
-           return new AlwaysEncryptedDataSourceProperties();
+            return new AlwaysEncryptedDataSourceProperties();
         }
     }
 }

@@ -5,7 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.gremlin;
 
-import com.microsoft.azure.telemetry.TelemetryProxy;
+import com.microsoft.azure.telemetry.TelemetrySender;
 import com.microsoft.spring.data.gremlin.common.GremlinFactory;
 import com.microsoft.spring.data.gremlin.conversion.MappingGremlinConverter;
 import com.microsoft.spring.data.gremlin.mapping.GremlinMappingContext;
@@ -24,6 +24,7 @@ import org.springframework.util.ClassUtils;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
+import java.util.Map;
 
 import static com.microsoft.azure.telemetry.TelemetryData.SERVICE_NAME;
 import static com.microsoft.azure.telemetry.TelemetryData.getClassPackageSimpleName;
@@ -36,33 +37,28 @@ public class GremlinAutoConfiguration {
 
     private final GremlinProperties properties;
 
-    private final TelemetryProxy telemetryProxy;
-
     private final ApplicationContext applicationContext;
 
-    public GremlinAutoConfiguration(@NonNull GremlinProperties properties, @NonNull ApplicationContext context,
-                                    TelemetryProxy telemetryProxy) {
+    public GremlinAutoConfiguration(@NonNull GremlinProperties properties, @NonNull ApplicationContext context) {
         this.properties = properties;
         this.applicationContext = context;
-        this.telemetryProxy = telemetryProxy;
     }
 
     @PostConstruct
-    private void trackCustomEvent() {
+    private void sendTelemetry() {
         if (properties.isTelemetryAllowed()) {
-            final HashMap<String, String> events = new HashMap<>();
+            final Map<String, String> events = new HashMap<>();
+            final TelemetrySender sender = new TelemetrySender();
 
             events.put(SERVICE_NAME, getClassPackageSimpleName(GremlinAutoConfiguration.class));
 
-            telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), events);
+            sender.send(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
         }
     }
 
     @Bean
     @ConditionalOnMissingBean
     public GremlinFactory gremlinFactory() {
-        this.trackCustomEvent();
-
         final String endpoint = this.properties.getEndpoint();
         final String port = this.properties.getPort();
         final String username = this.properties.getUsername();

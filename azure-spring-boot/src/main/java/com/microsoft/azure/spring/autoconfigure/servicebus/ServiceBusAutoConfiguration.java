@@ -11,7 +11,7 @@ import com.microsoft.azure.servicebus.SubscriptionClient;
 import com.microsoft.azure.servicebus.TopicClient;
 import com.microsoft.azure.servicebus.primitives.ConnectionStringBuilder;
 import com.microsoft.azure.servicebus.primitives.ServiceBusException;
-import com.microsoft.azure.telemetry.TelemetryProxy;
+import com.microsoft.azure.telemetry.TelemetrySender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -23,6 +23,7 @@ import org.springframework.util.ClassUtils;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
+import java.util.Map;
 
 import static com.microsoft.azure.telemetry.TelemetryData.*;
 import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
@@ -35,11 +36,9 @@ import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 public class ServiceBusAutoConfiguration {
 
     private final ServiceBusProperties properties;
-    private final TelemetryProxy telemetryProxy;
 
-    public ServiceBusAutoConfiguration(ServiceBusProperties properties, TelemetryProxy telemetryProxy) {
+    public ServiceBusAutoConfiguration(ServiceBusProperties properties) {
         this.properties = properties;
-        this.telemetryProxy = telemetryProxy;
     }
 
     @Bean
@@ -83,14 +82,16 @@ public class ServiceBusAutoConfiguration {
     }
 
     @PostConstruct
-    private void trackCustomEvent() {
+    private void sendTelemetry() {
         if (properties.isAllowTelemetry()) {
-            final HashMap<String, String> events = new HashMap<>();
+            final Map<String, String> events = new HashMap<>();
+            final TelemetrySender sender = new TelemetrySender();
 
             events.put(SERVICE_NAME, getClassPackageSimpleName(ServiceBusAutoConfiguration.class));
             events.put(HASHED_NAMESPACE, getHashNamespace());
 
-            telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), events);
+            sender.send(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
         }
     }
+
 }

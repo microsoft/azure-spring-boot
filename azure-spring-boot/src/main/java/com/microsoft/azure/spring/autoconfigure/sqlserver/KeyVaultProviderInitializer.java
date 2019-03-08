@@ -5,7 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.sqlserver;
 
-import com.microsoft.azure.telemetry.TelemetryProxy;
+import com.microsoft.azure.telemetry.TelemetrySender;
 import com.microsoft.sqlserver.jdbc.SQLServerColumnEncryptionAzureKeyVaultProvider;
 import com.microsoft.sqlserver.jdbc.SQLServerColumnEncryptionKeyStoreProvider;
 import com.microsoft.sqlserver.jdbc.SQLServerConnection;
@@ -26,11 +26,9 @@ public class KeyVaultProviderInitializer {
     private static final Logger LOG = LoggerFactory.getLogger(KeyVaultProviderInitializer.class);
 
     private KeyVaultProperties properties;
-    private final TelemetryProxy telemetryProxy;
 
-    public KeyVaultProviderInitializer(KeyVaultProperties properties, TelemetryProxy telemetryProxy) {
+    public KeyVaultProviderInitializer(KeyVaultProperties properties) {
         this.properties = properties;
-        this.telemetryProxy = telemetryProxy;
         init();
     }
 
@@ -56,13 +54,14 @@ public class KeyVaultProviderInitializer {
     }
 
     @PostConstruct
-    private void trackCustomEvent() {
+    private void sendTelemetry() {
         if (properties.isAllowTelemetry()) {
-            final HashMap<String, String> events = new HashMap<>();
+            final Map<String, String> events = new HashMap<>();
+            final TelemetrySender sender = new TelemetrySender();
 
             events.put(SERVICE_NAME, getClassPackageSimpleName(KeyVaultProviderInitializer.class));
 
-            telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), events);
+            sender.send(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
         }
     }
 }

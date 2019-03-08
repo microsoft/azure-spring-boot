@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.storage;
 
-import com.microsoft.azure.telemetry.TelemetryProxyConfiguration;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBindException;
@@ -23,8 +22,7 @@ public class StoragePropertiesTest {
     private static final String CONTAINER_NAME = "fakestoragecontainername";
 
     private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(StorageAutoConfiguration.class))
-            .withConfiguration(AutoConfigurations.of(TelemetryProxyConfiguration.class));
+            .withConfiguration(AutoConfigurations.of(StorageAutoConfiguration.class));
 
     @Test
     public void canSetProperties() {

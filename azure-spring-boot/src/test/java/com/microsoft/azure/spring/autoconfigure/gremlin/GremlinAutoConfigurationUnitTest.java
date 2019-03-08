@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.gremlin;
 
-import com.microsoft.azure.telemetry.TelemetryProxyConfiguration;
 import com.microsoft.spring.data.gremlin.common.GremlinFactory;
 import com.microsoft.spring.data.gremlin.conversion.MappingGremlinConverter;
 import com.microsoft.spring.data.gremlin.mapping.GremlinMappingContext;
@@ -20,8 +19,7 @@ import static com.microsoft.azure.spring.autoconfigure.gremlin.PropertiesUtil.*;
 public class GremlinAutoConfigurationUnitTest {
 
     private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(GremlinAutoConfiguration.class))
-            .withConfiguration(AutoConfigurations.of(TelemetryProxyConfiguration.class));
+            .withConfiguration(AutoConfigurations.of(GremlinAutoConfiguration.class));
 
     @Test
     public void testAllBeanCreated() {
