@@ -21,8 +21,7 @@ public class GremlinProperties {
     @NotEmpty
     private String endpoint;
 
-    @NotEmpty
-    private String port;
+    private int port;
 
     @NotEmpty
     private String username;

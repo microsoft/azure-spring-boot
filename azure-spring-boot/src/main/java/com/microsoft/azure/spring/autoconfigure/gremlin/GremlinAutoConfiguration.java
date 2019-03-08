@@ -6,6 +6,7 @@
 package com.microsoft.azure.spring.autoconfigure.gremlin;
 
 import com.microsoft.azure.telemetry.TelemetrySender;
+import com.microsoft.spring.data.gremlin.common.GremlinConfig;
 import com.microsoft.spring.data.gremlin.common.GremlinFactory;
 import com.microsoft.spring.data.gremlin.conversion.MappingGremlinConverter;
 import com.microsoft.spring.data.gremlin.mapping.GremlinMappingContext;
@@ -60,11 +61,13 @@ public class GremlinAutoConfiguration {
     @ConditionalOnMissingBean
     public GremlinFactory gremlinFactory() {
         final String endpoint = this.properties.getEndpoint();
-        final String port = this.properties.getPort();
+        final int port = this.properties.getPort();
         final String username = this.properties.getUsername();
         final String password = this.properties.getPassword();
 
-        return new GremlinFactory(endpoint, port, username, password);
+        final GremlinConfig config = GremlinConfig.builder(endpoint, username, password).port(port).build();
+
+        return new GremlinFactory(config);
     }
 
     @Bean
