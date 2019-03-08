@@ -11,8 +11,6 @@ import com.microsoft.spring.data.gremlin.common.GremlinFactory;
 import com.microsoft.spring.data.gremlin.conversion.MappingGremlinConverter;
 import com.microsoft.spring.data.gremlin.mapping.GremlinMappingContext;
 import com.microsoft.spring.data.gremlin.query.GremlinTemplate;
-import com.microsoft.spring.data.gremlin.telemetry.EmptyTracker;
-import com.microsoft.spring.data.gremlin.telemetry.TelemetryTracker;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -57,16 +55,6 @@ public class GremlinAutoConfiguration {
 
             sender.send(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
         }
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public TelemetryTracker getTelemetryTracker() {
-        if (getGremlinConfig().isTelemetryAllowed()) {
-            return new TelemetryTracker();
-        }
-
-        return new EmptyTracker();
     }
 
     @Bean
