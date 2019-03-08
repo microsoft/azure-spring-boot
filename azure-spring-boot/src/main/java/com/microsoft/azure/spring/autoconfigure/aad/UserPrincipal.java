@@ -5,19 +5,20 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.google.common.collect.Lists;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jwt.JWTClaimsSet;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class UserPrincipal implements Serializable {
     private static final long serialVersionUID = -3725690847771476854L;
 
     private JWSObject jwsObject;
     private JWTClaimsSet jwtClaimsSet;
-    private List<UserGroup> userGroups = Lists.newArrayList();
+    private List<UserGroup> userGroups = new ArrayList<>();
 
     public UserPrincipal(JWSObject jwsObject, JWTClaimsSet jwtClaimsSet) {
         this.jwsObject = jwsObject;
