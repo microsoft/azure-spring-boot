@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.microsoft.azure.telemetry.TelemetryProxyConfiguration;
 import com.nimbusds.jose.jwk.source.RemoteJWKSet;
 import com.nimbusds.jose.util.DefaultResourceRetriever;
 import com.nimbusds.jose.util.ResourceRetriever;
@@ -18,7 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ResourceRetrieverTest {
     private final WebApplicationContextRunner contextRunner = new WebApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(AADAuthenticationFilterAutoConfiguration.class))
-            .withConfiguration(AutoConfigurations.of(TelemetryProxyConfiguration.class))
             .withPropertyValues("azure.activedirectory.client-id=fake-client-id",
                     "azure.activedirectory.client-secret=fake-client-secret",
                     "azure.activedirectory.active-directory-groups=fake-group",

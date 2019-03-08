@@ -5,7 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.microsoft.azure.telemetry.TelemetryProxy;
+import com.microsoft.azure.telemetry.TelemetrySender;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -32,18 +32,14 @@ import static com.microsoft.azure.telemetry.TelemetryData.getClassPackageSimpleN
 @EnableConfigurationProperties({AADAuthenticationProperties.class, ServiceEndpointsProperties.class})
 public class AADOAuth2AutoConfiguration {
 
-    private final TelemetryProxy telemetryProxy;
-
     private final AADAuthenticationProperties aadAuthProps;
 
     private final ServiceEndpointsProperties serviceEndpointsProps;
 
     public AADOAuth2AutoConfiguration(AADAuthenticationProperties aadAuthProperties,
-                                      ServiceEndpointsProperties serviceEndpointsProps,
-                                      TelemetryProxy telemetryProxy) {
+                                      ServiceEndpointsProperties serviceEndpointsProps) {
         this.aadAuthProps = aadAuthProperties;
         this.serviceEndpointsProps = serviceEndpointsProps;
-        this.telemetryProxy = telemetryProxy;
     }
 
     @Bean
@@ -53,13 +49,14 @@ public class AADOAuth2AutoConfiguration {
     }
 
     @PostConstruct
-    private void trackCustomEvent() {
+    private void sendTelemetry() {
         if (aadAuthProps.isAllowTelemetry()) {
             final Map<String, String> events = new HashMap<>();
+            final TelemetrySender sender = new TelemetrySender();
 
             events.put(SERVICE_NAME, getClassPackageSimpleName(AADOAuth2AutoConfiguration.class));
 
-            telemetryProxy.trackEvent(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
+            sender.send(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
         }
     }
 }
