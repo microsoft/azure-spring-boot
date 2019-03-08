@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.google.common.collect.Lists;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jwt.JWTClaimsSet;
 
@@ -17,7 +16,7 @@ public class UserPrincipal implements Serializable {
 
     private JWSObject jwsObject;
     private JWTClaimsSet jwtClaimsSet;
-    private List<UserGroup> userGroups = Lists.newArrayList();
+    private List<UserGroup> userGroups = new ArrayList<>();
 
     public UserPrincipal(JWSObject jwsObject, JWTClaimsSet jwtClaimsSet) {
         this.jwsObject = jwsObject;

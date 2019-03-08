@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.microsoft.azure.telemetry.TelemetryProxyConfiguration;
 import io.jsonwebtoken.lang.Assert;
 import org.junit.After;
 import org.junit.Before;
@@ -120,7 +119,6 @@ public class AADOAuth2ConfigTest {
         }
 
         context.register(AADOAuth2AutoConfiguration.class);
-        context.register(TelemetryProxyConfiguration.class);
         context.refresh();
 
         return context;

@@ -13,8 +13,7 @@ import com.microsoft.azure.credentials.MSICredentials;
 import com.microsoft.azure.keyvault.KeyVaultClient;
 import com.microsoft.azure.serializer.AzureJacksonAdapter;
 import com.microsoft.azure.spring.support.UserAgent;
-import com.microsoft.azure.telemetry.TelemetryProxy;
-import com.microsoft.azure.utils.PropertyLoader;
+import com.microsoft.azure.telemetry.TelemetrySender;
 import com.microsoft.rest.RestClient;
 import com.microsoft.rest.credentials.ServiceClientCredentials;
 import org.slf4j.Logger;
@@ -27,7 +26,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
-import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -39,12 +37,12 @@ class KeyVaultEnvironmentPostProcessorHelper {
     private static final Logger LOG = LoggerFactory.getLogger(KeyVaultEnvironmentPostProcessorHelper.class);
 
     private final ConfigurableEnvironment environment;
-    private final TelemetryProxy telemetryProxy;
 
     public KeyVaultEnvironmentPostProcessorHelper(final ConfigurableEnvironment environment) {
         this.environment = environment;
-        // As auto-configuration not available when post processor, load it from file.
-        this.telemetryProxy = new TelemetryProxy(PropertyLoader.getTelemetryInstrumentationKey());
+
+        // As @PostConstructor not available when post processor, call it explicitly.
+        sendTelemetry();
     }
 
     public void addKeyVaultPropertySource() {
@@ -140,14 +138,14 @@ class KeyVaultEnvironmentPostProcessorHelper {
         return env.getProperty(Constants.AZURE_KEYVAULT_ALLOW_TELEMETRY, Boolean.class, true);
     }
 
-    @PostConstruct
-    private void trackCustomEvent() {
+    private void sendTelemetry() {
         if (allowTelemetry(environment)) {
             final Map<String, String> events = new HashMap<>();
+            final TelemetrySender sender = new TelemetrySender();
 
             events.put(SERVICE_NAME, getClassPackageSimpleName(KeyVaultEnvironmentPostProcessorHelper.class));
 
-            telemetryProxy.trackEvent(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
+            sender.send(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
         }
     }
 }

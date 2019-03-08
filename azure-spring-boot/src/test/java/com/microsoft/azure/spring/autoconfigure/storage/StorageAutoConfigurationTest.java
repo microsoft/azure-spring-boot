@@ -7,7 +7,6 @@ package com.microsoft.azure.spring.autoconfigure.storage;
 
 import com.microsoft.azure.storage.blob.ContainerURL;
 import com.microsoft.azure.storage.blob.ServiceURL;
-import com.microsoft.azure.telemetry.TelemetryProxyConfiguration;
 import org.junit.Test;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -20,8 +19,7 @@ public class StorageAutoConfigurationTest {
     private static final String BLOB_HTTPS_URL = "https://%s.blob.core.windows.net";
     private static final String ACCOUNT_KEY = "ZmFrZUFjY291bnRLZXk="; /* Base64 encoded for string fakeAccountKey */
     private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(StorageAutoConfiguration.class))
-            .withConfiguration(AutoConfigurations.of(TelemetryProxyConfiguration.class));
+            .withConfiguration(AutoConfigurations.of(StorageAutoConfiguration.class));
 
     @Test(expected = NoSuchBeanDefinitionException.class)
     public void serviceUrlBeanNotCreatedByDefault() {
