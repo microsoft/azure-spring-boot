@@ -47,7 +47,7 @@
 
     <properties>
         <azure.spring.boot.version>2.1.6-SNAPSHOT</azure.spring.boot.version>
-        <azure.dependencies.bom.version>2.1.0.M3</azure.dependencies.bom.version>
+        <azure.dependencies.bom.version>2.1.0.M4</azure.dependencies.bom.version>
     </properties>
 
     <dependencyManagement>
