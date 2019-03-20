@@ -167,11 +167,6 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>applicationinsights-core</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
             <optional>true</optional>
