@@ -28,6 +28,10 @@ public class AADB2CAuthorizationRequestResolver implements OAuth2AuthorizationRe
 
     private static final String REGISTRATION_ID_NAME = "registrationId";
 
+    private static final String PARAMETER_X_CLIENT_SKU = "x-client-SKU";
+
+    private static final String AAD_B2C_USER_AGENT = "spring-boot-starter";
+
     private static final String MATCHER_PATTERN = String.format("%s/{%s}", REQUEST_BASE_URI, REGISTRATION_ID_NAME);
 
     private static final AntPathRequestMatcher requestMatcher = new AntPathRequestMatcher(MATCHER_PATTERN);
@@ -85,6 +89,7 @@ public class AADB2CAuthorizationRequestResolver implements OAuth2AuthorizationRe
         final Map<String, Object> parameters = new HashMap<>(request.getAdditionalParameters());
 
         parameters.put("p", userFlow);
+        parameters.put(PARAMETER_X_CLIENT_SKU, AAD_B2C_USER_AGENT);
 
         return OAuth2AuthorizationRequest.from(request).additionalParameters(parameters).build();
     }
