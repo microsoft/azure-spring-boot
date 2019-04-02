@@ -114,6 +114,7 @@ public class KeyVaultOperation {
             secrets.forEach(s -> {
                 final String secretName = s.id().replace(vaultUri + "/secrets/", "").toLowerCase(Locale.US);
                 propertyNamesHashMap.putIfAbsent(secretName, s.id());
+                propertyNamesHashMap.putIfAbsent(secretName.replaceAll("-", "."), s.id());
             });
 
             this.lastUpdateTime.set(System.currentTimeMillis());
