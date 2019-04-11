@@ -19,7 +19,6 @@
 
     <properties>
         <project.rootdir>${project.basedir}/../..</project.rootdir>
-        <nimbusds.oauth2.oidc.version>5.64.4</nimbusds.oauth2.oidc.version>
     </properties>
 
     <dependencies>
@@ -55,13 +54,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-        </dependency>
-
-        <!-- Workaround for adal4j dependency conflict with spring security 5.1.x -->
-        <dependency>
-            <groupId>com.nimbusds</groupId>
-            <artifactId>oauth2-oidc-sdk</artifactId>
-            <version>${nimbusds.oauth2.oidc.version}</version>
         </dependency>
     </dependencies>
 
