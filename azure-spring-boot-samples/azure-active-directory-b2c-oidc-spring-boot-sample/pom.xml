@@ -25,7 +25,7 @@
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-active-directory-b2c-spring-boot-starter</artifactId>
-            <version>2.1.7-SNAPSHOT</version>
+            <version>2.1.6.M2</version>
         </dependency>
 
         <dependency>
