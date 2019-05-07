@@ -22,6 +22,13 @@
     </properties>
 
     <dependencies>
+        <!-- will remove this after no milestone -->
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-spring-boot</artifactId>
+            <version>2.1.6.M2</version>
+        </dependency>
+
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-active-directory-b2c-spring-boot-starter</artifactId>
