@@ -1,6 +1,6 @@
-## Azure DocumentDB Spring Boot Starter
+## Azure Cosmos DB Spring Boot Starter
 
-[Azure DocumentDB](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction) helps manage JSON data through well-defined database resources. It is a key part of [Azure Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-introduction), which is a globally-distributed database service that allows developers to work with data using a variety of standard APIs, such as DocumentDB, MongoDB, Graph, and Table. 
+[Azure Cosmos DB](https://azure.microsoft.com/en-us/services/cosmos-db/) is a globally-distributed database service that allows developers to work with data using a variety of standard APIs, such as SQL, MongoDB, Graph, and Azure Table storage. 
 
 ## TOC
 
@@ -35,14 +35,14 @@ Please refer to [sample project here](../../azure-spring-boot-samples/azure-cosm
 
 ### Add the dependency
 
-`azure-documentdb-spring-boot-starter` is published on Maven Central Repository.  
+`azure-cosmosdb-spring-boot-starter` is published on Maven Central Repository.  
 If you are using Maven, add the following dependency.  
 
 ```xml
 <dependency>
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-documentdb-spring-boot-starter</artifactId>
-    <version>2.0.5</version>
+    <artifactId>azure-cosmosdb-spring-boot-starter</artifactId>
+    <version>2.1.6</version>
 </dependency>
 ```
 
@@ -59,7 +59,7 @@ azure.cosmosdb.database=your-documentdb-databasename
 Property `azure.cosmosdb.consistency-level` is also supported.
 
 ### Define an entity
-Define a simple entity as Document in DocumentDB.
+Define a simple entity as Document in Cosmos DB.
 
 ```
 @Document(collection = "mycollection")
@@ -87,13 +87,13 @@ public class User {
 ```
 `id` field will be used as document `id` in Azure Cosmos DB. Or you can annotate any field with `@Id` to map it to document `id`.
 
-Annotation `@Document(collection="mycollection")` is used to specify collection name of your document in Azure Cosmos DB.
+Annotation `@Document(collection="mycollection")` is used to specify the collection name of your document in Azure Cosmos DB.
 
 ### Create repositories
 Extends DocumentDbRepository interface, which provides Spring Data repository support.
 
 ```
-import com.microsoft.azure.spring.data.cosmosdb.documentdb.repository.DocumentDbRepository;
+import com.microsoft.azure.spring.data.cosmosdb.repository.DocumentDbRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
