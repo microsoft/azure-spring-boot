@@ -130,7 +130,7 @@ public class AzureADGraphClient {
 
 
     /**
-     * Converts UserGroup list to Set of GrantedAutorities
+     * Converts UserGroup list to Set of GrantedAuthorities
      * @param groups
      * @return
      */
