@@ -57,16 +57,15 @@ public class UserPrincipalTest {
         aadAuthProps.getUserGroup().setAllowedGroups(Collections.singletonList("group1"));
         this.graphClientMock = new AzureADGraphClient(credential, aadAuthProps, endpointsProps);
 
-        stubFor(get(urlEqualTo("/memberOf")).withHeader("Accept", equalTo("application/json;odata=minimalmetadata"))
+        stubFor(get(urlEqualTo("/memberOf")).withHeader("Accept", equalTo("application/json"))
                 .willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json")
                         .withBody(Constants.USERGROUPS_JSON)));
 
         assertThat(graphClientMock.getGrantedAuthorities(Constants.BEARER_TOKEN)).isNotEmpty()
                 .extracting(GrantedAuthority::getAuthority).containsExactly("ROLE_group1");
 
-        verify(getRequestedFor(urlMatching("/memberOf")).withHeader("Authorization", equalTo(accessToken))
-                .withHeader("Accept", equalTo("application/json;odata=minimalmetadata"))
-                .withHeader("api-version", equalTo("1.6")));
+        verify(getRequestedFor(urlMatching("/memberOf")).withHeader("Authorization", equalTo("Bearer " + accessToken))
+                .withHeader("Accept", equalTo("application/json")));
     }
 
     @Test
@@ -75,7 +74,7 @@ public class UserPrincipalTest {
         aadAuthProps.setActiveDirectoryGroups(Arrays.asList("group1", "group2", "group3"));
         this.graphClientMock = new AzureADGraphClient(credential, aadAuthProps, endpointsProps);
 
-        stubFor(get(urlEqualTo("/memberOf")).withHeader("Accept", equalTo("application/json;odata=minimalmetadata"))
+        stubFor(get(urlEqualTo("/memberOf")).withHeader("Accept", equalTo("application/json"))
                 .willReturn(aResponse().withStatus(200).withHeader("Content-Type", "application/json")
                         .withBody(Constants.USERGROUPS_JSON)));
         final Collection<? extends GrantedAuthority> authorities = graphClientMock
@@ -84,9 +83,8 @@ public class UserPrincipalTest {
         assertThat(authorities).isNotEmpty().extracting(GrantedAuthority::getAuthority)
                 .containsExactly("ROLE_group1", "ROLE_group2", "ROLE_group3");
 
-        verify(getRequestedFor(urlMatching("/memberOf")).withHeader("Authorization", equalTo(accessToken))
-                .withHeader("Accept", equalTo("application/json;odata=minimalmetadata"))
-                .withHeader("api-version", equalTo("1.6")));
+        verify(getRequestedFor(urlMatching("/memberOf")).withHeader("Authorization", equalTo("Bearer " + accessToken))
+                .withHeader("Accept", equalTo("application/json")));
     }
 
     @Test

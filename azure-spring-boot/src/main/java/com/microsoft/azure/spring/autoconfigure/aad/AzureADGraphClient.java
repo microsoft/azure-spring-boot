@@ -55,8 +55,8 @@ public class AzureADGraphClient {
 
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         // Set the appropriate header fields in the request header.
-        conn.setRequestProperty("Authorization", "Bearer " + accessToken);
         conn.setRequestMethod("GET");
+        conn.setRequestProperty("Authorization", "Bearer " + accessToken);
         conn.setRequestProperty("Accept", "application/json");
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         final String responseInJson = getResponseStringFromConn(conn);

@@ -10,7 +10,6 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 
 public class GraphOidcUser implements OidcUser {
