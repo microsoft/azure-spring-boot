@@ -7,7 +7,6 @@ package com.microsoft.azure.spring.autoconfigure.sqlserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -33,7 +32,6 @@ public class AlwaysEncryptedAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AlwaysEncryptedAutoConfiguration.class);
 
     /**
-     *
      * @return post processor bean that initializes KeyVault ofr SQL Driver
      */
     @Bean(name = "dataSourceKeyVaultInitializer")
@@ -51,7 +49,7 @@ public class AlwaysEncryptedAutoConfiguration {
         public DataSourceProperties dataSourceProperties() {
             LOG.info("Setting AlwaysEncrypted url flag");
             // Set Property to enable Encryption
-           return new AlwaysEncryptedDataSourceProperties();
+            return new AlwaysEncryptedDataSourceProperties();
         }
     }
 }

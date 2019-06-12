@@ -5,19 +5,12 @@
  */
 package com.microsoft.azure.spring.autoconfigure.storage;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.context.properties.ConfigurationPropertiesBindException;
-import org.springframework.boot.context.properties.bind.validation.BindValidationException;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
-import java.util.Arrays;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.isA;
-import static org.junit.Assert.assertTrue;
 
 public class StoragePropertiesTest {
     private static final String ACCOUNT_NAME_PROP = "azure.storage.account-name";
@@ -30,6 +23,7 @@ public class StoragePropertiesTest {
 
     private ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(StorageAutoConfiguration.class));
+
     @Test
     public void canSetProperties() {
         contextRunner.withPropertyValues(propValuePair(ACCOUNT_NAME_PROP, ACCOUNT_NAME),

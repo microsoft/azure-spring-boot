@@ -5,6 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import com.microsoft.azure.telemetry.TelemetrySender;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -14,6 +15,14 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.util.ClassUtils;
+
+import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.microsoft.azure.telemetry.TelemetryData.SERVICE_NAME;
+import static com.microsoft.azure.telemetry.TelemetryData.getClassPackageSimpleName;
 
 @Configuration
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
@@ -22,8 +31,10 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 @PropertySource(value = "classpath:serviceEndpoints.properties")
 @EnableConfigurationProperties({AADAuthenticationProperties.class, ServiceEndpointsProperties.class})
 public class AADOAuth2AutoConfiguration {
-    private AADAuthenticationProperties aadAuthProps;
-    private ServiceEndpointsProperties serviceEndpointsProps;
+
+    private final AADAuthenticationProperties aadAuthProps;
+
+    private final ServiceEndpointsProperties serviceEndpointsProps;
 
     public AADOAuth2AutoConfiguration(AADAuthenticationProperties aadAuthProperties,
                                       ServiceEndpointsProperties serviceEndpointsProps) {
@@ -35,5 +46,17 @@ public class AADOAuth2AutoConfiguration {
     @ConditionalOnProperty(prefix = "azure.activedirectory", value = "active-directory-groups")
     public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
         return new AADOAuth2UserService(aadAuthProps, serviceEndpointsProps);
+    }
+
+    @PostConstruct
+    private void sendTelemetry() {
+        if (aadAuthProps.isAllowTelemetry()) {
+            final Map<String, String> events = new HashMap<>();
+            final TelemetrySender sender = new TelemetrySender();
+
+            events.put(SERVICE_NAME, getClassPackageSimpleName(AADOAuth2AutoConfiguration.class));
+
+            sender.send(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
+        }
     }
 }

@@ -118,6 +118,7 @@ public class AADOAuth2ConfigTest {
         if (environment.length > 0) {
             TestPropertySourceUtils.addInlinedPropertiesToEnvironment(context, environment);
         }
+
         context.register(AADOAuth2AutoConfiguration.class);
         context.refresh();
 

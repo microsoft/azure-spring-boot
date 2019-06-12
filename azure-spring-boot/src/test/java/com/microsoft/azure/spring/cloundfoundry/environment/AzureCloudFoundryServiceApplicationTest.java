@@ -42,8 +42,7 @@ public class AzureCloudFoundryServiceApplicationTest {
         try {
             content = new String(
                     Files.readAllBytes(Paths.get(resource.getURI())));
-            final VcapResult result = parser.parse(content);
-            final VcapPojo[] pojos = result.getPojos();
+            final VcapPojo[] pojos = parser.parseVcapService(content).toArray(new VcapPojo[0]);
             assertNotNull(pojos);
             assertEquals(1, pojos.length);
             final VcapPojo pojo = pojos[0];
@@ -82,8 +81,7 @@ public class AzureCloudFoundryServiceApplicationTest {
         try {
             content = new String(
                     Files.readAllBytes(Paths.get(resource.getURI())));
-            final VcapResult result = parser.parse(content);
-            final VcapPojo[] pojos = result.getPojos();
+            final VcapPojo[] pojos = parser.parseVcapService(content).toArray(new VcapPojo[0]);
             assertNotNull(pojos);
             assertEquals(1, pojos.length);
             final VcapPojo pojo = pojos[0];
@@ -123,8 +121,7 @@ public class AzureCloudFoundryServiceApplicationTest {
         try {
             content = new String(
                     Files.readAllBytes(Paths.get(resource.getURI())));
-            final VcapResult result = parser.parse(content);
-            final VcapPojo[] pojos = result.getPojos();
+            final VcapPojo[] pojos = parser.parseVcapService(content).toArray(new VcapPojo[0]);
             assertNotNull(pojos);
             assertEquals(1, pojos.length);
             final VcapPojo pojo = pojos[0];

@@ -12,7 +12,6 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesBindEx
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 import static com.microsoft.azure.spring.autoconfigure.mediaservices.Constants.*;
-import static com.microsoft.azure.spring.autoconfigure.mediaservices.Constants.REST_API_ENDPOINT;
 import static com.microsoft.azure.utils.TestUtils.propPair;
 import static org.assertj.core.api.Assertions.assertThat;
 

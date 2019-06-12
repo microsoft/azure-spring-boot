@@ -54,11 +54,9 @@ public class VcapProcessor implements EnvironmentPostProcessor {
         log("VcapParser.postProcessEnvironment: Start");
 
         final String vcapServices = (String) environment.get(VcapProcessor.VCAP_SERVICES);
-        final VcapResult result = parse(vcapServices);
+        final List<VcapPojo> vcapPojos = parseVcapService(vcapServices);
 
-        result.setLogFlag(logFlag);
-        result.setConfEnv(confEnv);
-        result.populateProperties();
+        new VcapResult(confEnv, vcapPojos.toArray(new VcapPojo[0]), logFlag);
 
         log("VcapParser.postProcessEnvironment: End");
     }
@@ -96,8 +94,7 @@ public class VcapProcessor implements EnvironmentPostProcessor {
         return configs.stream().map(this::getVcapServiceConfig).collect(Collectors.toList());
     }
 
-    public VcapResult parse(String vcapServices) {
-        final VcapResult result = new VcapResult();
+    public List<VcapPojo> parseVcapService(String vcapServices) {
         final List<VcapPojo> results = new ArrayList<>();
 
         log("VcapParser.parse:  vcapServices = " + vcapServices);
@@ -129,8 +126,8 @@ public class VcapProcessor implements EnvironmentPostProcessor {
             }
         }
 
-        result.setPojos(results.toArray(new VcapPojo[0]));
-        return result;
+        return results;
+
     }
 
     private VcapPojo parseService(String serviceBrokerName, VcapServiceConfig serviceConfig, String vCapServices) {

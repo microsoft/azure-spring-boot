@@ -7,8 +7,7 @@
 package com.microsoft.azure.spring.autoconfigure.storage;
 
 import com.microsoft.azure.storage.blob.*;
-import com.microsoft.azure.telemetry.TelemetryData;
-import com.microsoft.azure.telemetry.TelemetryProxy;
+import com.microsoft.azure.telemetry.TelemetrySender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +18,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ClassUtils;
 
+import javax.annotation.PostConstruct;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.util.HashMap;
+import java.util.Map;
+
+import static com.microsoft.azure.telemetry.TelemetryData.*;
+import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 @Configuration
 @ConditionalOnClass(ServiceURL.class)
@@ -35,11 +39,9 @@ public class StorageAutoConfiguration {
     private static final String USER_AGENT_PREFIX = "spring-storage/";
 
     private final StorageProperties properties;
-    private final TelemetryProxy telemetryProxy;
 
     public StorageAutoConfiguration(StorageProperties properties) {
         this.properties = properties;
-        this.telemetryProxy = new TelemetryProxy(properties.isAllowTelemetry());
     }
 
     /**
@@ -50,7 +52,6 @@ public class StorageAutoConfiguration {
     public ServiceURL createServiceUrl(@Autowired(required = false) PipelineOptions options) throws InvalidKeyException,
             MalformedURLException {
         LOG.debug("Creating ServiceURL bean...");
-        trackCustomEvent();
         final SharedKeyCredentials credentials = new SharedKeyCredentials(properties.getAccountName(),
                 properties.getAccountKey());
         final URL blobUrl = getURL();
@@ -59,12 +60,12 @@ public class StorageAutoConfiguration {
 
         return serviceURL;
     }
-    
+
     private URL getURL() throws MalformedURLException {
         if (properties.isEnableHttps()) {
             return new URL(String.format(BLOB_HTTPS_URL, properties.getAccountName()));
         }
-        return new URL(String.format(BLOB_URL, properties.getAccountName())); 
+        return new URL(String.format(BLOB_URL, properties.getAccountName()));
     }
 
     private PipelineOptions buildOptions(PipelineOptions fromOptions) {
@@ -82,16 +83,16 @@ public class StorageAutoConfiguration {
         return serviceURL.createContainerURL(properties.getContainerName());
     }
 
-    private void trackCustomEvent() {
-        final HashMap<String, String> customTelemetryProperties = new HashMap<>();
-        final String[] packageNames = this.getClass().getPackage().getName().split("\\.");
+    @PostConstruct
+    private void sendTelemetry() {
+        if (properties.isAllowTelemetry()) {
+            final Map<String, String> events = new HashMap<>();
+            final TelemetrySender sender = new TelemetrySender();
 
-        if (packageNames.length > 1) {
-            customTelemetryProperties.put(TelemetryData.SERVICE_NAME, packageNames[packageNames.length - 1]);
+            events.put(SERVICE_NAME, getClassPackageSimpleName(StorageAutoConfiguration.class));
+            events.put(HASHED_ACCOUNT_NAME, sha256Hex(properties.getAccountName()));
+
+            sender.send(ClassUtils.getUserClass(getClass()).getSimpleName(), events);
         }
-
-        customTelemetryProperties.putIfAbsent(TelemetryData.ACCOUNT_NAME, properties.getAccountName());
-
-        telemetryProxy.trackEvent(ClassUtils.getUserClass(this.getClass()).getSimpleName(), customTelemetryProperties);
     }
 }

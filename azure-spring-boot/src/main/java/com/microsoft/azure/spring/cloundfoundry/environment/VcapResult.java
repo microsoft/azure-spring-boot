@@ -6,6 +6,8 @@
 package com.microsoft.azure.spring.cloundfoundry.environment;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -13,11 +15,15 @@ import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySource;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class VcapResult {
+@Getter
+@Setter
+public class VcapResult implements Serializable {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(VcapResult.class);
 
     private static final String AZURE_SERVICE_BUS_DOMAIN = "servicebus.windows.net";
@@ -28,11 +34,15 @@ public class VcapResult {
     private static final String URI = "uri";
     private static final String KEY = "key";
     private static final String DATABASE = "database";
+    private static final long serialVersionUID = -4825963001214199795L;
 
-    private ConfigurableEnvironment confEnv;
-    private VcapPojo[] pojos = null;
-    private boolean logFlag = false;
+    private final boolean logFlag;
 
+    public VcapResult(ConfigurableEnvironment environment, VcapPojo[] pojos, boolean logFlag) {
+        this.logFlag = logFlag;
+
+        populateProperties(environment, pojos);
+    }
 
     /**
      * Populates default properties during @EnvironmentPostProcessor processing.
@@ -41,40 +51,18 @@ public class VcapResult {
      * subsystem, so we just use System.out.println instead.
      */
     @SuppressFBWarnings("UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR")
-    public void populateProperties() {
+    private void populateProperties(ConfigurableEnvironment environment, VcapPojo[] pojos) {
         final Map<String, Object> map = new HashMap<>();
         populateDefaultStorageProperties(map,
-                findPojoForServiceType(VcapServiceType.AZURE_STORAGE));
+                findPojoForServiceType(VcapServiceType.AZURE_STORAGE, pojos));
         populateDefaultServiceBusProperties(map,
-                findPojoForServiceType(VcapServiceType.AZURE_SERVICEBUS));
+                findPojoForServiceType(VcapServiceType.AZURE_SERVICEBUS, pojos));
         populateDefaultDocumentDBProperties(map,
-                findPojoForServiceType(VcapServiceType.AZURE_DOCUMENTDB));
-        addOrReplace(confEnv.getPropertySources(), map);
+                findPojoForServiceType(VcapServiceType.AZURE_DOCUMENTDB, pojos));
+        addOrReplace(environment.getPropertySources(), map);
     }
 
-    @SuppressFBWarnings("EI_EXPOSE_REP")
-    public VcapPojo[] getPojos() {
-        return pojos;
-    }
-
-    @SuppressFBWarnings("EI_EXPOSE_REP")
-    public void setPojos(VcapPojo[] pojos) {
-        this.pojos = pojos;
-    }
-
-    public ConfigurableEnvironment getConfEnv() {
-        return confEnv;
-    }
-
-    public void setConfEnv(ConfigurableEnvironment confEnv) {
-        this.confEnv = confEnv;
-    }
-
-    public void setLogFlag(boolean logFlag) {
-        this.logFlag = logFlag;
-    }
-
-    private VcapPojo findPojoForServiceType(VcapServiceType serviceType) {
+    private VcapPojo findPojoForServiceType(VcapServiceType serviceType, VcapPojo[] pojos) {
         if (serviceType == null) {
             log("VcapResult.findPojoForServiceType: ServiceType is null, no service found.");
             return null;
@@ -82,7 +70,7 @@ public class VcapResult {
 
         VcapPojo pojo = null;
 
-        switch (findCountByServiceType(serviceType)) {
+        switch (findCountByServiceType(serviceType, pojos)) {
             case 0:
                 log("VcapResult.findPojoForServiceType: No services of type "
                         + serviceType.toString() + " found.");
@@ -90,7 +78,7 @@ public class VcapResult {
             case 1:
                 log("VcapResult.findPojoForServiceType: One services of type "
                         + serviceType.toString() + " found.");
-                pojo = findByServiceType(serviceType);
+                pojo = findByServiceType(serviceType, pojos);
                 if (pojo != null) {
                     log("VcapResult.findPojoForServiceType: Found the matching pojo");
                 }
@@ -104,7 +92,7 @@ public class VcapResult {
         return pojo;
     }
 
-    private int findCountByServiceType(VcapServiceType serviceType) {
+    private int findCountByServiceType(VcapServiceType serviceType, VcapPojo[] pojos) {
         int result = 0;
 
         if (serviceType != null) {
@@ -190,7 +178,7 @@ public class VcapResult {
         }
     }
 
-    private VcapPojo findByServiceType(VcapServiceType serviceType) {
+    private VcapPojo findByServiceType(VcapServiceType serviceType, VcapPojo[] pojos) {
         VcapPojo result = null;
 
         if (serviceType != null) {

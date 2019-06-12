@@ -34,7 +34,7 @@ import java.util.stream.StreamSupport;
 
 public class AzureADGraphClient {
     private static final SimpleGrantedAuthority DEFAULT_AUTHORITY = new SimpleGrantedAuthority("ROLE_USER");
-    private static final String DEFAULE_ROLE_PREFIX = "ROLE_";
+    private static final String DEFAULT_ROLE_PREFIX = "ROLE_";
     private static final String REQUEST_ID_SUFFIX = "aadfeed5";
 
     private final String clientId;
@@ -130,14 +130,14 @@ public class AzureADGraphClient {
 
 
     /**
-     * Converts UserGroup list to Set of GrantedAutorities
+     * Converts UserGroup list to Set of GrantedAuthorities
      * @param groups
      * @return
      */
     public Set<GrantedAuthority> convertGroupsToGrantedAuthorities(final List<UserGroup> groups) {
         // Map the authority information to one or more GrantedAuthority's and add it to mappedAuthorities
         final Set<GrantedAuthority> mappedAuthorities = groups.stream().filter(this::isValidUserGroupToGrantAuthority)
-                .map(userGroup -> new SimpleGrantedAuthority(DEFAULE_ROLE_PREFIX + userGroup.getDisplayName()))
+                .map(userGroup -> new SimpleGrantedAuthority(DEFAULT_ROLE_PREFIX + userGroup.getDisplayName()))
                 .collect(Collectors.toCollection(LinkedHashSet::new));
         if (mappedAuthorities.isEmpty()) {
             mappedAuthorities.add(DEFAULT_AUTHORITY);
