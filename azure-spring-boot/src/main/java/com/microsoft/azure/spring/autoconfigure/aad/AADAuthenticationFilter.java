@@ -44,7 +44,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                                    ResourceRetriever resourceRetriever) {
         this.aadAuthProps = aadAuthProps;
         this.serviceEndpointsProps = serviceEndpointsProps;
-        this.principalManager = new UserPrincipalManager(serviceEndpointsProps, aadAuthProps, resourceRetriever);
+        this.principalManager = new UserPrincipalManager(serviceEndpointsProps, aadAuthProps, resourceRetriever, false);
     }
 
     @Override

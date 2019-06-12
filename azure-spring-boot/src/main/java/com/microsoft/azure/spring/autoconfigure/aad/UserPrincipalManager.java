@@ -17,6 +17,9 @@ import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jose.util.ResourceRetriever;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.proc.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.MalformedURLException;
@@ -27,6 +30,9 @@ import java.text.ParseException;
 public class UserPrincipalManager {
 
     private final JWKSource<SecurityContext> keySource;
+    private final AADAuthenticationProperties aadAuthProps;
+    private final Boolean explicitAudienceCheck;
+    private final Set<String> validAudiences = new HashSet<>();
 
     /**
      * Creates a new {@link UserPrincipalManager} with a predefined {@link JWKSource}.
@@ -37,6 +43,8 @@ public class UserPrincipalManager {
      */
     public UserPrincipalManager(JWKSource<SecurityContext> keySource) {
         this.keySource = keySource;
+        this.explicitAudienceCheck = false;
+        this.aadAuthProps = null;
     }
 
     /**
@@ -49,7 +57,16 @@ public class UserPrincipalManager {
      */
     public UserPrincipalManager(ServiceEndpointsProperties serviceEndpointsProps,
                                 AADAuthenticationProperties aadAuthProps,
-                                ResourceRetriever resourceRetriever) {
+                                ResourceRetriever resourceRetriever,
+                                boolean explicitAudienceCheck) {
+        this.aadAuthProps = aadAuthProps;
+        this.explicitAudienceCheck =  explicitAudienceCheck;
+        if (explicitAudienceCheck) {
+            //client-id for "normal" check
+            this.validAudiences.add(this.aadAuthProps.getClientId());
+            //app id uri for client credentials flow (server to server communication)
+            this.validAudiences.add(this.aadAuthProps.getAppIdUri());
+        }
         try {
             keySource = new RemoteJWKSet<>(new URL(serviceEndpointsProps
                     .getServiceEndpoints(aadAuthProps.getEnvironment()).getAadKeyDiscoveryUri()), resourceRetriever);
@@ -85,6 +102,16 @@ public class UserPrincipalManager {
                 if (issuer == null || !issuer.contains("https://sts.windows.net/")
                         && !issuer.contains("https://sts.chinacloudapi.cn/")) {
                     throw new BadJWTException("Invalid token issuer");
+                }
+                if (explicitAudienceCheck) {
+                    final Optional<String> matchedAudience = claimsSet.getAudience().stream()
+                        .filter(UserPrincipalManager.this.validAudiences::contains).findFirst();
+                    if (matchedAudience.isPresent()) {
+                        log.debug("Matched audience [{}]", matchedAudience.get());
+                    } else {
+                        throw new BadJWTException("Invalid token audience. Provided value " + claimsSet.getAudience() +
+                            "does not match neither client-id nor AppIdUri.");
+                    }
                 }
             }
         });

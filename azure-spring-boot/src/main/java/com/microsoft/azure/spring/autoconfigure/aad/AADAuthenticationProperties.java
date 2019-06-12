@@ -49,6 +49,10 @@ public class AADAuthenticationProperties {
      */
     private List<String> activeDirectoryGroups = new ArrayList<>();
 
+    /**
+     * App ID URI which might be used in the <code>"aud"</code> claim of an <code>id_token</code>.
+     */
+    private String appIdUri;
 
     /**
      * Connection Timeout for the JWKSet Remote URL call.
