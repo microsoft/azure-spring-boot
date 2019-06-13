@@ -15,6 +15,10 @@ import com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationProperties.
 import com.nimbusds.oauth2.sdk.http.HTTPResponse;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 
 import javax.naming.ServiceUnavailableException;
 import java.io.BufferedReader;
@@ -55,10 +59,11 @@ public class AzureADGraphClient {
 
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         // Set the appropriate header fields in the request header.
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Authorization", "Bearer " + accessToken);
-        conn.setRequestProperty("Accept", "application/json");
-        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        conn.setRequestMethod(HttpMethod.GET.toString());
+        conn.setRequestProperty(HttpHeaders.AUTHORIZATION, 
+                                String.format("%s %s", OAuth2AccessToken.TokenType.BEARER.getValue(), accessToken));
+        conn.setRequestProperty(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+        conn.setRequestProperty(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
         final String responseInJson = getResponseStringFromConn(conn);
         final int responseCode = conn.getResponseCode();
         if (responseCode == HTTPResponse.SC_OK) {

@@ -79,13 +79,12 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                     request.getSession().setAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN, graphApiToken);
                 }
 
-                final PreAuthenticatedAuthenticationToken preauth = new PreAuthenticatedAuthenticationToken(
+                final PreAuthenticatedAuthenticationToken preAuth = new PreAuthenticatedAuthenticationToken(
                         principal, null, client.convertGroupsToGrantedAuthorities(principal.getUserGroups()));
-                preauth.setDetails(graphApiToken);
-                final Authentication authentication = preauth;
-                authentication.setAuthenticated(true);
-                log.info("Request token verification success. {}", authentication);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                preAuth.setDetails(graphApiToken);
+                preAuth.setAuthenticated(true);
+                log.info("Request token verification success. {}", preAuth);
+                SecurityContextHolder.getContext().setAuthentication(preAuth);
             } catch (MalformedURLException | ParseException | BadJOSEException | JOSEException ex) {
                 log.error("Failed to initialize UserPrincipal.", ex);
                 throw new ServletException(ex);
