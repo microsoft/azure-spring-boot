@@ -31,19 +31,14 @@ import java.time.Instant;
 import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class UserPrincipalManagerAudienceTest {
 
-  private static final Logger log = LoggerFactory.getLogger(UserPrincipalManagerAudienceTest.class);
   private static final String FAKE_CLIENT_ID = "dsflkjsdflkjsdf";
   private static final String FAKE_APPLICATION_URI = "https://oihiugjuzfvbhg";
 
-  private KeyPair kp;
-  private RSAPrivateKey privateKey;
+
   private JWSSigner signer;
-  private JWKSet jwkSet;
   private String jwkString;
   private ResourceRetriever resourceRetriever;
 
@@ -56,8 +51,8 @@ public class UserPrincipalManagerAudienceTest {
     final KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
     kpg.initialize(2048);
 
-    kp = kpg.genKeyPair();
-    privateKey = (RSAPrivateKey) kp.getPrivate();
+    final KeyPair kp = kpg.genKeyPair();
+    final RSAPrivateKey privateKey = (RSAPrivateKey) kp.getPrivate();
 
     signer = new RSASSASigner(privateKey);
 
@@ -65,7 +60,7 @@ public class UserPrincipalManagerAudienceTest {
         .privateKey((RSAPrivateKey) kp.getPrivate())
         .keyID("1")
         .build();
-    jwkSet = new JWKSet(rsaJWK);
+    final JWKSet jwkSet = new JWKSet(rsaJWK);
     jwkString = jwkSet.toString();
 
     resourceRetriever = url -> new Resource(jwkString, "application/json");
