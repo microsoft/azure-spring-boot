@@ -7,6 +7,7 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 
 import com.nimbusds.jose.jwk.source.RemoteJWKSet;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +20,7 @@ import java.util.List;
 @Validated
 @ConfigurationProperties("azure.activedirectory")
 @Data
+@Slf4j
 public class AADAuthenticationProperties {
 
     private static final String DEFAULT_SERVICE_ENVIRONMENT = "global";
@@ -130,9 +132,13 @@ public class AADAuthenticationProperties {
      */
     @PostConstruct
     public void validateUserGroupProperties() {
-        if (this.activeDirectoryGroups.isEmpty() && this.getUserGroup().getAllowedGroups().isEmpty()) {
+        if (this.sessionStateless) {
+            if (!this.activeDirectoryGroups.isEmpty()) {
+              log.warn("Group names are not supported if you set 'sessionSateless' to 'true'.");
+            }
+        } else if (this.activeDirectoryGroups.isEmpty() && this.getUserGroup().getAllowedGroups().isEmpty()) {
             throw new IllegalStateException("One of the User Group Properties must be populated. "
-                    + "Please populate azure.activedirectory.user-group.allowed-groups");
+                + "Please populate azure.activedirectory.user-group.allowed-groups");
         }
     }
 
