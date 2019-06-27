@@ -30,6 +30,11 @@ public class AADAuthenticationProperties {
 
 
     /**
+     * Default UserGroup configuration for old graph api.
+     */
+    private UserGroupPropertiesOld userGroupOld = new UserGroupPropertiesOld();
+
+    /**
      * Azure service environment/region name, e.g., cn, global
      */
     private String environment = DEFAULT_SERVICE_ENVIRONMENT;
@@ -124,6 +129,41 @@ public class AADAuthenticationProperties {
             throw new IllegalStateException("One of the User Group Properties must be populated. "
                     + "Please populate azure.activedirectory.user-group.allowed-groups");
         }
+    }
+
+    /**
+     * Properties dedicated to changing the behavior of how the groups are mapped from the Azure AD response. Depending
+     * on the graph API used the object will not be the same.
+     */
+    @Data
+    public static class UserGroupPropertiesOld {
+
+        /**
+         * Expected UserGroups that an authority will be granted to if found in the response from the MemeberOf Graph
+         * API Call.
+         */
+        private List<String> allowedGroups = new ArrayList<>();
+
+        /**
+         * Key of the JSON Node to get from the Azure AD response object that will be checked to contain the {@code
+         * azure.activedirectory.user-group.value}  to signify that this node is a valid {@code UserGroup}.
+         */
+        @NotEmpty
+        private String key = "objectType";
+
+        /**
+         * Value of the JSON Node identified by the {@code azure.activedirectory.user-group.key} to validate the JSON
+         * Node is a UserGroup.
+         */
+        @NotEmpty
+        private String value = "Group";
+
+        /**
+         * Key of the JSON Node containing the Azure Object ID for the {@code UserGroup}.
+         */
+        @NotEmpty
+        private String objectIDKey = "objectId";
+
     }
 
 

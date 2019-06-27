@@ -48,7 +48,8 @@ public class UserPrincipalTest {
         aadAuthProps = new AADAuthenticationProperties();
         endpointsProps = new ServiceEndpointsProperties();
         final ServiceEndpoints serviceEndpoints = new ServiceEndpoints();
-        serviceEndpoints.setAadMembershipRestUri("http://localhost:9519/memberOf");
+        serviceEndpoints.setAadMembershipRestUriNew("http://localhost:9519/memberOf");
+        serviceEndpoints.setAadUseNewGraphApi("true");
         endpointsProps.getEndpoints().put("global", serviceEndpoints);
         credential = new ClientCredential("client", "pass");
     }
