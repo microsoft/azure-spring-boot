@@ -33,7 +33,7 @@ To run this sample, you'll need:
 - The sample retrieves user's group membership using Azure AD graph API which requires the registered app to have `Direcory.AccessAsUser.All` "Access the directory as the signed-in user" under `Delegated Permissions`. You need AAD admin privilege to be able to grant the permission in API ACCESS -> Required permission.
 
 #### Note
-* If you are not the admin, you need consent from your admin for the the `Directory.AccessAsUser.All` permission. For details see [Directory Permissions](https://docs.microsoft.com/en-us/graph/permissions-reference#directory-permissions)
+- If you are not the admin, you need consent from your admin for the the `Directory.AccessAsUser.All` permission. For details see [Directory Permissions](https://docs.microsoft.com/en-us/graph/permissions-reference#directory-permissions)
 
 
 
