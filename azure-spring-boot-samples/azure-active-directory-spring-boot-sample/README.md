@@ -32,7 +32,8 @@ To run this sample, you'll need:
 - Configure groups in your Azure AD tenant with your users in that groups, see [how to create groups](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-groups-create-azure-portal)
 - The sample retrieves user's group membership using Azure AD graph API which requires the registered app to have `Direcory.AccessAsUser.All` "Access the directory as the signed-in user" under `Delegated Permissions`. You need AAD admin privilege to be able to grant the permission in API ACCESS -> Required permission.
 
-##### Note: If you are not the admin, you need consent from your admin for the the `Directory.AccessAsUser.All` permission. For details see [Directory Permissions](https://docs.microsoft.com/en-us/graph/permissions-reference#directory-permissions)
+#### Note
+* If you are not the admin, you need consent from your admin for the the `Directory.AccessAsUser.All` permission. For details see [Directory Permissions](https://docs.microsoft.com/en-us/graph/permissions-reference#directory-permissions)
 
 
 
@@ -106,7 +107,7 @@ Open application.properties in your project to configure
    
    
 ### Step 5: Angular JS
-1. In `app.js`, make following changes. The client leverages Azure AD library for JS to handle AAD authentication in single page application. The following snippet of code configures adal provider for your registered app.
+In `app.js`, make following changes. The client leverages Azure AD library for JS to handle AAD authentication in single page application. The following snippet of code configures adal provider for your registered app.
 ```
         adalProvider.init(
             {
