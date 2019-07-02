@@ -74,8 +74,8 @@ public class AADOAuth2UserService implements OAuth2UserService<OidcUserRequest, 
 
         // Create a copy of oidcUser but use the mappedAuthorities instead
         oidcUser = new DefaultOidcUser(mappedAuthorities, oidcUser.getIdToken(), getUserNameAttrName(userRequest));
-        final GraphOidcUser graphOidcUser = new GraphOidcUser(oidcUser, graphApiToken);
-
+        final GraphOidcUser graphOidcUser = new GraphOidcUser(oidcUser, graphApiToken);   
+            
         return graphOidcUser;
     }
 

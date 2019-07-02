@@ -55,15 +55,28 @@ public class AzureADGraphClient {
     }
 
     private String getUserMembershipsV1(String accessToken) throws IOException {
-        final URL url = new URL(serviceEndpoints.getAadMembershipRestUri());
-
+        final String aadMembershipRestUriString;
+        final boolean useNewGraphApi = Boolean.parseBoolean(serviceEndpoints.getAadUseNewGraphApi());
+        if (useNewGraphApi) {
+            aadMembershipRestUriString = serviceEndpoints.getAadMembershipRestUriNew();
+        } else {
+            aadMembershipRestUriString = serviceEndpoints.getAadMembershipRestUri();            
+        }
+        final URL url = new URL(aadMembershipRestUriString);
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         // Set the appropriate header fields in the request header.
-        conn.setRequestMethod(HttpMethod.GET.toString());
-        conn.setRequestProperty(HttpHeaders.AUTHORIZATION, 
-                                String.format("%s %s", OAuth2AccessToken.TokenType.BEARER.getValue(), accessToken));
-        conn.setRequestProperty(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
-        conn.setRequestProperty(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+
+        if (useNewGraphApi) {
+            conn.setRequestMethod(HttpMethod.GET.toString());
+            conn.setRequestProperty(HttpHeaders.AUTHORIZATION, 
+                                    String.format("%s %s", OAuth2AccessToken.TokenType.BEARER.getValue(), accessToken));
+            conn.setRequestProperty(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+            conn.setRequestProperty(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+        } else {
+            conn.setRequestProperty("api-version", "1.6");
+            conn.setRequestProperty(HttpHeaders.AUTHORIZATION, String.format("%s", accessToken));
+            conn.setRequestProperty(HttpHeaders.ACCEPT, "application/json;odata=minimalmetadata");
+        }
         final String responseInJson = getResponseStringFromConn(conn);
         final int responseCode = conn.getResponseCode();
         if (responseCode == HTTPResponse.SC_OK) {
@@ -99,8 +112,9 @@ public class AzureADGraphClient {
         final JsonNode valuesNode = rootNode.get("value");
 
         if (valuesNode != null) {
-
-            lUserGroups
+            final boolean graphApiBool = Boolean.parseBoolean(serviceEndpoints.getAadUseNewGraphApi());
+            if (graphApiBool) {
+                lUserGroups
                     .addAll(StreamSupport.stream(valuesNode.spliterator(), false).filter(this::isMatchingUserGroupKey)
                             .map(node -> {
                                 final String objectID = node.
@@ -108,6 +122,16 @@ public class AzureADGraphClient {
                                 final String displayName = node.get("displayName").asText();
                                 return new UserGroup(objectID, displayName);
                             }).collect(Collectors.toList()));
+            } else {
+                lUserGroups
+                    .addAll(StreamSupport.stream(valuesNode.spliterator(), false).filter(this::isMatchingUserGroupKey)
+                            .map(node -> {
+                                final String objectID = node.
+                                        get(aadAuthenticationProperties.getUserGroupOld().getObjectIDKey()).asText();
+                                final String displayName = node.get("displayName").asText();
+                                return new UserGroup(objectID, displayName);
+                            }).collect(Collectors.toList()));                
+            }
 
         }
 
@@ -122,8 +146,14 @@ public class AzureADGraphClient {
      * @return true if the json node contains the correct key, and expected value to identify a user group.
      */
     private boolean isMatchingUserGroupKey(final JsonNode node) {
-        return node.get(aadAuthenticationProperties.getUserGroup().getKey()).asText()
-                .equals(aadAuthenticationProperties.getUserGroup().getValue());
+        final boolean useNewGraphApi = Boolean.parseBoolean(serviceEndpoints.getAadUseNewGraphApi());
+        if (useNewGraphApi) {
+            return node.get(aadAuthenticationProperties.getUserGroup().getKey()).asText()
+                    .equals(aadAuthenticationProperties.getUserGroup().getValue());
+        } else {
+            return node.get(aadAuthenticationProperties.getUserGroupOld().getKey()).asText()
+                    .equals(aadAuthenticationProperties.getUserGroupOld().getValue());
+        }
     }
 
     public Set<GrantedAuthority> getGrantedAuthorities(String graphApiToken) throws IOException {
@@ -177,12 +207,19 @@ public class AzureADGraphClient {
         AuthenticationResult result = null;
         ExecutorService service = null;
         try {
+            final String graphApiUriString;
+            final boolean useNewGraphApi = Boolean.parseBoolean(serviceEndpoints.getAadUseNewGraphApi());
+            if (useNewGraphApi) {
+                graphApiUriString = serviceEndpoints.getAadGraphApiUriNew();
+            } else {
+                graphApiUriString = serviceEndpoints.getAadGraphApiUri();
+            }
             service = Executors.newFixedThreadPool(1);
             final AuthenticationContext context = new AuthenticationContext(
                     serviceEndpoints.getAadSigninUri() + tenantId + "/", true, service);
             context.setCorrelationId(getCorrelationId());
             final Future<AuthenticationResult> future = context
-                    .acquireToken(serviceEndpoints.getAadGraphApiUri(), assertion, credential, null);
+                    .acquireToken(graphApiUriString, assertion, credential, null);
             result = future.get();
         } finally {
             if (service != null) {
