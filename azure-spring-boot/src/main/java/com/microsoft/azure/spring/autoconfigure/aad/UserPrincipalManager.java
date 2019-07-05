@@ -60,11 +60,11 @@ public class UserPrincipalManager {
                                 ResourceRetriever resourceRetriever,
                                 boolean explicitAudienceCheck) {
         this.aadAuthProps = aadAuthProps;
-        this.explicitAudienceCheck =  explicitAudienceCheck;
+        this.explicitAudienceCheck = explicitAudienceCheck;
         if (explicitAudienceCheck) {
-            //client-id for "normal" check
+            // client-id for "normal" check
             this.validAudiences.add(this.aadAuthProps.getClientId());
-            //app id uri for client credentials flow (server to server communication)
+            // app id uri for client credentials flow (server to server communication)
             this.validAudiences.add(this.aadAuthProps.getAppIdUri());
         }
         try {

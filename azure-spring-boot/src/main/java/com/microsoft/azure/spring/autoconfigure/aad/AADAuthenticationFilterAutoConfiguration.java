@@ -28,13 +28,13 @@ import org.springframework.util.ClassUtils;
 
 @Configuration
 @ConditionalOnWebApplication
-@ConditionalOnProperty(prefix = "azure.activedirectory", value = {"client-id"})
+@ConditionalOnProperty(prefix = AADAuthenticationFilterAutoConfiguration.PROPERTY_PREFIX, value = {"client-id"})
 @EnableConfigurationProperties({AADAuthenticationProperties.class, ServiceEndpointsProperties.class})
 @PropertySource(value = "classpath:serviceEndpoints.properties")
 public class AADAuthenticationFilterAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationProperties.class);
 
-    private static final String PROPERTY_PREFIX = "azure.activedirectory";
+    public static final String PROPERTY_PREFIX = "azure.activedirectory";
     private static final String PROPERTY_SESSION_STATELESS = "session-stateless";
 
     private final AADAuthenticationProperties aadAuthProps;

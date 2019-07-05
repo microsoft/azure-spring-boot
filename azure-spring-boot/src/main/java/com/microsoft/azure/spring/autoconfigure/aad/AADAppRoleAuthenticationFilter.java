@@ -5,6 +5,8 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import static org.springframework.util.StringUtils.hasText;
+
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.proc.BadJOSEException;
 import com.nimbusds.jwt.proc.BadJWTException;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.minidev.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,12 +34,12 @@ public class AADAppRoleAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(AADAppRoleAuthenticationFilter.class);
 
-    private static final String TOKEN_HEADER = "Authorization";
+
     private static final String TOKEN_TYPE = "Bearer ";
     private static final JSONArray DEFAULT_ROLE_CLAIM = new JSONArray().appendElement("USER");
     private static final String ROLE_PREFIX = "ROLE_";
 
-    private UserPrincipalManager principalManager;
+    private final UserPrincipalManager principalManager;
 
     public AADAppRoleAuthenticationFilter(UserPrincipalManager principalManager) {
         this.principalManager = principalManager;
@@ -46,10 +49,10 @@ public class AADAppRoleAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
 
-        final String authHeader = request.getHeader(TOKEN_HEADER);
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         boolean cleanupRequired = false;
 
-        if (authHeader != null && authHeader.startsWith(TOKEN_TYPE)) {
+        if (hasText(authHeader) && authHeader.startsWith(TOKEN_TYPE)) {
             try {
                 final String token = authHeader.replace(TOKEN_TYPE, "");
                 final UserPrincipal principal = principalManager.buildUserPrincipal(token);
