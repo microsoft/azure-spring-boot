@@ -62,12 +62,12 @@ public class AADAuthenticationFilterAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(AADAppRoleAuthenticationFilter.class)
+    @ConditionalOnMissingBean(AadAppRoleStatelessAuthenticationFilter.class)
     @ConditionalOnProperty(prefix = PROPERTY_PREFIX, value = PROPERTY_SESSION_STATELESS, havingValue = "true")
-    public AADAppRoleAuthenticationFilter azureADStatelessAuthFilter(ResourceRetriever resourceRetriever) {
+    public AadAppRoleStatelessAuthenticationFilter azureADStatelessAuthFilter(ResourceRetriever resourceRetriever) {
         LOG.info("Creating AzureADStatelessAuthFilter bean.");
         final boolean useExplicitAudienceCheck = true;
-        return new AADAppRoleAuthenticationFilter(new UserPrincipalManager(serviceEndpointsProps, aadAuthProps,
+        return new AadAppRoleStatelessAuthenticationFilter(new UserPrincipalManager(serviceEndpointsProps, aadAuthProps,
             resourceRetriever, useExplicitAudienceCheck));
     }
 

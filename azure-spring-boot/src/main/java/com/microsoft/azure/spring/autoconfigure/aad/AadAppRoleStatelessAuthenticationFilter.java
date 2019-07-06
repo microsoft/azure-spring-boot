@@ -30,9 +30,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-public class AADAppRoleAuthenticationFilter extends OncePerRequestFilter {
+public class AadAppRoleStatelessAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final Logger log = LoggerFactory.getLogger(AADAppRoleAuthenticationFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(AadAppRoleStatelessAuthenticationFilter.class);
 
 
     private static final String TOKEN_TYPE = "Bearer ";
@@ -41,7 +41,7 @@ public class AADAppRoleAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserPrincipalManager principalManager;
 
-    public AADAppRoleAuthenticationFilter(UserPrincipalManager principalManager) {
+    public AadAppRoleStatelessAuthenticationFilter(UserPrincipalManager principalManager) {
         this.principalManager = principalManager;
     }
 
