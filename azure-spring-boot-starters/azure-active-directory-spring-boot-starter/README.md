@@ -125,7 +125,7 @@ Define your roles in your application registration manifest:
 Autowire the auth filter and attach it to the filter chain:
 ```java
     @Autowired
-    private AADAppRoleAuthenticationFilter appRoleAuthFilter;
+    private AADAppRoleStatelessAuthenticationFilter appRoleAuthFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
