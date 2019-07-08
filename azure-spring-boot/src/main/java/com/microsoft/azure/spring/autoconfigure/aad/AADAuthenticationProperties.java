@@ -7,6 +7,7 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 
 import com.nimbusds.jose.jwk.source.RemoteJWKSet;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.DeprecatedConfigurationProperty;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +20,7 @@ import java.util.List;
 @Validated
 @ConfigurationProperties("azure.activedirectory")
 @Data
+@Slf4j
 public class AADAuthenticationProperties {
 
     private static final String DEFAULT_SERVICE_ENVIRONMENT = "global";
@@ -49,6 +51,10 @@ public class AADAuthenticationProperties {
      */
     private List<String> activeDirectoryGroups = new ArrayList<>();
 
+    /**
+     * App ID URI which might be used in the <code>"aud"</code> claim of an <code>id_token</code>.
+     */
+    private String appIdUri;
 
     /**
      * Connection Timeout for the JWKSet Remote URL call.
@@ -74,6 +80,12 @@ public class AADAuthenticationProperties {
      * If Telemetry events should be published to Azure AD.
      */
     private boolean allowTelemetry = true;
+
+    /**
+     * If <code>true</code> activates the stateless auth filter {@link AADAppRoleStatelessAuthenticationFilter}.
+     * The default is <code>false</code> which activates {@link AADAuthenticationFilter}.
+     */
+    private Boolean sessionStateless = false;
 
     @DeprecatedConfigurationProperty(reason = "Configuration moved to UserGroup class to keep UserGroup properties "
             + "together", replacement = "azure.activedirectory.user-group.allowed-groups")
@@ -120,9 +132,13 @@ public class AADAuthenticationProperties {
      */
     @PostConstruct
     public void validateUserGroupProperties() {
-        if (this.activeDirectoryGroups.isEmpty() && this.getUserGroup().getAllowedGroups().isEmpty()) {
+        if (this.sessionStateless) {
+            if (!this.activeDirectoryGroups.isEmpty()) {
+              log.warn("Group names are not supported if you set 'sessionSateless' to 'true'.");
+            }
+        } else if (this.activeDirectoryGroups.isEmpty() && this.getUserGroup().getAllowedGroups().isEmpty()) {
             throw new IllegalStateException("One of the User Group Properties must be populated. "
-                    + "Please populate azure.activedirectory.user-group.allowed-groups");
+                + "Please populate azure.activedirectory.user-group.allowed-groups");
         }
     }
 

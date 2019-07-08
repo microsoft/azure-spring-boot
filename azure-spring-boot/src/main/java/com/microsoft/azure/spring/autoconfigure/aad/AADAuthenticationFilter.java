@@ -31,6 +31,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String CURRENT_USER_PRINCIPAL = "CURRENT_USER_PRINCIPAL";
     private static final String CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN = "CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN";
+    private static final String CURRENT_USER_PRINCIPAL_JWT_TOKEN = "CURRENT_USER_PRINCIPAL_JWT_TOKEN";
 
     private static final String TOKEN_HEADER = "Authorization";
     private static final String TOKEN_TYPE = "Bearer ";
@@ -44,7 +45,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                                    ResourceRetriever resourceRetriever) {
         this.aadAuthProps = aadAuthProps;
         this.serviceEndpointsProps = serviceEndpointsProps;
-        this.principalManager = new UserPrincipalManager(serviceEndpointsProps, aadAuthProps, resourceRetriever);
+        this.principalManager = new UserPrincipalManager(serviceEndpointsProps, aadAuthProps, resourceRetriever, false);
     }
 
     @Override
@@ -60,6 +61,8 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                         .getSession().getAttribute(CURRENT_USER_PRINCIPAL);
                 String graphApiToken = (String) request
                         .getSession().getAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN);
+                final String currentToken = (String) request
+                        .getSession().getAttribute(CURRENT_USER_PRINCIPAL_JWT_TOKEN);
 
                 final ClientCredential credential =
                         new ClientCredential(aadAuthProps.getClientId(), aadAuthProps.getClientSecret());
@@ -67,7 +70,11 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                 final AzureADGraphClient client =
                         new AzureADGraphClient(credential, aadAuthProps, serviceEndpointsProps);
 
-                if (principal == null || graphApiToken == null || graphApiToken.isEmpty()) {
+                if (principal == null ||
+                    graphApiToken == null ||
+                    graphApiToken.isEmpty() ||
+                    !idToken.equals(currentToken)
+                ) {
                     principal = principalManager.buildUserPrincipal(idToken);
 
                     final String tenantId = principal.getClaim().toString();
@@ -77,6 +84,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
 
                     request.getSession().setAttribute(CURRENT_USER_PRINCIPAL, principal);
                     request.getSession().setAttribute(CURRENT_USER_PRINCIPAL_GRAPHAPI_TOKEN, graphApiToken);
+                    request.getSession().setAttribute(CURRENT_USER_PRINCIPAL_JWT_TOKEN, idToken);
                 }
 
                 final Authentication authentication = new PreAuthenticatedAuthenticationToken(
