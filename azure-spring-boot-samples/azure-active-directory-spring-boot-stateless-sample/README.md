@@ -1,3 +1,16 @@
+## About this sample
+
+### Overview
+This demo project  explains the usage of the stateless authentication filter `AADAppRoleStatelessAuthenticationFilter`.
+This project is composed of a vue.js frontend and a simple backend with three endpoints
+* `/public` (accessible by anyone)
+* `/authorized` (role "user" required)
+* `/admin/demo` (role "admin" required).
+
+### Get started
+The sample is composed of two layers: vue.js client and Spring Boot RESTful Web Service. You need to make some changes 
+to get it working with your Azure AD tenant on both sides.
+
 ### How to configure
 
 #### Register your application with your Azure Active Directory Tenant
