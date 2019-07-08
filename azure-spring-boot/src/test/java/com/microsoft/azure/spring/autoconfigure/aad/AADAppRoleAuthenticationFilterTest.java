@@ -39,6 +39,7 @@ import net.minidev.json.JSONArray;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -53,7 +54,7 @@ public class AADAppRoleAuthenticationFilterTest {
     private final HttpServletResponse response;
     private final SimpleGrantedAuthority roleAdmin;
     private final SimpleGrantedAuthority roleUser;
-    private final AADAppRoleAuthenticationFilter filter;
+    private final AADAppRoleStatelessAuthenticationFilter filter;
 
     private UserPrincipal createUserPrincipal(Collection<String> roles) {
         final JSONArray claims = new JSONArray();
@@ -73,7 +74,7 @@ public class AADAppRoleAuthenticationFilterTest {
         response = mock(HttpServletResponse.class);
         roleAdmin = new SimpleGrantedAuthority("ROLE_admin");
         roleUser = new SimpleGrantedAuthority("ROLE_user");
-        filter = new AADAppRoleAuthenticationFilter(userPrincipalManager);
+        filter = new AADAppRoleStatelessAuthenticationFilter(userPrincipalManager);
     }
 
     @Test
@@ -81,10 +82,10 @@ public class AADAppRoleAuthenticationFilterTest {
         throws ParseException, JOSEException, BadJOSEException, ServletException, IOException {
         final UserPrincipal dummyPrincipal = createUserPrincipal(Arrays.asList("user", "admin"));
 
-        when(request.getHeader(Constants.TOKEN_HEADER)).thenReturn("Bearer " + TOKEN);
+        when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn("Bearer " + TOKEN);
         when(userPrincipalManager.buildUserPrincipal(TOKEN)).thenReturn(dummyPrincipal);
 
-        //Check in subsequent filter that authentication is available!
+        // Check in subsequent filter that authentication is available!
         final FilterChain filterChain = new FilterChain() {
             @Override
             public void doFilter(ServletRequest request, ServletResponse response)
@@ -110,7 +111,7 @@ public class AADAppRoleAuthenticationFilterTest {
     public void testDoFilterShouldRethrowJWTException()
         throws ParseException, JOSEException, BadJOSEException, ServletException, IOException {
 
-        when(request.getHeader(Constants.TOKEN_HEADER)).thenReturn("Bearer " + TOKEN);
+        when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn("Bearer " + TOKEN);
         when(userPrincipalManager.buildUserPrincipal(any())).thenThrow(new BadJWTException("bad token"));
 
         filter.doFilterInternal(request, response, mock(FilterChain.class));
@@ -122,10 +123,10 @@ public class AADAppRoleAuthenticationFilterTest {
 
         final UserPrincipal dummyPrincipal = createUserPrincipal(Collections.emptyList());
 
-        when(request.getHeader(Constants.TOKEN_HEADER)).thenReturn("Bearer " + TOKEN);
+        when(request.getHeader(HttpHeaders.AUTHORIZATION)).thenReturn("Bearer " + TOKEN);
         when(userPrincipalManager.buildUserPrincipal(TOKEN)).thenReturn(dummyPrincipal);
 
-        //Check in subsequent filter that authentication is available and default roles are filled.
+        // Check in subsequent filter that authentication is available and default roles are filled.
         final FilterChain filterChain = new FilterChain() {
             @Override
             public void doFilter(ServletRequest request, ServletResponse response)
@@ -151,7 +152,7 @@ public class AADAppRoleAuthenticationFilterTest {
     @Test
     public void testRolesToGrantedAuthoritiesShouldConvertRolesAndFilterNulls() {
         final JSONArray roles = new JSONArray().appendElement("user").appendElement(null).appendElement("ADMIN");
-        final AADAppRoleAuthenticationFilter filter = new AADAppRoleAuthenticationFilter(null);
+        final AADAppRoleStatelessAuthenticationFilter filter = new AADAppRoleStatelessAuthenticationFilter(null);
         final Set<SimpleGrantedAuthority> result = filter.rolesToGrantedAuthorities(roles);
         assertThat("Set should contain the two granted authority 'ROLE_user' and 'ROLE_ADMIN'", result,
             CoreMatchers.hasItems(new SimpleGrantedAuthority("ROLE_user"),
