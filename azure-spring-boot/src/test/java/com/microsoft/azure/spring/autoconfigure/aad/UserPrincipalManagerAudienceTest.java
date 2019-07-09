@@ -37,7 +37,6 @@ public class UserPrincipalManagerAudienceTest {
   private static final String FAKE_CLIENT_ID = "dsflkjsdflkjsdf";
   private static final String FAKE_APPLICATION_URI = "https://oihiugjuzfvbhg";
 
-
   private JWSSigner signer;
   private String jwkString;
   private ResourceRetriever resourceRetriever;
@@ -72,7 +71,6 @@ public class UserPrincipalManagerAudienceTest {
     final ServiceEndpoints serviceEndpoints = new ServiceEndpoints();
     serviceEndpoints.setAadKeyDiscoveryUri("file://dummy");
     when(serviceEndpointsProperties.getServiceEndpoints(anyString())).thenReturn(serviceEndpoints);
-
   }
 
   @Test

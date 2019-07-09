@@ -148,7 +148,6 @@ public class AADAppRoleAuthenticationFilterTest {
         assertNull("Authentication has not been cleaned up!", SecurityContextHolder.getContext().getAuthentication());
     }
 
-
     @Test
     public void testRolesToGrantedAuthoritiesShouldConvertRolesAndFilterNulls() {
         final JSONArray roles = new JSONArray().appendElement("user").appendElement(null).appendElement("ADMIN");
