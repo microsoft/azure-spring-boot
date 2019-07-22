@@ -41,7 +41,6 @@
         <javax.jms-api.version>2.0.1</javax.jms-api.version>
         <spring-jms.version>5.1.8.RELEASE</spring-jms.version>
         <qpid-jms-client.version>0.43.0</qpid-jms-client.version>
-<!--        <azure-servicebus-jms-spring-boot-starter.version>0.0.1-SNAPSHOT</azure-servicebus-jms-spring-boot-starter.version>-->
     </properties>
 
     <profiles>
@@ -139,13 +138,8 @@
                 <artifactId>hibernate-validator</artifactId>
                 <version>${hibernate.validator.version}</version>
             </dependency>
-
-<!--            <dependency>-->
-<!--                <groupId>com.microsoft.azure</groupId>-->
-<!--                <artifactId>azure-servicebus-jms-spring-boot-starter</artifactId>-->
-<!--                <version>${azure-servicebus-jms-spring-boot-starter.version}</version>-->
-<!--            </dependency>-->
-<!--            &lt;!&ndash;Spring JMS&ndash;&gt;-->
+            
+            <!--Spring JMS-->
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-jms</artifactId>
