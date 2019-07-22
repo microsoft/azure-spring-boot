@@ -1,0 +1,4 @@
+description = 'Azure Service Bus JMS Spring Boot Starter Sample'
+dependencies {
+    compile group: 'com.microsoft.azure', name: 'azure-servicebus-jms-spring-boot-starter', version:"${azureSpringBootStartersVersion}"
+}

@@ -153,5 +153,6 @@
         <module>azure-storage-spring-boot-sample</module>
         <module>azure-cloud-foundry-service-sample</module>
         <module>spring-data-gremlin-boot-sample</module>
+        <module>azure-servicebus-jms-spring-boot-sample</module>
     </modules>
 </project>
