@@ -38,7 +38,6 @@
         <wiremock-standalone.version>2.19.0</wiremock-standalone.version>
         <commons-io.version>2.3</commons-io.version>
         <hibernate.validator.version>6.0.9.Final</hibernate.validator.version>
-        <javax.jms-api.version>2.0.1</javax.jms-api.version>
         <spring-jms.version>5.1.8.RELEASE</spring-jms.version>
         <qpid-jms-client.version>0.43.0</qpid-jms-client.version>
     </properties>
@@ -138,7 +137,7 @@
                 <artifactId>hibernate-validator</artifactId>
                 <version>${hibernate.validator.version}</version>
             </dependency>
-            
+
             <!--Spring JMS-->
             <dependency>
                 <groupId>org.springframework</groupId>
