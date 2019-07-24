@@ -121,13 +121,6 @@ public class AADAuthenticationProperties {
     @Data
     public abstract static class AbstractUserGroupProperties {
 
-        public void configure(String keys, String value, String objectIDKey, List<String> allowedGroups) {
-            this.key = keys;
-            this.value = value;
-            this.objectIDKey = objectIDKey;
-            this.allowedGroups = allowedGroups;
-        }
-
         /**
          * Expected UserGroups that an authority will be granted to if found in the response from the MemeberOf Graph
          * API Call.
@@ -155,6 +148,12 @@ public class AADAuthenticationProperties {
         @NotEmpty
         private String objectIDKey;
 
+        public void configure(String keys, String value, String objectIDKey, List<String> allowedGroups) {
+            this.key = keys;
+            this.value = value;
+            this.objectIDKey = objectIDKey;
+            this.allowedGroups = allowedGroups;
+        }
     }
 
     /**
@@ -162,47 +161,72 @@ public class AADAuthenticationProperties {
      */
     public static class AADGraphUserGroupProperties extends AbstractUserGroupProperties {
 
-        public AADGraphUserGroupProperties() {
-            init();        
-        }
-
-        @PostConstruct
-        public void init() {
-            super.configure(KEY, VALUE, OBJECTIDKEY, ALLOWEDGROUPS);
-        }
-
         /**
          * Expected UserGroups that an authority will be granted to if found in the response from the MemeberOf Graph
          * API Call.
          */
-        private List<String> ALLOWEDGROUPS = new ArrayList<>();
+        private List<String> allowedGroups = new ArrayList<>();
 
         /**
          * Key of the JSON Node to get from the Azure AD response object that will be checked to contain the {@code
          * azure.activedirectory.user-group.value}  to signify that this node is a valid {@code UserGroup}.
          */
         @NotEmpty
-        private String KEY = "objectType";
+        private String key = "objectType";
 
         /**
          * Value of the JSON Node identified by the {@code azure.activedirectory.user-group.key} to validate the JSON
          * Node is a UserGroup.
          */
         @NotEmpty
-        private String VALUE = "Group";
+        private String value = "Group";
 
         /**
          * Key of the JSON Node containing the Azure Object ID for the {@code UserGroup}.
          */
         @NotEmpty
-        private String OBJECTIDKEY = "objectId";
+        private String objectIDKey = "objectId";
 
+        public AADGraphUserGroupProperties() {
+            init();        
+        }
+
+        @PostConstruct
+        public void init() {
+            super.configure(key, value, objectIDKey, allowedGroups);
+        }
     }
 
     /**
      * Properties for Microsoft Graph API used.
      */
     public static class MicrosoftGraphUserGroupProperties extends AbstractUserGroupProperties {
+
+        /**
+         * Expected UserGroups that an authority will be granted to if found in the response from the MemeberOf Graph
+         * API Call.
+         */
+        private List<String> allowedGroups = new ArrayList<>();
+
+        /**
+         * Key of the JSON Node to get from the Azure AD response object that will be checked to contain the {@code
+         * azure.activedirectory.user-group.value}  to signify that this node is a valid {@code UserGroup}.
+         */
+        @NotEmpty
+        private String key = "@odata.type";
+
+        /**
+         * Value of the JSON Node identified by the {@code azure.activedirectory.user-group.key} to validate the JSON
+         * Node is a UserGroup.
+         */
+        @NotEmpty
+        private String value = "#microsoft.graph.group";
+
+        /**
+         * Key of the JSON Node containing the Azure Object ID for the {@code UserGroup}.
+         */
+        @NotEmpty
+        private String objectIDKey = "id";
 
         public MicrosoftGraphUserGroupProperties() {
             init();
@@ -211,51 +235,24 @@ public class AADAuthenticationProperties {
         public MicrosoftGraphUserGroupProperties(String key, String value, String objectIDKey, 
                                                  List<String> allowedGroups) {
             if (key != null) {
-                this.KEY = key;
+                this.key = key;
             }
             if (value != null) {
-                this.VALUE = value;
+                this.value = value;
             }
             if (objectIDKey != null) {
-                this.OBJECTIDKEY = objectIDKey;
+                this.objectIDKey = objectIDKey;
             }
             if (allowedGroups != null) {
-                this.ALLOWEDGROUPS = allowedGroups;
+                this.allowedGroups = allowedGroups;
             }
             init();
         }
 
         @PostConstruct
         public void init() {
-            super.configure(KEY, VALUE, OBJECTIDKEY, ALLOWEDGROUPS);
+            super.configure(key, value, objectIDKey, allowedGroups);
         }
-
-        /**
-         * Expected UserGroups that an authority will be granted to if found in the response from the MemeberOf Graph
-         * API Call.
-         */
-        private List<String> ALLOWEDGROUPS = new ArrayList<>();
-
-        /**
-         * Key of the JSON Node to get from the Azure AD response object that will be checked to contain the {@code
-         * azure.activedirectory.user-group.value}  to signify that this node is a valid {@code UserGroup}.
-         */
-        @NotEmpty
-        private String KEY = "@odata.type";
-
-        /**
-         * Value of the JSON Node identified by the {@code azure.activedirectory.user-group.key} to validate the JSON
-         * Node is a UserGroup.
-         */
-        @NotEmpty
-        private String VALUE = "#microsoft.graph.group";
-
-        /**
-         * Key of the JSON Node containing the Azure Object ID for the {@code UserGroup}.
-         */
-        @NotEmpty
-        private String OBJECTIDKEY = "id";
-
     }
 
     /**
