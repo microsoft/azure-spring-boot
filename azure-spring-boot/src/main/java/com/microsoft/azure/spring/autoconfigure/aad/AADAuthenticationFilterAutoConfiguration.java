@@ -31,6 +31,7 @@ import org.springframework.util.ClassUtils;
 @ConditionalOnProperty(prefix = AADAuthenticationFilterAutoConfiguration.PROPERTY_PREFIX, value = {"client-id"})
 @EnableConfigurationProperties({AADAuthenticationProperties.class, ServiceEndpointsProperties.class})
 @PropertySource(value = "classpath:serviceEndpoints.properties")
+@PropertySource(value = "classpath:microsoftGraphServiceEndpoints.properties")
 public class AADAuthenticationFilterAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationProperties.class);
 
