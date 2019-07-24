@@ -12,7 +12,9 @@ import org.springframework.core.env.Environment;
 
 import java.util.Map;
 
-import static com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationProperties.UserGroupProperties;
+import static com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationProperties.AbstractUserGroupProperties;
+import static com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationProperties.AADGraphUserGroupProperties;
+import static com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationProperties.MicrosoftGraphUserGroupProperties;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AADAuthenticationAutoConfigurationTest {
@@ -38,7 +40,8 @@ public class AADAuthenticationAutoConfigurationTest {
                 "azure.service.endpoints.global.aadSigninUri=https://test/",
                 "azure.service.endpoints.global.aadGraphApiUri=https://test/",
                 "azure.service.endpoints.global.aadKeyDiscoveryUri=https://test/",
-                "azure.service.endpoints.global.aadMembershipRestUri=https://test/")
+                "azure.service.endpoints.global.aadMembershipRestUri=https://test/",
+                "azure.service.endpoints.global.aadMicrosoftGraphApiBool=false")
                 .run(context -> {
                     final Environment environment = context.getEnvironment();
                     assertThat(environment.getProperty("azure.service.endpoints.global.aadSigninUri"))
@@ -49,24 +52,29 @@ public class AADAuthenticationAutoConfigurationTest {
                             .isEqualTo("https://test/");
                     assertThat(environment.getProperty("azure.service.endpoints.global.aadMembershipRestUri"))
                             .isEqualTo("https://test/");
+                    assertThat(environment.getProperty("azure.service.endpoints.global.aadMicrosoftGraphApiBool"))
+                            .isEqualTo("false");
                     final ServiceEndpointsProperties serviceEndpointsProperties =
                             context.getBean(ServiceEndpointsProperties.class);
                     assertThat(serviceEndpointsProperties).isNotNull();
                     assertThat(serviceEndpointsProperties.getEndpoints()).isNotEmpty();
 
                     final Map<String, ServiceEndpoints> endpoints = serviceEndpointsProperties.getEndpoints();
-                    assertThat(endpoints).hasSize(2);
+                    assertThat(endpoints).hasSize(4);
                     assertThat(endpoints.get("cn")).isNotNull()
                             .extracting(ServiceEndpoints::getAadGraphApiUri, ServiceEndpoints::getAadKeyDiscoveryUri,
-                                    ServiceEndpoints::getAadMembershipRestUri, ServiceEndpoints::getAadSigninUri)
+                                    ServiceEndpoints::getAadMembershipRestUri, ServiceEndpoints::getAadSigninUri,
+                                    ServiceEndpoints::isAadMicrosoftGraphApiBool)
                             .containsExactly("https://graph.chinacloudapi.cn/",
                                     "https://login.partner.microsoftonline.cn/common/discovery/keys",
                                     "https://graph.chinacloudapi.cn/me/memberOf?api-version=1.6",
-                                    "https://login.partner.microsoftonline.cn/");
+                                    "https://login.partner.microsoftonline.cn/", false);
                     assertThat(endpoints.get("global")).isNotNull()
                             .extracting(ServiceEndpoints::getAadGraphApiUri, ServiceEndpoints::getAadKeyDiscoveryUri,
-                                    ServiceEndpoints::getAadMembershipRestUri, ServiceEndpoints::getAadSigninUri)
-                            .containsExactly("https://test/", "https://test/", "https://test/", "https://test/");
+                                    ServiceEndpoints::getAadMembershipRestUri, ServiceEndpoints::getAadSigninUri,
+                                    ServiceEndpoints::isAadMicrosoftGraphApiBool)
+                            .containsExactly("https://test/", "https://test/", "https://test/", "https://test/",
+                                    false);
                 });
     }
 
@@ -76,18 +84,44 @@ public class AADAuthenticationAutoConfigurationTest {
         contextRunner.withPropertyValues("azure.activedirectory.user-group.allowed-groups=another_group,third_group",
                 "azure.activedirectory.user-group.key=key", "azure.activedirectory.user-group.value=value",
                 "azure.activedirectory.user-group.object-id-key=objidk").run(context -> {
-
             assertThat(context.getBean(AADAuthenticationProperties.class)).isNotNull();
+            final AADAuthenticationProperties aadAuthProperties = context
+            .getBean(AADAuthenticationProperties.class);
+            aadAuthProperties.setUserGroupWithBool(false);
 
-            final UserGroupProperties userGroupProperties = context
-                    .getBean(AADAuthenticationProperties.class).getUserGroup();
+            final AADGraphUserGroupProperties userGroupProperties = 
+                        (AADGraphUserGroupProperties) aadAuthProperties.getUserGroup();
 
             assertThat(userGroupProperties).hasNoNullFieldsOrProperties()
-                    .extracting(UserGroupProperties::getKey, UserGroupProperties::getValue,
-                            UserGroupProperties::getObjectIDKey).containsExactly("key", "value", "objidk");
+                    .extracting(AADGraphUserGroupProperties::getKey, AADGraphUserGroupProperties::getValue,
+                    AADGraphUserGroupProperties::getObjectIDKey).containsExactly("key", "value", "objidk");
 
             assertThat(userGroupProperties.getAllowedGroups()).isNotEmpty()
                     .hasSize(2).containsExactly("another_group", "third_group");
+        });
+
+    }
+
+    @Test
+    public void testUserGroupPropertiesAreOverriddenMicrosoftGraph() {
+
+        contextRunner.withPropertyValues("azure.activedirectory.user-group.allowed-groups=another_group,third_group",
+                "azure.activedirectory.user-group.key=key", "azure.activedirectory.user-group.value=value",
+                "azure.activedirectory.user-group.object-id-key=objidk").run(context -> {
+            assertThat(context.getBean(AADAuthenticationProperties.class)).isNotNull();
+            final AADAuthenticationProperties aadAuthProperties = context
+            .getBean(AADAuthenticationProperties.class);
+            aadAuthProperties.setUserGroupWithBool(true);
+
+             final MicrosoftGraphUserGroupProperties userGroupProperties = 
+                    (MicrosoftGraphUserGroupProperties) aadAuthProperties.getUserGroup();
+
+        assertThat(userGroupProperties).hasNoNullFieldsOrProperties()
+                .extracting(AbstractUserGroupProperties::getKey, MicrosoftGraphUserGroupProperties::getValue,
+                MicrosoftGraphUserGroupProperties::getObjectIDKey).containsExactly("key", "value", "objidk");
+
+        assertThat(userGroupProperties.getAllowedGroups()).isNotEmpty()
+                .hasSize(2).containsExactly("another_group", "third_group");
         });
 
     }

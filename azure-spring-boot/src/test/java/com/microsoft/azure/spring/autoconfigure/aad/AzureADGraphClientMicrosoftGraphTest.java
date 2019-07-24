@@ -18,7 +18,7 @@ import java.util.*;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AzureADGraphClientTest {
+public class AzureADGraphClientMicrosoftGraphTest {
 
     private AzureADGraphClient adGraphClient;
 
@@ -36,10 +36,11 @@ public class AzureADGraphClientTest {
         activeDirectoryGroups.add("Test_Group");
         aadAuthProps = new AADAuthenticationProperties();
         endpointsProps = new ServiceEndpointsProperties();
-        aadAuthProps.setUserGroupWithBool(false);
+        aadAuthProps.setEnvironment("global-microsoft");
+        aadAuthProps.setUserGroupWithBool(true);
         final ServiceEndpoints serviceEndpoints = new ServiceEndpoints();
-        serviceEndpoints.setAadMicrosoftGraphApiBool(false);
-        endpointsProps.getEndpoints().put("global", serviceEndpoints);
+        serviceEndpoints.setAadMicrosoftGraphApiBool(true);
+        endpointsProps.getEndpoints().put("global-microsoft", serviceEndpoints);
         aadAuthProps.setActiveDirectoryGroups(activeDirectoryGroups);
         adGraphClient = new AzureADGraphClient(credential, aadAuthProps, endpointsProps);
     }

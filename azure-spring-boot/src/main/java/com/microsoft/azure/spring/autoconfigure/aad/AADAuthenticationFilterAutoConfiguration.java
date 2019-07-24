@@ -33,6 +33,7 @@ import static com.microsoft.azure.telemetry.TelemetryData.getClassPackageSimpleN
 @ConditionalOnProperty(prefix = "azure.activedirectory", value = {"client-id", "client-secret"})
 @EnableConfigurationProperties({AADAuthenticationProperties.class, ServiceEndpointsProperties.class})
 @PropertySource(value = "classpath:serviceEndpoints.properties")
+@PropertySource(value = "classpath:microsoftGraphServiceEndpoints.properties")
 public class AADAuthenticationFilterAutoConfiguration {
     private static final Logger LOG = LoggerFactory.getLogger(AADAuthenticationProperties.class);
 

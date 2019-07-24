@@ -29,6 +29,7 @@ import static com.microsoft.azure.telemetry.TelemetryData.getClassPackageSimpleN
 @ConditionalOnProperty(prefix = "azure.activedirectory", value = "tenant-id")
 @PropertySource("classpath:/aad-oauth2-common.properties")
 @PropertySource(value = "classpath:serviceEndpoints.properties")
+@PropertySource(value = "classpath:microsoftGraphServiceEndpoints.properties")
 @EnableConfigurationProperties({AADAuthenticationProperties.class, ServiceEndpointsProperties.class})
 public class AADOAuth2AutoConfiguration {
 

@@ -12,14 +12,14 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-public class AADUserGroupsPropertyValidatorTest {
+public class AADUserGroupsPropertyValidatorMicrosoftGraphTest {
 
     private AADAuthenticationProperties aadAuthenticationProperties;
 
     @Before
     public void setUp() {
         aadAuthenticationProperties = new AADAuthenticationProperties();
-        aadAuthenticationProperties.setUserGroupWithBool(false);
+        aadAuthenticationProperties.setUserGroupWithBool(true);
     }
 
     @Test

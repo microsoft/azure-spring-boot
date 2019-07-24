@@ -14,9 +14,7 @@ import lombok.Data;
 public class ServiceEndpoints {
     private String aadSigninUri;
     private String aadGraphApiUri;
-    private String aadGraphApiUriNew;
     private String aadKeyDiscoveryUri;
     private String aadMembershipRestUri;
-    private String aadMembershipRestUriNew;
-    private String aadUseNewGraphApi;
+    private boolean aadMicrosoftGraphApiBool;
 }

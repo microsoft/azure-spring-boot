@@ -96,7 +96,7 @@ public class AADOAuth2ConfigTest {
         assertThat(serviceEndpointsProperties.getEndpoints()).isNotEmpty();
 
         final Map<String, ServiceEndpoints> endpoints = serviceEndpointsProperties.getEndpoints();
-        assertThat(endpoints).hasSize(2);
+        assertThat(endpoints).hasSize(4);
         assertThat(endpoints.get("cn")).isNotNull()
                 .extracting(ServiceEndpoints::getAadGraphApiUri, ServiceEndpoints::getAadKeyDiscoveryUri,
                         ServiceEndpoints::getAadMembershipRestUri, ServiceEndpoints::getAadSigninUri)

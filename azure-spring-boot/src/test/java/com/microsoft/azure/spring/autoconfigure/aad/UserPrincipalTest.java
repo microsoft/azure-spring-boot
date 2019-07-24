@@ -46,11 +46,12 @@ public class UserPrincipalTest {
     public void setup() {
         accessToken = Constants.BEARER_TOKEN;
         aadAuthProps = new AADAuthenticationProperties();
+        aadAuthProps.setEnvironment("global-microsoft");
         endpointsProps = new ServiceEndpointsProperties();
         final ServiceEndpoints serviceEndpoints = new ServiceEndpoints();
-        serviceEndpoints.setAadMembershipRestUriNew("http://localhost:9519/memberOf");
-        serviceEndpoints.setAadUseNewGraphApi("true");
-        endpointsProps.getEndpoints().put("global", serviceEndpoints);
+        serviceEndpoints.setAadMembershipRestUri("http://localhost:9519/memberOf");
+        serviceEndpoints.setAadMicrosoftGraphApiBool(true);
+        endpointsProps.getEndpoints().put("global-microsoft", serviceEndpoints);
         credential = new ClientCredential("client", "pass");
     }
 
@@ -58,6 +59,7 @@ public class UserPrincipalTest {
     @Test
     public void getAuthoritiesByUserGroups() throws Exception {
 
+        aadAuthProps.setUserGroupWithBool(true);
         aadAuthProps.getUserGroup().setAllowedGroups(Collections.singletonList("group1"));
         this.graphClientMock = new AzureADGraphClient(credential, aadAuthProps, endpointsProps);
 
@@ -78,6 +80,7 @@ public class UserPrincipalTest {
     @Test
     public void getGroups() throws Exception {
 
+        aadAuthProps.setUserGroupWithBool(true);
         aadAuthProps.setActiveDirectoryGroups(Arrays.asList("group1", "group2", "group3"));
         this.graphClientMock = new AzureADGraphClient(credential, aadAuthProps, endpointsProps);
 
