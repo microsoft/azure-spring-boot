@@ -4,7 +4,7 @@
  * license information.
  */
 
-package sample.jms;
+package sample.jms.queue;
 
 import java.io.Serializable;
 

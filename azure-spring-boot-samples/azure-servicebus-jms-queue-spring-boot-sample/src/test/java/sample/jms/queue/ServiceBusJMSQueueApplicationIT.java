@@ -4,7 +4,7 @@
  * license information.
  */
 
-package sample.jms;
+package sample.jms.queue;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,10 +25,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = ServiceBusJMSApplication.class)
+@SpringBootTest(classes = ServiceBusJMSQueueApplication.class)
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class ServiceBusJMSApplicationIT {
+public class ServiceBusJMSQueueApplicationIT {
 
     @Autowired
     private MockMvc mvc;
@@ -44,33 +44,6 @@ public class ServiceBusJMSApplicationIT {
                 .andExpect(content().string(message));
 
         final String messageReceivedLog = String.format("Received message from queue: %s", message);
-
-        boolean messageReceived = false;
-
-        for (int i = 0; i < 100; i++) {
-            final String output = capture.toString();
-            if (!messageReceived && output.contains(messageReceivedLog)) {
-                messageReceived = true;
-            }
-
-            if (messageReceived) {
-                break;
-            }
-
-            Thread.sleep(1000);
-        }
-
-        assertThat(messageReceived).isTrue();
-    }
-
-    @Test
-    public void testTopicSendAndReceiveMessage() throws Exception {
-        final String message = UUID.randomUUID().toString();
-
-        mvc.perform(post("/topic?message=" + message)).andExpect(status().isOk())
-                .andExpect(content().string(message));
-
-        final String messageReceivedLog = String.format("Received message from topic: %s", message);
 
         boolean messageReceived = false;
 

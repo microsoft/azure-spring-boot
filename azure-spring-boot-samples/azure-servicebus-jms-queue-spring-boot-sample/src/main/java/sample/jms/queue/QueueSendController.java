@@ -4,7 +4,7 @@
  * license information.
  */
 
-package sample.jms;
+package sample.jms.queue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -11,10 +11,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>azure-servicebus-jms-spring-boot-sample</artifactId>
+    <artifactId>azure-servicebus-jms-queue-spring-boot-sample</artifactId>
     <packaging>jar</packaging>
 
-    <name>Azure Service Bus JMS Spring Boot Starter Sample</name>
+    <name>Azure Service Bus JMS Queue Spring Boot Starter Sample</name>
     <description>Sample project for Spring Boot Service Bus JMS Starter</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
@@ -28,10 +28,11 @@
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-servicebus-jms-spring-boot-starter</artifactId>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>RELEASE</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -52,6 +53,7 @@
             <version>3.11.1</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <properties>

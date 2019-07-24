@@ -4,7 +4,7 @@
  * license information.
  */
 
-package sample.jms;
+package sample.jms.queue;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,11 +12,11 @@ import org.springframework.jms.annotation.EnableJms;
 
 @SpringBootApplication
 @EnableJms
-public class ServiceBusJMSApplication {
+public class ServiceBusJMSQueueApplication {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(ServiceBusJMSApplication.class, args);
+        SpringApplication.run(ServiceBusJMSQueueApplication.class, args);
 
     }
 

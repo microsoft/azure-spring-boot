@@ -20,7 +20,7 @@ public class ServiceBusJMSAutoConfigurationTest {
 
     @Test
     public void testAzureServiceBusDisabled() {
-        this.contextRunner.withPropertyValues("spring.cloud.azure.servicebus.jms.enabled=false")
+        this.contextRunner.withPropertyValues("azure.servicebus.jms.enabled=false")
                 .run(context -> assertThat(context).doesNotHaveBean(AzureServiceBusJMSProperties.class));
     }
 

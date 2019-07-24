@@ -22,7 +22,7 @@ import javax.jms.ConnectionFactory;
 
 @Configuration
 @ConditionalOnClass(JmsConnectionFactory.class)
-@ConditionalOnProperty(value = "spring.cloud.azure.servicebus.jms.enabled", matchIfMissing = true)
+@ConditionalOnProperty(value = "azure.servicebus.jms.enabled", matchIfMissing = true)
 @EnableConfigurationProperties(AzureServiceBusJMSProperties.class)
 public class ServiceBusJMSAutoConfiguration {
 
@@ -41,7 +41,7 @@ public class ServiceBusJMSAutoConfiguration {
         final String sasKey = serviceBusKey.getSharedAccessKey();
 
         final String remoteUri = String.format(AMQP_URI_FORMAT, host, idleTimeout);
-        final JmsConnectionFactory jmsConnectionFactory = new JmsConnectionFactory(remoteUri);
+        final JmsConnectionFactory jmsConnectionFactory = new JmsConnectionFactory();
         jmsConnectionFactory.setRemoteURI(remoteUri);
         jmsConnectionFactory.setClientID(clientId);
         jmsConnectionFactory.setUsername(sasKeyName);

@@ -20,7 +20,7 @@ public class AzureServiceBusJMSProperties {
 
     private String clientId;
 
-    private int idleTimeout = 3600000;
+    private int idleTimeout = 1800000;
 
     public String getConnectionString() {
         return connectionString;
@@ -48,17 +48,11 @@ public class AzureServiceBusJMSProperties {
 
     @PostConstruct
     public void validate() {
+
         if (!StringUtils.hasText(connectionString)) {
             throw new IllegalArgumentException("'azure.servicebus.jms.connection-string' " +
                     "should be provided");
         }
-        if (!StringUtils.hasText(clientId)) {
-            throw new IllegalArgumentException("'azure.servicebus.jms.client-id' " +
-                    "should be provided");
-        }
-        if (!StringUtils.hasText(idleTimeout + "")) {
-            throw new IllegalArgumentException("'azure.servicebus.jms.idle-timeout' " +
-                    "should be provided");
-        }
+
     }
 }
