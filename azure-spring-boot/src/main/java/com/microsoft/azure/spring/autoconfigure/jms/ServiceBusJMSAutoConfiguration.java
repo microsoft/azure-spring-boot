@@ -22,7 +22,7 @@ import javax.jms.ConnectionFactory;
 
 @Configuration
 @ConditionalOnClass(JmsConnectionFactory.class)
-@ConditionalOnProperty(value = "azure.servicebus.jms.enabled", matchIfMissing = true)
+@ConditionalOnProperty(value = "spring.jms.servicebus.enabled", matchIfMissing = true)
 @EnableConfigurationProperties(AzureServiceBusJMSProperties.class)
 public class ServiceBusJMSAutoConfiguration {
 
@@ -32,7 +32,7 @@ public class ServiceBusJMSAutoConfiguration {
     @ConditionalOnMissingBean
     public ConnectionFactory jmsConnectionFactory(AzureServiceBusJMSProperties serviceBusJMSProperties) {
         final String connectionString = serviceBusJMSProperties.getConnectionString();
-        final String clientId = serviceBusJMSProperties.getClientId();
+        final String clientId = serviceBusJMSProperties.getTopicClientId();
         final int idleTimeout = serviceBusJMSProperties.getIdleTimeout();
 
         final ServiceBusKey serviceBusKey = ConnectionStringResolver.getServiceBusKey(connectionString);

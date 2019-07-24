@@ -13,12 +13,12 @@ import org.springframework.validation.annotation.Validated;
 import javax.annotation.PostConstruct;
 
 @Validated
-@ConfigurationProperties("azure.servicebus.jms")
+@ConfigurationProperties("spring.jms.servicebus")
 public class AzureServiceBusJMSProperties {
 
     private String connectionString;
 
-    private String clientId;
+    private String topicClientId;
 
     private int idleTimeout = 1800000;
 
@@ -30,12 +30,12 @@ public class AzureServiceBusJMSProperties {
         this.connectionString = connectionString;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getTopicClientId() {
+        return topicClientId;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+    public void setTopicClientId(String topicClientId) {
+        this.topicClientId = topicClientId;
     }
 
     public int getIdleTimeout() {

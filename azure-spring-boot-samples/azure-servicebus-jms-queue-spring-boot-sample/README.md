@@ -22,11 +22,11 @@ Running this sample will be charged by Azure. You can check the usage and bill a
 
     ```
     # Fill service bus namespace connection string copied from portal
-    azure.servicebus.jms.connection-string=[servicebus-namespace-connection-string]
+    spring.jms.servicebus.connection-string=[servicebus-namespace-connection-string]
     
     # The idle timeout in milliseconds after which the connection will be failed if the peer sends no AMQP frames
     # Default is 1800000
-    azure.servicebus.jms.idle-timeout=[idle-timeout]
+    spring.jms.servicebus.idle-timeout=[idle-timeout]
     ```
 
 3. Specify your queue name. Update `QUEUE_NAME` in [QueueSendController](src/main/java/sample/jms/queue/QueueSendController.java) and [QueueReceiveController](src/main/java/sample/jms/queue/QueueReceiveController.java).

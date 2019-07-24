@@ -22,15 +22,15 @@ Running this sample will be charged by Azure. You can check the usage and bill a
 
     ```
     # Fill service bus namespace connection string copied from portal
-    azure.servicebus.jms.connection-string=[servicebus-namespace-connection-string]
+    spring.jms.servicebus.connection-string=[servicebus-namespace-connection-string]
     
     # The JMS client id needs to be specified when using topic and durable subscription
     # Default is empty string
-    azure.servicebus.jms.client-id=[client-id]
+    spring.jms.servicebus.topic-client-id=[topic-client-id]
     
     # The idle timeout in milliseconds after which the connection will be failed if the peer sends no AMQP frames
     # Default is 1800000
-    azure.servicebus.jms.idle-timeout=[idle-timeout]
+    spring.jms.servicebus.idle-timeout=[idle-timeout]
     ```
 
 3. Specify your topic name and subscription name. Update `TOPIC_NAME` in [TopicSendController](src/main/java/sample/jms/topic/TopicSendController.java) and [TopicReceiveController](src/main/java/sample/jms/topic/TopicReceiveController.java), and `SUBSCRIPTION_NAME` in [TopicReceiveController](src/main/java/sample/jms/topic/TopicReceiveController.java).

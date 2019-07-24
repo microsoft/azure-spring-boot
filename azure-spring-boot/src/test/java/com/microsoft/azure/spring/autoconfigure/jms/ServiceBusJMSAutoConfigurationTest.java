@@ -20,7 +20,7 @@ public class ServiceBusJMSAutoConfigurationTest {
 
     @Test
     public void testAzureServiceBusDisabled() {
-        this.contextRunner.withPropertyValues("azure.servicebus.jms.enabled=false")
+        this.contextRunner.withPropertyValues("spring.jms.servicebus.enabled=false")
                 .run(context -> assertThat(context).doesNotHaveBean(AzureServiceBusJMSProperties.class));
     }
 
@@ -41,15 +41,15 @@ public class ServiceBusJMSAutoConfigurationTest {
         final String connectionString = "Endpoint=sb://host/;SharedAccessKeyName=sasKeyName;SharedAccessKey=sasKey";
 
         this.contextRunner = this.contextRunner.withPropertyValues(
-                "azure.servicebus.jms.connection-string=" + connectionString
+                "spring.jms.servicebus.connection-string=" + connectionString
         );
 
         this.contextRunner = this.contextRunner.withPropertyValues(
-                "azure.servicebus.jms.client-id=cid"
+                "spring.jms.servicebus.topic-client-id=cid"
         );
 
         this.contextRunner = this.contextRunner.withPropertyValues(
-                "azure.servicebus.jms.idle-timeout=123"
+                "spring.jms.servicebus.idle-timeout=123"
         );
 
         this.contextRunner.run(
@@ -57,7 +57,7 @@ public class ServiceBusJMSAutoConfigurationTest {
                 assertThat(context).hasSingleBean(AzureServiceBusJMSProperties.class);
                 assertThat(context.getBean(AzureServiceBusJMSProperties.class).getConnectionString()).isEqualTo(
                         connectionString);
-                assertThat(context.getBean(AzureServiceBusJMSProperties.class).getClientId()).isEqualTo("cid");
+                assertThat(context.getBean(AzureServiceBusJMSProperties.class).getTopicClientId()).isEqualTo("cid");
                 assertThat(context.getBean(AzureServiceBusJMSProperties.class).getIdleTimeout()).isEqualTo(123);
             }
         );
