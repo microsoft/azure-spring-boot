@@ -235,5 +235,20 @@
             <artifactId>wiremock-standalone</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!--Spring JMS-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!--Qpid-->
+        <dependency>
+            <groupId>org.apache.qpid</groupId>
+            <artifactId>qpid-jms-client</artifactId>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
 </project>
