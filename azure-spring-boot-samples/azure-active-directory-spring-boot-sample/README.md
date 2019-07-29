@@ -22,7 +22,7 @@ To run this sample, you'll need:
 
 - JDK 1.8 and above
 - [Maven](http://maven.apache.org/) 3.0 and above
-- An Intenet connection
+- An Internet connection
 - A Windows machine (necessary if you want to run the app on Windows)
 - An OS X machine (necessary if you want to run the app on Mac)
 - A Linux machine (necessary if you want to run the app on Linux)
