@@ -107,16 +107,14 @@ public class AzureADGraphClient {
         final JsonNode valuesNode = rootNode.get("value");
 
         if (valuesNode != null) {
-            //final boolean microsoftGraphApiBool = serviceEndpoints.isAadMicrosoftGraphApiBool();
             lUserGroups
-            .addAll(StreamSupport.stream(valuesNode.spliterator(), false).filter(this::isMatchingUserGroupKey)
-                    .map(node -> {
-                        final String objectID = node.
-                                get(aadAuthenticationProperties.getUserGroup()
-                                .getObjectIDKey()).asText();
-                        final String displayName = node.get("displayName").asText();
-                        return new UserGroup(objectID, displayName);
-                    }).collect(Collectors.toList()));
+                    .addAll(StreamSupport.stream(valuesNode.spliterator(), false).filter(this::isMatchingUserGroupKey)
+                        .map(node -> {
+                            final String objectID = node.
+                                    get(aadAuthenticationProperties.getUserGroup().getObjectIDKey()).asText();
+                            final String displayName = node.get("displayName").asText();
+                            return new UserGroup(objectID, displayName);
+                        }).collect(Collectors.toList()));
 
         }
 
@@ -131,9 +129,8 @@ public class AzureADGraphClient {
      * @return true if the json node contains the correct key, and expected value to identify a user group.
      */
     private boolean isMatchingUserGroupKey(final JsonNode node) {
-        //final boolean microsoftGraphApiBool = serviceEndpoints.isAadMicrosoftGraphApiBool();
         return node.get(aadAuthenticationProperties.getUserGroup().getKey()).asText()
-        .equals(aadAuthenticationProperties.getUserGroup().getValue());
+                .equals(aadAuthenticationProperties.getUserGroup().getValue());
     }
 
     public Set<GrantedAuthority> getGrantedAuthorities(String graphApiToken) throws IOException {
@@ -174,9 +171,7 @@ public class AzureADGraphClient {
      * @return true if either of the allowed-groups or active-directory-groups contains the UserGroup display name
      */
     private boolean isValidUserGroupToGrantAuthority(final UserGroup group) {
-        //final boolean microsoftGraphApiBool = serviceEndpoints.isAadMicrosoftGraphApiBool();
-        return aadAuthenticationProperties.getUserGroup().getAllowedGroups()
-                .contains(group.getDisplayName())
+        return aadAuthenticationProperties.getUserGroup().getAllowedGroups().contains(group.getDisplayName())
                 || aadAuthenticationProperties.getActiveDirectoryGroups().contains(group.getDisplayName());
     }
 
