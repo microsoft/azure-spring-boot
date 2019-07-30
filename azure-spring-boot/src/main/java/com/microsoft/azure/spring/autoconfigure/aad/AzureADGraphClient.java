@@ -109,12 +109,12 @@ public class AzureADGraphClient {
         if (valuesNode != null) {
             lUserGroups
                     .addAll(StreamSupport.stream(valuesNode.spliterator(), false).filter(this::isMatchingUserGroupKey)
-                        .map(node -> {
-                            final String objectID = node.
-                                    get(aadAuthenticationProperties.getUserGroup().getObjectIDKey()).asText();
-                            final String displayName = node.get("displayName").asText();
-                            return new UserGroup(objectID, displayName);
-                        }).collect(Collectors.toList()));
+                            .map(node -> {
+                                final String objectID = node.
+                                        get(aadAuthenticationProperties.getUserGroup().getObjectIDKey()).asText();
+                                final String displayName = node.get("displayName").asText();
+                                return new UserGroup(objectID, displayName);
+                            }).collect(Collectors.toList()));
 
         }
 
