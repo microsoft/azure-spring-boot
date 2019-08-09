@@ -60,7 +60,8 @@ public class UserPrincipalManagerTest {
     }
 
     @Test
-    @FileParameters("src/test/resources/jwt-valid-issuer.txt") //TODO: add more generated tokens with other valid issuers
+    //TODO: add more generated tokens with other valid issuers to this file. Didn't manage to generate them
+    @FileParameters("src/test/resources/jwt-valid-issuer.txt")
     public void validIssuer(final String token) {
         userPrincipalManager = new UserPrincipalManager(immutableJWKSet);
         assertThatCode(() -> userPrincipalManager.buildUserPrincipal(token))
