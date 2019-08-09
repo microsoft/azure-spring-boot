@@ -9,8 +9,11 @@ import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jwt.proc.BadJWTException;
+import junitparams.FileParameters;
+import junitparams.JUnitParamsRunner;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -21,6 +24,7 @@ import java.security.cert.X509Certificate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
+@RunWith(JUnitParamsRunner.class)
 public class UserPrincipalManagerTest {
 
     private static ImmutableJWKSet immutableJWKSet;
@@ -53,6 +57,14 @@ public class UserPrincipalManagerTest {
                 new String(Files.readAllBytes(
                         Paths.get("src/test/resources/jwt-bad-issuer.txt")), StandardCharsets.UTF_8)))
                 .isInstanceOf(BadJWTException.class);
+    }
+
+    @Test
+    @FileParameters("src/test/resources/jwt-valid-issuer.txt") //TODO: add more generated tokens with other valid issuers
+    public void validIssuer(final String token) {
+        userPrincipalManager = new UserPrincipalManager(immutableJWKSet);
+        assertThatCode(() -> userPrincipalManager.buildUserPrincipal(token))
+                .doesNotThrowAnyException();
     }
 
     @Test
