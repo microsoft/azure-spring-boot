@@ -30,6 +30,7 @@ public class AADAuthenticationProperties {
      */
     private UserGroupProperties userGroup = new UserGroupProperties();
 
+
     /**
      * Azure service environment/region name, e.g., cn, global
      */
@@ -111,7 +112,6 @@ public class AADAuthenticationProperties {
         @NotEmpty
         private String key = "objectType";
 
-
         /**
          * Value of the JSON Node identified by the {@code azure.activedirectory.user-group.key} to validate the JSON
          * Node is a UserGroup.
@@ -129,7 +129,7 @@ public class AADAuthenticationProperties {
 
     /**
      * Validates at least one of the user group properties are populated.
-     */    
+     */
     @PostConstruct
     public void validateUserGroupProperties() {
         if (this.sessionStateless) {
@@ -141,4 +141,6 @@ public class AADAuthenticationProperties {
                 + "Please populate azure.activedirectory.user-group.allowed-groups");
         }
     }
+
+
 }
