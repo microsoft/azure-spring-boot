@@ -38,7 +38,7 @@ This sample project demonstrates how to use Service Bus via Spring Boot Starter 
    - Use Gradle 
    
      ```
-     gradle bootRepackage
+     gradle bootJar
      java -jar build/libs/azure-servicebus-spring-boot-sample-0.0.1-SNAPSHOT.jar
      ```
 
