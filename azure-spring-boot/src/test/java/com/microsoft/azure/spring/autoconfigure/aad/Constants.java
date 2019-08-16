@@ -24,89 +24,74 @@ public class Constants {
     public static final String BEARER_TOKEN = "Bearer real_jtw_bearer_token";
 
     public static final String USERGROUPS_JSON = "{\n" +
-    "    \"odata.metadata\": \"https://graph.windows.net/myorganization/$metadata#directoryObjects\",\n" +
-    "    \"value\": [\n" +
-    "        {\n" +
-    "            \"@odata.type\": \"#microsoft.graph.group\",\n" +
-    "            \"id\": \"12345678-7baf-48ce-96f4-a2d60c26391e\",\n" +
-    "            \"deletedDateTime\": null,\n" +
-    "            \"classification\": null,\n" +
-    "            \"createdDateTime\": \"2017-08-02T12:54:37Z\",\n" +
-    "            \"creationOptions\": [],\n" +
-    "            \"description\": \"this is group1\",\n" +
-    "            \"displayName\": \"group1\",\n" +
-    "            \"groupTypes\": [],\n" +
-    "            \"mail\": null,\n" +
-    "            \"mailEnabled\": false,\n" +
-    "            \"mailNickname\": \"something\",\n" +
-    "            \"onPremisesLastSyncDateTime\": null,\n" +
-    "            \"onPremisesSecurityIdentifier\": null,\n" +
-    "            \"onPremisesSyncEnabled\": null,\n" +
-    "            \"preferredDataLocation\": null,\n" +
-    "            \"proxyAddresses\": [],\n" +
-    "            \"renewedDateTime\": \"2017-08-02T12:54:37Z\",\n" +
-    "            \"resourceBehaviorOptions\": [],\n" +
-    "            \"resourceProvisioningOptions\": [],\n" +
-    "            \"securityEnabled\": true,\n" +
-    "            \"visibility\": null,\n" +
-    "            \"onPremisesProvisioningErrors\": []\n" +
-    "        },\n" +
-    "        {\n" +
-    "            \"@odata.type\": \"#microsoft.graph.group\",\n" +
-    "            \"id\": \"12345678-e757-4474-b9c4-3f00a9ac17a0\",\n" +
-    "            \"deletedDateTime\": null,\n" +
-    "            \"classification\": null,\n" +
-    "            \"createdDateTime\": \"2017-08-09T13:45:03Z\",\n" +
-    "            \"creationOptions\": [],\n" +
-    "            \"description\": \"this is group2\",\n" +
-    "            \"displayName\": \"group2\",\n" +
-    "            \"groupTypes\": [],\n" +
-    "            \"mail\": null,\n" +
-    "            \"mailEnabled\": false,\n" +
-    "            \"mailNickname\": \"somethingelse\",\n" +
-    "            \"onPremisesLastSyncDateTime\": null,\n" +
-    "            \"onPremisesSecurityIdentifier\": null,\n" +
-    "            \"onPremisesSyncEnabled\": null,\n" +
-    "            \"preferredDataLocation\": null,\n" +
-    "            \"proxyAddresses\": [],\n" +
-    "            \"renewedDateTime\": \"2017-08-09T13:45:03Z\",\n" +
-    "            \"resourceBehaviorOptions\": [],\n" +
-    "            \"resourceProvisioningOptions\": [],\n" +
-    "            \"securityEnabled\": true,\n" +
-    "            \"visibility\": null,\n" +
-    "            \"onPremisesProvisioningErrors\": []\n" +
-    "        },\n" +
-    "        {\n" +
-    "            \"@odata.type\": \"#microsoft.graph.group\",\n" +
-    "            \"id\": \"12345678-86a4-4237-aeb0-60bad29c1de0\",\n" +
-    "            \"deletedDateTime\": null,\n" +
-    "            \"classification\": null,\n" +
-    "            \"createdDateTime\": \"2017-08-09T05:41:43Z\",\n" +
-    "            \"creationOptions\": [],\n" +
-    "            \"description\": \"this is group3\",\n" +
-    "            \"displayName\": \"group3\",\n" +
-    "            \"groupTypes\": [],\n" +
-    "            \"mail\": null,\n" +
-    "            \"mailEnabled\": false,\n" +
-    "            \"mailNickname\": \"somethingelse\",\n" +
-    "            \"onPremisesLastSyncDateTime\": null,\n" +
-    "            \"onPremisesSecurityIdentifier\": null,\n" +
-    "            \"onPremisesSyncEnabled\": null,\n" +
-    "            \"preferredDataLocation\": null,\n" +
-    "            \"proxyAddresses\": [],\n" +
-    "            \"renewedDateTime\": \"2017-08-09T05:41:43Z\",\n" +
-    "            \"resourceBehaviorOptions\": [],\n" +
-    "            \"resourceProvisioningOptions\": [],\n" +
-    "            \"securityEnabled\": true,\n" +
-    "            \"visibility\": null,\n" +
-    "            \"onPremisesProvisioningErrors\": []\n" +
-    "        }" +
-    "],\n" +
-    "    \"odata.nextLink\": \"directoryObjects/$/Microsoft.DirectoryServices.User/" +
-    "12345678-2898-434a-a370-8ec974c2fb57/memberOf?$skiptoken=X'4453707407000100000000" +
-    "00000000100000009D29CBA7B45D854A84FF7F9B636BD9DC000000000000000000000017312E322E3" +
-    "834302E3131333535362E312E342E3233333100000000'\"\n" +
-    "}";
+            "    \"odata.metadata\": \"https://graph.windows.net/myorganization/$metadata#directoryObjects\",\n" +
+            "    \"value\": [\n" +
+            "        {\n" +
+            "            \"odata.type\": \"Microsoft.DirectoryServices.Group\",\n" +
+            "            \"objectType\": \"Group\",\n" +
+            "            \"objectId\": \"12345678-7baf-48ce-96f4-a2d60c26391e\",\n" +
+            "            \"deletionTimestamp\": null,\n" +
+            "            \"description\": \"this is group1\",\n" +
+            "            \"dirSyncEnabled\": true,\n" +
+            "            \"displayName\": \"group1\",\n" +
+            "            \"lastDirSyncTime\": \"2017-08-02T12:54:37Z\",\n" +
+            "            \"mail\": null,\n" +
+            "            \"mailNickname\": \"something\",\n" +
+            "            \"mailEnabled\": false,\n" +
+            "            \"onPremisesDomainName\": null,\n" +
+            "            \"onPremisesNetBiosName\": null,\n" +
+            "            \"onPremisesSamAccountName\": null,\n" +
+            "            \"onPremisesSecurityIdentifier\": \"S-1-5-21-1234567885-903363285-719344707-285039\",\n" +
+            "            \"provisioningErrors\": [],\n" +
+            "            \"proxyAddresses\": [],\n" +
+            "            \"securityEnabled\": true\n" +
+            "        },\n" +
+            "        {\n" +
+            "            \"odata.type\": \"Microsoft.DirectoryServices.Group\",\n" +
+            "            \"objectType\": \"Group\",\n" +
+            "            \"objectId\": \"12345678-e757-4474-b9c4-3f00a9ac17a0\",\n" +
+            "            \"deletionTimestamp\": null,\n" +
+            "            \"description\": null,\n" +
+            "            \"dirSyncEnabled\": true,\n" +
+            "            \"displayName\": \"group2\",\n" +
+            "            \"lastDirSyncTime\": \"2017-08-09T13:45:03Z\",\n" +
+            "            \"mail\": null,\n" +
+            "            \"mailNickname\": \"somethingelse\",\n" +
+            "            \"mailEnabled\": false,\n" +
+            "            \"onPremisesDomainName\": null,\n" +
+            "            \"onPremisesNetBiosName\": null,\n" +
+            "            \"onPremisesSamAccountName\": null,\n" +
+            "            \"onPremisesSecurityIdentifier\": \"S-1-5-21-1234567885-903363285-719344707-28565\",\n" +
+            "            \"provisioningErrors\": [],\n" +
+            "            \"proxyAddresses\": [],\n" +
+            "            \"securityEnabled\": true\n" +
+            "        },\n" +
+            "        {\n" +
+            "            \"odata.type\": \"Microsoft.DirectoryServices.Group\",\n" +
+            "            \"objectType\": \"Group\",\n" +
+            "            \"objectId\": \"12345678-86a4-4237-aeb0-60bad29c1de0\",\n" +
+            "            \"deletionTimestamp\": null,\n" +
+            "            \"description\": \"this is group3\",\n" +
+            "            \"dirSyncEnabled\": true,\n" +
+            "            \"displayName\": \"group3\",\n" +
+            "            \"lastDirSyncTime\": \"2017-08-09T05:41:43Z\",\n" +
+            "            \"mail\": null,\n" +
+            "            \"mailNickname\": \"somethingelse\",\n" +
+            "            \"mailEnabled\": false,\n" +
+            "            \"onPremisesDomainName\": null,\n" +
+            "            \"onPremisesNetBiosName\": null,\n" +
+            "            \"onPremisesSamAccountName\": null,\n" +
+            "            \"onPremisesSecurityIdentifier\": \"S-1-5-21-1234567884-1604012920-1887927527-14401381\",\n" +
+            "            \"provisioningErrors\": [],\n" +
+            "            \"proxyAddresses\": [],\n" +
+            "            \"securityEnabled\": true\n" +
+            "        }" +
+            "],\n" +
+            "    \"odata.nextLink\": \"directoryObjects/$/Microsoft.DirectoryServices.User/" +
+            "12345678-2898-434a-a370-8ec974c2fb57/memberOf?$skiptoken=X'4453707407000100000000" +
+            "00000000100000009D29CBA7B45D854A84FF7F9B636BD9DC000000000000000000000017312E322E3" +
+            "834302E3131333535362E312E342E3233333100000000'\"\n" +
+            "}";
 
     /** Token from https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-id-and-access-tokens */
     public static final String JWT_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik1uQ19WWmNBVGZNNXBPWWlKSE1" +

@@ -28,7 +28,7 @@ public class AADAuthenticationProperties {
     /**
      * Default UserGroup configuration.
      */
-    private AbstractUserGroupProperties userGroup = new AADGraphUserGroupProperties();
+    private UserGroupProperties userGroup = new UserGroupProperties();
 
     /**
      * Azure service environment/region name, e.g., cn, global
@@ -80,42 +80,6 @@ public class AADAuthenticationProperties {
      */
     private boolean allowTelemetry = true;
 
-    public void setUserGroupWithBool(boolean microsoftGraphApi) {
-        if (microsoftGraphApi) {
-            if (!MicrosoftGraphUserGroupProperties.class.isInstance(this.userGroup)) {
-                final AADGraphUserGroupProperties tempProperties = new AADGraphUserGroupProperties();
-                final String overrideKey = this.userGroup.getKey().equals(tempProperties.getKey())
-                                           ? null : this.userGroup.getKey();
-                final String overrideValue = this.userGroup.getValue().equals(tempProperties.getValue())
-                                           ? null : this.userGroup.getValue();
-                final String overrideObjectIDKey = this.userGroup.getObjectIDKey()
-                                           .equals(tempProperties.getObjectIDKey())
-                                           ? null : this.userGroup.getObjectIDKey();
-                final List<String> overrideAllowedGroups = this.userGroup.getAllowedGroups()
-                                           .isEmpty() ? null : this.userGroup.getAllowedGroups();
-
-                this.userGroup = new MicrosoftGraphUserGroupProperties();
-                
-                if (overrideKey != null) {
-                    this.userGroup.key = overrideKey;
-                }
-                if (overrideValue != null) {
-                    this.userGroup.value = overrideValue;
-                }
-                if (overrideObjectIDKey != null) {
-                    this.userGroup.objectIDKey = overrideObjectIDKey;
-                }
-                if (overrideAllowedGroups != null) {
-                    this.userGroup.allowedGroups = overrideAllowedGroups;
-                }
-            }
-        } else {
-            if (!AADGraphUserGroupProperties.class.isInstance(this.userGroup)) {
-                this.userGroup = new AADGraphUserGroupProperties();
-            }
-        }
-    }
-
     /**
      * If <code>true</code> activates the stateless auth filter {@link AADAppRoleStatelessAuthenticationFilter}.
      * The default is <code>false</code> which activates {@link AADAuthenticationFilter}.
@@ -132,7 +96,7 @@ public class AADAuthenticationProperties {
      * on the graph API used the object will not be the same.
      */
     @Data
-    public abstract static class AbstractUserGroupProperties {
+    public static class UserGroupProperties {
 
         /**
          * Expected UserGroups that an authority will be granted to if found in the response from the MemeberOf Graph
@@ -145,7 +109,7 @@ public class AADAuthenticationProperties {
          * azure.activedirectory.user-group.value}  to signify that this node is a valid {@code UserGroup}.
          */
         @NotEmpty
-        private String key;
+        private String key = "objectType";
 
 
         /**
@@ -153,79 +117,14 @@ public class AADAuthenticationProperties {
          * Node is a UserGroup.
          */
         @NotEmpty
-        private String value;
+        private String value = "Group";
 
         /**
          * Key of the JSON Node containing the Azure Object ID for the {@code UserGroup}.
          */
         @NotEmpty
-        private String objectIDKey;
+        private String objectIDKey = "objectId";
 
-        public AbstractUserGroupProperties(String keys, String value, String objectIDKey) {
-            this.key = keys;
-            this.value = value;
-            this.objectIDKey = objectIDKey;
-        }
-    }
-
-    /**
-     * Properties for AAD Graph API used.
-     */
-    public static class AADGraphUserGroupProperties extends AbstractUserGroupProperties {
-
-        /**
-         * Key of the JSON Node to get from the Azure AD response object that will be checked to contain the {@code
-         * azure.activedirectory.user-group.value}  to signify that this node is a valid {@code UserGroup}.
-         */
-        @NotEmpty
-        private static String key = "objectType";
-
-        /**
-         * Value of the JSON Node identified by the {@code azure.activedirectory.user-group.key} to validate the JSON
-         * Node is a UserGroup.
-         */
-        @NotEmpty
-        private static String value = "Group";
-
-        /**
-         * Key of the JSON Node containing the Azure Object ID for the {@code UserGroup}.
-         */
-        @NotEmpty
-        private static String objectIDKey = "objectId";
-
-        public AADGraphUserGroupProperties() {
-            super(key, value, objectIDKey);     
-        }
-    }
-
-    /**
-     * Properties for Microsoft Graph API used.
-     */
-    public static class MicrosoftGraphUserGroupProperties extends AbstractUserGroupProperties {
-
-        /**
-         * Key of the JSON Node to get from the Azure AD response object that will be checked to contain the {@code
-         * azure.activedirectory.user-group.value}  to signify that this node is a valid {@code UserGroup}.
-         */
-        @NotEmpty
-        private static String key = "@odata.type";
-
-        /**
-         * Value of the JSON Node identified by the {@code azure.activedirectory.user-group.key} to validate the JSON
-         * Node is a UserGroup.
-         */
-        @NotEmpty
-        private static String value = "#microsoft.graph.group";
-
-        /**
-         * Key of the JSON Node containing the Azure Object ID for the {@code UserGroup}.
-         */
-        @NotEmpty
-        private static String objectIDKey = "id";
-
-        public MicrosoftGraphUserGroupProperties() {
-            super(key, value, objectIDKey); 
-        }
     }
 
     /**

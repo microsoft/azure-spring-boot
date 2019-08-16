@@ -12,9 +12,7 @@ import org.springframework.core.env.Environment;
 
 import java.util.Map;
 
-import static com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationProperties.AbstractUserGroupProperties;
-import static com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationProperties.AADGraphUserGroupProperties;
-import static com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationProperties.MicrosoftGraphUserGroupProperties;
+import static com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationProperties.UserGroupProperties;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AADAuthenticationAutoConfigurationTest {
@@ -84,44 +82,18 @@ public class AADAuthenticationAutoConfigurationTest {
         contextRunner.withPropertyValues("azure.activedirectory.user-group.allowed-groups=another_group,third_group",
                 "azure.activedirectory.user-group.key=key", "azure.activedirectory.user-group.value=value",
                 "azure.activedirectory.user-group.object-id-key=objidk").run(context -> {
-            assertThat(context.getBean(AADAuthenticationProperties.class)).isNotNull();
-            final AADAuthenticationProperties aadAuthProperties = context
-            .getBean(AADAuthenticationProperties.class);
-            aadAuthProperties.setUserGroupWithBool(false);
 
-            final AADGraphUserGroupProperties userGroupProperties = 
-                        (AADGraphUserGroupProperties) aadAuthProperties.getUserGroup();
+            assertThat(context.getBean(AADAuthenticationProperties.class)).isNotNull();
+
+            final UserGroupProperties userGroupProperties = context
+                    .getBean(AADAuthenticationProperties.class).getUserGroup();
 
             assertThat(userGroupProperties).hasNoNullFieldsOrProperties()
-                    .extracting(AADGraphUserGroupProperties::getKey, AADGraphUserGroupProperties::getValue,
-                    AADGraphUserGroupProperties::getObjectIDKey).containsExactly("key", "value", "objidk");
+                    .extracting(UserGroupProperties::getKey, UserGroupProperties::getValue,
+                            UserGroupProperties::getObjectIDKey).containsExactly("key", "value", "objidk");
 
             assertThat(userGroupProperties.getAllowedGroups()).isNotEmpty()
                     .hasSize(2).containsExactly("another_group", "third_group");
-        });
-
-    }
-
-    @Test
-    public void testUserGroupPropertiesAreOverriddenMicrosoftGraph() {
-
-        contextRunner.withPropertyValues("azure.activedirectory.user-group.allowed-groups=another_group,third_group",
-                "azure.activedirectory.user-group.key=key", "azure.activedirectory.user-group.value=value",
-                "azure.activedirectory.user-group.object-id-key=objidk").run(context -> {
-            assertThat(context.getBean(AADAuthenticationProperties.class)).isNotNull();
-            final AADAuthenticationProperties aadAuthProperties = context
-            .getBean(AADAuthenticationProperties.class);
-            aadAuthProperties.setUserGroupWithBool(true);
-
-             final MicrosoftGraphUserGroupProperties userGroupProperties = 
-                    (MicrosoftGraphUserGroupProperties) aadAuthProperties.getUserGroup();
-
-        assertThat(userGroupProperties).hasNoNullFieldsOrProperties()
-                .extracting(AbstractUserGroupProperties::getKey, MicrosoftGraphUserGroupProperties::getValue,
-                MicrosoftGraphUserGroupProperties::getObjectIDKey).containsExactly("key", "value", "objidk");
-
-        assertThat(userGroupProperties.getAllowedGroups()).isNotEmpty()
-                .hasSize(2).containsExactly("another_group", "third_group");
         });
 
     }

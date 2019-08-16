@@ -35,11 +35,6 @@ public class AzureADGraphClientTest {
         final List<String> activeDirectoryGroups = new ArrayList<>();
         activeDirectoryGroups.add("Test_Group");
         aadAuthProps = new AADAuthenticationProperties();
-        endpointsProps = new ServiceEndpointsProperties();
-        aadAuthProps.setUserGroupWithBool(false);
-        final ServiceEndpoints serviceEndpoints = new ServiceEndpoints();
-        serviceEndpoints.setAadMicrosoftGraphApiBool(false);
-        endpointsProps.getEndpoints().put("global", serviceEndpoints);
         aadAuthProps.setActiveDirectoryGroups(activeDirectoryGroups);
         adGraphClient = new AzureADGraphClient(credential, aadAuthProps, endpointsProps);
     }

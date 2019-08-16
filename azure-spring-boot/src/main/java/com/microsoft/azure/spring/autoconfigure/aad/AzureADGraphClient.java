@@ -51,7 +51,6 @@ public class AzureADGraphClient {
         this.clientSecret = clientCredential.getClientSecret();
         this.aadAuthenticationProperties = aadAuthProps;
         this.serviceEndpoints = serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment());
-        this.aadAuthenticationProperties.setUserGroupWithBool(this.serviceEndpoints.isAadMicrosoftGraphApiBool());
     }
 
     private String getUserMembershipsV1(String accessToken) throws IOException {

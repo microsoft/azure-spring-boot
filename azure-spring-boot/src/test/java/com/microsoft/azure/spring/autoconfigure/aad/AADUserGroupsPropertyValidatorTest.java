@@ -19,7 +19,6 @@ public class AADUserGroupsPropertyValidatorTest {
     @Before
     public void setUp() {
         aadAuthenticationProperties = new AADAuthenticationProperties();
-        aadAuthenticationProperties.setUserGroupWithBool(false);
     }
 
     @Test
