@@ -41,6 +41,7 @@
         <javax.jms-api.version>2.0.1</javax.jms-api.version>
         <spring-jms.version>5.1.8.RELEASE</spring-jms.version>
         <qpid-jms-client.version>0.43.0</qpid-jms-client.version>
+        <junit-params.version>1.1.1</junit-params.version>
     </properties>
 
     <profiles>
@@ -152,6 +153,12 @@
                 <version>${qpid-jms-client.version}</version>
             </dependency>
 
+            <!-- TEST -->
+            <dependency>
+                <groupId>pl.pragmatists</groupId>
+                <artifactId>JUnitParams</artifactId>
+                <version>${junit-params.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
