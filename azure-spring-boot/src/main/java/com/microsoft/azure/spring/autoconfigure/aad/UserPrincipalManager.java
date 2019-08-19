@@ -28,6 +28,9 @@ import java.text.ParseException;
 
 @Slf4j
 public class UserPrincipalManager {
+    private static final String LOGIN_MICROSOFT_ONLINE_ISSUER = "https://login.microsoftonline.com/";
+    private static final String STS_WINDOWS_ISSUER = "https://sts.windows.net/";
+    private static final String STS_CHINA_CLOUD_API_ISSUER = "https://sts.chinacloudapi.cn/";
 
     private final JWKSource<SecurityContext> keySource;
     private final AADAuthenticationProperties aadAuthProps;
@@ -94,13 +97,15 @@ public class UserPrincipalManager {
                 new JWSVerificationKeySelector<>(jwsAlgorithm, keySource);
         jwtProcessor.setJWSKeySelector(keySelector);
 
+         //TODO: would it make sense to inject it? and make it configurable or even allow to provide own implementation
         jwtProcessor.setJWTClaimsSetVerifier(new DefaultJWTClaimsVerifier<SecurityContext>() {
             @Override
             public void verify(JWTClaimsSet claimsSet, SecurityContext ctx) throws BadJWTException {
                 super.verify(claimsSet, ctx);
                 final String issuer = claimsSet.getIssuer();
-                if (issuer == null || !issuer.contains("https://sts.windows.net/")
-                        && !issuer.contains("https://sts.chinacloudapi.cn/")) {
+                if (issuer == null || !(issuer.startsWith(LOGIN_MICROSOFT_ONLINE_ISSUER)
+                        || issuer.startsWith(STS_WINDOWS_ISSUER)
+                        || issuer.startsWith(STS_CHINA_CLOUD_API_ISSUER))) {
                     throw new BadJWTException("Invalid token issuer");
                 }
                 if (explicitAudienceCheck) {
