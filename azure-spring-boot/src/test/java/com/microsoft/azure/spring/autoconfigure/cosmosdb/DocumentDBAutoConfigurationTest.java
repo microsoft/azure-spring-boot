@@ -11,6 +11,7 @@ import com.microsoft.azure.documentdb.DocumentClient;
 import com.microsoft.azure.documentdb.RetryOptions;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ import java.net.URI;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Ignore
 public class DocumentDBAutoConfigurationTest {
     @BeforeClass
     public static void beforeClass() {

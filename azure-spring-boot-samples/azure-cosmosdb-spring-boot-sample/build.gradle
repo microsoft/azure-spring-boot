@@ -1,9 +1,8 @@
-plugins {
-    id 'io.franzbecker.gradle-lombok' version '1.8'
-}
 
 description = 'Azure Document DB Spring Boot Starter Sample'
 
 dependencies {
     compile group: 'com.microsoft.azure', name: 'azure-cosmosdb-spring-boot-starter', version:"${azureSpringBootStartersVersion}"
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
 }

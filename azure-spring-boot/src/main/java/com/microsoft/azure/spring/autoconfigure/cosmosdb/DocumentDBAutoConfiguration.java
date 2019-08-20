@@ -14,6 +14,7 @@ import com.microsoft.azure.spring.data.cosmosdb.core.DocumentDbTemplate;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -30,8 +31,8 @@ public class DocumentDBAutoConfiguration extends AbstractDocumentDbConfiguration
         configConnectionPolicy(properties, policy);
     }
 
-    @Override
-    public DocumentDBConfig getConfig() {
+    @Bean
+    public DocumentDBConfig documentDbConfig() {
         final DocumentDBConfig config = DocumentDBConfig.builder(
                 properties.getUri(), properties.getKey(), properties.getDatabase())
                 .consistencyLevel(properties.getConsistencyLevel())
