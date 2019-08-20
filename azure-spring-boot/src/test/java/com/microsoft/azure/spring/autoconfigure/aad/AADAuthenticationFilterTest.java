@@ -36,7 +36,7 @@ public class AADAuthenticationFilterTest {
         Assume.assumeTrue(!Constants.BEARER_TOKEN.contains("real_jtw_bearer_token"));
     }
 
-    //TODO current test case is out of date, a new test case need to cover here, do it later.
+    //TODO (Zhou Liu): current test case is out of date, a new test case need to cover here, do it later.
     @Test
     @Ignore
     public void doFilterInternal() {
