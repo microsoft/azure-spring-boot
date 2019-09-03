@@ -143,6 +143,24 @@ Autowire the auth filter and attach it to the filter chain:
 The roles you want to use within your application have to be [set up in the manifest of your
 application registration](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-add-app-roles-in-azure-ad-apps).
 
+##### Using The Microsoft Graph API
+By default, azure-spring-boot is set up to utilize the Azure AD Graph.  If you would prefer, it can be set up to utilize the Microsoft Graph instead.  In order to do this, you will need to update the app registration in Azure to grant the application permissions to the Microsoft Graph API and add some properties to the application.properties file.
+
+* **Grant permissions to the application**: After application registration succeeded, go to API permissions - Add a permission, select `Microsoft Graph`, select Delegated permissions,  tick `Directory.AccessAsUser.All - Access the directory as the signed-in user` and `Use.Read - Sign in and read user profile`. Click `Add Permissions` (Note: you will need administrator privilege to grant permission).  Furthermore, you can remove the API permissions to the Azure Active Directory Graph, as these will not be needed.
+
+* **Configure your `application properties`**:
+```properties
+azure.activedirectory.environment=global-v2-graph
+azure.activedirectory.user-group.key=@odata.type
+azure.activedirectory.user-group.value=#microsoft.graph.group
+azure.activedirectory.user-group.object-id-key=id
+```
+
+If you're using [Azure China](https://docs.microsoft.com/en-us/azure/china/china-welcome), please set the environment property in the `application.properties` file to:
+```properties
+azure.activedirectory.environment=cn-v2-graph
+```
+
 #### Allow telemetry
 Microsoft would like to collect data about how users use this Spring boot starter.
 Microsoft uses this information to improve our tooling experience. Participation is voluntary.

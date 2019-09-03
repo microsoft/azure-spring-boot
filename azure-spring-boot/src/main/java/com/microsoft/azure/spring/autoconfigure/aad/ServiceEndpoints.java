@@ -16,5 +16,4 @@ public class ServiceEndpoints {
     private String aadGraphApiUri;
     private String aadKeyDiscoveryUri;
     private String aadMembershipRestUri;
-    private boolean aadMicrosoftGraphApiBool;
 }

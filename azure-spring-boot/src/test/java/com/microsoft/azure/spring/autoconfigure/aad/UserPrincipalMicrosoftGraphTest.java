@@ -46,15 +46,14 @@ public class UserPrincipalMicrosoftGraphTest {
     public void setup() {
         accessToken = MicrosoftGraphConstants.BEARER_TOKEN;
         aadAuthProps = new AADAuthenticationProperties();
-        aadAuthProps.setEnvironment("global-microsoft");
+        aadAuthProps.setEnvironment("global-v2-graph");
         aadAuthProps.getUserGroup().setKey("@odata.type");
         aadAuthProps.getUserGroup().setValue("#microsoft.graph.group");
         aadAuthProps.getUserGroup().setObjectIDKey("id");
         endpointsProps = new ServiceEndpointsProperties();
         final ServiceEndpoints serviceEndpoints = new ServiceEndpoints();
         serviceEndpoints.setAadMembershipRestUri("http://localhost:9519/memberOf");
-        serviceEndpoints.setAadMicrosoftGraphApiBool(true);
-        endpointsProps.getEndpoints().put("global-microsoft", serviceEndpoints);
+        endpointsProps.getEndpoints().put("global-v2-graph", serviceEndpoints);
         credential = new ClientCredential("client", "pass");
     }
 

@@ -45,21 +45,32 @@ public class AzureADGraphClient {
     private final ServiceEndpoints serviceEndpoints;
     private final AADAuthenticationProperties aadAuthenticationProperties;
 
+    private static final String V2_VERSION_ENV_FLAG = "v2-graph";
+    private boolean aadMicrosoftGraphApiBool;
+
     public AzureADGraphClient(ClientCredential clientCredential, AADAuthenticationProperties aadAuthProps,
                               ServiceEndpointsProperties serviceEndpointsProps) {
         this.clientId = clientCredential.getClientId();
         this.clientSecret = clientCredential.getClientSecret();
         this.aadAuthenticationProperties = aadAuthProps;
         this.serviceEndpoints = serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment());
+
+        this.initAADMicrosoftGraphApiBool(aadAuthProps.getEnvironment());
+    }
+
+    private void initAADMicrosoftGraphApiBool(String endpointEnv) {
+        this.aadMicrosoftGraphApiBool = false;
+        if (endpointEnv.contains(V2_VERSION_ENV_FLAG)) {
+            this.aadMicrosoftGraphApiBool = true;
+        }
     }
 
     private String getUserMembershipsV1(String accessToken) throws IOException {
-        final boolean microsoftGraphApiBool = serviceEndpoints.isAadMicrosoftGraphApiBool();
         final URL url = new URL(serviceEndpoints.getAadMembershipRestUri());
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         // Set the appropriate header fields in the request header.
 
-        if (microsoftGraphApiBool) {
+        if (this.aadMicrosoftGraphApiBool) {
             conn.setRequestMethod(HttpMethod.GET.toString());
             conn.setRequestProperty(HttpHeaders.AUTHORIZATION, 
                                     String.format("%s %s", OAuth2AccessToken.TokenType.BEARER.getValue(), accessToken));

@@ -38,8 +38,7 @@ public class AADAuthenticationAutoConfigurationTest {
                 "azure.service.endpoints.global.aadSigninUri=https://test/",
                 "azure.service.endpoints.global.aadGraphApiUri=https://test/",
                 "azure.service.endpoints.global.aadKeyDiscoveryUri=https://test/",
-                "azure.service.endpoints.global.aadMembershipRestUri=https://test/",
-                "azure.service.endpoints.global.aadMicrosoftGraphApiBool=false")
+                "azure.service.endpoints.global.aadMembershipRestUri=https://test/")
                 .run(context -> {
                     final Environment environment = context.getEnvironment();
                     assertThat(environment.getProperty("azure.service.endpoints.global.aadSigninUri"))
@@ -50,8 +49,6 @@ public class AADAuthenticationAutoConfigurationTest {
                             .isEqualTo("https://test/");
                     assertThat(environment.getProperty("azure.service.endpoints.global.aadMembershipRestUri"))
                             .isEqualTo("https://test/");
-                    assertThat(environment.getProperty("azure.service.endpoints.global.aadMicrosoftGraphApiBool"))
-                            .isEqualTo("false");
                     final ServiceEndpointsProperties serviceEndpointsProperties =
                             context.getBean(ServiceEndpointsProperties.class);
                     assertThat(serviceEndpointsProperties).isNotNull();
@@ -61,18 +58,15 @@ public class AADAuthenticationAutoConfigurationTest {
                     assertThat(endpoints).hasSize(4);
                     assertThat(endpoints.get("cn")).isNotNull()
                             .extracting(ServiceEndpoints::getAadGraphApiUri, ServiceEndpoints::getAadKeyDiscoveryUri,
-                                    ServiceEndpoints::getAadMembershipRestUri, ServiceEndpoints::getAadSigninUri,
-                                    ServiceEndpoints::isAadMicrosoftGraphApiBool)
+                                    ServiceEndpoints::getAadMembershipRestUri, ServiceEndpoints::getAadSigninUri)
                             .containsExactly("https://graph.chinacloudapi.cn/",
                                     "https://login.partner.microsoftonline.cn/common/discovery/keys",
                                     "https://graph.chinacloudapi.cn/me/memberOf?api-version=1.6",
-                                    "https://login.partner.microsoftonline.cn/", false);
+                                    "https://login.partner.microsoftonline.cn/");
                     assertThat(endpoints.get("global")).isNotNull()
                             .extracting(ServiceEndpoints::getAadGraphApiUri, ServiceEndpoints::getAadKeyDiscoveryUri,
-                                    ServiceEndpoints::getAadMembershipRestUri, ServiceEndpoints::getAadSigninUri,
-                                    ServiceEndpoints::isAadMicrosoftGraphApiBool)
-                            .containsExactly("https://test/", "https://test/", "https://test/", "https://test/",
-                                    false);
+                                    ServiceEndpoints::getAadMembershipRestUri, ServiceEndpoints::getAadSigninUri)
+                            .containsExactly("https://test/", "https://test/", "https://test/", "https://test/");
                 });
     }
 
