@@ -161,6 +161,8 @@ If you're using [Azure China](https://docs.microsoft.com/en-us/azure/china/china
 azure.activedirectory.environment=cn-v2-graph
 ```
 
+Please refer to [azure-active-directory-v2-spring-boot-backend-sample](../../azure-spring-boot-samples/azure-active-directory-v2-spring-boot-backend-sample/) to see a sample configured to use the Microsoft Graph API.
+
 #### Allow telemetry
 Microsoft would like to collect data about how users use this Spring boot starter.
 Microsoft uses this information to improve our tooling experience. Participation is voluntary.
