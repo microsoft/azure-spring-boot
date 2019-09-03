@@ -15,7 +15,7 @@ Add the following dependency to your project:
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-servicebus-jms-spring-boot-starter</artifactId>
-    <version>2.0.4</version>
+    <version>2.1.7</version>
 </dependency>
 ```
 

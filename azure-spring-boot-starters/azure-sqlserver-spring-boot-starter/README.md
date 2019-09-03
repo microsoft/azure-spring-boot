@@ -2,9 +2,6 @@
 
 [Azure SQL DB Always Encrypted](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-always-encrypted) feature allows to encrypt data in SQL and store master keys in Azure KeyVault
 
-## Sample Code
-Please refer to [sample project here](../../azure-spring-boot-samples/azure-sqlserver-spring-boot-sample).
-
 ## Quick Start
 
 ### Add the dependency
