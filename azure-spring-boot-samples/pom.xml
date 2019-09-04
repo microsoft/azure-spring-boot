@@ -144,6 +144,7 @@
     <modules>
         <module>azure-active-directory-b2c-oidc-spring-boot-sample</module>
         <module>azure-active-directory-spring-boot-backend-sample</module>
+        <module>azure-active-directory-v2-spring-boot-backend-sample</module>
         <module>azure-active-directory-spring-boot-sample</module>
         <module>azure-active-directory-spring-boot-stateless-sample</module>
         <module>azure-cosmosdb-spring-boot-sample</module>
