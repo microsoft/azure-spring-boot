@@ -17,6 +17,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.util.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -29,7 +30,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class UserPrincipalTest {
+public class UserPrincipalMicrosoftGraphTest {
     private AzureADGraphClient graphClientMock;
 
     @Rule
@@ -43,36 +44,38 @@ public class UserPrincipalTest {
 
     @Before
     public void setup() {
-        accessToken = Constants.BEARER_TOKEN;
+        accessToken = MicrosoftGraphConstants.BEARER_TOKEN;
         aadAuthProps = new AADAuthenticationProperties();
+        aadAuthProps.setEnvironment("global-v2-graph");
+        aadAuthProps.getUserGroup().setKey("@odata.type");
+        aadAuthProps.getUserGroup().setValue("#microsoft.graph.group");
+        aadAuthProps.getUserGroup().setObjectIDKey("id");
         endpointsProps = new ServiceEndpointsProperties();
         final ServiceEndpoints serviceEndpoints = new ServiceEndpoints();
         serviceEndpoints.setAadMembershipRestUri("http://localhost:9519/memberOf");
-        endpointsProps.getEndpoints().put("global", serviceEndpoints);
+        endpointsProps.getEndpoints().put("global-v2-graph", serviceEndpoints);
         credential = new ClientCredential("client", "pass");
     }
 
 
     @Test
     public void getAuthoritiesByUserGroups() throws Exception {
-
+        
         aadAuthProps.getUserGroup().setAllowedGroups(Collections.singletonList("group1"));
         this.graphClientMock = new AzureADGraphClient(credential, aadAuthProps, endpointsProps);
 
-        stubFor(get(urlEqualTo("/memberOf")).withHeader(HttpHeaders.ACCEPT, 
-                equalTo("application/json;odata=minimalmetadata"))
+        stubFor(get(urlEqualTo("/memberOf")).withHeader(HttpHeaders.ACCEPT, equalTo(MediaType.APPLICATION_JSON_VALUE))
                 .willReturn(aResponse().withStatus(200)
                         .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                        .withBody(Constants.USERGROUPS_JSON)));
+                        .withBody(MicrosoftGraphConstants.USERGROUPS_JSON)));
 
-        assertThat(graphClientMock.getGrantedAuthorities(Constants.BEARER_TOKEN)).isNotEmpty()
+        assertThat(graphClientMock.getGrantedAuthorities(MicrosoftGraphConstants.BEARER_TOKEN)).isNotEmpty()
                 .extracting(GrantedAuthority::getAuthority).containsExactly("ROLE_group1");
 
         verify(getRequestedFor(urlMatching("/memberOf"))
                 .withHeader(HttpHeaders.AUTHORIZATION, 
-                        equalTo(String.format("%s", accessToken)))
-                .withHeader(HttpHeaders.ACCEPT, equalTo("application/json;odata=minimalmetadata"))
-                .withHeader("api-version", equalTo("1.6")));
+                        equalTo(String.format("%s %s", OAuth2AccessToken.TokenType.BEARER.getValue(), accessToken)))
+                .withHeader(HttpHeaders.ACCEPT, equalTo(MediaType.APPLICATION_JSON_VALUE)));
     }
 
     @Test
@@ -81,22 +84,20 @@ public class UserPrincipalTest {
         aadAuthProps.setActiveDirectoryGroups(Arrays.asList("group1", "group2", "group3"));
         this.graphClientMock = new AzureADGraphClient(credential, aadAuthProps, endpointsProps);
 
-        stubFor(get(urlEqualTo("/memberOf")).withHeader(HttpHeaders.ACCEPT, 
-                equalTo("application/json;odata=minimalmetadata"))
+        stubFor(get(urlEqualTo("/memberOf")).withHeader(HttpHeaders.ACCEPT, equalTo(MediaType.APPLICATION_JSON_VALUE))
                 .willReturn(aResponse().withStatus(200)
                         .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                        .withBody(Constants.USERGROUPS_JSON)));
+                        .withBody(MicrosoftGraphConstants.USERGROUPS_JSON)));
         final Collection<? extends GrantedAuthority> authorities = graphClientMock
-                .getGrantedAuthorities(Constants.BEARER_TOKEN);
+                .getGrantedAuthorities(MicrosoftGraphConstants.BEARER_TOKEN);
 
         assertThat(authorities).isNotEmpty().extracting(GrantedAuthority::getAuthority)
                 .containsExactly("ROLE_group1", "ROLE_group2", "ROLE_group3");
 
         verify(getRequestedFor(urlMatching("/memberOf"))
                 .withHeader(HttpHeaders.AUTHORIZATION, 
-                        equalTo(String.format("%s", accessToken)))
-                .withHeader(HttpHeaders.ACCEPT, equalTo("application/json;odata=minimalmetadata"))
-                .withHeader("api-version", equalTo("1.6")));
+                        equalTo(String.format("%s %s", OAuth2AccessToken.TokenType.BEARER.getValue(), accessToken)))
+                .withHeader(HttpHeaders.ACCEPT, equalTo(MediaType.APPLICATION_JSON_VALUE)));
     }
 
     @Test
@@ -108,7 +109,7 @@ public class UserPrincipalTest {
              final FileInputStream fileInputStream = new FileInputStream(tmpOutputFile);
                 final ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);) {
 
-            final JWSObject jwsObject = JWSObject.parse(Constants.JWT_TOKEN);
+            final JWSObject jwsObject = JWSObject.parse(MicrosoftGraphConstants.JWT_TOKEN);
             final JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder().subject("fake-subject").build();
             final UserPrincipal principal = new UserPrincipal(jwsObject, jwtClaimsSet);
 
