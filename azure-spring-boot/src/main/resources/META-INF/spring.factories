@@ -1,4 +1,4 @@
-org.springframework.boot.env.EnvironmentPostProcessor=com.microsoft.azure.spring.cloundfoundry.environment.VcapProcessor,\
+org.springframework.boot.env.EnvironmentPostProcessor=com.microsoft.azure.spring.cloudfoundry.environment.VcapProcessor,\
 com.microsoft.azure.keyvault.spring.KeyVaultEnvironmentPostProcessor,\
 com.microsoft.azure.spring.autoconfigure.sqlserver.AlwaysEncryptedEnvironmentPostProcessor
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.microsoft.azure.spring.autoconfigure.cosmosdb.DocumentDBAutoConfiguration,\

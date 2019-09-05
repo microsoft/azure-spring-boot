@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.spring.cloundfoundry.environment;
+package com.microsoft.azure.spring.cloudfoundry.environment;
 
 public enum VcapServiceType {
     AZURE_REDISCACHE("azure-rediscache"), AZURE_DOCUMENTDB("azure-documentdb"), AZURE_STORAGE(
