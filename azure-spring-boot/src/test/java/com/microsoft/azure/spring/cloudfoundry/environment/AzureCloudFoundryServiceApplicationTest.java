@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.spring.cloundfoundry.environment;
+package com.microsoft.azure.spring.cloudfoundry.environment;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.junit.Test;
