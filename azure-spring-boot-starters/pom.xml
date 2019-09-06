@@ -14,7 +14,7 @@
     <artifactId>azure-spring-boot-starters</artifactId>
     <packaging>pom</packaging>
 
-    <name>Azure Spring Boot Starers</name>
+    <name>Azure Spring Boot Starters</name>
     <description>Spring Boot Starters for Azure</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
