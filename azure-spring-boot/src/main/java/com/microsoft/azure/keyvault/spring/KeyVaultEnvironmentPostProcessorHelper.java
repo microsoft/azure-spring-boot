@@ -83,7 +83,16 @@ class KeyVaultEnvironmentPostProcessorHelper {
             LOG.debug("Will use MSI credentials for app services");
             final String msiEndpoint = getProperty(this.environment, "MSI_ENDPOINT");
             final String msiSecret = getProperty(this.environment, "MSI_SECRET");
-            return new AppServiceMSICredentials(AzureEnvironment.AZURE, msiEndpoint, msiSecret);
+            final AppServiceMSICredentials msiCredentials = new AppServiceMSICredentials(AzureEnvironment.AZURE,
+                    msiEndpoint, msiSecret);
+
+            if (this.environment.containsProperty(Constants.AZURE_KEYVAULT_CLIENT_ID)) {
+                LOG.debug("Will use MSI credentials for app services with user assigned identity");
+                final String clientId = getProperty(this.environment, Constants.AZURE_KEYVAULT_CLIENT_ID);
+                msiCredentials.withClientId(clientId);
+            }
+
+            return msiCredentials;
         }
 
         final long timeAcquiringTimeoutInSeconds = this.environment.getProperty(
