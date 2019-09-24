@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.microsoft.azure</groupId>
+        <artifactId>azure-spring-boot-parent</artifactId>
+        <version>2.1.8-SNAPSHOT</version>
+        <relativePath>../azure-spring-boot-parent/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>azure-spring-boot-tests</artifactId>
+    <packaging>pom</packaging>
+
+    <name>Azure Spring Boot Tests</name>
+    <description>Tests for Azure Spring Boot</description>
+
+    <modules>
+
+        <module>azure-spring-boot-tests-core</module>
+        <module>azure-spring-boot-test-keyvault</module>
+    </modules>
+
+    <properties>
+        <spring.boot.version>2.1.7.RELEASE</spring.boot.version>
+        <azure.spring.boot.version>2.1.8-SNAPSHOT</azure.spring.boot.version>
+        <azure.mgmt.keyvault.version>1.26.0</azure.mgmt.keyvault.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
+                <version>${azure.spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-mgmt-keyvault</artifactId>
+                <version>${azure.mgmt.keyvault.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-spring-boot-tests-core</artifactId>
+                <version>${azure.spring.boot.version}</version>
+            </dependency>
+        </dependencies>
+
+    </dependencyManagement>
+
+
+</project>
