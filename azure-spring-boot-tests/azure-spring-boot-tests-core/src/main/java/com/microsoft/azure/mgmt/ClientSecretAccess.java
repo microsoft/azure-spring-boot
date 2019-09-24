@@ -29,10 +29,10 @@ public class ClientSecretAccess implements Access {
     }
     
     public static ClientSecretAccess load(Properties props) {
-        String tenant = props.getProperty(TENANT);
-        String subscription = props.getProperty(SUBSCRIPTION);
-        String clientId = props.getProperty(CLIENT_ID);
-        String clientSecret = props.getProperty(CLIENT_SECRET);
+        final String tenant = props.getProperty(TENANT);
+        final String subscription = props.getProperty(SUBSCRIPTION);
+        final String clientId = props.getProperty(CLIENT_ID);
+        final String clientSecret = props.getProperty(CLIENT_SECRET);
         
         assertNotEmpty(tenant, TENANT);
         assertNotEmpty(subscription, SUBSCRIPTION);

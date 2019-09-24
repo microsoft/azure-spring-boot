@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See LICENSE in the project root for
+ * license information.
+ */
 package com.microsoft.azure.test.keyvault;
 
 import com.microsoft.azure.management.keyvault.Vault;
@@ -22,14 +27,14 @@ public class KeyVaultTest {
     public static void createKeyVault() {
         access = ClientSecretAccess.load();
         
-        KeyVaultTool tool = new KeyVaultTool(access);
+        final KeyVaultTool tool = new KeyVaultTool(access);
         vault = tool.createVaultInNewGroup("spring-boot-test-rg", "test-keyvault");      
         vault.secrets().define("key").withValue("value").create();
     }
     
     @AfterClass
     public static void deleteResourceGroup() {
-        ResourceGroupTool tool = new ResourceGroupTool(access);
+        final ResourceGroupTool tool = new ResourceGroupTool(access);
         tool.deleteGroup("spring-boot-test-rg");
     }
 

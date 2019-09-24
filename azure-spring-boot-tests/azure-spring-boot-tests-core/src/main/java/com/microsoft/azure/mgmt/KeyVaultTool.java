@@ -5,12 +5,12 @@
  */
 package com.microsoft.azure.mgmt;
 
+import java.util.Random;
+
 import com.microsoft.azure.management.keyvault.Vault;
 import com.microsoft.azure.management.keyvault.Vaults;
 import com.microsoft.azure.management.keyvault.implementation.KeyVaultManager;
 import com.microsoft.azure.management.resources.fluentcore.arm.Region;
-
-import java.util.Random;
 
 public class KeyVaultTool {
 
@@ -25,7 +25,7 @@ public class KeyVaultTool {
     }
     
     public Vault createVaultInNewGroup(String resourceGroup, String prefix) {
-        String vaultName = keyVaultName(prefix);
+        final String vaultName = keyVaultName(prefix);
         
         Vault result = vaults
                 .define(vaultName)
@@ -43,7 +43,7 @@ public class KeyVaultTool {
                 .allowStorageAllPermissions()
                 .attach()
                 .apply();
-        
+
         return result;
     }
     
@@ -51,15 +51,15 @@ public class KeyVaultTool {
         String name;
         do {
             name = String.format("%s-%s", prefix, randomText(4));
-        } while (! vaults.checkNameAvailability(name).nameAvailable());
+        } while (!vaults.checkNameAvailability(name).nameAvailable());
         
         return name;
     }
     
     private String randomText(int size) {
-        Random random = new Random();
+        final Random random = new Random();
         
-        StringBuilder result = random
+        final StringBuilder result = random
                 .ints()
                 .mapToObj(value -> (char) value)
                 .filter(value -> value >= 'a' && value <= 'z')

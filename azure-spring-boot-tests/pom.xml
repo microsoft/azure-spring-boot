@@ -17,7 +17,6 @@
     <description>Tests for Azure Spring Boot</description>
 
     <modules>
-
         <module>azure-spring-boot-tests-core</module>
         <module>azure-spring-boot-test-keyvault</module>
     </modules>

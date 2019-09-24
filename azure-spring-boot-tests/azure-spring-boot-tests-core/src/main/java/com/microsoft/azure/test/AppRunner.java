@@ -33,7 +33,7 @@ public class AppRunner implements AutoCloseable {
     
     public void start() {
         if (app == null) {
-            SpringApplicationBuilder builder = new SpringApplicationBuilder(appClass);
+            final SpringApplicationBuilder builder = new SpringApplicationBuilder(appClass);
             builder.properties("spring.jmx.enabled=false");
             builder.properties(String.format("server.port=%d", availableTcpPort()));
             builder.properties(props());
@@ -47,11 +47,10 @@ public class AppRunner implements AutoCloseable {
     }
     
     private String [] props() {
-        List<String> result = new ArrayList<>();
+        final List<String> result = new ArrayList<>();
         
-        for (String key : props.keySet()) {
-            String value = props.get(key);
-            result.add(String.format("%s=%s", key, value));
+        for (final Map.Entry<String, String> entry: props.entrySet()) {
+            result.add(String.format("%s=%s", entry.getKey(), entry.getValue()));
         }
         
         return result.toArray(new String [0]);
@@ -69,11 +68,11 @@ public class AppRunner implements AutoCloseable {
     }
     
     public <T> T getBean(Class<T> type) {
-        return app.getBean(type);
+        return getApp().getBean(type);
     }
     
     public ApplicationContext parent() {
-        return app.getParent();
+        return getApp().getParent();
     }
     
     public <T> Map<String, T> getParentBeans(Class<T> type) {
@@ -81,34 +80,31 @@ public class AppRunner implements AutoCloseable {
     }
 
     public String getProperty(String key) {
-        if (app == null) {
-            throw new RuntimeException("App is not running.");
-        }
-        return app.getEnvironment().getProperty(key);
+        return getApp().getEnvironment().getProperty(key);
     }
     
     public int port() {
-        if (app == null) {
-            throw new RuntimeException("App is not running.");
-        }
-        return app.getEnvironment().getProperty("server.port", Integer.class, -1);
+        return getApp().getEnvironment().getProperty("server.port", Integer.class, -1);
     }
     
     public String root() {
-        if (app == null) {
-            throw new RuntimeException("App is not running.");
-        }
-        
-        String protocol = tlsEnabled() ? "https" : "http";
+        final String protocol = tlsEnabled() ? "https" : "http";
         return String.format("%s://localhost:%d/", protocol, port());
     }
     
     private boolean tlsEnabled() {
-        return app.getEnvironment().getProperty("server.ssl.enabled", Boolean.class, false);
+        return getApp().getEnvironment().getProperty("server.ssl.enabled", Boolean.class, false);
     }
 
     @Override
     public void close() {
         stop();
+    }
+
+    private ConfigurableApplicationContext getApp()  {
+        if (app == null) {
+            throw new RuntimeException("App is not running.");
+        }
+        return app;
     }
 }
