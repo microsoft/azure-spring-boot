@@ -133,11 +133,6 @@
         <!-- Azure libraries-->
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-documentdb</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-media</artifactId>
             <optional>true</optional>
         </dependency>

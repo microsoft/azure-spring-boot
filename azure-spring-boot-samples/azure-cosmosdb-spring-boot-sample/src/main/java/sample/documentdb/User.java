@@ -7,21 +7,26 @@
 package sample.documentdb;
 
 import com.microsoft.azure.spring.data.cosmosdb.core.mapping.Document;
+import com.microsoft.azure.spring.data.cosmosdb.core.mapping.PartitionKey;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 @Document(collection = "mycollection")
-@Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class User {
+    @Id
     private String id;
     private String firstName;
+
+    @PartitionKey
     private String lastName;
     private String address;
-
-    public User() {
-
-    }
 
     @Override
     public String toString() {
