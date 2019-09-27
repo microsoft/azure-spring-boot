@@ -6,11 +6,11 @@
 
 package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
-import com.microsoft.azure.documentdb.ConnectionPolicy;
-import com.microsoft.azure.documentdb.DocumentClient;
-import com.microsoft.azure.spring.data.cosmosdb.config.AbstractDocumentDbConfiguration;
-import com.microsoft.azure.spring.data.cosmosdb.config.DocumentDBConfig;
-import com.microsoft.azure.spring.data.cosmosdb.core.DocumentDbTemplate;
+import com.azure.data.cosmos.ConnectionPolicy;
+import com.azure.data.cosmos.CosmosClient;
+import com.microsoft.azure.spring.data.cosmosdb.config.AbstractCosmosConfiguration;
+import com.microsoft.azure.spring.data.cosmosdb.config.CosmosDBConfig;
+import com.microsoft.azure.spring.data.cosmosdb.core.CosmosTemplate;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -18,9 +18,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnClass({DocumentClient.class, DocumentDbTemplate.class})
+@ConditionalOnClass({ CosmosClient.class, CosmosTemplate.class})
 @EnableConfigurationProperties(DocumentDBProperties.class)
-public class DocumentDBAutoConfiguration extends AbstractDocumentDbConfiguration {
+public class DocumentDBAutoConfiguration extends AbstractCosmosConfiguration {
     private final DocumentDBProperties properties;
     private final ConnectionPolicy policy;
 
@@ -32,8 +32,8 @@ public class DocumentDBAutoConfiguration extends AbstractDocumentDbConfiguration
     }
 
     @Bean
-    public DocumentDBConfig documentDbConfig() {
-        final DocumentDBConfig config = DocumentDBConfig.builder(
+    public CosmosDBConfig cosmosDBConfig() {
+        final CosmosDBConfig config = CosmosDBConfig.builder(
                 properties.getUri(), properties.getKey(), properties.getDatabase())
                 .consistencyLevel(properties.getConsistencyLevel())
                 .allowTelemetry(properties.isAllowTelemetry())
@@ -45,7 +45,7 @@ public class DocumentDBAutoConfiguration extends AbstractDocumentDbConfiguration
 
     private void configConnectionPolicy(DocumentDBProperties properties, ConnectionPolicy connectionPolicy) {
         // This is a temp fix as DocumentDbFactory does not support loading ConnectionPolicy bean from context
-        final ConnectionPolicy policy = connectionPolicy == null ? ConnectionPolicy.GetDefault() : connectionPolicy;
+        final ConnectionPolicy policy = connectionPolicy == null ? ConnectionPolicy.defaultPolicy() : connectionPolicy;
 
         properties.setConnectionPolicy(policy);
     }

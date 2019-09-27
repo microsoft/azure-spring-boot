@@ -33,7 +33,7 @@ public class DocumentDbSampleApplication implements CommandLineRunner {
         repository.deleteAll();
         repository.save(testUser);
 
-        final Optional<User> opResult = repository.findById(testUser.getId());
+        final Optional<User> opResult = repository.findById(testUser.getId()).blockOptional();
         Assert.isTrue(opResult.isPresent(), "Cannot find user.");
 
         final User result = opResult.get();

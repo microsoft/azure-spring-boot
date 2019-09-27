@@ -6,9 +6,10 @@
 
 package sample.documentdb;
 
-import com.microsoft.azure.spring.data.cosmosdb.repository.DocumentDbRepository;
+import com.microsoft.azure.spring.data.cosmosdb.repository.CosmosRepository;
+import com.microsoft.azure.spring.data.cosmosdb.repository.ReactiveCosmosRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends DocumentDbRepository<User, String> {
+public interface UserRepository extends ReactiveCosmosRepository<User, String> {
 }

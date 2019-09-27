@@ -6,13 +6,13 @@
 
 package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
-import com.microsoft.azure.documentdb.DocumentClient;
+import com.azure.data.cosmos.CosmosClient;
 import com.microsoft.azure.spring.autoconfigure.cosmosdb.domain.Person;
 import com.microsoft.azure.spring.autoconfigure.cosmosdb.domain.PersonRepository;
-import com.microsoft.azure.spring.data.cosmosdb.DocumentDbFactory;
-import com.microsoft.azure.spring.data.cosmosdb.core.DocumentDbTemplate;
-import com.microsoft.azure.spring.data.cosmosdb.core.convert.MappingDocumentDbConverter;
-import com.microsoft.azure.spring.data.cosmosdb.repository.config.EnableDocumentDbRepositories;
+import com.microsoft.azure.spring.data.cosmosdb.CosmosDbFactory;
+import com.microsoft.azure.spring.data.cosmosdb.core.CosmosTemplate;
+import com.microsoft.azure.spring.data.cosmosdb.core.convert.MappingCosmosConverter;
+import com.microsoft.azure.spring.data.cosmosdb.repository.config.EnableCosmosRepositories;
 import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,16 +33,16 @@ public class DocumentDbRepositoriesAutoConfigurationUnitTest {
     private AnnotationConfigApplicationContext context;
 
     @InjectMocks
-    private DocumentDbTemplate dbOperations;
+    private CosmosTemplate dbOperations;
 
     @Mock
-    private DocumentDbFactory documentDbFactory;
+    private CosmosDbFactory documentDbFactory;
 
     @Mock
-    private MappingDocumentDbConverter mappingDocumentDbConverter;
+    private MappingCosmosConverter mappingDocumentDbConverter;
 
     @Mock
-    private DocumentClient documentClient;
+    private CosmosClient documentClient;
 
     @After
     public void close() {
@@ -68,7 +68,7 @@ public class DocumentDbRepositoriesAutoConfigurationUnitTest {
         this.context = new AnnotationConfigApplicationContext();
         this.context.register(configurationClasses);
         this.context.register(DocumentDbRepositoriesAutoConfiguration.class);
-        this.context.getBeanFactory().registerSingleton(DocumentDbTemplate.class.getName(), dbOperations);
+        this.context.getBeanFactory().registerSingleton(CosmosTemplate.class.getName(), dbOperations);
         this.context.refresh();
     }
 
@@ -78,7 +78,7 @@ public class DocumentDbRepositoriesAutoConfigurationUnitTest {
     }
 
     @Configuration
-    @EnableDocumentDbRepositories("foo.bar")
+    @EnableCosmosRepositories("foo.bar")
     @TestAutoConfigurationPackage(DocumentDbRepositoriesAutoConfigurationUnitTest.class)
     protected static class InvalidCustomConfiguration {
 
