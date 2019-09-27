@@ -49,7 +49,7 @@ public class CosmosSampleApplication implements CommandLineRunner {
         Assert.state(savedUser != null, "Saved user must not be null");
         Assert.state(savedUser.getFirstName().equals(testUser.getFirstName()), "Saved user first name doesn't match");
 
-        final List<User> users = firstNameUserFlux.collectList().block();
+        firstNameUserFlux.collectList().block();
 
         final Optional<User> optionalUserResult = repository.findById(testUser.getId()).blockOptional();
         Assert.isTrue(optionalUserResult.isPresent(), "Cannot find user.");

@@ -32,7 +32,7 @@ public class CosmosAutoConfiguration extends AbstractCosmosConfiguration {
     }
 
     @Bean
-    public CosmosDBConfig cosmosDbConfig() {
+    public CosmosDBConfig cosmosDBConfig() {
         final CosmosDBConfig config = CosmosDBConfig.builder(
                 properties.getUri(), properties.getKey(), properties.getDatabase())
                 .consistencyLevel(properties.getConsistencyLevel())
