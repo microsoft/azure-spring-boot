@@ -36,7 +36,6 @@
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-spring-boot</artifactId>
-            <version>2.2.0.M1</version>
         </dependency>
         <!-- Below poms will be replaced to azure-spring-boot-starter pom when no milestone tag. -->
 
