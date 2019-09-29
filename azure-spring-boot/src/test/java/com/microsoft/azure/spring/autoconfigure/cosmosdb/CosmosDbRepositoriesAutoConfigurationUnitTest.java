@@ -12,7 +12,7 @@ import com.microsoft.azure.spring.autoconfigure.cosmosdb.domain.PersonRepository
 import com.microsoft.azure.spring.data.cosmosdb.CosmosDbFactory;
 import com.microsoft.azure.spring.data.cosmosdb.core.CosmosTemplate;
 import com.microsoft.azure.spring.data.cosmosdb.core.convert.MappingCosmosConverter;
-import com.microsoft.azure.spring.data.cosmosdb.repository.config.EnableReactiveCosmosRepositories;
+import com.microsoft.azure.spring.data.cosmosdb.repository.config.EnableCosmosRepositories;
 import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -78,7 +78,7 @@ public class CosmosDbRepositoriesAutoConfigurationUnitTest {
     }
 
     @Configuration
-    @EnableReactiveCosmosRepositories("foo.bar")
+    @EnableCosmosRepositories("foo.bar")
     @TestAutoConfigurationPackage(CosmosDbRepositoriesAutoConfigurationUnitTest.class)
     protected static class InvalidCustomConfiguration {
 

@@ -9,7 +9,7 @@ public class Constants {
     // Property namespaces
     public static final String NAMESPACE_STORAGE = "azure.storage";
     public static final String NAMESPACE_SERVICE_BUS = "azure.servicebus";
-    public static final String NAMESPACE_DOCUMENTDB = "azure.documentdb";
+    public static final String NAMESPACE_COSMOSDB = "azure.cosmosdb";
 
     // VCAP credential key names
     public static final String STORAGE_ACCOUNT_NAME = "storage_account_name";
@@ -19,8 +19,8 @@ public class Constants {
     public static final String SHARED_ACCESS_KEY_VALUE = "shared_access_key_value";
     public static final String NAMESPACE_NAME = "namespace_name";
 
-    public static final String HOST_ENDPOINT = "documentdb_host_endpoint";
-    public static final String MASTER_KEY = "documentdb_master_key";
-    public static final String DATABASE_ID = "documentdb_database_id";
+    public static final String HOST_ENDPOINT = "cosmosdb_host_endpoint";
+    public static final String MASTER_KEY = "cosmosdb_master_key";
+    public static final String DATABASE_ID = "cosmosdb_database_id";
 
 }

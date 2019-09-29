@@ -6,9 +6,9 @@
 
 package com.microsoft.azure.spring.autoconfigure.cosmosdb.domain;
 
-import com.microsoft.azure.spring.data.cosmosdb.repository.ReactiveCosmosRepository;
+import com.microsoft.azure.spring.data.cosmosdb.repository.CosmosRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PersonRepository extends ReactiveCosmosRepository<Person, String> {
+public interface PersonRepository extends CosmosRepository<Person, String> {
 }

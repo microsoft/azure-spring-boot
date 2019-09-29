@@ -6,7 +6,7 @@ applications:
   random-route: true
   services:
     - azure-storage-service
-    - azure-documentdb-service
+    - azure-cosmosdb-service
     - azure-servicebus-service
   env:
     COM_MICROSOFT_AZURE_CLOUDFOUNDRY_SERVICE_LOG: false

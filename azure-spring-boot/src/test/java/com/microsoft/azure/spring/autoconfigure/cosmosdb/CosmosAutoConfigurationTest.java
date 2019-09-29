@@ -7,17 +7,12 @@ package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
 
 import com.azure.data.cosmos.ConnectionPolicy;
-import com.azure.data.cosmos.CosmosClient;
 import com.azure.data.cosmos.RetryOptions;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
-import org.junit.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @Ignore
 public class CosmosAutoConfigurationTest {

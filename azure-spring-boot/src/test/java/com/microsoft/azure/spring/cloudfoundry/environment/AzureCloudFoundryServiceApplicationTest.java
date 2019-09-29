@@ -91,22 +91,22 @@ public class AzureCloudFoundryServiceApplicationTest {
             assertEquals(4, config.getCredentials().size());
             assertEquals(0, config.getTags().length);
             assertEquals(0, config.getVolumeMounts().length);
-            assertEquals("azure-documentdb", config.getLabel());
+            assertEquals("azure-cosmosdb", config.getLabel());
             assertNull(config.getProvider());
-            assertEquals("azure-documentdb", pojo.getServiceBrokerName());
-            assertEquals("mydocumentdb", config.getName());
+            assertEquals("azure-cosmosdb", pojo.getServiceBrokerName());
+            assertEquals("mycosmosdb", config.getName());
             assertEquals("standard", config.getPlan());
             assertNull(config.getSyslogDrainUrl());
 
             assertEquals("docdb123mj",
-                    config.getCredentials().get("documentdb_database_id"));
+                    config.getCredentials().get("cosmosdb_database_id"));
             assertEquals("dbs/ZFxCAA==/",
-                    config.getCredentials().get("documentdb_database_link"));
+                    config.getCredentials().get("cosmosdb_database_link"));
             assertEquals("https://hostname:443/",
-                    config.getCredentials().get("documentdb_host_endpoint"));
+                    config.getCredentials().get("cosmosdb_host_endpoint"));
             assertEquals(
                     "3becR7JFnWamMvGwWYWWTV4WpeNhN8tOzJ74yjAxPKDpx65q2lYz60jt8WXU6HrIKrAIwhs0Hglf0123456789==",
-                    config.getCredentials().get("documentdb_master_key"));
+                    config.getCredentials().get("cosmosdb_master_key"));
         } catch (IOException e) {
             LOG.error("Error reading json file", e);
             throw e;
@@ -133,20 +133,20 @@ public class AzureCloudFoundryServiceApplicationTest {
             assertEquals(0, config.getVolumeMounts().length);
             assertEquals("user-provided", config.getLabel());
             assertNull(config.getProvider());
-            assertEquals("azure-documentdb", pojo.getServiceBrokerName());
-            assertEquals("mydocumentdb", config.getName());
+            assertEquals("azure-cosmosdb", pojo.getServiceBrokerName());
+            assertEquals("mycosmosdb", config.getName());
             assertEquals("standard", config.getPlan());
             assertNull(config.getSyslogDrainUrl());
 
             assertEquals("docdb123mj",
-                    config.getCredentials().get("documentdb_database_id"));
+                    config.getCredentials().get("cosmosdb_database_id"));
             assertEquals("dbs/ZFxCAA==/",
-                    config.getCredentials().get("documentdb_database_link"));
+                    config.getCredentials().get("cosmosdb_database_link"));
             assertEquals("https://hostname:443/",
-                    config.getCredentials().get("documentdb_host_endpoint"));
+                    config.getCredentials().get("cosmosdb_host_endpoint"));
             assertEquals(
                     "3becR7JFnWamMvGwWYWWTV4WpeNhN8tOzJ74yjAxPKDpx65q2lYz60jt8WXU6HrIKrAIwhs0Hglf0123456789==",
-                    config.getCredentials().get("documentdb_master_key"));
+                    config.getCredentials().get("cosmosdb_master_key"));
         } catch (IOException e) {
             LOG.error("Error reading json file", e);
             throw e;

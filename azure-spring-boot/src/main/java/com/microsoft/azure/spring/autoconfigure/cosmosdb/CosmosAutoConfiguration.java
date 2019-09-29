@@ -10,6 +10,7 @@ import com.azure.data.cosmos.ConnectionPolicy;
 import com.azure.data.cosmos.CosmosClient;
 import com.microsoft.azure.spring.data.cosmosdb.config.AbstractCosmosConfiguration;
 import com.microsoft.azure.spring.data.cosmosdb.config.CosmosDBConfig;
+import com.microsoft.azure.spring.data.cosmosdb.core.CosmosTemplate;
 import com.microsoft.azure.spring.data.cosmosdb.core.ReactiveCosmosTemplate;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -18,7 +19,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConditionalOnClass({ CosmosClient.class, ReactiveCosmosTemplate.class})
+@ConditionalOnClass({ CosmosClient.class, ReactiveCosmosTemplate.class,
+    CosmosTemplate.class})
 @EnableConfigurationProperties(CosmosDBProperties.class)
 public class CosmosAutoConfiguration extends AbstractCosmosConfiguration {
     private final CosmosDBProperties properties;

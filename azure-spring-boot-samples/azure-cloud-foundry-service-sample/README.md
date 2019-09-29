@@ -15,7 +15,7 @@ If installed, you should see something like this:
 ```
 service              plans                                                          description
 azure-cosmosdb       standard*                                                      Azure CosmosDb Service
-azure-documentdb     standard*                                                      Azure DocumentDb Service
+azure-cosmosdb     standard*                                                      Azure cosmosdb Service
 azure-mysqldb        basic50*, basic100*, standard100*, standard200*, standard400*,
                      standard800*                                                   Azure Database for MySQL Service
 azure-postgresqldb   basic50*, basic100*, standard100*, standard200*, standard400*,
@@ -82,8 +82,8 @@ Now you can create the new service
 cf create-service azure-storage standard azure-storage-service -c ./azure-storage.json
 ```
 
-# DocumentDB
-To create the service instance, you'll need to create a JSON file (ex. azure-documentdb.json) 
+# cosmosdb
+To create the service instance, you'll need to create a JSON file (ex. azure-cosmosdb.json) 
 with the configuration details for your service instance.
 Specify your existing resource group name for RESOURCE_GROUP_NAME, then a new
 value for DOCDB_ACCOUNT_NAME and DOCDB_NAME, and your Azure location (ex. "centralus") for LOCATION
@@ -101,7 +101,7 @@ value for DOCDB_ACCOUNT_NAME and DOCDB_NAME, and your Azure location (ex. "centr
 Now you can create the new service
 
 ```
-cf create-service azure-documentdb standard azure-documentdb-service -c ./azure-documentdb.json
+cf create-service azure-cosmosdb standard azure-cosmosdb-service -c ./azure-cosmosdb.json
 ```
 
 # User Provided Service
@@ -115,14 +115,14 @@ The Pre Reqs section don't really apply for user provided services, however, you
 To create a user provided service compatible with the starter, you first need to create a json with the service credentials (ex. azure-service-credentials.json)
 ```
 {
-    "azure-service-broker-name":"azure-documentdb",
-    "documentdb_host_endpoint": "https://docdb-account.documents.azure.com:443/",                                       
-    "documentdb_master_key": "XXPSWDXXX==",
-    "documentdb_database_id": "databasename",                                                                             
-    "documentdb_database_link": "dbs/XXXXX==/"                                                                         
+    "azure-service-broker-name":"azure-cosmosdb",
+    "cosmosdb_host_endpoint": "https://docdb-account.documents.azure.com:443/",                                       
+    "cosmosdb_master_key": "XXPSWDXXX==",
+    "cosmosdb_database_id": "databasename",                                                                             
+    "cosmosdb_database_link": "dbs/XXXXX==/"                                                                         
 }
 ```
-You basically create the credentials block the same way as the credentials block created by the Microsoft Azure Service Broker (see example further ahead), and add the attribute `azure-service-broker-name` with the name of the broker responsible for the service (in this case, "azure-documentdb").
+You basically create the credentials block the same way as the credentials block created by the Microsoft Azure Service Broker (see example further ahead), and add the attribute `azure-service-broker-name` with the name of the broker responsible for the service (in this case, "azure-cosmosdb").
 
 You can then create the service
 
@@ -134,21 +134,21 @@ It is worth noticing that the Microsoft Azure Service Broker doesn't actually ne
 
 ## Example Service Creation with a Microsoft Azure Service Broker service
 
-Taking as an example the documentdb service created in the previous section, you may inspect the environment of the application to see which credentials the service has
+Taking as an example the cosmosdb service created in the previous section, you may inspect the environment of the application to see which credentials the service has
 ```
 System-Provided:
 {
  "VCAP_SERVICES": {
-  "azure-documentdb": [
+  "azure-cosmosdb": [
    {
     "credentials": {
-     "documentdb_database_id": "databasename",
-     "documentdb_database_link": "dbs/XXXXX==/",
-     "documentdb_host_endpoint": "https://docdb-account.documents.azure.com:443/",
-     "documentdb_master_key": "XXPSWDXXX"
+     "cosmosdb_database_id": "databasename",
+     "cosmosdb_database_link": "dbs/XXXXX==/",
+     "cosmosdb_host_endpoint": "https://docdb-account.documents.azure.com:443/",
+     "cosmosdb_master_key": "XXPSWDXXX"
     },
-    "label": "azure-documentdb",
-    "name": "azure-documentdb-service",
+    "label": "azure-cosmosdb",
+    "name": "azure-cosmosdb-service",
     "plan": "standard",
     "provider": null,
     "syslog_drain_url": null,
@@ -162,11 +162,11 @@ System-Provided:
 The credentials attribute can be used to create the json file for the user provided service.
 ```
 {
-    "azure-service-broker-name":"azure-documentdb",
-    "documentdb_host_endpoint": "https://docdb-account.documents.azure.com:443/",                                       
-    "documentdb_master_key": "XXPSWDXXX==",
-    "documentdb_database_id": "databasename",                                                                             
-    "documentdb_database_link": "dbs/XXXXX==/"                                                                         
+    "azure-service-broker-name":"azure-cosmosdb",
+    "cosmosdb_host_endpoint": "https://docdb-account.documents.azure.com:443/",                                       
+    "cosmosdb_master_key": "XXPSWDXXX==",
+    "cosmosdb_database_id": "databasename",                                                                             
+    "cosmosdb_database_link": "dbs/XXXXX==/"                                                                         
 }
 ```
 Which can then be used to create user provided services in any space or foundation, and sharing the same storage.
@@ -186,7 +186,7 @@ applications:
   random-route: true
   services:
     - azure-storage-service
-    - azure-documentdb-service
+    - azure-cosmosdb-service
     - azure-servicebus-service
 
 ```
@@ -197,7 +197,7 @@ the following endpoints:
 * "/" - web page with links to the demos below
 * "/sb" - this demo uses Azure Service Bus to put a message on a queue, retrieve it, and delete it.
 * "/blob" - this demo uses Azure Storage to store and display an image from a repo.
-* "/docdb" -  this demo uses Azure DocumentDB to store a new User object.
+* "/docdb" -  this demo uses Azure cosmosdb to store a new User object.
 
 
 

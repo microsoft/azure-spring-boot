@@ -27,6 +27,11 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>io.projectreactor.netty</groupId>
+            <artifactId>reactor-netty</artifactId>
+            <version>0.8.3.RELEASE</version>
+        </dependency>
     </dependencies>
 
     <properties>

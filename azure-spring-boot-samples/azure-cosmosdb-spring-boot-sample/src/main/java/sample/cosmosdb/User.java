@@ -4,7 +4,7 @@
  * license information.
  */
 
-package sample.documentdb;
+package sample.cosmosdb;
 
 import com.microsoft.azure.spring.data.cosmosdb.core.mapping.Document;
 import com.microsoft.azure.spring.data.cosmosdb.core.mapping.PartitionKey;

@@ -3,6 +3,7 @@ com.microsoft.azure.keyvault.spring.KeyVaultEnvironmentPostProcessor,\
 com.microsoft.azure.spring.autoconfigure.sqlserver.AlwaysEncryptedEnvironmentPostProcessor
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.microsoft.azure.spring.autoconfigure.cosmosdb.CosmosAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.cosmosdb.CosmosDbRepositoriesAutoConfiguration,\
+com.microsoft.azure.spring.autoconfigure.cosmosdb.ReactiveCosmosDbRepositoriesAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.gremlin.GremlinAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.gremlin.GremlinRepositoriesAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.mediaservices.MediaServicesAutoConfiguration,\

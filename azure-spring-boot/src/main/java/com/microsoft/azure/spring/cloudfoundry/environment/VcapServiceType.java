@@ -6,7 +6,7 @@
 package com.microsoft.azure.spring.cloudfoundry.environment;
 
 public enum VcapServiceType {
-    AZURE_REDISCACHE("azure-rediscache"), AZURE_DOCUMENTDB("azure-documentdb"), AZURE_STORAGE(
+    AZURE_REDISCACHE("azure-rediscache"), AZURE_COSMOSDB("azure-cosmosdb"), AZURE_STORAGE(
             "azure-storage"), AZURE_SQLDB("azure-sqldb"), AZURE_SERVICEBUS(
             "azure-servicebus");
 

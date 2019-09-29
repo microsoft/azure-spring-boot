@@ -4,7 +4,7 @@
  * license information.
  */
 
-package sample.cloudfoundry.documentdb;
+package sample.cloudfoundry.cosmosdb;
 
 import com.microsoft.azure.spring.data.cosmosdb.repository.CosmosRepository;
 import org.springframework.stereotype.Repository;
