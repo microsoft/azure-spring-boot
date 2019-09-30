@@ -41,6 +41,7 @@
         <javax.jms-api.version>2.0.1</javax.jms-api.version>
         <qpid-jms-client.version>0.43.0</qpid-jms-client.version>
         <junit-params.version>1.1.1</junit-params.version>
+        <reactor-netty.version>0.8.3.RELEASE</reactor-netty.version>
     </properties>
 
     <profiles>
@@ -136,6 +137,12 @@
                 <groupId>pl.pragmatists</groupId>
                 <artifactId>JUnitParams</artifactId>
                 <version>${junit-params.version}</version>
+            </dependency>
+            <!-- the version include from Spring-Boot is not compatible with which Cosmos SDK depends on -->
+            <dependency>
+                <groupId>io.projectreactor.netty</groupId>
+                <artifactId>reactor-netty</artifactId>
+                <version>${reactor-netty.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
