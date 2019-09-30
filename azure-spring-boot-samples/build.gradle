@@ -1,8 +1,9 @@
 buildscript {
     ext {
-        springBootVersion = '2.1.7.RELEASE'
+        springBootVersion = '2.2.0.M6'
     }
     repositories {
+        maven { url "http://repo.spring.io/libs-milestone" }
         mavenCentral()
     }
     dependencies {
@@ -18,7 +19,7 @@ allprojects {
     version = '0.0.1-SNAPSHOT'
 
     ext {
-        azureSpringBootStartersVersion = '2.1.8-SNAPSHOT'
+        azureSpringBootStartersVersion = '2.2.0.M1'
         commonsioVersion = '2.3'
     }
 }

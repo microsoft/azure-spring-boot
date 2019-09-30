@@ -7,7 +7,7 @@ Also test if the latest release.
 - Spring boot starter:
   <!--Which Spring boot starters have the issue, pick items below and delete the rest-->
   - active directory spring boot starter
-  - documentdb spring boot starter
+  - cosmosdb spring boot starter
   - key vault spring boot starter
   - media services spring boot starter
   - service bus spring boot starter

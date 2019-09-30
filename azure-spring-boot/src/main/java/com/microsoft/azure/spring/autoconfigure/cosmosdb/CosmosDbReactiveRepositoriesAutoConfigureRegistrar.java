@@ -6,31 +6,31 @@
 
 package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
-import com.microsoft.azure.spring.data.cosmosdb.repository.config.DocumentDbRepositoryConfigurationExtension;
-import com.microsoft.azure.spring.data.cosmosdb.repository.config.EnableDocumentDbRepositories;
+import com.microsoft.azure.spring.data.cosmosdb.repository.config.EnableReactiveCosmosRepositories;
+import com.microsoft.azure.spring.data.cosmosdb.repository.config.ReactiveCosmosRepositoryConfigurationExtension;
 import org.springframework.boot.autoconfigure.data.AbstractRepositoryConfigurationSourceSupport;
 import org.springframework.data.repository.config.RepositoryConfigurationExtension;
 
 import java.lang.annotation.Annotation;
 
-public class DocumentDbRepositoriesAutoConfigureRegistrar extends AbstractRepositoryConfigurationSourceSupport {
+public class CosmosDbReactiveRepositoriesAutoConfigureRegistrar extends AbstractRepositoryConfigurationSourceSupport {
     @Override
     protected Class<? extends Annotation> getAnnotation() {
-        return EnableDocumentDbRepositories.class;
+        return EnableReactiveCosmosRepositories.class;
     }
 
     @Override
     protected Class<?> getConfiguration() {
-        return EnableDocumentDbRepositoriesConfiguration.class;
+        return EnableCosmosDbReactiveRepositoriesConfiguration.class;
     }
 
     @Override
     protected RepositoryConfigurationExtension getRepositoryConfigurationExtension() {
-        return new DocumentDbRepositoryConfigurationExtension();
+        return new ReactiveCosmosRepositoryConfigurationExtension();
     }
 
-    @EnableDocumentDbRepositories
-    private static class EnableDocumentDbRepositoriesConfiguration {
+    @EnableReactiveCosmosRepositories
+    private static class EnableCosmosDbReactiveRepositoriesConfiguration {
 
     }
 

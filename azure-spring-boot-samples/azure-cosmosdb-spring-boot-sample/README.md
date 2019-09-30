@@ -48,7 +48,7 @@ This sample project demonstrates how to use Azure CosmosDB via Spring Boot Start
 
 ### Known issue
 
-Directly running the sample app from IDE IntelliJ or Eclipse has below security exception if using the *released* starter. The root cause is that the release `spring-data-azure-documentdb` jar is code-signed by us. We're working actively to resolve this issue. 
+Directly running the sample app from IDE IntelliJ or Eclipse has below security exception if using the *released* starter. The root cause is that the release `spring-data-azure-cosmosdb` jar is code-signed by us. We're working actively to resolve this issue. 
 
 ```
 Caused by: java.lang.SecurityException: class "com.microsoft.azure.sample.User_Accessor_yhb3bq"'s signer information does not match signer information of other classes in the same package
@@ -61,5 +61,5 @@ If `com.fasterxml.jackson.databind.JsonMappingException` is thrown during deseri
 
 ### More details
 
-Please refer to [this article](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-java-spring-boot-starter-with-cosmos-db) for the tutorial about how to use the Spring Boot Starter with Azure Cosmos DB DocumentDB API.
+Please refer to [this article](https://docs.microsoft.com/en-us/java/azure/spring-framework/configure-spring-boot-starter-java-app-with-cosmos-db) for the tutorial about how to use the Spring Boot Starter with Azure Cosmos DB API.
 

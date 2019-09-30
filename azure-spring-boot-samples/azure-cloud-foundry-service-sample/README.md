@@ -15,7 +15,6 @@ If installed, you should see something like this:
 ```
 service              plans                                                          description
 azure-cosmosdb       standard*                                                      Azure CosmosDb Service
-azure-documentdb     standard*                                                      Azure DocumentDb Service
 azure-mysqldb        basic50*, basic100*, standard100*, standard200*, standard400*,
                      standard800*                                                   Azure Database for MySQL Service
 azure-postgresqldb   basic50*, basic100*, standard100*, standard200*, standard400*,

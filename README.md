@@ -61,7 +61,7 @@ Please follow [instructions here](./HowToContribute.md) to build from source or 
 ### Other articles
 You could check below articles to learn more on usage of specific starters.
 
-[How to use the Spring Boot Starter with Azure Cosmos DB DocumentDB API](https://docs.microsoft.com/en-us/azure/cosmos-db/documentdb-java-spring-boot-starter-with-cosmos-db)
+[How to use the Spring Boot Starter with Azure Cosmos DB API](https://docs.microsoft.com/en-us/java/azure/spring-framework/configure-spring-boot-starter-java-app-with-cosmos-db)
 
 ### Filing Issues
 

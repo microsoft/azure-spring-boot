@@ -4,11 +4,11 @@
  * license information.
  */
 
-package sample.cloudfoundry.documentdb;
+package sample.cloudfoundry.cosmosdb;
 
-import com.microsoft.azure.spring.data.cosmosdb.repository.DocumentDbRepository;
+import com.microsoft.azure.spring.data.cosmosdb.repository.CosmosRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends DocumentDbRepository<User, String> {
+public interface UserRepository extends CosmosRepository<User, String> {
 }

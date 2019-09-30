@@ -6,13 +6,13 @@
 
 package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
-import com.microsoft.azure.documentdb.DocumentClient;
+import com.azure.data.cosmos.CosmosClient;
 import com.microsoft.azure.spring.autoconfigure.cosmosdb.domain.Person;
 import com.microsoft.azure.spring.autoconfigure.cosmosdb.domain.PersonRepository;
-import com.microsoft.azure.spring.data.cosmosdb.DocumentDbFactory;
-import com.microsoft.azure.spring.data.cosmosdb.core.DocumentDbTemplate;
-import com.microsoft.azure.spring.data.cosmosdb.core.convert.MappingDocumentDbConverter;
-import com.microsoft.azure.spring.data.cosmosdb.repository.config.EnableDocumentDbRepositories;
+import com.microsoft.azure.spring.data.cosmosdb.CosmosDbFactory;
+import com.microsoft.azure.spring.data.cosmosdb.core.CosmosTemplate;
+import com.microsoft.azure.spring.data.cosmosdb.core.convert.MappingCosmosConverter;
+import com.microsoft.azure.spring.data.cosmosdb.repository.config.EnableCosmosRepositories;
 import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -28,21 +28,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
 @Ignore
-public class DocumentDbRepositoriesAutoConfigurationUnitTest {
+public class CosmosDbRepositoriesAutoConfigurationUnitTest {
 
     private AnnotationConfigApplicationContext context;
 
     @InjectMocks
-    private DocumentDbTemplate dbOperations;
+    private CosmosTemplate cosmosTemplate;
 
     @Mock
-    private DocumentDbFactory documentDbFactory;
+    private CosmosDbFactory cosmosDbFactory;
 
     @Mock
-    private MappingDocumentDbConverter mappingDocumentDbConverter;
+    private MappingCosmosConverter mappingCosmosConverter;
 
     @Mock
-    private DocumentClient documentClient;
+    private CosmosClient cosmosClient;
 
     @After
     public void close() {
@@ -67,8 +67,8 @@ public class DocumentDbRepositoriesAutoConfigurationUnitTest {
     private void prepareApplicationContext(Class<?>... configurationClasses) {
         this.context = new AnnotationConfigApplicationContext();
         this.context.register(configurationClasses);
-        this.context.register(DocumentDbRepositoriesAutoConfiguration.class);
-        this.context.getBeanFactory().registerSingleton(DocumentDbTemplate.class.getName(), dbOperations);
+        this.context.register(CosmosDbRepositoriesAutoConfiguration.class);
+        this.context.getBeanFactory().registerSingleton(CosmosTemplate.class.getName(), cosmosTemplate);
         this.context.refresh();
     }
 
@@ -78,8 +78,8 @@ public class DocumentDbRepositoriesAutoConfigurationUnitTest {
     }
 
     @Configuration
-    @EnableDocumentDbRepositories("foo.bar")
-    @TestAutoConfigurationPackage(DocumentDbRepositoriesAutoConfigurationUnitTest.class)
+    @EnableCosmosRepositories("foo.bar")
+    @TestAutoConfigurationPackage(CosmosDbRepositoriesAutoConfigurationUnitTest.class)
     protected static class InvalidCustomConfiguration {
 
     }
