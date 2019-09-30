@@ -8,8 +8,6 @@ package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
 import com.microsoft.azure.spring.data.cosmosdb.repository.config.CosmosRepositoryConfigurationExtension;
 import com.microsoft.azure.spring.data.cosmosdb.repository.config.EnableCosmosRepositories;
-import com.microsoft.azure.spring.data.cosmosdb.repository.config.EnableReactiveCosmosRepositories;
-import com.microsoft.azure.spring.data.cosmosdb.repository.config.ReactiveCosmosRepositoryConfigurationExtension;
 import org.springframework.boot.autoconfigure.data.AbstractRepositoryConfigurationSourceSupport;
 import org.springframework.data.repository.config.RepositoryConfigurationExtension;
 

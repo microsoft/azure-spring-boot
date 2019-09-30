@@ -7,11 +7,8 @@
 package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
 import com.microsoft.azure.spring.data.cosmosdb.repository.CosmosRepository;
-import com.microsoft.azure.spring.data.cosmosdb.repository.ReactiveCosmosRepository;
 import com.microsoft.azure.spring.data.cosmosdb.repository.config.CosmosRepositoryConfigurationExtension;
-import com.microsoft.azure.spring.data.cosmosdb.repository.config.ReactiveCosmosRepositoryConfigurationExtension;
 import com.microsoft.azure.spring.data.cosmosdb.repository.support.CosmosRepositoryFactoryBean;
-import com.microsoft.azure.spring.data.cosmosdb.repository.support.ReactiveCosmosRepositoryFactoryBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
