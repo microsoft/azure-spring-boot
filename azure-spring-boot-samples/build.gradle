@@ -19,7 +19,7 @@ allprojects {
     version = '0.0.1-SNAPSHOT'
 
     ext {
-        azureSpringBootStartersVersion = '2.2.0.M1'
+        azureSpringBootStartersVersion = '2.2.0-SNAPSHOT'
         commonsioVersion = '2.3'
     }
 }

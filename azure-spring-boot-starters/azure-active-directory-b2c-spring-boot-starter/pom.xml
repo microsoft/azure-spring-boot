@@ -7,12 +7,12 @@
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-parent</artifactId>
-        <version>2.2.0.M1</version>
+        <version>2.2.0-SNAPSHOT</version>
         <relativePath>../../azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>azure-active-directory-b2c-spring-boot-starter</artifactId>
-    <version>2.2.0.M1</version>
+    <version>2.2.0-SNAPSHOT</version>
 
     <name>Azure AD B2C Spring Security Integration Spring Boot Starter</name>
     <description>Spring Boot Starter for Azure AD B2C and Spring Security Integration</description>
