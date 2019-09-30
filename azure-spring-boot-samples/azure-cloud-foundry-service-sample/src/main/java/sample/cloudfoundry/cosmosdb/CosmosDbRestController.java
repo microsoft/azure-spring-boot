@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package sample.cloudfoundry.documentdb;
+package sample.cloudfoundry.cosmosdb;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @RestController
-public class DocumentDbRestController {
+public class CosmosDbRestController {
 
     private static final Logger LOG = LoggerFactory
-            .getLogger(DocumentDbRestController.class);
+            .getLogger(CosmosDbRestController.class);
 
     private static final String CR = "</BR>";
 

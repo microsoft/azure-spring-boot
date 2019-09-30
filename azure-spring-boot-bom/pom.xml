@@ -48,8 +48,9 @@
     <properties>
         <azure.spring.boot.version>2.2.0.M1</azure.spring.boot.version>
         <azure.dependencies.bom.version>2.2.0.M1</azure.dependencies.bom.version>
-        <spring.data.cosmosdb.version>2.1.7</spring.data.cosmosdb.version>
+        <spring.data.cosmosdb.version>2.2.0.M1</spring.data.cosmosdb.version>
         <spring.data.gremlin.version>2.2.0.M1</spring.data.gremlin.version>
+        <reactor-netty.version>0.8.3.RELEASE</reactor-netty.version>
     </properties>
 
     <dependencyManagement>
@@ -137,6 +138,12 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-spring-boot</artifactId>
                 <version>${azure.spring.boot.version}</version>
+            </dependency>
+            <!-- the version include from Spring-Boot is not compatible with which Cosmos SDK depends on -->
+            <dependency>
+                <groupId>io.projectreactor.netty</groupId>
+                <artifactId>reactor-netty</artifactId>
+                <version>${reactor-netty.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

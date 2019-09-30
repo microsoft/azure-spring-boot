@@ -4,7 +4,7 @@
  * license information.
  */
 
-package sample.cloudfoundry.documentdb;
+package sample.cloudfoundry.cosmosdb;
 
 public class User {
     private String id;

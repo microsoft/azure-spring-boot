@@ -133,7 +133,7 @@
         <!-- Azure libraries-->
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-documentdb</artifactId>
+            <artifactId>azure-cosmos</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -260,6 +260,5 @@
             <artifactId>qpid-jms-client</artifactId>
             <optional>true</optional>
         </dependency>
-
     </dependencies>
 </project>

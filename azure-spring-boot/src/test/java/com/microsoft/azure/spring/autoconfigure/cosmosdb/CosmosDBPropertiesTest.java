@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DocumentDBPropertiesTest {
+public class CosmosDBPropertiesTest {
     @Test
     public void canSetAllProperties() {
         PropertySettingUtil.setProperties();
@@ -29,7 +29,7 @@ public class DocumentDBPropertiesTest {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(Config.class);
             context.refresh();
-            final DocumentDBProperties properties = context.getBean(DocumentDBProperties.class);
+            final CosmosDBProperties properties = context.getBean(CosmosDBProperties.class);
 
             assertThat(properties.getUri()).isEqualTo(PropertySettingUtil.URI);
             assertThat(properties.getKey()).isEqualTo(PropertySettingUtil.KEY);
@@ -47,7 +47,7 @@ public class DocumentDBPropertiesTest {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext()) {
             context.register(Config.class);
             context.refresh();
-            final DocumentDBProperties properties = context.getBean(DocumentDBProperties.class);
+            final CosmosDBProperties properties = context.getBean(CosmosDBProperties.class);
 
             assertThat(properties.isAllowTelemetry()).isEqualTo(PropertySettingUtil.ALLOW_TELEMETRY_FALSE);
         }
@@ -92,7 +92,7 @@ public class DocumentDBPropertiesTest {
     }
 
     @Configuration
-    @EnableConfigurationProperties(DocumentDBProperties.class)
+    @EnableConfigurationProperties(CosmosDBProperties.class)
     static class Config {
     }
 }

@@ -94,7 +94,7 @@ public class Network {
 ```
 
 ### Create repositories
-Extends DocumentDbRepository interface, which provides Spring Data repository support.
+Extends CosmosRepository interface, which provides Spring Data repository support.
 
 ```
 import GremlinRepository;
