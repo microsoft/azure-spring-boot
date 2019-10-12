@@ -112,7 +112,7 @@ public class KeyVaultOperation {
         }
         if (this.propertyNames.contains(secretName)) {
             final SecretBundle secretBundle = this.keyVaultClient.getSecret(this.vaultUri, secretName);
-            return secretBundle.value();
+            return secretBundle == null ? null : secretBundle.value();
         } else {
             return null;
         }
