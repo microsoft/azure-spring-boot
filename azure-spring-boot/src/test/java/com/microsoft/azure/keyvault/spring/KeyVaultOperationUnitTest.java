@@ -71,7 +71,10 @@ public class KeyVaultOperationUnitTest {
 
         when(keyVaultClient.listSecrets(anyString())).thenReturn(mockResult);
         when(keyVaultClient.getSecret(anyString(), anyString())).thenReturn(secretBundle);
-        keyVaultOperation = new KeyVaultOperation(keyVaultClient, fakeVaultUri, Constants.TOKEN_ACQUIRE_TIMEOUT_SECS, secretKeysConfig);
+        keyVaultOperation = new KeyVaultOperation(keyVaultClient,
+                fakeVaultUri,
+                Constants.TOKEN_ACQUIRE_TIMEOUT_SECS,
+                secretKeysConfig);
     }
 
     @Test
@@ -95,7 +98,7 @@ public class KeyVaultOperationUnitTest {
 
         //test list with specific secret key configs
         setupSecretBundle(testPropertyName1, testPropertyName1, secretKeysConfig);
-        String[] specificResult = keyVaultOperation.list();
+        final String[] specificResult = keyVaultOperation.list();
         assertThat(specificResult.length).isEqualTo(3);
         assertThat(specificResult[0]).isEqualTo(secretKeysConfig.split(",")[0]);
     }
