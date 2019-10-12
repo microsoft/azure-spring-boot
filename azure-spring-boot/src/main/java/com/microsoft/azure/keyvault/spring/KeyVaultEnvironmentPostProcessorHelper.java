@@ -64,7 +64,10 @@ class KeyVaultEnvironmentPostProcessorHelper {
 
         try {
             final MutablePropertySources sources = this.environment.getPropertySources();
-            final KeyVaultOperation kvOperation = new KeyVaultOperation(kvClient, vaultUri, refreshInterval,secretKeys);
+            final KeyVaultOperation kvOperation = new KeyVaultOperation(kvClient,
+                    vaultUri,
+                    refreshInterval,
+                    secretKeys);
 
             if (sources.contains(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME)) {
                 sources.addAfter(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME,
@@ -118,7 +121,6 @@ class KeyVaultEnvironmentPostProcessorHelper {
 
             return new KeyVaultCertificateCredential(clientId, certResource, certPwd, timeAcquiringTimeoutInSeconds);
         }
-
         if (this.environment.containsProperty(Constants.AZURE_KEYVAULT_CLIENT_ID)) {
             LOG.debug("Will use MSI credentials for VMs with specified clientId");
             final String clientId = getProperty(this.environment, Constants.AZURE_KEYVAULT_CLIENT_ID);

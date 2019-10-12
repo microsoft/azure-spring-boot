@@ -36,7 +36,10 @@ public class KeyVaultOperation {
     private final AtomicLong lastUpdateTime = new AtomicLong();
     private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
 
-    public KeyVaultOperation(final KeyVaultClient keyVaultClient, String vaultUri, final long refreshInterval, final String secretKeysConfig) {
+    public KeyVaultOperation(final KeyVaultClient keyVaultClient,
+                             String vaultUri,
+                             final long refreshInterval,
+                             final String secretKeysConfig) {
         this.cacheRefreshIntervalInMs = refreshInterval;
         this.secretKeys = parseSecretKeys(secretKeysConfig);
         this.keyVaultClient = keyVaultClient;
@@ -48,13 +51,13 @@ public class KeyVaultOperation {
     private String[] parseSecretKeys(String secretKeysConfig) {
         if (StringUtils.isEmpty(secretKeysConfig)) {
             log.info("specific secret keys haven't set, so apply global list mode");
-            return null;
+            return new String[0];
         }
 
-        String[] split = secretKeysConfig.split(",");
-        if (split == null || split.length == 0) {
+        final String[] split = secretKeysConfig.split(",");
+        if (split.length == 0) {
             log.info("specific secret keys haven't set, so apply global list mode");
-            return null;
+            return new String[0];
         }
 
         return split;
@@ -148,11 +151,12 @@ public class KeyVaultOperation {
 
                 this.lastUpdateTime.set(System.currentTimeMillis());
             } else {
-                for (String key : secretKeys) {
-                    if (!propertyNames.contains(key)) {
-                        propertyNames.add(key);
+                for (int i = 0; i < secretKeys.length; i++) {
+                    if (!propertyNames.contains(secretKeys[i])) {
+                        propertyNames.add(secretKeys[i]);
                     }
                 }
+
             }
             propertyNamesArr = propertyNames.toArray(new String[propertyNames.size()]);
         } finally {

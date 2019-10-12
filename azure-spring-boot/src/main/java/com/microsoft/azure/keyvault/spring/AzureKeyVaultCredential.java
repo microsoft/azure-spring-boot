@@ -3,17 +3,12 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-
 package com.microsoft.azure.keyvault.spring;
 
-import com.microsoft.aad.adal4j.AuthenticationContext;
 import com.microsoft.aad.adal4j.AuthenticationResult;
-import com.microsoft.aad.adal4j.ClientCredential;
 import com.microsoft.azure.keyvault.authentication.KeyVaultCredentials;
 import org.apache.commons.lang3.StringUtils;
 
-import java.net.MalformedURLException;
-import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 
@@ -26,10 +21,10 @@ public class AzureKeyVaultCredential extends KeyVaultCredentials {
     private AADAuthUtil aadAuthUtil;
     private String token = "";
     private AtomicLong lastAcquireTokenTime = new AtomicLong();
-    private long expireIn = 0;
-    private final long EXPIRE_BUFFER_TIME = 10 * 1000; //buffer time 10s
+    private AtomicLong expireIn = new AtomicLong();
+    private static final long EXPIRE_BUFFER_TIME = 10 * 1000; //buffer time 10s
 
-    public AzureKeyVaultCredential(String clientId, String clientKey, long timeoutInSeconds,AADAuthUtil aadAuthUtil) {
+    public AzureKeyVaultCredential(String clientId, String clientKey, long timeoutInSeconds, AADAuthUtil aadAuthUtil) {
         this.clientId = clientId;
         this.clientKey = clientKey;
         this.timeoutInSeconds = timeoutInSeconds;
@@ -58,9 +53,13 @@ public class AzureKeyVaultCredential extends KeyVaultCredentials {
         }
 
         try {
-            AuthenticationResult result = aadAuthUtil.getToken(authorization, resource, clientId, clientKey, timeoutInSeconds);
+            final AuthenticationResult result = aadAuthUtil.getToken(authorization,
+                    resource,
+                    clientId,
+                    clientKey,
+                    timeoutInSeconds);
             token = result.getAccessToken();
-            expireIn = result.getExpiresAfter();
+            expireIn.set(result.getExpiresAfter());
             lastAcquireTokenTime.set(System.currentTimeMillis());
         } catch (Exception ex) {
             throw new IllegalStateException("Failed to do authentication.", ex);
@@ -68,6 +67,7 @@ public class AzureKeyVaultCredential extends KeyVaultCredentials {
     }
 
     private boolean needRefresh() {
-        return ((System.currentTimeMillis() - lastAcquireTokenTime.get() + EXPIRE_BUFFER_TIME) / 1000) >= expireIn;
+        return ((System.currentTimeMillis() - lastAcquireTokenTime.get() + EXPIRE_BUFFER_TIME) / 1000) >=
+                expireIn.get();
     }
 }

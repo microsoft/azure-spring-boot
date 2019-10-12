@@ -14,36 +14,61 @@ public class AzureKeyVaultCredentialUnitTest {
 
     @Test(expected = RuntimeException.class)
     public void testDoAuthenticationRejctIfInvalidCredential() {
-        AzureKeyVaultCredential keyVaultCredential = new AzureKeyVaultCredential("fakeClientId", "fakeClientKey", Constants.TOKEN_ACQUIRE_TIMEOUT_SECS);
+        final AzureKeyVaultCredential keyVaultCredential = new AzureKeyVaultCredential("fakeClientId",
+                "fakeClientKey",
+                Constants.TOKEN_ACQUIRE_TIMEOUT_SECS);
         keyVaultCredential.doAuthenticate("https://fakeauthorizationurl.com", "keyvault", "scope");
     }
 
     @Test
     public void testDoAuthenticationPass() throws Exception {
-        MockAADAuthUtil mockAADAuthUtil = new MockAADAuthUtil("token1", 11l);
-        AzureKeyVaultCredential keyVaultCredential = new AzureKeyVaultCredential("fakeClientId", "fakeClientKey", Constants.TOKEN_ACQUIRE_TIMEOUT_SECS, mockAADAuthUtil);
-        String token = keyVaultCredential.doAuthenticate("https://fakeauthorizationurl.com", "keyvault", "scope");
+        final MockAADAuthUtil mockAADAuthUtil = new MockAADAuthUtil("token1", 11L);
+        final AzureKeyVaultCredential keyVaultCredential = new AzureKeyVaultCredential("fakeClientId",
+                "fakeClientKey",
+                Constants.TOKEN_ACQUIRE_TIMEOUT_SECS,
+                mockAADAuthUtil);
+        final String token = keyVaultCredential.doAuthenticate("https://fakeauthorizationurl.com", "keyvault", "scope");
         //assert token from cache
         mockAADAuthUtil.updateToken("token2");
-        assertThat(keyVaultCredential.doAuthenticate("https://fakeauthorizationurl.com", "keyvault", "scope")).isEqualTo(token);
+        assertThat(keyVaultCredential.doAuthenticate("https://fakeauthorizationurl.com",
+                "keyvault",
+                "scope")).isEqualTo(token);
         //assert token refresh
-        Thread.sleep(1000l);
-        assertThat(keyVaultCredential.doAuthenticate("https://fakeauthorizationurl.com", "keyvault", "scope")).isNotEqualTo(token);
+        Thread.sleep(1000L);
+        assertThat(keyVaultCredential.doAuthenticate("https://fakeauthorizationurl.com",
+                "keyvault",
+                "scope")).isNotEqualTo(token);
     }
 
     class MockAADAuthUtil extends AADAuthUtil {
         AuthenticationResult result;
 
         public void updateToken(String token) {
-            result = new AuthenticationResult("mockType", token, "mockRefreshToken", result.getExpiresAfter(), "mockIdToken", null, true);
+            result = new AuthenticationResult("mockType",
+                    token,
+                    "mockRefreshToken",
+                    result.getExpiresAfter(),
+                    "mockIdToken",
+                    null,
+                    true);
         }
 
         public MockAADAuthUtil(String token, long expiresIn) {
-            this.result = new AuthenticationResult("mockType", token, "mockRefreshToken", expiresIn, "mockIdToken", null, true);
+            this.result = new AuthenticationResult("mockType",
+                    token,
+                    "mockRefreshToken",
+                    expiresIn,
+                    "mockIdToken",
+                    null,
+                    true);
         }
 
         @Override
-        public AuthenticationResult getToken(String authorization, String resource, String clientId, String clientKey, long tokenAcquireTimeout) {
+        public AuthenticationResult getToken(String authorization,
+                                             String resource,
+                                             String clientId,
+                                             String clientKey,
+                                             long tokenAcquireTimeout) {
             return result;
         }
     }
