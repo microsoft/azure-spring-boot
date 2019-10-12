@@ -10,43 +10,60 @@ import com.microsoft.azure.PagedList;
 import com.microsoft.azure.keyvault.KeyVaultClient;
 import com.microsoft.azure.keyvault.models.SecretBundle;
 import com.microsoft.azure.keyvault.models.SecretItem;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.Locale;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+@Slf4j
 public class KeyVaultOperation {
     private final long cacheRefreshIntervalInMs;
+    private final String[] secretKeys;
+
     private final Object refreshLock = new Object();
     private final KeyVaultClient keyVaultClient;
     private final String vaultUri;
-    private ConcurrentHashMap<String, Object> propertyNamesHashMap = new ConcurrentHashMap<>();
+
+    private ArrayList<String> propertyNames = new ArrayList();
+    private String[] propertyNamesArr;
+
     private final AtomicLong lastUpdateTime = new AtomicLong();
     private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
 
-    public KeyVaultOperation(final KeyVaultClient keyVaultClient, final String vaultUri) {
-        this(keyVaultClient, vaultUri, Constants.DEFAULT_REFRESH_INTERVAL_MS);
-    }
-
-    public KeyVaultOperation(final KeyVaultClient keyVaultClient, String vaultUri, final long refreshInterval) {
+    public KeyVaultOperation(final KeyVaultClient keyVaultClient, String vaultUri, final long refreshInterval, final String secretKeysConfig) {
         this.cacheRefreshIntervalInMs = refreshInterval;
+        this.secretKeys = parseSecretKeys(secretKeysConfig);
         this.keyVaultClient = keyVaultClient;
         // TODO(pan): need to validate why last '/' need to be truncated.
         this.vaultUri = StringUtils.trimTrailingCharacter(vaultUri.trim(), '/');
+        fillSecretsList();
+    }
 
-        fillSecretsHashMap();
+    private String[] parseSecretKeys(String secretKeysConfig) {
+        if (StringUtils.isEmpty(secretKeysConfig)) {
+            log.info("specific secret keys haven't set, so apply global list mode");
+            return null;
+        }
+
+        String[] split = secretKeysConfig.split(",");
+        if (split == null || split.length == 0) {
+            log.info("specific secret keys haven't set, so apply global list mode");
+            return null;
+        }
+
+        return split;
     }
 
     public String[] list() {
         try {
             this.rwLock.readLock().lock();
-            return Collections.list(propertyNamesHashMap.keys()).toArray(new String[propertyNamesHashMap.size()]);
+            return propertyNamesArr;
         } finally {
             this.rwLock.readLock().unlock();
         }
@@ -85,17 +102,12 @@ public class KeyVaultOperation {
         Assert.hasText(property, "property should contain text.");
         final String secretName = getKeyvaultSecretName(property);
 
-        // refresh periodically
-        if (System.currentTimeMillis() - this.lastUpdateTime.get() > this.cacheRefreshIntervalInMs) {
-            synchronized (this.refreshLock) {
-                if (System.currentTimeMillis() - this.lastUpdateTime.get() > this.cacheRefreshIntervalInMs) {
-                    this.lastUpdateTime.set(System.currentTimeMillis());
-                    fillSecretsHashMap();
-                }
-            }
+        //if user don't set specific secret keys, then refresh token
+        if (this.secretKeys == null || secretKeys.length == 0) {
+            // refresh periodically
+            refreshPropertyNames();
         }
-
-        if (this.propertyNamesHashMap.containsKey(secretName)) {
+        if (this.propertyNames.contains(secretName)) {
             final SecretBundle secretBundle = this.keyVaultClient.getSecret(this.vaultUri, secretName);
             return secretBundle.value();
         } else {
@@ -103,21 +115,46 @@ public class KeyVaultOperation {
         }
     }
 
-    private void fillSecretsHashMap() {
+    private void refreshPropertyNames() {
+        if (System.currentTimeMillis() - this.lastUpdateTime.get() > this.cacheRefreshIntervalInMs) {
+            synchronized (this.refreshLock) {
+                if (System.currentTimeMillis() - this.lastUpdateTime.get() > this.cacheRefreshIntervalInMs) {
+                    this.lastUpdateTime.set(System.currentTimeMillis());
+                    fillSecretsList();
+                }
+            }
+        }
+    }
+
+    private void fillSecretsList() {
         try {
             this.rwLock.writeLock().lock();
-            this.propertyNamesHashMap.clear();
+            if (this.secretKeys == null || secretKeys.length == 0) {
+                this.propertyNames.clear();
 
-            final PagedList<SecretItem> secrets = this.keyVaultClient.listSecrets(this.vaultUri);
-            secrets.loadAll();
+                final PagedList<SecretItem> secrets = this.keyVaultClient.listSecrets(this.vaultUri);
+                secrets.loadAll();
 
-            secrets.forEach(s -> {
-                final String secretName = s.id().replace(vaultUri + "/secrets/", "").toLowerCase(Locale.US);
-                propertyNamesHashMap.putIfAbsent(secretName, s.id());
-                propertyNamesHashMap.putIfAbsent(secretName.replaceAll("-", "."), s.id());
-            });
+                secrets.forEach(s -> {
+                    final String secretName = s.id().replace(vaultUri + "/secrets/", "").toLowerCase(Locale.US);
+                    if (!propertyNames.contains(secretName)) {
+                        propertyNames.add(secretName);
+                    }
 
-            this.lastUpdateTime.set(System.currentTimeMillis());
+                    if (!propertyNames.contains(secretName.replaceAll("-", "."))) {
+                        propertyNames.add(secretName.replaceAll("-", "."));
+                    }
+                });
+
+                this.lastUpdateTime.set(System.currentTimeMillis());
+            } else {
+                for (String key : secretKeys) {
+                    if (!propertyNames.contains(key)) {
+                        propertyNames.add(key);
+                    }
+                }
+            }
+            propertyNamesArr = propertyNames.toArray(new String[propertyNames.size()]);
         } finally {
             this.rwLock.writeLock().unlock();
         }
