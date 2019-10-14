@@ -41,7 +41,7 @@ public class AzureKeyVaultCredentialUnitTest {
     }
 
     class MockAADAuthUtil extends AADAuthUtil {
-        AuthenticationResult result;
+        private AuthenticationResult result;
 
         public void updateToken(String token) {
             result = new AuthenticationResult("mockType",

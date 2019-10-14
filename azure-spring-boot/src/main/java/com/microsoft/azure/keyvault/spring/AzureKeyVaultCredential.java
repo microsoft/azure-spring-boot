@@ -32,7 +32,7 @@ public class AzureKeyVaultCredential extends KeyVaultCredentials {
     }
 
     public AzureKeyVaultCredential(String clientId, String clientKey, long timeoutInSeconds) {
-        this(clientId, clientKey, DEFAULT_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS, new AADAuthUtil());
+        this(clientId, clientKey, timeoutInSeconds, new AADAuthUtil());
     }
 
     public AzureKeyVaultCredential(String clientId, String clientKey) {
