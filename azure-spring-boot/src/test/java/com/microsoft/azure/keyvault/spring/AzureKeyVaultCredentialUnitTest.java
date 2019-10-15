@@ -6,6 +6,7 @@
 package com.microsoft.azure.keyvault.spring;
 
 import com.microsoft.aad.adal4j.AuthenticationResult;
+import com.microsoft.azure.utils.AADAuthUtil;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
