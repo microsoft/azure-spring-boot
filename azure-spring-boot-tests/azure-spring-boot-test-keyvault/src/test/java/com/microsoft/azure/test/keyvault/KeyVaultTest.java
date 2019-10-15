@@ -50,6 +50,19 @@ public class KeyVaultTest {
             assertEquals("value", app.getProperty("key"));
         }
     }
+
+    @Test
+    public void keyVaultAsPropertySourceWithSpecificKeys() {
+        try (AppRunner app = new AppRunner(DumbApp.class)) {
+            app.property("azure.keyvault.enabled", "true");
+            app.property("azure.keyvault.uri", vault.vaultUri());
+            app.property("azure.keyvault.client-id", access.clientId());
+            app.property("azure.keyvault.client-key", access.clientSecret());
+
+            app.start();
+            assertEquals("value", app.getProperty("key"));
+        }
+    }
     
     @SpringBootConfiguration
     @EnableAutoConfiguration
