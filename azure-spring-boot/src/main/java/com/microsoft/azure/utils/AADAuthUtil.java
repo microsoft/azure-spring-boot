@@ -3,7 +3,7 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-package com.microsoft.azure.keyvault.spring;
+package com.microsoft.azure.utils;
 
 import com.microsoft.aad.adal4j.AuthenticationContext;
 import com.microsoft.aad.adal4j.AuthenticationResult;
