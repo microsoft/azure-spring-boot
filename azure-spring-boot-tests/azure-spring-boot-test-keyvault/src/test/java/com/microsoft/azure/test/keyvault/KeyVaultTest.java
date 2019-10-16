@@ -38,7 +38,7 @@ public class KeyVaultTest {
         tool.deleteGroup("spring-boot-test-rg");
     }
 
-    @Test
+//    @Test
     public void keyVaultAsPropertySource() {
         try (AppRunner app = new AppRunner(DumbApp.class)) {
             app.property("azure.keyvault.enabled", "true");
@@ -51,7 +51,7 @@ public class KeyVaultTest {
         }
     }
 
-    @Test
+//    @Test
     public void keyVaultAsPropertySourceWithSpecificKeys() {
         try (AppRunner app = new AppRunner(DumbApp.class)) {
             app.property("azure.keyvault.enabled", "true");

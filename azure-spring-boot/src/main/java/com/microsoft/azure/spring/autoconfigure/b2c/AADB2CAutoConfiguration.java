@@ -35,7 +35,7 @@ import static com.microsoft.azure.telemetry.TelemetryData.*;
 
 @Configuration
 @ConditionalOnWebApplication
-@ConditionalOnResource(resources = "classpath:aadb2cdriver.config")
+@ConditionalOnResource(resources = "classpath:aadb2c.enable.config")
 @ConditionalOnProperty(
         prefix = PREFIX,
         value = {
