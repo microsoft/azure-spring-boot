@@ -29,7 +29,6 @@
         <module>azure-servicebus-spring-boot-starter</module>
         <module>azure-storage-spring-boot-starter</module>
         <module>spring-data-gremlin-boot-starter</module>
-        <module>azure-sqlserver-spring-boot-starter</module>
         <module>azure-servicebus-jms-spring-boot-starter</module>
     </modules>
 
