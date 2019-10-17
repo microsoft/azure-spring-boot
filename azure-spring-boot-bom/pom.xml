@@ -130,11 +130,6 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-sqlserver-spring-boot-starter</artifactId>
-                <version>${azure.spring.boot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-spring-boot</artifactId>
                 <version>${azure.spring.boot.version}</version>
             </dependency>
