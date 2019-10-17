@@ -1,6 +1,5 @@
 org.springframework.boot.env.EnvironmentPostProcessor=com.microsoft.azure.spring.cloundfoundry.environment.VcapProcessor,\
-com.microsoft.azure.keyvault.spring.KeyVaultEnvironmentPostProcessor,\
-com.microsoft.azure.spring.autoconfigure.sqlserver.AlwaysEncryptedEnvironmentPostProcessor
+com.microsoft.azure.keyvault.spring.KeyVaultEnvironmentPostProcessor
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.microsoft.azure.spring.autoconfigure.cosmosdb.DocumentDBAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.cosmosdb.DocumentDbRepositoriesAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.gremlin.GremlinAutoConfiguration,\
@@ -10,5 +9,4 @@ com.microsoft.azure.spring.autoconfigure.servicebus.ServiceBusAutoConfiguration,
 com.microsoft.azure.spring.autoconfigure.storage.StorageAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationFilterAutoConfiguration,\
 com.microsoft.azure.spring.autoconfigure.aad.AADOAuth2AutoConfiguration,\
-com.microsoft.azure.spring.autoconfigure.metrics.AzureMonitorMetricsExportAutoConfiguration,\
-com.microsoft.azure.spring.autoconfigure.sqlserver.AlwaysEncryptedAutoConfiguration
+com.microsoft.azure.spring.autoconfigure.metrics.AzureMonitorMetricsExportAutoConfiguration
