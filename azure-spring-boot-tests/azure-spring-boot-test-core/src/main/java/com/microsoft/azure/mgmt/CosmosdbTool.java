@@ -30,7 +30,7 @@ public class CosmosdbTool {
         final String docDBName = SdkContext.randomResourceName(prefix, 20);
 
         //create CosmosDB
-        CosmosDBAccount cosmosDBAccount = cosmosDBAccounts.define(docDBName)
+        final CosmosDBAccount cosmosDBAccount = cosmosDBAccounts.define(docDBName)
                 .withRegion(Region.US_EAST)
                 .withNewResourceGroup(resourceGroup)
                 .withKind(DatabaseAccountKind.GLOBAL_DOCUMENT_DB)
@@ -42,12 +42,12 @@ public class CosmosdbTool {
 
     public void createDBAndAddCollection(CosmosDBAccount cosmosDBAccount) {
         // Get credentials for the CosmosDB.
-        DatabaseAccountListKeysResult databaseAccountListKeysResult = cosmosDBAccount.listKeys();
-        String masterKey = databaseAccountListKeysResult.primaryMasterKey();
-        String endPoint = cosmosDBAccount.documentEndpoint();
+        final DatabaseAccountListKeysResult databaseAccountListKeysResult = cosmosDBAccount.listKeys();
+        final String masterKey = databaseAccountListKeysResult.primaryMasterKey();
+        final String endPoint = cosmosDBAccount.documentEndpoint();
         // Connect to CosmosDB
         try {
-            DocumentClient documentClient = new DocumentClient(endPoint,
+            final DocumentClient documentClient = new DocumentClient(endPoint,
                     masterKey, ConnectionPolicy.GetDefault(),
                     ConsistencyLevel.Session);
 
@@ -58,7 +58,7 @@ public class CosmosdbTool {
             myDatabase = documentClient
                     .createDatabase(myDatabase, null)
                     .getResource();
-            log.info("created a new database:{}",myDatabase.toString());
+            log.info("created a new database:{}", myDatabase.toString());
             log.info("create DB and collection over");
         } catch (Exception ex) {
             ex.printStackTrace();

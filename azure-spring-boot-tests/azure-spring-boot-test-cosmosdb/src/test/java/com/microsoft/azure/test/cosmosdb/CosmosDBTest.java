@@ -15,13 +15,11 @@ import com.microsoft.azure.spring.autoconfigure.b2c.AADB2CAutoConfiguration;
 import com.microsoft.azure.test.AppRunner;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.util.Optional;
 
 @Slf4j
@@ -51,18 +49,16 @@ public class CosmosDBTest {
     public void testCosmosStarterIsolating() {
         try (AppRunner app = new AppRunner(DummyApp.class)) {
             //set properties
-            DatabaseAccountListKeysResult databaseAccountListKeysResult = cosmosDBAccount.listKeys();
-            String masterKey = databaseAccountListKeysResult.primaryMasterKey();
-            String endPoint = cosmosDBAccount.documentEndpoint();
+            final DatabaseAccountListKeysResult databaseAccountListKeysResult = cosmosDBAccount.listKeys();
+            final String masterKey = databaseAccountListKeysResult.primaryMasterKey();
+            final String endPoint = cosmosDBAccount.documentEndpoint();
             app.property("azure.cosmosdb.uri", endPoint);
             app.property("azure.cosmosdb.key", masterKey);
             app.property("azure.cosmosdb.database", cosmosdbTool.DATABASE_ID);
 
             //start app
             app.start();
-            AADB2CAutoConfiguration bean = app.getBean(AADB2CAutoConfiguration.class);
-            Assert.assertNull(bean);
-            log.info("--------------------->test over");
+            app.getBean(AADB2CAutoConfiguration.class);
         }
     }
 
@@ -70,16 +66,16 @@ public class CosmosDBTest {
     public void testCosmosOperation() {
         try (AppRunner app = new AppRunner(DummyApp.class)) {
             //set properties
-            DatabaseAccountListKeysResult databaseAccountListKeysResult = cosmosDBAccount.listKeys();
-            String masterKey = databaseAccountListKeysResult.primaryMasterKey();
-            String endPoint = cosmosDBAccount.documentEndpoint();
+            final DatabaseAccountListKeysResult databaseAccountListKeysResult = cosmosDBAccount.listKeys();
+            final String masterKey = databaseAccountListKeysResult.primaryMasterKey();
+            final String endPoint = cosmosDBAccount.documentEndpoint();
             app.property("azure.cosmosdb.uri", endPoint);
             app.property("azure.cosmosdb.key", masterKey);
             app.property("azure.cosmosdb.database", cosmosdbTool.DATABASE_ID);
 
             //start app
             app.start();
-            UserRepository repository = app.getBean(UserRepository.class);
+            final UserRepository repository = app.getBean(UserRepository.class);
             final User testUser = new User("testId", "testFirstName", "testLastName", "test address line one");
 
             // Save the User class to Azure CosmosDB database.
@@ -94,16 +90,20 @@ public class CosmosDBTest {
 
             final User savedUser = saveUserMono.block();
             org.springframework.util.Assert.state(savedUser != null, "Saved user must not be null");
-            org.springframework.util.Assert.state(savedUser.getFirstName().equals(testUser.getFirstName()), "Saved user first name doesn't match");
+            org.springframework.util.Assert.state(savedUser.getFirstName().equals(testUser.getFirstName()),
+                    "Saved user first name doesn't match");
 
             firstNameUserFlux.collectList().block();
             final Optional<User> optionalUserResult = repository.findById(testUser.getId()).blockOptional();
             org.springframework.util.Assert.isTrue(optionalUserResult.isPresent(), "Cannot find user.");
 
             final User result = optionalUserResult.get();
-            org.springframework.util.Assert.state(result.getFirstName().equals(testUser.getFirstName()), "query result firstName doesn't match!");
-            org.springframework.util.Assert.state(result.getLastName().equals(testUser.getLastName()), "query result lastName doesn't match!");
+            org.springframework.util.Assert.state(result.getFirstName().equals(testUser.getFirstName()),
+                    "query result firstName doesn't match!");
+            org.springframework.util.Assert.state(result.getLastName().equals(testUser.getLastName()),
+                    "query result lastName doesn't match!");
             log.info("findOne in User collection get result: {}", result.toString());
+            app.close();
             log.info("--------------------->test over");
         }
     }
