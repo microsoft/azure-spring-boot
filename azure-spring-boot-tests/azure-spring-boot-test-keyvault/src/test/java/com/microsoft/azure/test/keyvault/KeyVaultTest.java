@@ -55,6 +55,7 @@ public class KeyVaultTest {
             
             app.start();
             assertEquals("value", app.getProperty("key"));
+            app.close();
             log.info("--------------------->test over");
         }
     }
@@ -70,6 +71,7 @@ public class KeyVaultTest {
 
             app.start();
             assertEquals("value", app.getProperty("key"));
+            app.close();
             log.info("--------------------->test over");
         }
     }

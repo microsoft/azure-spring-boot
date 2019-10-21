@@ -44,7 +44,7 @@ public class ClientSecretAccess implements Access {
     
     private static void assertNotEmpty(String text, String key) {
         if (text == null || text.isEmpty()) {
-            throw new RuntimeException(String.format("%s is not set!", key));
+            throw new IllegalArgumentException(String.format("%s is not set!", key));
         }
     }
     
