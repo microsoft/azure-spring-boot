@@ -5,10 +5,8 @@
  */
 package com.microsoft.azure.test.cosmosdb;
 
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootConfiguration
-@EnableAutoConfiguration
+@SpringBootApplication
 public class DummyApp {
 }

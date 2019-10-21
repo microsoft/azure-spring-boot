@@ -16,8 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import static org.junit.Assert.assertEquals;
 
@@ -76,9 +75,6 @@ public class KeyVaultTest {
         }
     }
 
-
-    
-    @SpringBootConfiguration
-    @EnableAutoConfiguration
+    @SpringBootApplication
     public static class DumbApp {}
 }
