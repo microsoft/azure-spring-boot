@@ -5,7 +5,7 @@
  */
 package com.microsoft.azure.mgmt;
 
-public class Constants {
-    public static final String TEST_RESOURCE_GROUP_NAME =
+public class ConstantsHelper {
+    public static final String TEST_RESOURCE_GROUP_NAME_PREFIX =
             "spring-boot-test-rg";
 }

@@ -7,20 +7,24 @@ package com.microsoft.azure.test.cosmosdb;
 
 import com.microsoft.azure.management.cosmosdb.CosmosDBAccount;
 import com.microsoft.azure.management.cosmosdb.DatabaseAccountListKeysResult;
+import com.microsoft.azure.management.resources.fluentcore.utils.SdkContext;
 import com.microsoft.azure.mgmt.ClientSecretAccess;
-import com.microsoft.azure.mgmt.Constants;
+import com.microsoft.azure.mgmt.ConstantsHelper;
 import com.microsoft.azure.mgmt.CosmosdbTool;
 import com.microsoft.azure.mgmt.ResourceGroupTool;
 import com.microsoft.azure.spring.autoconfigure.b2c.AADB2CAutoConfiguration;
 import com.microsoft.azure.test.AppRunner;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
 import java.util.Optional;
+
 
 @Slf4j
 public class CosmosDBTest {
@@ -28,12 +32,14 @@ public class CosmosDBTest {
     private static CosmosdbTool cosmosdbTool;
     private static ClientSecretAccess access;
     private static CosmosDBAccount cosmosDBAccount;
+    private static String resourceGroupName;
 
     @BeforeClass
     public static void createCosmosDB() {
         access = ClientSecretAccess.load();
         cosmosdbTool = new CosmosdbTool(access);
-        cosmosDBAccount = cosmosdbTool.createCosmosDBInNewGroup(Constants.TEST_RESOURCE_GROUP_NAME, "test-cosmosdb");
+        resourceGroupName = SdkContext.randomResourceName(ConstantsHelper.TEST_RESOURCE_GROUP_NAME_PREFIX, 30);
+        cosmosDBAccount = cosmosdbTool.createCosmosDBInNewGroup(resourceGroupName, "test-cosmosdb");
         cosmosdbTool.createDBAndAddCollection(cosmosDBAccount);
         log.info("------------------resources provision over------------------");
     }
@@ -41,7 +47,7 @@ public class CosmosDBTest {
     @AfterClass
     public static void deleteResourceGroup() {
         final ResourceGroupTool tool = new ResourceGroupTool(access);
-        tool.deleteGroup(Constants.TEST_RESOURCE_GROUP_NAME);
+        tool.deleteGroup(resourceGroupName);
         log.info("---------------------resources clean over------------------");
     }
 
@@ -86,22 +92,22 @@ public class CosmosDBTest {
             //  findById will not return the user as user is not present.
             final Mono<User> findByIdMono = repository.findById(testUser.getId());
             final User findByIdUser = findByIdMono.block();
-            org.springframework.util.Assert.isNull(findByIdUser, "User must be null");
+            Assert.assertNull("User must be null", findByIdUser);
 
             final User savedUser = saveUserMono.block();
-            org.springframework.util.Assert.state(savedUser != null, "Saved user must not be null");
-            org.springframework.util.Assert.state(savedUser.getFirstName().equals(testUser.getFirstName()),
-                    "Saved user first name doesn't match");
+            Assert.assertNotNull("Saved user must not be null", savedUser);
+            Assert.assertEquals("Saved user first name doesn't match",
+                    testUser.getFirstName(), savedUser.getFirstName());
 
             firstNameUserFlux.collectList().block();
             final Optional<User> optionalUserResult = repository.findById(testUser.getId()).blockOptional();
-            org.springframework.util.Assert.isTrue(optionalUserResult.isPresent(), "Cannot find user.");
+            Assert.assertTrue("Cannot find user.", optionalUserResult.isPresent());
 
             final User result = optionalUserResult.get();
-            org.springframework.util.Assert.state(result.getFirstName().equals(testUser.getFirstName()),
-                    "query result firstName doesn't match!");
-            org.springframework.util.Assert.state(result.getLastName().equals(testUser.getLastName()),
-                    "query result lastName doesn't match!");
+            Assert.assertEquals("query result firstName doesn't match!",
+                    testUser.getFirstName(), result.getFirstName());
+            Assert.assertEquals("query result lastName doesn't match!", testUser.getLastName(), result.getLastName());
+
             log.info("findOne in User collection get result: {}", result.toString());
             app.close();
             log.info("--------------------->test over");

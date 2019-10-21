@@ -10,7 +10,6 @@ import com.microsoft.azure.credentials.ApplicationTokenCredentials;
 import com.microsoft.azure.credentials.AzureTokenCredentials;
 
 import java.util.Map;
-import java.util.Properties;
 
 public class ClientSecretAccess implements Access {
     

@@ -6,7 +6,8 @@
 package com.microsoft.azure.test.keyvault;
 
 import com.microsoft.azure.management.keyvault.Vault;
-import com.microsoft.azure.mgmt.Constants;
+import com.microsoft.azure.management.resources.fluentcore.utils.SdkContext;
+import com.microsoft.azure.mgmt.ConstantsHelper;
 import com.microsoft.azure.test.AppRunner;
 import com.microsoft.azure.mgmt.ClientSecretAccess;
 import com.microsoft.azure.mgmt.KeyVaultTool;
@@ -25,13 +26,14 @@ public class KeyVaultTest {
   
     private static ClientSecretAccess access;
     private static Vault vault;
+    private static String resourceGroupName;
     
     @BeforeClass
     public static void createKeyVault() {
         access = ClientSecretAccess.load();
-        
+        resourceGroupName = SdkContext.randomResourceName(ConstantsHelper.TEST_RESOURCE_GROUP_NAME_PREFIX, 30);
         final KeyVaultTool tool = new KeyVaultTool(access);
-        vault = tool.createVaultInNewGroup(Constants.TEST_RESOURCE_GROUP_NAME, "test-keyvault");
+        vault = tool.createVaultInNewGroup(resourceGroupName, "test-keyvault");
         vault.secrets().define("key").withValue("value").create();
         log.info("--------------------->resources provision over");
     }
@@ -39,7 +41,7 @@ public class KeyVaultTest {
     @AfterClass
     public static void deleteResourceGroup() {
         final ResourceGroupTool tool = new ResourceGroupTool(access);
-        tool.deleteGroup(Constants.TEST_RESOURCE_GROUP_NAME);
+        tool.deleteGroup(ConstantsHelper.TEST_RESOURCE_GROUP_NAME_PREFIX);
         log.info("--------------------->resources clean over");
     }
 

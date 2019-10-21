@@ -7,6 +7,7 @@ package com.microsoft.azure.test;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextException;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.SocketUtils;
 
@@ -103,7 +104,7 @@ public class AppRunner implements AutoCloseable {
 
     private ConfigurableApplicationContext getApp()  {
         if (app == null) {
-            throw new RuntimeException("App is not running.");
+            throw new ApplicationContextException("App is not running.");
         }
         return app;
     }
