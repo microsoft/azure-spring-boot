@@ -41,7 +41,7 @@ public class KeyVaultTest {
     @AfterClass
     public static void deleteResourceGroup() {
         final ResourceGroupTool tool = new ResourceGroupTool(access);
-        tool.deleteGroup(ConstantsHelper.TEST_RESOURCE_GROUP_NAME_PREFIX);
+        tool.deleteGroup(resourceGroupName);
         log.info("--------------------->resources clean over");
     }
 
