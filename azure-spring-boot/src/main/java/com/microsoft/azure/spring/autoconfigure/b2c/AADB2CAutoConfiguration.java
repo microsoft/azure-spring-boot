@@ -92,7 +92,7 @@ public class AADB2CAutoConfiguration {
     }
 
     @Configuration
-    @ConditionalOnResource(resources = "classpath:aadb2cdriver.config")
+    @ConditionalOnResource(resources = "classpath:aadb2c.enable.config")
     @ConditionalOnProperty(prefix = PREFIX, value = "oidc-enabled", havingValue = "true", matchIfMissing = true)
     public static class AADB2COidcAutoConfiguration {
 

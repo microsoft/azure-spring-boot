@@ -9,14 +9,15 @@ import com.microsoft.azure.AzureEnvironment;
 import com.microsoft.azure.credentials.ApplicationTokenCredentials;
 import com.microsoft.azure.credentials.AzureTokenCredentials;
 
+import java.util.Map;
 import java.util.Properties;
 
 public class ClientSecretAccess implements Access {
     
-    private static final String TENANT = "azure.tenant";
-    private static final String SUBSCRIPTION = "azure.subscription";
-    private static final String CLIENT_ID = "azure.client.id";
-    private static final String CLIENT_SECRET = "azure.client.secret";
+    private static final String TENANT = "AZURE_TENANT";
+    private static final String SUBSCRIPTION = "AZURE_SUBSCRIPTION";
+    private static final String CLIENT_ID = "AZURE_CLIENT_ID";
+    private static final String CLIENT_SECRET = "AZURE_CLIENT_SECRET";
     
     private String tenant;
     private String subscription;
@@ -25,14 +26,14 @@ public class ClientSecretAccess implements Access {
     private String clientSecret;
     
     public static ClientSecretAccess load() {
-        return load(System.getProperties());
+        return load(System.getenv());
     }
     
-    public static ClientSecretAccess load(Properties props) {
-        final String tenant = props.getProperty(TENANT);
-        final String subscription = props.getProperty(SUBSCRIPTION);
-        final String clientId = props.getProperty(CLIENT_ID);
-        final String clientSecret = props.getProperty(CLIENT_SECRET);
+    public static ClientSecretAccess load(Map<String, String> props) {
+        final String tenant = props.get(TENANT);
+        final String subscription = props.get(SUBSCRIPTION);
+        final String clientId = props.get(CLIENT_ID);
+        final String clientSecret = props.get(CLIENT_SECRET);
         
         assertNotEmpty(tenant, TENANT);
         assertNotEmpty(subscription, SUBSCRIPTION);
