@@ -11,15 +11,16 @@ import com.microsoft.azure.test.AppRunner;
 import com.microsoft.azure.mgmt.ClientSecretAccess;
 import com.microsoft.azure.mgmt.KeyVaultTool;
 import com.microsoft.azure.mgmt.ResourceGroupTool;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
 import static org.junit.Assert.assertEquals;
 
+@Slf4j
 public class KeyVaultTest {
   
     private static ClientSecretAccess access;
@@ -32,14 +33,14 @@ public class KeyVaultTest {
         final KeyVaultTool tool = new KeyVaultTool(access);
         vault = tool.createVaultInNewGroup(Constants.TEST_RESOURCE_GROUP_NAME, "test-keyvault");
         vault.secrets().define("key").withValue("value").create();
-        System.out.println("--------------------->resources provision over");
+        log.info("--------------------->resources provision over");
     }
     
     @AfterClass
     public static void deleteResourceGroup() {
         final ResourceGroupTool tool = new ResourceGroupTool(access);
         tool.deleteGroup(Constants.TEST_RESOURCE_GROUP_NAME);
-        System.out.println("--------------------->resources clean over");
+        log.info("--------------------->resources clean over");
     }
 
     @Test
@@ -52,7 +53,7 @@ public class KeyVaultTest {
             
             app.start();
             assertEquals("value", app.getProperty("key"));
-            System.out.println("--------------------->test over");
+            log.info("--------------------->test over");
         }
     }
 
@@ -67,7 +68,7 @@ public class KeyVaultTest {
 
             app.start();
             assertEquals("value", app.getProperty("key"));
-            System.out.println("--------------------->test over");
+            log.info("--------------------->test over");
         }
     }
 
