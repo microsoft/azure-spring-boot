@@ -52,13 +52,10 @@ public class CosmosdbTool {
                     ConsistencyLevel.Session);
 
             // Define a new database using the id above.
-            Database myDatabase = new Database();
+            final Database myDatabase = new Database();
             myDatabase.setId(DATABASE_ID);
+            documentClient.createDatabase(myDatabase, null);
 
-            myDatabase = documentClient
-                    .createDatabase(myDatabase, null)
-                    .getResource();
-            log.info("created a new database:{}", myDatabase.toString());
             log.info("create DB and collection over");
         } catch (Exception ex) {
             ex.printStackTrace();
