@@ -27,7 +27,6 @@
         <azure.spring.boot.version>2.2.0</azure.spring.boot.version>
         <azure.mgmt.keyvault.version>1.26.0</azure.mgmt.keyvault.version>
         <azure.documentdb.version>1.9.4</azure.documentdb.version>
-        <reactor.netty.version>0.8.3.RELEASE</reactor.netty.version>
         <cobertura.version>2.1.1</cobertura.version>
     </properties>
 
@@ -67,11 +66,6 @@
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-cosmosdb-spring-boot-starter</artifactId>
                 <version>${azure.spring.boot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.projectreactor.netty</groupId>
-                <artifactId>reactor-netty</artifactId>
-                <version>${reactor.netty.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.sourceforge.cobertura</groupId>

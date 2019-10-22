@@ -30,10 +30,6 @@
             <groupId>com.microsoft.azure</groupId>
             <artifactId>spring-data-cosmosdb</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.projectreactor.netty</groupId>
-            <artifactId>reactor-netty</artifactId>
-        </dependency>
     </dependencies>
 
 </project>
