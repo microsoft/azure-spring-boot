@@ -57,7 +57,7 @@ respectively. Specify your user flow **Name** and **User attributes and claims**
    <dependency>
        <groupId>com.microsoft.azure</groupId>
        <artifactId>azure-active-directory-b2c-spring-boot-starter</artifactId>
-       <version>2.1.6.M1</version>
+       <version>2.1.7</version>
    </dependency>
    <dependency>
        <groupId>org.springframework.boot</groupId>
