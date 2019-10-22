@@ -5,12 +5,11 @@
  */
 package com.microsoft.azure.mgmt;
 
-import java.util.Random;
-
 import com.microsoft.azure.management.keyvault.Vault;
 import com.microsoft.azure.management.keyvault.Vaults;
 import com.microsoft.azure.management.keyvault.implementation.KeyVaultManager;
 import com.microsoft.azure.management.resources.fluentcore.arm.Region;
+import com.microsoft.azure.management.resources.fluentcore.utils.SdkContext;
 
 public class KeyVaultTool {
 
@@ -26,7 +25,7 @@ public class KeyVaultTool {
     
     public Vault createVaultInNewGroup(String resourceGroup, String prefix) {
         final String vaultName = keyVaultName(prefix);
-        
+
         Vault result = vaults
                 .define(vaultName)
                 .withRegion(Region.US_WEST)
@@ -50,22 +49,9 @@ public class KeyVaultTool {
     private String keyVaultName(String prefix) {
         String name;
         do {
-            name = String.format("%s-%s", prefix, randomText(4));
+            name = SdkContext.randomResourceName(prefix, 20);
         } while (!vaults.checkNameAvailability(name).nameAvailable());
         
         return name;
-    }
-    
-    private String randomText(int size) {
-        final Random random = new Random();
-        
-        final StringBuilder result = random
-                .ints()
-                .mapToObj(value -> (char) value)
-                .filter(value -> value >= 'a' && value <= 'z')
-                .limit(size)
-                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append);
-
-        return result.toString();
     }
 }
