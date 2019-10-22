@@ -12,7 +12,7 @@ before_install:
 install: "./mvnw -B install -DskipTests=true"
 
 script:
-  - ./mvnw -B verify cobertura:cobertura
+  - chmod +x ./travis-wait-mvn-build.sh && ./travis-wait-mvn-build.sh
   - cd azure-spring-boot-samples && chmod +x gradlew && ./gradlew build
 
 
