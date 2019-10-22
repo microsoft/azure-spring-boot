@@ -28,6 +28,7 @@
         <azure.mgmt.keyvault.version>1.26.0</azure.mgmt.keyvault.version>
         <azure.documentdb.version>1.9.4</azure.documentdb.version>
         <reactor.netty.version>0.8.3.RELEASE</reactor.netty.version>
+        <cobertura.version>2.1.1</cobertura.version>
     </properties>
 
     <dependencyManagement>
@@ -75,7 +76,7 @@
             <dependency>
                 <groupId>net.sourceforge.cobertura</groupId>
                 <artifactId>cobertura</artifactId>
-                <version>2.1.1</version>
+                <version>${cobertura.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
