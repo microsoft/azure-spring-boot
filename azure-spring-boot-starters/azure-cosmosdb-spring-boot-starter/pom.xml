@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-parent</artifactId>
-        <version>2.2.0-SNAPSHOT</version>
+        <version>2.2.0</version>
         <relativePath>../../azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
@@ -29,10 +29,6 @@
         <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>spring-data-cosmosdb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.projectreactor.netty</groupId>
-            <artifactId>reactor-netty</artifactId>
         </dependency>
     </dependencies>
 
