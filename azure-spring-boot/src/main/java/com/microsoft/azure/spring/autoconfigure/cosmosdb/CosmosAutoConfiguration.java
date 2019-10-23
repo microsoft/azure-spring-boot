@@ -33,14 +33,15 @@ public class CosmosAutoConfiguration extends AbstractCosmosConfiguration {
 
     @Bean
     public CosmosDBConfig cosmosDBConfig() {
-        final CosmosDBConfig config = CosmosDBConfig.builder(
-                properties.getUri(), properties.getKey(), properties.getDatabase())
-                .consistencyLevel(properties.getConsistencyLevel())
-                .allowTelemetry(properties.isAllowTelemetry())
-                .connectionPolicy(properties.getConnectionPolicy())
-                .build();
 
-        return config;
+        return CosmosDBConfig.builder(
+                properties.getUri(), properties.getKey(), properties.getDatabase())
+                             .consistencyLevel(properties.getConsistencyLevel())
+                             .allowTelemetry(properties.isAllowTelemetry())
+                             .connectionPolicy(properties.getConnectionPolicy())
+                             .responseDiagnosticsProcessor(properties.getResponseDiagnosticsProcessor())
+                             .populateQueryMetrics(properties.isPopulateQueryMetrics())
+                             .build();
     }
 
     private void configConnectionPolicy(CosmosDBProperties properties, ConnectionPolicy connectionPolicy) {

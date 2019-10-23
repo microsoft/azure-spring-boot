@@ -8,14 +8,16 @@ package com.microsoft.azure.spring.autoconfigure.cosmosdb;
 
 import com.azure.data.cosmos.ConnectionPolicy;
 import com.azure.data.cosmos.ConsistencyLevel;
-
-import javax.validation.constraints.NotEmpty;
-
+import com.microsoft.azure.spring.data.cosmosdb.core.ResponseDiagnosticsProcessor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotEmpty;
+
 @Validated
 @ConfigurationProperties("azure.cosmosdb")
+@Slf4j
 public class CosmosDBProperties {
     /**
      * Document DB URI.
@@ -41,9 +43,25 @@ public class CosmosDBProperties {
     private String database;
 
     /**
+     * Populate Diagnostics Strings and Query metrics
+     */
+    private boolean populateQueryMetrics;
+
+    /**
      * Whether allow Microsoft to collect telemetry data.
      */
     private boolean allowTelemetry = true;
+
+    /**
+     * Response Diagnostics processor
+     * Default implementation is to log the response diagnostics string
+     */
+    private ResponseDiagnosticsProcessor responseDiagnosticsProcessor =
+        responseDiagnostics -> {
+        if (populateQueryMetrics) {
+            log.info("Response Diagnostics {}", responseDiagnostics);
+        }
+    };
 
     private ConnectionPolicy connectionPolicy = ConnectionPolicy.defaultPolicy();
 
@@ -93,5 +111,21 @@ public class CosmosDBProperties {
 
     public void setConnectionPolicy(ConnectionPolicy connectionPolicy) {
         this.connectionPolicy = connectionPolicy;
+    }
+
+    public boolean isPopulateQueryMetrics() {
+        return populateQueryMetrics;
+    }
+
+    public void setPopulateQueryMetrics(boolean populateQueryMetrics) {
+        this.populateQueryMetrics = populateQueryMetrics;
+    }
+
+    public ResponseDiagnosticsProcessor getResponseDiagnosticsProcessor() {
+        return responseDiagnosticsProcessor;
+    }
+
+    public void setResponseDiagnosticsProcessor(ResponseDiagnosticsProcessor responseDiagnosticsProcessor) {
+        this.responseDiagnosticsProcessor = responseDiagnosticsProcessor;
     }
 }
