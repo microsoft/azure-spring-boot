@@ -24,7 +24,7 @@
 
     <properties>
         <spring.boot.version>2.2.0.RELEASE</spring.boot.version>
-        <azure.spring.boot.version>2.2.0-SNAPSHOT</azure.spring.boot.version>
+        <azure.spring.boot.version>2.2.1-SNAPSHOT</azure.spring.boot.version>
         <azure.mgmt.keyvault.version>1.26.0</azure.mgmt.keyvault.version>
         <azure.documentdb.version>1.9.4</azure.documentdb.version>
         <cobertura.version>2.1.1</cobertura.version>
