@@ -10,6 +10,7 @@ import org.apache.qpid.jms.JmsConnectionFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnResource;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ import javax.jms.ConnectionFactory;
 
 @Configuration
 @ConditionalOnClass(JmsConnectionFactory.class)
+@ConditionalOnResource(resources = "classpath:servicebusjms.enable.config")
 @ConditionalOnProperty(value = "spring.jms.servicebus.enabled", matchIfMissing = true)
 @EnableConfigurationProperties(AzureServiceBusJMSProperties.class)
 public class ServiceBusJMSAutoConfiguration {
