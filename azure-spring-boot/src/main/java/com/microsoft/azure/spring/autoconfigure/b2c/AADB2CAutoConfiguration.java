@@ -9,6 +9,7 @@ import com.microsoft.azure.telemetry.TelemetrySender;
 import lombok.NonNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnResource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +35,7 @@ import static com.microsoft.azure.telemetry.TelemetryData.*;
 
 @Configuration
 @ConditionalOnWebApplication
+@ConditionalOnResource(resources = "classpath:aadb2c.enable.config")
 @ConditionalOnProperty(
         prefix = PREFIX,
         value = {
