@@ -35,6 +35,7 @@ public class CosmosDBPropertiesTest {
             assertThat(properties.getKey()).isEqualTo(PropertySettingUtil.KEY);
             assertThat(properties.getConsistencyLevel()).isEqualTo(PropertySettingUtil.CONSISTENCY_LEVEL);
             assertThat(properties.isAllowTelemetry()).isEqualTo(PropertySettingUtil.ALLOW_TELEMETRY_TRUE);
+            assertThat(properties.isPopulateQueryMetrics()).isEqualTo(PropertySettingUtil.POPULATE_QUERY_METRICS);
         }
 
         PropertySettingUtil.unsetProperties();

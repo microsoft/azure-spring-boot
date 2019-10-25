@@ -9,7 +9,7 @@ If you are using Maven, add the following dependency.
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-storage-spring-boot-starter</artifactId>
-    <version>2.2.0.M1</version>
+    <version>2.2.0</version>
 </dependency>
 ```
 

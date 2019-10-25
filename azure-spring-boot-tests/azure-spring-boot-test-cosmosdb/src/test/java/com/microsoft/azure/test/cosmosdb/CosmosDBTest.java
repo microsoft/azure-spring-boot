@@ -61,6 +61,7 @@ public class CosmosDBTest {
             app.property("azure.cosmosdb.uri", endPoint);
             app.property("azure.cosmosdb.key", masterKey);
             app.property("azure.cosmosdb.database", cosmosdbTool.DATABASE_ID);
+            app.property("azure.cosmosdb.populateQueryMetrics", String.valueOf(true));
 
             //start app
             app.start();
@@ -78,6 +79,7 @@ public class CosmosDBTest {
             app.property("azure.cosmosdb.uri", endPoint);
             app.property("azure.cosmosdb.key", masterKey);
             app.property("azure.cosmosdb.database", cosmosdbTool.DATABASE_ID);
+            app.property("azure.cosmosdb.populateQueryMetrics", String.valueOf(true));
 
             //start app
             app.start();
