@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.microsoft.azure</groupId>
+        <artifactId>azure-spring-boot-parent</artifactId>
+        <version>2.1.8-SNAPSHOT</version>
+        <relativePath>../azure-spring-boot-parent/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>azure-spring-boot-tests</artifactId>
+    <packaging>pom</packaging>
+
+    <name>Azure Spring Boot Tests</name>
+    <description>Tests for Azure Spring Boot</description>
+
+    <modules>
+        <module>azure-spring-boot-test-core</module>
+        <module>azure-spring-boot-test-keyvault</module>
+        <module>azure-spring-boot-test-cosmosdb</module>
+    </modules>
+
+    <properties>
+        <spring.boot.version>2.1.7.RELEASE</spring.boot.version>
+        <azure.spring.boot.version>2.1.8-SNAPSHOT</azure.spring.boot.version>
+        <azure.mgmt.keyvault.version>1.26.0</azure.mgmt.keyvault.version>
+        <azure.documentdb.version>1.9.4</azure.documentdb.version>
+        <cobertura.version>2.1.1</cobertura.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-spring-boot-test-core</artifactId>
+                <version>${azure.spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure</artifactId>
+                <version>${azure.mgmt.keyvault.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-documentdb</artifactId>
+                <version>${azure.documentdb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
+                <version>${azure.spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-cosmosdb-spring-boot-starter</artifactId>
+                <version>${azure.spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sourceforge.cobertura</groupId>
+                <artifactId>cobertura</artifactId>
+                <version>${cobertura.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>
