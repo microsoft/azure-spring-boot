@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnResource;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +31,7 @@ import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 
 @Configuration
 @ConditionalOnClass(ServiceURL.class)
+@ConditionalOnResource(resources = "classpath:storage.enable.config")
 @EnableConfigurationProperties(StorageProperties.class)
 @ConditionalOnProperty(prefix = "azure.storage", value = {"account-name", "account-key"})
 public class StorageAutoConfiguration {

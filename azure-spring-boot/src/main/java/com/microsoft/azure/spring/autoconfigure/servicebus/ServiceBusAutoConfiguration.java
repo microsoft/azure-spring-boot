@@ -15,6 +15,7 @@ import com.microsoft.azure.telemetry.TelemetrySender;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnResource;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +32,7 @@ import static org.apache.commons.codec.digest.DigestUtils.sha256Hex;
 @Slf4j
 @Lazy
 @Configuration
+@ConditionalOnResource(resources = "classpath:servicebus.enable.config")
 @EnableConfigurationProperties(ServiceBusProperties.class)
 @ConditionalOnProperty(prefix = "azure.servicebus", value = "connection-string")
 public class ServiceBusAutoConfiguration {
