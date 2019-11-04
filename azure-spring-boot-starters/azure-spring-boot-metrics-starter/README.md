@@ -22,7 +22,7 @@ management.metrics.export.azuremonitor.instrumentation-key=<your-instrumentation
 ```
 
 ### Trouble Shooting
-1. If you use JDK version greater than 1.8, You may meet this problem: 
+1. If the JDK version you use is greater than 1.8, You may meet this problem: 
 ```
 NoClassDefFoundError: javax/xml/bind/JAXBException
 ```
