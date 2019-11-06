@@ -10,6 +10,7 @@ import expect4j.Closure;
 import expect4j.Expect4j;
 import expect4j.matches.Match;
 import expect4j.matches.RegExpMatch;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.oro.text.regex.MalformedPatternException;
 
 import java.io.Closeable;
@@ -22,6 +23,7 @@ import java.util.List;
 /**
  * Utility class to run commands on Linux VM via SSH.
  */
+@Slf4j
 public final class SSHShell implements Closeable {
     private final Session session;
     private final ChannelShell channel;
@@ -102,7 +104,7 @@ public final class SSHShell implements Closeable {
             try {
                 channel.mkdir(path.toString());
             } catch (Exception e) {
-
+                log.error(e.getMessage(), e);
             }
         }
         channel.cd(absolutePath);

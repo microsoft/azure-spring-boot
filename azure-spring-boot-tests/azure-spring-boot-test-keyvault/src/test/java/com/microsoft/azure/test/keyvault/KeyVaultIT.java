@@ -98,13 +98,14 @@ public class KeyVaultIT {
     public void keyVaultWithAppServiceMSI() throws Exception {
         final AppServiceTool appServiceTool = new AppServiceTool(access);
 
-        Map<String, String> appSettings = new HashMap<>();
+        final Map<String, String> appSettings = new HashMap<>();
         appSettings.put("AZURE_KEYVAULT_URI", vault.vaultUri());
 
         final WebApp appService = appServiceTool.createAppService(resourceGroupName, prefix, appSettings);
 
         // Grant System Assigned MSI access to key vault
-        KeyVaultTool.grantSystemAssignedMSIAccessToKeyVault(vault, appService.systemAssignedManagedServiceIdentityPrincipalId());
+        KeyVaultTool.grantSystemAssignedMSIAccessToKeyVault(vault,
+                appService.systemAssignedManagedServiceIdentityPrincipalId());
 
         // Deploy to app through FTP
         appServiceTool.deployJARToAppService(appService, TEST_KEYVAULT_APP_JAR_PATH);
@@ -112,9 +113,9 @@ public class KeyVaultIT {
         // Restart App Service
         appService.restart();
 
-        String resourceUrl = "https://" + appService.name() + ".azurewebsites.net" + "/get";
+        final String resourceUrl = "https://" + appService.name() + ".azurewebsites.net" + "/get";
         // warm up
-        ResponseEntity<String> response = curlWithRetry(resourceUrl, 3, 120_000, String.class);
+        final ResponseEntity<String> response = curlWithRetry(resourceUrl, 3, 120_000, String.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
         assertEquals(response.getBody(), KEYVAULT_VALUE);
@@ -123,14 +124,15 @@ public class KeyVaultIT {
 
     @Test
     public void keyVaultWithVirtualMachineMSI() throws Exception {
-        final VirtualMachineTool virtualMachineTool = new VirtualMachineTool(access);
+        final VirtualMachineTool vmTool = new VirtualMachineTool(access);
 
         // create virtual machine
-        final VirtualMachine vm = virtualMachineTool.createVM(resourceGroupName, prefix, VM_USER_NAME, VM_USER_PASSWORD);
+        final VirtualMachine vm = vmTool.createVM(resourceGroupName, prefix, VM_USER_NAME, VM_USER_PASSWORD);
         final String host = vm.getPrimaryPublicIPAddress().ipAddress();
 
         // Grant System Assigned MSI access to key vault
-        KeyVaultTool.grantSystemAssignedMSIAccessToKeyVault(vault, vm.systemAssignedManagedServiceIdentityPrincipalId());
+        KeyVaultTool.grantSystemAssignedMSIAccessToKeyVault(vault,
+                vm.systemAssignedManagedServiceIdentityPrincipalId());
 
         // Upload app.jar to virtual machine
         try (SSHShell sshShell = SSHShell.open(host, 22, VM_USER_NAME, VM_USER_PASSWORD);
@@ -141,12 +143,13 @@ public class KeyVaultIT {
         }
 
         // run java application
-        List<String> commands = new ArrayList<>();
+        final List<String> commands = new ArrayList<>();
         commands.add(String.format("cd /home/%s", VM_USER_NAME));
-        commands.add(String.format("nohup java -jar -Dazure.keyvault.uri=%s %s &", vault.vaultUri(), TEST_KEY_VAULT_JAR_FILE_NAME));
-        virtualMachineTool.runCommandOnVM(vm, commands);
+        commands.add(String.format("nohup java -jar -Dazure.keyvault.uri=%s %s &", vault.vaultUri(),
+                TEST_KEY_VAULT_JAR_FILE_NAME));
+        vmTool.runCommandOnVM(vm, commands);
 
-        ResponseEntity<String> response = curlWithRetry(
+        final ResponseEntity<String> response = curlWithRetry(
                 String.format("http://%s:8080/get", host),
                 3,
                 60_000,
