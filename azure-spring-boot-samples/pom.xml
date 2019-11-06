@@ -159,10 +159,4 @@
         <module>azure-servicebus-jms-topic-spring-boot-sample</module>
     </modules>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-milestones</id>
-            <url>https://repo.spring.io/milestone</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>
