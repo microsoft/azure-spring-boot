@@ -6,5 +6,3 @@ function write_visual_bells() {
   done
 }
 write_visual_bells&
-
-set -o pipefail && mvn cobertura:cobertura verify | grep -v "DEBUG"
