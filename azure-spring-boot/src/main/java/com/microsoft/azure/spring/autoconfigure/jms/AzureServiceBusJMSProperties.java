@@ -50,7 +50,7 @@ public class AzureServiceBusJMSProperties {
     public void validate() {
 
         if (!StringUtils.hasText(connectionString)) {
-            throw new IllegalArgumentException("'azure.servicebus.jms.connection-string' " +
+            throw new IllegalArgumentException("'spring.jms.servicebus.connection-string' " +
                     "should be provided");
         }
 
