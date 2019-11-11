@@ -9,6 +9,7 @@ import com.microsoft.azure.management.appservice.PublishingProfile;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,7 +48,13 @@ public class ManagementUtils {
                     ftpClient.changeWorkingDirectory(segment);
                 }
             }
-            ftpClient.storeFile(fileName, file);
+
+            boolean result = ftpClient.storeFile(fileName, file);
+            log.info("store file result: " + result);
+            FTPFile[] ftpFiles = ftpClient.listDirectories();
+            for (FTPFile ftpFile : ftpFiles) {
+                log.info("listing ftpfile " + ftpFile.getName());
+            }
             ftpClient.disconnect();
         } catch (IOException e) {
             log.error(e.getMessage(), e);
