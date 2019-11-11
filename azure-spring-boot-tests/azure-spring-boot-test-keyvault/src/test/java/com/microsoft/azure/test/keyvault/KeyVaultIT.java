@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -144,8 +145,12 @@ public class KeyVaultIT {
                 vm.systemAssignedManagedServiceIdentityPrincipalId());
 
         // Upload app.jar to virtual machine
+        final File file = new File(TEST_KEYVAULT_APP_JAR_PATH);
+        if (!file.exists()) {
+            throw new FileNotFoundException("There's no file found on " + TEST_KEYVAULT_APP_JAR_PATH);
+        }
         try (SSHShell sshShell = SSHShell.open(host, 22, VM_USER_NAME, VM_USER_PASSWORD);
-             FileInputStream fis = new FileInputStream(new File(TEST_KEYVAULT_APP_JAR_PATH))) {
+             FileInputStream fis = new FileInputStream(file)) {
 
             log.info(String.format("Uploading jar file %s", TEST_KEYVAULT_APP_JAR_PATH));
             sshShell.upload(fis, TEST_KEY_VAULT_JAR_FILE_NAME, "", true, "4095");

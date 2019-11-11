@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Map;
 
 @Slf4j
@@ -59,7 +60,11 @@ public class AppServiceTool {
     public void deployJARToAppService(WebApp app, String jarFilePath) throws Exception {
         log.info("Deploying a spring boot app " + jarFilePath + " to " + app.name() + " through FTP...");
 
-        try (FileInputStream fis = new FileInputStream(new File(jarFilePath))) {
+        final File file = new File(jarFilePath);
+        if (!file.exists()) {
+            throw new FileNotFoundException("There's no app.jar found on " + jarFilePath);
+        }
+        try (FileInputStream fis = new FileInputStream(file)) {
             ManagementUtils.uploadFileToWebAppWwwRoot(app.getPublishingProfile(), "app.jar", fis);
         }
 
