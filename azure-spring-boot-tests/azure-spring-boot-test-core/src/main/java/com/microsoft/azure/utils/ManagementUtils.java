@@ -51,7 +51,7 @@ public class ManagementUtils {
 
             boolean result = ftpClient.storeFile(fileName, file);
             log.info("store file result: " + result);
-            FTPFile[] ftpFiles = ftpClient.listDirectories();
+            final FTPFile[] ftpFiles = ftpClient.listDirectories();
             for (FTPFile ftpFile : ftpFiles) {
                 log.info("listing ftpfile " + ftpFile.getName());
             }
