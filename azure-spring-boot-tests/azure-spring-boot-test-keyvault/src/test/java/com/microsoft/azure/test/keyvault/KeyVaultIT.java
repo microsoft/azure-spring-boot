@@ -129,7 +129,7 @@ public class KeyVaultIT {
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
         assertEquals(response.getBody(), KEY_VAULT_VALUE);
-        log.info("--------------------->test over");
+        log.info("--------------------->test app service with MSI over");
     }
 
     @Test
@@ -171,7 +171,7 @@ public class KeyVaultIT {
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
         assertEquals(response.getBody(), KEY_VAULT_VALUE);
-        log.info("--------------------->test over");
+        log.info("--------------------->test virtual machine with MSI over");
     }
 
     private static <T> ResponseEntity<T> curlWithRetry(String resourceUrl,

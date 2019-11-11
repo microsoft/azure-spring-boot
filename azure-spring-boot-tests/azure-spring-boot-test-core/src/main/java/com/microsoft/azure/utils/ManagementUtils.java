@@ -6,12 +6,14 @@
 package com.microsoft.azure.utils;
 
 import com.microsoft.azure.management.appservice.PublishingProfile;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+@Slf4j
 public class ManagementUtils {
 
     /**
@@ -45,7 +47,7 @@ public class ManagementUtils {
             ftpClient.storeFile(fileName, file);
             ftpClient.disconnect();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
