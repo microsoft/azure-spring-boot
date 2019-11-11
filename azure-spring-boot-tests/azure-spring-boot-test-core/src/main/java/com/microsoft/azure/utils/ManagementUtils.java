@@ -49,10 +49,10 @@ public class ManagementUtils {
                 }
             }
 
-            boolean result = ftpClient.storeFile(fileName, file);
+            final boolean result = ftpClient.storeFile(fileName, file);
             log.info("store file result: " + result);
             final FTPFile[] ftpFiles = ftpClient.listDirectories();
-            for (FTPFile ftpFile : ftpFiles) {
+            for (final FTPFile ftpFile : ftpFiles) {
                 log.info("listing ftpfile " + ftpFile.getName());
             }
             ftpClient.disconnect();
