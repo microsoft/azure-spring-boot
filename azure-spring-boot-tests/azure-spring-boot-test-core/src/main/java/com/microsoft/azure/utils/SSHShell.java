@@ -5,7 +5,11 @@
  */
 package com.microsoft.azure.utils;
 
-import com.jcraft.jsch.*;
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.ChannelShell;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
+import com.jcraft.jsch.Session;
 import expect4j.Closure;
 import expect4j.Expect4j;
 import expect4j.matches.Match;
@@ -43,15 +47,11 @@ public final class SSHShell implements Closeable {
      * @throws IOException
      */
     private SSHShell(String host, int port, String userName, String password)
-            throws JSchException, IOException {
+            throws JSchException, IOException, MalformedPatternException {
         final Closure expectClosure = getExpectClosure();
         for (final String linuxPromptPattern : new String[]{"\\>", "#", "~#", "~\\$"}) {
-            try {
                 final Match match = new RegExpMatch(linuxPromptPattern, expectClosure);
                 linuxPromptMatches.add(match);
-            } catch (MalformedPatternException malformedEx) {
-                throw new RuntimeException(malformedEx);
-            }
         }
         final JSch jsch = new JSch();
         this.session = jsch.getSession(userName, host, port);
@@ -77,7 +77,7 @@ public final class SSHShell implements Closeable {
      * @throws IOException IO exception thrown
      */
     public static SSHShell open(String host, int port, String userName, String password)
-            throws JSchException, IOException {
+            throws JSchException, IOException, MalformedPatternException {
         return new SSHShell(host, port, userName, password);
     }
 

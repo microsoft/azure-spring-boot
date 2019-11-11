@@ -6,7 +6,12 @@
 package com.microsoft.azure.mgmt;
 
 import com.microsoft.azure.management.Azure;
-import com.microsoft.azure.management.appservice.*;
+import com.microsoft.azure.management.appservice.JavaVersion;
+import com.microsoft.azure.management.appservice.PricingTier;
+import com.microsoft.azure.management.appservice.RuntimeStack;
+import com.microsoft.azure.management.appservice.WebApp;
+import com.microsoft.azure.management.appservice.WebApps;
+import com.microsoft.azure.management.appservice.WebContainer;
 import com.microsoft.azure.management.graphrbac.BuiltInRole;
 import com.microsoft.azure.management.resources.fluentcore.arm.Region;
 import com.microsoft.azure.management.resources.fluentcore.utils.SdkContext;
