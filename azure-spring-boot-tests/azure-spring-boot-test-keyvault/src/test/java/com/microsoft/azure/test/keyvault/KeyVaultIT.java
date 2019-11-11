@@ -38,7 +38,7 @@ public class KeyVaultIT {
     private static final String prefix = "test-keyvault";
     private static final String VM_USER_NAME = "deploy";
     private static final String VM_USER_PASSWORD = "12NewPAwX0rd!";
-    private static final String KEYVAULT_VALUE = "value";
+    private static final String KEY_VAULT_VALUE = "value";
     private static final String TEST_KEY_VAULT_JAR_FILE_NAME = "app.jar";
     private static String TEST_KEYVAULT_APP_JAR_PATH;
 
@@ -48,8 +48,8 @@ public class KeyVaultIT {
         resourceGroupName = SdkContext.randomResourceName(ConstantsHelper.TEST_RESOURCE_GROUP_NAME_PREFIX, 30);
         final KeyVaultTool tool = new KeyVaultTool(access);
         vault = tool.createVaultInNewGroup(resourceGroupName, prefix);
-        vault.secrets().define("key").withValue(KEYVAULT_VALUE).create();
-        vault.secrets().define("azure-cosmosdb-key").withValue(KEYVAULT_VALUE).create();
+        vault.secrets().define("key").withValue(KEY_VAULT_VALUE).create();
+        vault.secrets().define("azure-cosmosdb-key").withValue(KEY_VAULT_VALUE).create();
         restTemplate = new RestTemplate();
 
         TEST_KEYVAULT_APP_JAR_PATH = new File(System.getProperty("keyvault.app.jar.path")).getCanonicalPath();
@@ -72,7 +72,7 @@ public class KeyVaultIT {
             app.property("azure.keyvault.client-key", access.clientSecret());
             
             app.start();
-            assertEquals(KEYVAULT_VALUE, app.getProperty("key"));
+            assertEquals(KEY_VAULT_VALUE, app.getProperty("key"));
             app.close();
             log.info("--------------------->test over");
         }
@@ -88,7 +88,7 @@ public class KeyVaultIT {
             app.property("azure.keyvault.secret.keys", "key");
 
             app.start();
-            assertEquals(KEYVAULT_VALUE, app.getProperty("key"));
+            assertEquals(KEY_VAULT_VALUE, app.getProperty("key"));
             app.close();
             log.info("--------------------->test over");
         }
@@ -118,7 +118,7 @@ public class KeyVaultIT {
         final ResponseEntity<String> response = curlWithRetry(resourceUrl, 3, 120_000, String.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
-        assertEquals(response.getBody(), KEYVAULT_VALUE);
+        assertEquals(response.getBody(), KEY_VAULT_VALUE);
         log.info("--------------------->test over");
     }
 
@@ -156,7 +156,7 @@ public class KeyVaultIT {
                 String.class);
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
-        assertEquals(response.getBody(), KEYVAULT_VALUE);
+        assertEquals(response.getBody(), KEY_VAULT_VALUE);
         log.info("--------------------->test over");
     }
 

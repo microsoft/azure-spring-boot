@@ -12,7 +12,7 @@ import org.apache.commons.net.ftp.FTPClient;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class Utils {
+public class ManagementUtils {
 
     /**
      * Uploads a file to an Azure web app.

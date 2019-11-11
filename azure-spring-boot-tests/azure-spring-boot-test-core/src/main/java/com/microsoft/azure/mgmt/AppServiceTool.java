@@ -10,7 +10,7 @@ import com.microsoft.azure.management.appservice.*;
 import com.microsoft.azure.management.graphrbac.BuiltInRole;
 import com.microsoft.azure.management.resources.fluentcore.arm.Region;
 import com.microsoft.azure.management.resources.fluentcore.utils.SdkContext;
-import com.microsoft.azure.utils.Utils;
+import com.microsoft.azure.utils.ManagementUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -32,7 +32,7 @@ public class AppServiceTool {
     }
 
     public WebApp createAppService(String resourceGroup, String prefix, Map<String, String> settings) {
-        final String appName = SdkContext.randomResourceName(prefix, 20);;
+        final String appName = SdkContext.randomResourceName(prefix, 20);
 
         log.info("Creating web app " + appName);
 
@@ -57,7 +57,7 @@ public class AppServiceTool {
         log.info("Deploying a spring boot app " + jarFilePath + " to " + app.name() + " through FTP...");
 
         try (FileInputStream fis = new FileInputStream(new File(jarFilePath))) {
-            Utils.uploadFileToWebAppWwwRoot(app.getPublishingProfile(), "app.jar", fis);
+            ManagementUtils.uploadFileToWebAppWwwRoot(app.getPublishingProfile(), "app.jar", fis);
         }
 
         log.info("Deployment to web app " + app.name() + " completed");
