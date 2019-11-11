@@ -17,19 +17,20 @@ public class ManagementUtils {
     /**
      * Uploads a file to an Azure web app.
      * @param profile the publishing profile for the web app.
-     * @param fileName the name of the file on server
+     * @param fileNameOrPath the name of the file on server
      * @param file the local file
      */
-    public static void uploadFileToWebAppWwwRoot(PublishingProfile profile, String fileName, InputStream file) {
+    public static void uploadFileToWebAppWwwRoot(PublishingProfile profile, String fileNameOrPath, InputStream file) {
         final FTPClient ftpClient = new FTPClient();
         final String[] ftpUrlSegments = profile.ftpUrl().split("/", 2);
         final String server = ftpUrlSegments[0];
         String path = "./site/wwwroot";
+        String fileName = fileNameOrPath;
 
-        if (fileName.contains("/")) {
-            final int lastSlash = fileName.lastIndexOf('/');
-            path = path + "/" + fileName.substring(0, lastSlash);
-            fileName = fileName.substring(lastSlash + 1);
+        if (fileNameOrPath.contains("/")) {
+            final int lastSlash = fileNameOrPath.lastIndexOf('/');
+            path = path + "/" + fileNameOrPath.substring(0, lastSlash);
+            fileName = fileNameOrPath.substring(lastSlash + 1);
         }
         try {
             ftpClient.connect(server);

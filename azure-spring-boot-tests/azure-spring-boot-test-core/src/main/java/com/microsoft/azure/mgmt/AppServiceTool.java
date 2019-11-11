@@ -20,11 +20,9 @@ import java.util.Map;
 @Slf4j
 public class AppServiceTool {
 
-    private Access access;
     private WebApps webApps;
 
     public AppServiceTool(Access access) {
-        this.access = access;
         webApps = Azure
                 .authenticate(access.credentials())
                 .withSubscription(access.subscription())

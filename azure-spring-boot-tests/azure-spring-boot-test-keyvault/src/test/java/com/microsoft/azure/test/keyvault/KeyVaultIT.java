@@ -9,7 +9,12 @@ import com.microsoft.azure.management.appservice.WebApp;
 import com.microsoft.azure.management.compute.VirtualMachine;
 import com.microsoft.azure.management.keyvault.Vault;
 import com.microsoft.azure.management.resources.fluentcore.utils.SdkContext;
-import com.microsoft.azure.mgmt.*;
+import com.microsoft.azure.mgmt.AppServiceTool;
+import com.microsoft.azure.mgmt.ClientSecretAccess;
+import com.microsoft.azure.mgmt.ConstantsHelper;
+import com.microsoft.azure.mgmt.KeyVaultTool;
+import com.microsoft.azure.mgmt.ResourceGroupTool;
+import com.microsoft.azure.mgmt.VirtualMachineTool;
 import com.microsoft.azure.test.AppRunner;
 import com.microsoft.azure.utils.SSHShell;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +29,11 @@ import org.springframework.web.client.RestTemplate;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
@@ -161,13 +170,14 @@ public class KeyVaultIT {
     }
 
     private static <T> ResponseEntity<T> curlWithRetry(String resourceUrl,
-                                                    int retryTimes,
+                                                    final int retryTimes,
                                                     int sleepMills,
                                                     Class<T> clazz) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         ResponseEntity<T> response = ResponseEntity.of(Optional.empty());
+        int rt = retryTimes;
 
-        while (retryTimes-- > 0 && httpStatus != HttpStatus.OK) {
+        while (rt-- > 0 && httpStatus != HttpStatus.OK) {
             SdkContext.sleep(sleepMills);
 
             log.info("CURLing " + resourceUrl);
