@@ -12,6 +12,7 @@ import org.apache.commons.net.ftp.FTPClient;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 @Slf4j
 public class ManagementUtils {
@@ -25,6 +26,8 @@ public class ManagementUtils {
     public static void uploadFileToWebAppWwwRoot(PublishingProfile profile, String fileNameOrPath, InputStream file) {
         final FTPClient ftpClient = new FTPClient();
         final String[] ftpUrlSegments = profile.ftpUrl().split("/", 2);
+
+        log.info("uploading to ftp " + Arrays.toString(ftpUrlSegments));
         final String server = ftpUrlSegments[0];
         String path = "./site/wwwroot";
         String fileName = fileNameOrPath;
