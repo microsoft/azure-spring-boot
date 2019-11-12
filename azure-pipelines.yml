@@ -26,6 +26,7 @@ steps:
 #    AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
 #    AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
 - task: Gradle@2
+  inputs:
     gradleWrapperFile: 'gradlew'
     workingDirectory: 'azure-spring-boot-samples'
     tasks: 'build'
