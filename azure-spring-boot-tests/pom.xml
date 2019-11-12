@@ -168,6 +168,7 @@
                 <configuration>
                     <systemPropertyVariables>
                         <keyvault.app.jar.path>${project.rootdir}/azure-spring-boot-tests/azure-spring-boot-test-application/target/app.jar</keyvault.app.jar.path>
+                        <keyvault.app.zip.path>${project.rootdir}/azure-spring-boot-tests/azure-spring-boot-test-application/target/app.zip</keyvault.app.zip.path>
                     </systemPropertyVariables>
                 </configuration>
                 <executions>

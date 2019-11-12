@@ -15,12 +15,9 @@ import com.microsoft.azure.management.appservice.WebContainer;
 import com.microsoft.azure.management.graphrbac.BuiltInRole;
 import com.microsoft.azure.management.resources.fluentcore.arm.Region;
 import com.microsoft.azure.management.resources.fluentcore.utils.SdkContext;
-import com.microsoft.azure.utils.ManagementUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Map;
 
 @Slf4j
@@ -55,20 +52,6 @@ public class AppServiceTool {
 
         log.info("Created web app " + app.name());
         return app;
-    }
-
-    public void deployJARToAppService(WebApp app, String jarFilePath) throws Exception {
-        log.info("Deploying a spring boot app " + jarFilePath + " to " + app.name() + " through FTP...");
-
-        final File file = new File(jarFilePath);
-        if (!file.exists()) {
-            throw new FileNotFoundException("There's no app.jar found on " + jarFilePath);
-        }
-        try (FileInputStream fis = new FileInputStream(file)) {
-            ManagementUtils.uploadFileToWebAppWwwRoot(app.getPublishingProfile(), "app.jar", fis);
-        }
-
-        log.info("Deployment to web app " + app.name() + " completed");
     }
 
 }

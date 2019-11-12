@@ -50,7 +50,9 @@ public class KeyVaultIT {
     private static final String VM_USER_PASSWORD = "12NewPAwX0rd!";
     private static final String KEY_VAULT_VALUE = "value";
     private static final String TEST_KEY_VAULT_JAR_FILE_NAME = "app.jar";
+    private static final int DEFAULT_MAX_RETRY_TIMES = 3;
     private static String TEST_KEYVAULT_APP_JAR_PATH;
+    private static String TEST_KEYVAULT_APP_ZIP_PATH;
 
     @BeforeClass
     public static void createKeyVault() throws IOException {
@@ -63,6 +65,9 @@ public class KeyVaultIT {
         restTemplate = new RestTemplate();
 
         TEST_KEYVAULT_APP_JAR_PATH = new File(System.getProperty("keyvault.app.jar.path")).getCanonicalPath();
+        TEST_KEYVAULT_APP_ZIP_PATH = new File(System.getProperty("keyvault.app.zip.path")).getCanonicalPath();
+        log.info("keyvault.app.jar.path={}", TEST_KEYVAULT_APP_JAR_PATH);
+        log.info("keyvault.app.zip.path={}", TEST_KEYVAULT_APP_ZIP_PATH);
         log.info("--------------------->resources provision over");
     }
     
@@ -105,7 +110,7 @@ public class KeyVaultIT {
     }
 
     @Test
-    public void keyVaultWithAppServiceMSI() throws Exception {
+    public void keyVaultWithAppServiceMSI() {
         final AppServiceTool appServiceTool = new AppServiceTool(access);
 
         final Map<String, String> appSettings = new HashMap<>();
@@ -117,8 +122,23 @@ public class KeyVaultIT {
         KeyVaultTool.grantSystemAssignedMSIAccessToKeyVault(vault,
                 appService.systemAssignedManagedServiceIdentityPrincipalId());
 
-        // Deploy to app through FTP
-        appServiceTool.deployJARToAppService(appService, TEST_KEYVAULT_APP_JAR_PATH);
+        // Deploy zip
+        // Add retry logic here to avoid Kudu's socket timeout issue.
+        // More details: https://github.com/Microsoft/azure-maven-plugins/issues/339
+        int retryCount = 0;
+        final File zipFile = new File(TEST_KEYVAULT_APP_ZIP_PATH);
+        while (retryCount < DEFAULT_MAX_RETRY_TIMES) {
+            retryCount += 1;
+            try {
+                appService.zipDeploy(zipFile);
+                log.info(String.format("Successfully deployed the artifact to https://%s",
+                        appService.defaultHostName()));
+            } catch (Exception e) {
+                log.debug(
+                        String.format("Exception occurred when deploying the zip package: %s, " +
+                                "retrying immediately (%d/%d)", e.getMessage(), retryCount, DEFAULT_MAX_RETRY_TIMES));
+            }
+        }
 
         // Restart App Service
         appService.restart();
