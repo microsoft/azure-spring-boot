@@ -20,3 +20,8 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
+  env:
+    AZURE_TENANT: $(AZURE_TENANT)
+    AZURE_SUBSCRIPTION: $(AZURE_SUBSCRIPTION)
+    AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+    AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
