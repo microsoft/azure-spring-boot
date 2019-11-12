@@ -2,11 +2,12 @@
 # Build your Java project and run tests with Apache Maven.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
-
 trigger:
   branches:
     include:
     - master
+    - 2.0.x
+    - 2.1.x
   paths:
     exclude:
     - README.md
@@ -20,6 +21,7 @@ pool:
 
 steps:
 - task: Maven@3
+  displayName: Maven Build
   inputs:
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'
@@ -36,7 +38,12 @@ steps:
     AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
 
 - task: Gradle@2
+  displayName: Gradle Build
   inputs:
     gradleWrapperFile: 'azure-spring-boot-samples/gradlew'
     workingDirectory: 'azure-spring-boot-samples'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: false
     tasks: 'build'
