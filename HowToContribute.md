@@ -38,7 +38,7 @@ mvn clean install -DskipTests
 Developing version naming convention is like `2.0.0-SNAPSHOT`. Release version naming convention is like `2.0.0`. Please don't update version if no release plan. 
 
 ## CI
-Both [Travis](https://travis-ci.org/Microsoft/azure-spring-boot) and [Appveyor](https://ci.appveyor.com/project/yungez/azure-spring-boot) CI is enabled.
+[Appveyor](https://ci.appveyor.com/project/yungez/azure-spring-boot) CI is enabled.
 
 ## Contribution
 Code contribution is welcome. To contribute to existing code or add a new starter, please make sure below check list is checked.
