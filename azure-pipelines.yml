@@ -30,7 +30,7 @@ steps:
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'clean package verify'
+    goals: 'clean package verify install'
   env:
     AZURE_TENANT: $(AZURE_TENANT)
     AZURE_SUBSCRIPTION: $(AZURE_SUBSCRIPTION)
