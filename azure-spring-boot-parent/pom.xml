@@ -27,6 +27,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+        <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
         <spring.boot.version>2.0.3.RELEASE</spring.boot.version>
         <findbugs.annotations.version>2.0.1</findbugs.annotations.version>
         <nimbus.jose.jwt.version>4.39.2</nimbus.jose.jwt.version>
@@ -128,6 +129,7 @@
         </dependencies>
     </dependencyManagement>
 
+
     <build>
         <pluginManagement>
             <plugins>
@@ -157,6 +159,7 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -209,8 +212,7 @@
                     <effort>Max</effort>
                     <threshold>Low</threshold>
                     <xmlOutput>true</xmlOutput>
-                    <findbugsXmlOutputDirectory>${project.build.directory}/findbugs
-                    </findbugsXmlOutputDirectory>
+                    <findbugsXmlOutputDirectory>${project.build.directory}/findbugs</findbugsXmlOutputDirectory>
                     <excludeFilterFile>${project.rootdir}/config/findbugs-exclude.xml</excludeFilterFile>
                 </configuration>
                 <dependencies>
@@ -256,4 +258,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

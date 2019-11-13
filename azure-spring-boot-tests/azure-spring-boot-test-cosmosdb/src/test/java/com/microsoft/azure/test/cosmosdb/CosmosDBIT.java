@@ -23,7 +23,7 @@ import java.util.Optional;
 
 
 @Slf4j
-public class CosmosDBTest {
+public class CosmosDBIT {
 
     private static CosmosdbTool cosmosdbTool;
     private static ClientSecretAccess access;
