@@ -5,10 +5,10 @@
  */
 package com.microsoft.azure.mgmt;
 
-import com.microsoft.azure.documentdb.ConnectionPolicy;
-import com.microsoft.azure.documentdb.ConsistencyLevel;
-import com.microsoft.azure.documentdb.Database;
-import com.microsoft.azure.documentdb.DocumentClient;
+import com.azure.data.cosmos.ConnectionPolicy;
+import com.azure.data.cosmos.ConsistencyLevel;
+import com.azure.data.cosmos.CosmosClient;
+import com.azure.data.cosmos.CosmosClientBuilder;
 import com.microsoft.azure.management.cosmosdb.CosmosDBAccount;
 import com.microsoft.azure.management.cosmosdb.CosmosDBAccounts;
 import com.microsoft.azure.management.cosmosdb.DatabaseAccountKind;
@@ -50,14 +50,15 @@ public class CosmosdbTool {
         final String endPoint = cosmosDBAccount.documentEndpoint();
         // Connect to CosmosDB
         try {
-            final DocumentClient documentClient = new DocumentClient(endPoint,
-                    masterKey, ConnectionPolicy.GetDefault(),
-                    ConsistencyLevel.Session);
+            final CosmosClient cosmosClient = new CosmosClientBuilder()
+                    .endpoint(endPoint)
+                    .key(masterKey)
+                    .connectionPolicy(ConnectionPolicy.defaultPolicy())
+                    .consistencyLevel(ConsistencyLevel.SESSION)
+                    .build();
 
             // Define a new database using the id above.
-            final Database myDatabase = new Database();
-            myDatabase.setId(DATABASE_ID);
-            documentClient.createDatabase(myDatabase, null);
+            cosmosClient.createDatabase(DATABASE_ID).block();
 
             log.info("create DB and collection over");
         } catch (Exception ex) {

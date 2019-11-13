@@ -54,4 +54,15 @@ public class KeyVaultTool {
         
         return name;
     }
-}
+
+    public static void grantSystemAssignedMSIAccessToKeyVault(Vault vault, String systemAssignedMSI) {
+        vault.update()
+                .defineAccessPolicy()
+                    .forObjectId(systemAssignedMSI)
+                    .allowKeyAllPermissions()
+                    .allowSecretAllPermissions()
+                    .attach()
+                .apply();
+    }
+
+ }
