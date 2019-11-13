@@ -20,7 +20,6 @@
     </modules>
 
     <properties>
-        <azure.documentdb.version>1.9.4</azure.documentdb.version>
         <!-- For module that has different relative path to the root dir, project.rootdir should be redefined
         in its module pom file -->
         <project.rootdir>${project.basedir}/..</project.rootdir>
