@@ -8,7 +8,6 @@ package com.microsoft.azure.mgmt;
 import com.azure.data.cosmos.ConnectionPolicy;
 import com.azure.data.cosmos.ConsistencyLevel;
 import com.azure.data.cosmos.CosmosClient;
-import com.azure.data.cosmos.CosmosClientBuilder;
 import com.microsoft.azure.management.cosmosdb.CosmosDBAccount;
 import com.microsoft.azure.management.cosmosdb.CosmosDBAccounts;
 import com.microsoft.azure.management.cosmosdb.DatabaseAccountKind;
@@ -50,7 +49,7 @@ public class CosmosdbTool {
         final String endPoint = cosmosDBAccount.documentEndpoint();
         // Connect to CosmosDB
         try {
-            final CosmosClient cosmosClient = new CosmosClientBuilder()
+            final CosmosClient cosmosClient = CosmosClient.builder()
                     .endpoint(endPoint)
                     .key(masterKey)
                     .connectionPolicy(ConnectionPolicy.defaultPolicy())
