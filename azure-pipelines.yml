@@ -10,7 +10,7 @@ trigger:
     - 2.1.x
   paths:
     exclude:
-    - README.md
+    - '**/*.md'
 pr:
   branches:
     include:
@@ -19,7 +19,7 @@ pr:
     - 2.1.x
   paths:
     exclude:
-    - README.md
+    - '**/*.md'
 
 pool:
   vmImage: 'ubuntu-latest'
