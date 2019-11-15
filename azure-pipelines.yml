@@ -12,9 +12,14 @@ trigger:
     exclude:
     - README.md
 pr:
-- master
-- 2.0.x
-- 2.1.x
+  branches:
+    include:
+    - master
+    - 2.0.x
+    - 2.1.x
+  paths:
+    exclude:
+    - README.md
 
 pool:
   vmImage: 'ubuntu-latest'
