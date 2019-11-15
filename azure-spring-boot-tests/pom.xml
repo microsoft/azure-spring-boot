@@ -32,6 +32,7 @@
         <azure.spring.boot.version>2.0.15-SNAPSHOT</azure.spring.boot.version>
         <azure.mgmt.version>1.26.0</azure.mgmt.version>
         <azure.client.runtime.version>1.6.1</azure.client.runtime.version>
+        <azure.client.authentication.version>1.6.1</azure.client.authentication.version>
         <cobertura.version>2.1.1</cobertura.version>
         <secure.channel.version>0.1.53</secure.channel.version>
         <expect4j.version>1.6</expect4j.version>
@@ -39,6 +40,17 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-client-runtime</artifactId>
+                <version>${azure.client.runtime.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-client-authentication</artifactId>
+                <version>${azure.client.authentication.version}</version>
+            </dependency>
+
             <dependency>
                 <!-- Import dependency management from Spring Boot -->
                 <groupId>org.springframework.boot</groupId>
@@ -102,11 +114,6 @@
                         <groupId>com.microsoft.azure</groupId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-client-runtime</artifactId>
-                <version>${azure.client.runtime.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-net</groupId>

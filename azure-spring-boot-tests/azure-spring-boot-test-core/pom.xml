@@ -20,11 +20,15 @@
     <dependencies>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure</artifactId>
+            <artifactId>azure-client-runtime</artifactId>
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-client-runtime</artifactId>
+            <artifactId>azure-client-authentication</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure</artifactId>
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>

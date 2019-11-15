@@ -18,6 +18,14 @@
     <dependencies>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-client-runtime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-client-authentication</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-cosmosdb-spring-boot-starter</artifactId>
         </dependency>
         <dependency>
