@@ -15,7 +15,6 @@
     <properties>
         <project.rootdir>${project.basedir}/../..</project.rootdir>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.microsoft.azure</groupId>

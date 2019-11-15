@@ -1,65 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.7.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.microsoft.azure</groupId>
-    <artifactId>azure-spring-boot-samples</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>azure-spring-boot-test-application</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-
-    <name>Azure Spring Boot Samples</name>
-    <description>Samples for Azure Spring Boot</description>
-    <url>https://github.com/Microsoft/azure-spring-boot</url>
-
-    <licenses>
-        <license>
-            <name>MIT</name>
-            <url>https://github.com/Microsoft/azure-spring-boot/blob/master/LICENSE</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <id>yungez</id>
-            <name>yunge zhu</name>
-            <email>yungez@microsoft.com</email>
-        </developer>
-
-        <developer>
-            <id>ZhijunZhao</id>
-            <name>Zhijun Zhao</name>
-            <email>zhijzhao@microsoft.com</email>
-        </developer>
-
-        <developer>
-            <id>rajadilipkolli</id>
-            <name>Raja Dilip Kolli</name>
-            <email>rajadileepkolli@outlook.com</email>
-        </developer>
-    </developers>
-
-    <scm>
-        <connection>scm:git:git://github.com/Microsoft/azure-spring-boot-starters.git</connection>
-        <developerConnection>scm:git:ssh://github.com:Microsoft/azure-spring-boot-starters.git</developerConnection>
-        <url>https://github.com/Microsoft/azure-spring-boot/tree/master</url>
-    </scm>
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>1.8</java.version>
-        <project.rootdir>${project.basedir}/..</project.rootdir>
+        <project.rootdir>${project.basedir}/../..</project.rootdir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>
@@ -70,16 +49,16 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>2.3</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <build>
+        <finalName>app</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -135,27 +114,25 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>src/main/resources/assembly/zip.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
-
-    <modules>
-        <module>azure-active-directory-b2c-oidc-spring-boot-sample</module>
-        <module>azure-active-directory-spring-boot-backend-sample</module>
-        <module>azure-active-directory-v2-spring-boot-backend-sample</module>
-        <module>azure-active-directory-spring-boot-sample</module>
-        <module>azure-active-directory-spring-boot-stateless-sample</module>
-        <module>azure-cosmosdb-spring-boot-sample</module>
-        <module>azure-keyvault-secrets-spring-boot-sample</module>
-        <module>azure-mediaservices-spring-boot-sample</module>
-        <module>azure-servicebus-spring-boot-sample</module>
-        <module>azure-storage-spring-boot-sample</module>
-        <module>azure-cloud-foundry-service-sample</module>
-        <module>spring-data-gremlin-boot-sample</module>
-        <module>azure-servicebus-jms-queue-spring-boot-sample</module>
-        <module>azure-servicebus-jms-topic-spring-boot-sample</module>
-    </modules>
 
 </project>
