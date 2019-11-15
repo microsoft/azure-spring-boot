@@ -18,6 +18,7 @@ import com.microsoft.azure.mgmt.VirtualMachineTool;
 import com.microsoft.azure.test.AppRunner;
 import com.microsoft.azure.utils.SSHShell;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -34,7 +35,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
@@ -109,7 +109,8 @@ public class KeyVaultIT {
         }
     }
 
-    @Test
+    //@Test
+    //App Service with MSI not supported in 2.0.x
     public void keyVaultWithAppServiceMSI() {
         final AppServiceTool appServiceTool = new AppServiceTool(access);
 
@@ -143,12 +144,15 @@ public class KeyVaultIT {
         // Restart App Service
         appService.restart();
 
+        log.info(new String(appService.getContainerLogs()));
+
         final String resourceUrl = "https://" + appService.name() + ".azurewebsites.net" + "/get";
         // warm up
         final ResponseEntity<String> response = curlWithRetry(resourceUrl, 3, 120_000, String.class);
 
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
-        assertEquals(response.getBody(), KEY_VAULT_VALUE);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(KEY_VAULT_VALUE, response.getBody());
         log.info("--------------------->test app service with MSI over");
     }
 
@@ -189,8 +193,8 @@ public class KeyVaultIT {
                 60_000,
                 String.class);
 
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
-        assertEquals(response.getBody(), KEY_VAULT_VALUE);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(KEY_VAULT_VALUE, response.getBody());
         log.info("--------------------->test virtual machine with MSI over");
     }
 
