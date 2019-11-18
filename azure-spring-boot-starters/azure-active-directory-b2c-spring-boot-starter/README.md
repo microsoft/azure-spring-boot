@@ -207,7 +207,19 @@ you should be redirected to login page.
 
 4. Click linke with name of `${your-sign-up-or-in}` user flow, you should be rediected Azure AD B2C to start the authentication process.
 
-4. After you have logged in successfully, you should see the sample `home page` from the browser,
+4. After you have logged in successfully, you should see the sample `home page` from the browser.
+
+### Allow telemetry
+
+Microsoft would like to collect data about how users use this Spring boot starter. Microsoft uses this information to improve our tooling experience. Participation is voluntary. If you don't want to participate, just simply disable it by setting below configuration in `application.properties`.
+
+```
+azure.activedirectory.b2c.allow-telemetry=false
+```
+
+When telemetry is enabled, an HTTP request will be sent to URL `https://dc.services.visualstudio.com/v2/track`. So please make sure it's not blocked by your firewall.
+
+Find more information about Azure Service Privacy Statement, please check [Microsoft Online Services Privacy Statement](https://www.microsoft.com/en-us/privacystatement/OnlineServices/Default.aspx).
 
 ## Summary
 
