@@ -30,15 +30,10 @@
         <findbugs.annotations.version>2.0.1</findbugs.annotations.version>
         <nimbus.jose.jwt.version>4.39.2</nimbus.jose.jwt.version>
         <mockito.core.version>2.8.9</mockito.core.version>
-        <azuremonitor.micrometer.registry.version>1.1.0</azuremonitor.micrometer.registry.version>
-        <micrometer.core.version>1.1.0</micrometer.core.version>
-        <spring-boot-actuator-autoconfigure.version>2.1.7.RELEASE</spring-boot-actuator-autoconfigure.version>
         <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
         <wiremock-standalone.version>2.19.0</wiremock-standalone.version>
         <commons-io.version>2.3</commons-io.version>
-        <hibernate.validator.version>6.0.9.Final</hibernate.validator.version>
         <javax.jms-api.version>2.0.1</javax.jms-api.version>
-        <spring-jms.version>5.1.9.RELEASE</spring-jms.version>
         <qpid-jms-client.version>0.43.0</qpid-jms-client.version>
         <junit-params.version>1.1.1</junit-params.version>
     </properties>
@@ -103,48 +98,16 @@
                 <version>${powermock.api.mockito2.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.micrometer</groupId>
-                <artifactId>micrometer-registry-azure-monitor</artifactId>
-                <version>${azuremonitor.micrometer.registry.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.micrometer</groupId>
-                <artifactId>micrometer-core</artifactId>
-                <version>${micrometer.core.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-actuator-autoconfigure</artifactId>
-                <version>${spring-boot-actuator-autoconfigure.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>io.micrometer</groupId>
-                        <artifactId>micrometer-core</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>com.github.tomakehurst</groupId>
                 <artifactId>wiremock-standalone</artifactId>
                 <version>${wiremock-standalone.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.hibernate.validator</groupId>
-                <artifactId>hibernate-validator</artifactId>
-                <version>${hibernate.validator.version}</version>
-            </dependency>
 
-            <!--Spring JMS-->
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-jms</artifactId>
-                <version>${spring-jms.version}</version>
-            </dependency>
             <!--Qpid-->
             <dependency>
                 <groupId>org.apache.qpid</groupId>
