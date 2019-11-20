@@ -15,14 +15,14 @@ steps:
   displayName: Daily Snapshot Publish
   inputs:
     mavenPomFile: 'pom.xml'
-    options: '-s .maven/settings.xml'
+    options: '-DskipITs -s .maven/settings.xml'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'deploy'
+    goals: 'clean deploy'
   env:
     NEXUS_USER: $(nexus_user)
     NEXUS_PASSWORD: $(nexus_password)
