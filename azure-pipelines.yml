@@ -24,32 +24,36 @@ pr:
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
-- task: Maven@3
-  displayName: Maven Build
-  timeoutInMinutes: 0
-  inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'clean package verify'
-  env:
-    AZURE_TENANT: $(AZURE_TENANT)
-    AZURE_SUBSCRIPTION: $(AZURE_SUBSCRIPTION)
-    AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
-    AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
 
-- task: Gradle@2
-  displayName: Gradle Build
-  inputs:
-    gradleWrapperFile: 'azure-spring-boot-samples/gradlew'
-    workingDirectory: 'azure-spring-boot-samples'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: false
-    tasks: 'build'
+jobs:
+- job: CI
+  timeoutInMinutes: 0
+  steps:
+  - task: Maven@3
+    displayName: Maven Build
+    timeoutInMinutes: 0
+    inputs:
+      mavenPomFile: 'pom.xml'
+      mavenOptions: '-Xmx3072m'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.8'
+      jdkArchitectureOption: 'x64'
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      goals: 'clean package verify'
+    env:
+      AZURE_TENANT: $(AZURE_TENANT)
+      AZURE_SUBSCRIPTION: $(AZURE_SUBSCRIPTION)
+      AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+      AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+
+  - task: Gradle@2
+    displayName: Gradle Build
+    inputs:
+      gradleWrapperFile: 'azure-spring-boot-samples/gradlew'
+      workingDirectory: 'azure-spring-boot-samples'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.8'
+      jdkArchitectureOption: 'x64'
+      publishJUnitResults: false
+      tasks: 'build'
