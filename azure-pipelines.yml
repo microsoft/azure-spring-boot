@@ -10,7 +10,7 @@ trigger:
     - 2.1.x
   paths:
     exclude:
-    - '**/*.md'
+    - README.md
 pr:
   branches:
     include:
@@ -19,7 +19,7 @@ pr:
     - 2.1.x
   paths:
     exclude:
-    - '**/*.md'
+    - README.md
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -27,6 +27,7 @@ pool:
 steps:
 - task: Maven@3
   displayName: Maven Build
+  timeoutInMinutes: 0
   inputs:
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'
