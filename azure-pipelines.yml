@@ -11,6 +11,7 @@ trigger:
   paths:
     exclude:
     - README.md
+    - appveyor.yml
 pr:
   branches:
     include:
@@ -20,6 +21,7 @@ pr:
   paths:
     exclude:
     - README.md
+    - appveyor.yml
 
 pool:
   vmImage: 'ubuntu-latest'
