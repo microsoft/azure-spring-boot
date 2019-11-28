@@ -30,7 +30,7 @@ public class KeyVaultOperation {
     private final KeyVaultClient keyVaultClient;
     private final String vaultUri;
 
-    private ArrayList<String> propertyNames = new ArrayList();
+    private ArrayList<String> propertyNames = new ArrayList<>();
     private String[] propertyNamesArr;
 
     private final AtomicLong lastUpdateTime = new AtomicLong();
@@ -139,28 +139,34 @@ public class KeyVaultOperation {
                 secrets.loadAll();
 
                 secrets.forEach(s -> {
-                    final String secretName = s.id().replace(vaultUri + "/secrets/", "").toLowerCase(Locale.US);
-                    if (!propertyNames.contains(secretName)) {
-                        propertyNames.add(secretName);
-                    }
-
-                    if (!propertyNames.contains(secretName.replaceAll("-", "."))) {
-                        propertyNames.add(secretName.replaceAll("-", "."));
-                    }
+                    final String secretName = s.id().replace(vaultUri + "/secrets/", "");
+                    addSecretIfNotExist(secretName);
                 });
 
                 this.lastUpdateTime.set(System.currentTimeMillis());
             } else {
-                for (int i = 0; i < secretKeys.length; i++) {
-                    if (!propertyNames.contains(secretKeys[i])) {
-                        propertyNames.add(secretKeys[i]);
-                    }
+                for (final String secretKey : secretKeys) {
+                    addSecretIfNotExist(secretKey);
                 }
-
             }
-            propertyNamesArr = propertyNames.toArray(new String[propertyNames.size()]);
+            propertyNamesArr = propertyNames.toArray(new String[0]);
         } finally {
             this.rwLock.writeLock().unlock();
         }
     }
+
+    private void addSecretIfNotExist(String keyVaultSecretName) {
+        keyVaultSecretName = keyVaultSecretName.toLowerCase(Locale.US);
+        
+        if (!propertyNames.contains(keyVaultSecretName)) {
+            propertyNames.add(keyVaultSecretName);
+        }
+
+
+        final String secretNameSeparatedByDot = keyVaultSecretName.replaceAll("-", ".");
+        if (!propertyNames.contains(secretNameSeparatedByDot)) {
+            propertyNames.add(secretNameSeparatedByDot);
+        }
+    }
+
 }
