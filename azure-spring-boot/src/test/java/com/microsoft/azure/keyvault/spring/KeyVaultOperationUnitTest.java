@@ -43,16 +43,13 @@ public class KeyVaultOperationUnitTest {
 
     private static final String TEST_SPRING_RELAXED_BINDING_NAME_3 = "ACME_MYPROJECT_PERSON_FIRSTNAME";
 
-    private static final String TEST_SPRING_RELAXED_BINDING_NAME_4 = "acme-myproject-person-firstname";
-
     private static final String TEST_AZURE_KEYVAULT_NAME = "acme-myproject-person-firstname";
 
     private static final List<String> TEST_SPRING_RELAXED_BINDING_NAMES = Arrays.asList(
             TEST_SPRING_RELAXED_BINDING_NAME_0,
             TEST_SPRING_RELAXED_BINDING_NAME_1,
             TEST_SPRING_RELAXED_BINDING_NAME_2,
-            TEST_SPRING_RELAXED_BINDING_NAME_3,
-            TEST_SPRING_RELAXED_BINDING_NAME_4
+            TEST_SPRING_RELAXED_BINDING_NAME_3
     );
 
     @Mock
