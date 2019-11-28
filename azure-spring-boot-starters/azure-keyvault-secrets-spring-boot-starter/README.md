@@ -20,13 +20,15 @@ If you are using Maven, add the following dependency.
 ```
 
 ### Custom settings
-To use custom configuration, open `application.properties` file and add below properties to specify your Azure Key Vault url, Azure service principal client id and client key. `azure.keyvault.enabled` is used to turn on/off Azure Key Vault Secret property source, default is true. `azure.keyvault.token-acquiring-timeout-seconds` is used to specify the timeout in seconds when acquiring token from Azure AAD. Default value is 60 seconds. This property is optional.
-```
+To use custom configuration, open `application.properties` file and add below properties to specify your Azure Key Vault url, Azure service principal client id and client key. `azure.keyvault.enabled` is used to turn on/off Azure Key Vault Secret property source, default is true. `azure.keyvault.token-acquiring-timeout-seconds` is used to specify the timeout in seconds when acquiring token from Azure AAD. Default value is 60 seconds. This property is optional. `azure.keyvault.refresh-interval` is the period for PropertySource to refresh secret keys, its value is 1800000(ms) by default. This property is optional. `azure.keyvault.secret.keys` is a property to indicate that if application using specific secret keys, if this property is set, application will only load the keys in the property and won't load all the keys from keyvault, that means if you want to update your secrets, you need to restart the application rather than only add secrets in the keyvault.
+```properties
 azure.keyvault.enabled=true
 azure.keyvault.uri=put-your-azure-keyvault-uri-here
 azure.keyvault.client-id=put-your-azure-client-id-here
 azure.keyvault.client-key=put-your-azure-client-key-here
 azure.keyvault.token-acquire-timeout-seconds=60
+azure.keyvault.refresh-interval=1800000
+azure.keyvault.secret.keys=key1,key2,key3
 ```
 
 ### Use MSI / Managed identities 
