@@ -152,15 +152,15 @@ public class KeyVaultOperation {
         }
     }
 
-    private void addSecretIfNotExist(String keyVaultSecretName) {
-        keyVaultSecretName = keyVaultSecretName.toLowerCase(Locale.US);
+    private void addSecretIfNotExist(final String secretName) {
+        final String secretNameLowerCase = secretName.toLowerCase(Locale.US);
 
-        if (!propertyNames.contains(keyVaultSecretName)) {
-            propertyNames.add(keyVaultSecretName);
+        if (!propertyNames.contains(secretNameLowerCase)) {
+            propertyNames.add(secretNameLowerCase);
         }
 
 
-        final String secretNameSeparatedByDot = keyVaultSecretName.replaceAll("-", ".");
+        final String secretNameSeparatedByDot = secretNameLowerCase.replaceAll("-", ".");
         if (!propertyNames.contains(secretNameSeparatedByDot)) {
             propertyNames.add(secretNameSeparatedByDot);
         }
