@@ -15,7 +15,7 @@ steps:
   displayName: Daily Snapshot Publish
   inputs:
     mavenPomFile: 'pom.xml'
-    options: '-DskipITs -s .maven/settings.xml'
+    options: '-DskipITs -s .maven/settings.xml -DaltDeploymentRepository=nexus-snapshots::default::https://oss.sonatype.org/content/repositories/snapshots/ -pl !azure-spring-boot-samples,!azure-spring-boot-tests'
     mavenOptions: '-Xmx3072m'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
