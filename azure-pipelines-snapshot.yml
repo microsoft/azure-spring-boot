@@ -7,6 +7,9 @@ trigger: none
 
 pr: none
 
+variables: 
+- group: nexus-snapshot-repository
+
 pool:
   vmImage: 'ubuntu-latest'
 
