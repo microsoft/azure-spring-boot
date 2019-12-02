@@ -30,6 +30,8 @@ public class KeyVaultOperationUnitTest {
 
     private static final String testPropertyName1 = "testPropertyName1";
 
+    private static final String secretKey1 = "key1";
+
     private static final String fakeVaultUri = "https://fake.vault.com";
 
     private static final String TEST_SPRING_RELAXED_BINDING_NAME_0 = "acme.my-project.person.first-name";
@@ -82,10 +84,19 @@ public class KeyVaultOperationUnitTest {
         //test get with no specific secret keys
         setupSecretBundle(testPropertyName1, testPropertyName1, null);
         assertThat(keyVaultOperation.get(testPropertyName1)).isEqualToIgnoringCase(testPropertyName1);
+    }
 
+    @Test
+    public void testGetAndMissWhenSecretsProvided() {
         //test get with specific secret key configs
         setupSecretBundle(testPropertyName1, testPropertyName1, secretKeysConfig);
         assertThat(keyVaultOperation.get(testPropertyName1)).isEqualToIgnoringCase(null);
+    }
+
+    @Test
+    public void testGetAndHitWhenSecretsProvided() {
+        setupSecretBundle(secretKey1, secretKey1, secretKeysConfig);
+        assertThat(keyVaultOperation.get(secretKey1)).isEqualToIgnoringCase(secretKey1);
     }
 
     @Test
@@ -105,10 +116,22 @@ public class KeyVaultOperationUnitTest {
 
     @Test
     public void setTestSpringRelaxedBindingNames() {
+        //test list with no specific secret keys
         setupSecretBundle(TEST_AZURE_KEYVAULT_NAME, TEST_AZURE_KEYVAULT_NAME, null);
 
         TEST_SPRING_RELAXED_BINDING_NAMES.forEach(
                 n -> assertThat(keyVaultOperation.get(n)).isEqualTo(TEST_AZURE_KEYVAULT_NAME)
+        );
+
+        //test list with specific secret key configs
+        setupSecretBundle(TEST_AZURE_KEYVAULT_NAME, TEST_AZURE_KEYVAULT_NAME, TEST_AZURE_KEYVAULT_NAME);
+        TEST_SPRING_RELAXED_BINDING_NAMES.forEach(
+                n -> assertThat(keyVaultOperation.get(n)).isEqualTo(TEST_AZURE_KEYVAULT_NAME)
+        );
+
+        setupSecretBundle(TEST_AZURE_KEYVAULT_NAME, TEST_AZURE_KEYVAULT_NAME, secretKeysConfig);
+        TEST_SPRING_RELAXED_BINDING_NAMES.forEach(
+                n -> assertThat(keyVaultOperation.get(n)).isEqualTo(null)
         );
     }
 
