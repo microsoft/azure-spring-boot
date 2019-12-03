@@ -27,7 +27,11 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class KeyVaultOperationUnitTest {
 
+    private static final String secretKeysConfig = "key1,key2,key3";
+
     private static final String testPropertyName1 = "testPropertyName1";
+
+    private static final String secretKey1 = "key1";
 
     private static final String fakeVaultUri = "https://fake.vault.com";
 
@@ -52,7 +56,7 @@ public class KeyVaultOperationUnitTest {
     private KeyVaultClient keyVaultClient;
     private KeyVaultOperation keyVaultOperation;
 
-    public void setupSecretBundle(String id, String value) {
+    public void setupSecretBundle(String id, String value, String secretKeysConfig) {
         final PagedList<SecretItem> mockResult = new PagedList<SecretItem>() {
             @Override
             public Page<SecretItem> nextPage(String s) throws RestException {
@@ -71,32 +75,64 @@ public class KeyVaultOperationUnitTest {
         when(keyVaultClient.listSecrets(anyString())).thenReturn(mockResult);
         when(keyVaultClient.getSecret(anyString(), anyString())).thenReturn(secretBundle);
 
-        keyVaultOperation = new KeyVaultOperation(keyVaultClient, fakeVaultUri);
+        keyVaultOperation = new KeyVaultOperation(keyVaultClient, fakeVaultUri, Constants.TOKEN_ACQUIRE_TIMEOUT_SECS,
+                secretKeysConfig);
+
     }
 
     @Test
     public void testGet() {
-        setupSecretBundle(testPropertyName1, testPropertyName1);
-
+        //test get with no specific secret keys
+        setupSecretBundle(testPropertyName1, testPropertyName1, null);
         assertThat(keyVaultOperation.get(testPropertyName1)).isEqualToIgnoringCase(testPropertyName1);
     }
 
     @Test
+    public void testGetAndMissWhenSecretsProvided() {
+        //test get with specific secret key configs
+        setupSecretBundle(testPropertyName1, testPropertyName1, secretKeysConfig);
+        assertThat(keyVaultOperation.get(testPropertyName1)).isEqualToIgnoringCase(null);
+    }
+
+    @Test
+    public void testGetAndHitWhenSecretsProvided() {
+        setupSecretBundle(secretKey1, secretKey1, secretKeysConfig);
+        assertThat(keyVaultOperation.get(secretKey1)).isEqualToIgnoringCase(secretKey1);
+    }
+
+    @Test
     public void testList() {
-        setupSecretBundle(testPropertyName1, testPropertyName1);
-
+        //test list with no specific secret keys
+        setupSecretBundle(testPropertyName1, testPropertyName1, null);
         final String[] result = keyVaultOperation.list();
-
         assertThat(result.length).isEqualTo(1);
         assertThat(result[0]).isEqualToIgnoringCase(testPropertyName1);
+
+        //test list with specific secret key configs
+        setupSecretBundle(testPropertyName1, testPropertyName1, secretKeysConfig);
+        final String[] specificResult = keyVaultOperation.list();
+        assertThat(specificResult.length).isEqualTo(3);
+        assertThat(specificResult[0]).isEqualTo(secretKeysConfig.split(",")[0]);
     }
 
     @Test
     public void setTestSpringRelaxedBindingNames() {
-        setupSecretBundle(TEST_AZURE_KEYVAULT_NAME, TEST_AZURE_KEYVAULT_NAME);
+        //test list with no specific secret keys
+        setupSecretBundle(TEST_AZURE_KEYVAULT_NAME, TEST_AZURE_KEYVAULT_NAME, null);
 
         TEST_SPRING_RELAXED_BINDING_NAMES.forEach(
                 n -> assertThat(keyVaultOperation.get(n)).isEqualTo(TEST_AZURE_KEYVAULT_NAME)
+        );
+
+        //test list with specific secret key configs
+        setupSecretBundle(TEST_AZURE_KEYVAULT_NAME, TEST_AZURE_KEYVAULT_NAME, TEST_AZURE_KEYVAULT_NAME);
+        TEST_SPRING_RELAXED_BINDING_NAMES.forEach(
+                n -> assertThat(keyVaultOperation.get(n)).isEqualTo(TEST_AZURE_KEYVAULT_NAME)
+        );
+
+        setupSecretBundle(TEST_AZURE_KEYVAULT_NAME, TEST_AZURE_KEYVAULT_NAME, secretKeysConfig);
+        TEST_SPRING_RELAXED_BINDING_NAMES.forEach(
+                n -> assertThat(keyVaultOperation.get(n)).isEqualTo(null)
         );
     }
 
