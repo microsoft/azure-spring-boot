@@ -66,9 +66,9 @@ public class AADAppRoleStatelessAuthenticationFilterIT {
                 assertEquals(HttpClientErrorException.Forbidden.class, e.getClass());
             }
 
-            HttpHeaders headers = new HttpHeaders();
+            final HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", String.format("Bearer %s", authResponse.getIdToken()));
-            HttpEntity entity = new HttpEntity(headers);
+            final HttpEntity entity = new HttpEntity(headers);
 
             final ResponseEntity<String> response2 = restTemplate.exchange(app.root() + "authorized",
                     HttpMethod.GET, entity, String.class, new HashMap<>());

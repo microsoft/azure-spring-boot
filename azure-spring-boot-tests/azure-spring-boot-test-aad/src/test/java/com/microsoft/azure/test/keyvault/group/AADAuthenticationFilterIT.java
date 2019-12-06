@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See LICENSE in the project root for
+ * license information.
+ */
 package com.microsoft.azure.test.keyvault.group;
 
 import com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationFilter;
@@ -60,7 +65,7 @@ public class AADAuthenticationFilterIT {
             assertEquals(HttpStatus.OK, response.getStatusCode());
             assertEquals("home", response.getBody());
 
-            HttpHeaders headers = new HttpHeaders();
+            final HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", String.format("Bearer %s", authResponse.getIdToken()));
             HttpEntity entity = new HttpEntity(headers);
 
