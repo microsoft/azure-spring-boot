@@ -28,8 +28,8 @@ public class OAuthUtils {
     private static final OkHttpClient client = new OkHttpClient();
 
     public static OAuthResponse executeOAuth2ROPCFlow() {
-        MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-        RequestBody body = RequestBody.create(mediaType, String.format("client_id=%s" +
+        final MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        final RequestBody body = RequestBody.create(mediaType, String.format("client_id=%s" +
                         "&scope=user.read openid profile offline_access" +
                         "&client_secret=%s" +
                         "&username=%s" +
@@ -41,7 +41,7 @@ public class OAuthUtils {
                 System.getenv(AAD_USER_PASSWORD)
         ));
 
-        Request request = new Request.Builder()
+        final Request request = new Request.Builder()
                 .url(String.format("https://login.microsoftonline.com/%s/oauth2/v2.0/token",
                         System.getenv().get(AAD_TENANT_ID)))
                 .post(body)
@@ -56,7 +56,7 @@ public class OAuthUtils {
                 .build();
 
         try {
-            Response response = client.newCall(request).execute();
+            final Response response = client.newCall(request).execute();
 
             assertNotNull("OAuth response body should not be null.", response.body());
 
