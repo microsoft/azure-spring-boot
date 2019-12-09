@@ -11,6 +11,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.apache.http.util.Asserts;
 
 import java.io.IOException;
 
@@ -29,16 +30,26 @@ public class OAuthUtils {
 
     public static OAuthResponse executeOAuth2ROPCFlow() {
         final MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
+        final String aadClientId = System.getenv(AAD_CLIENT_ID);
+        final String aadClientSecret = System.getenv(AAD_CLIENT_SECRET);
+        final String aadUsername = System.getenv(AAD_USER_NAME);
+        final String aadUserPassword = System.getenv(AAD_USER_PASSWORD);
+
+        assertNotEmpty(aadClientId, AAD_CLIENT_ID);
+        assertNotEmpty(aadClientSecret, AAD_CLIENT_SECRET);
+        assertNotEmpty(aadUsername, AAD_USER_NAME);
+        assertNotEmpty(aadUserPassword, AAD_USER_PASSWORD);
+
         final RequestBody body = RequestBody.create(mediaType, String.format("client_id=%s" +
                         "&scope=user.read openid profile offline_access" +
                         "&client_secret=%s" +
                         "&username=%s" +
                         "&password=%s" +
                         "&grant_type=password",
-                System.getenv(AAD_CLIENT_ID),
-                System.getenv(AAD_CLIENT_SECRET),
-                System.getenv(AAD_USER_NAME),
-                System.getenv(AAD_USER_PASSWORD)
+                aadClientId,
+                aadClientSecret,
+                aadUsername,
+                aadUserPassword
         ));
 
         final Request request = new Request.Builder()
@@ -64,6 +75,12 @@ public class OAuthUtils {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    private static void assertNotEmpty(String text, String key) {
+        if (text == null || text.isEmpty()) {
+            throw new IllegalArgumentException(String.format("%s is not set!", key));
         }
     }
 
