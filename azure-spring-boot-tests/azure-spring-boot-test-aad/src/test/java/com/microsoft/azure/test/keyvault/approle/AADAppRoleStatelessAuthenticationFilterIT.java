@@ -10,6 +10,7 @@ import com.microsoft.azure.test.AppRunner;
 import com.microsoft.azure.test.oauth.OAuthResponse;
 import com.microsoft.azure.test.oauth.OAuthUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -41,6 +42,7 @@ public class AADAppRoleStatelessAuthenticationFilterIT {
     private RestTemplate restTemplate = new RestTemplate();
 
     @Test
+    @Ignore
     public void testAADAppRoleStatelessAuthenticationFilter() {
         final OAuthResponse authResponse = OAuthUtils.executeOAuth2ROPCFlow();
         assertNotNull(authResponse);
