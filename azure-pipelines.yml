@@ -26,6 +26,9 @@ pr:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  - group: aad-auth
+
 
 jobs:
 - job: CI
@@ -48,6 +51,10 @@ jobs:
       AZURE_SUBSCRIPTION: $(AZURE_SUBSCRIPTION)
       AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
       AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+      AAD_CLIENT_ID: $(AAD_CLIENT_ID)
+      AAD_CLIENT_SECRET: $(AAD_CLIENT_SECRET)
+      AAD_USER_NAME: $(AAD_USER_NAME)
+      AAD_USER_PASSWORD: $(AAD_USER_PASSWORD)
 
   - task: Gradle@2
     displayName: Gradle Build
