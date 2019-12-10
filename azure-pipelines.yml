@@ -19,6 +19,9 @@ pr:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  - group: aad-auth
+
 jobs:
 - job: CI
   timeoutInMinutes: 0
