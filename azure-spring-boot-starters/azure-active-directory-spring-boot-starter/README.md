@@ -163,6 +163,14 @@ azure.activedirectory.environment=cn-v2-graph
 
 Please refer to [azure-active-directory-v2-spring-boot-backend-sample](../../azure-spring-boot-samples/azure-active-directory-v2-spring-boot-backend-sample/) to see a sample configured to use the Microsoft Graph API.
 
+### Using Microsoft identity platform endpoints
+If you want to use v2 version endpoints to do authorization and authentication, please pay attention to the attributes of claims, because there are some attributes exits in v1 version id-token by default but not in v2 version id-token, if you have to get that attribute, please make sure to add it into your scope.
+There is the doc [Difference between v1 and v2](https://docs.microsoft.com/en-us/azure/active-directory/develop/azure-ad-endpoint-comparison), For example, the name attribute doesn't exist in v2 token, if you want it, you need add `profile` to your scope, like this:
+```properties
+spring.security.oauth2.client.registration.azure.scope=openid, https://graph.microsoft.com/user.read, profile
+```
+You can see more details in this link: [details](https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens)
+
 #### Allow telemetry
 Microsoft would like to collect data about how users use this Spring boot starter.
 Microsoft uses this information to improve our tooling experience. Participation is voluntary.
