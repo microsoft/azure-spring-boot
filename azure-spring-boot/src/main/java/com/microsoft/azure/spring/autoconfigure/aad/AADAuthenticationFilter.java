@@ -5,10 +5,17 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.microsoft.aad.adal4j.ClientCredential;
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.proc.BadJOSEException;
-import com.nimbusds.jose.util.ResourceRetriever;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.text.ParseException;
+import java.util.concurrent.ExecutionException;
+
+import javax.naming.ServiceUnavailableException;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -16,15 +23,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.naming.ServiceUnavailableException;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.text.ParseException;
-import java.util.concurrent.ExecutionException;
+import com.microsoft.aad.adal4j.ClientCredential;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.jwk.source.JWKSetCache;
+import com.nimbusds.jose.proc.BadJOSEException;
+import com.nimbusds.jose.util.ResourceRetriever;
 
 public class AADAuthenticationFilter extends OncePerRequestFilter {
     private static final Logger log = LoggerFactory.getLogger(AADAuthenticationFilter.class);
@@ -46,6 +49,15 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
         this.aadAuthProps = aadAuthProps;
         this.serviceEndpointsProps = serviceEndpointsProps;
         this.principalManager = new UserPrincipalManager(serviceEndpointsProps, aadAuthProps, resourceRetriever, false);
+    }
+
+    public AADAuthenticationFilter(AADAuthenticationProperties aadAuthProps,
+                                   ServiceEndpointsProperties serviceEndpointsProps,
+                                   ResourceRetriever resourceRetriever,
+                                   JWKSetCache jwkSetCache) {
+        this.aadAuthProps = aadAuthProps;
+        this.serviceEndpointsProps = serviceEndpointsProps;
+        this.principalManager = new UserPrincipalManager(serviceEndpointsProps, aadAuthProps, resourceRetriever, false, jwkSetCache);
     }
 
     @Override

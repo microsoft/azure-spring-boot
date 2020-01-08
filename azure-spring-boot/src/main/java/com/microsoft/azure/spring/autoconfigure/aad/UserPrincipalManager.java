@@ -5,9 +5,17 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.ParseException;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSObject;
+import com.nimbusds.jose.jwk.source.JWKSetCache;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.jwk.source.RemoteJWKSet;
 import com.nimbusds.jose.proc.BadJOSEException;
@@ -16,15 +24,13 @@ import com.nimbusds.jose.proc.JWSVerificationKeySelector;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jose.util.ResourceRetriever;
 import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.proc.*;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import lombok.extern.slf4j.Slf4j;
+import com.nimbusds.jwt.proc.BadJWTException;
+import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
+import com.nimbusds.jwt.proc.DefaultJWTClaimsVerifier;
+import com.nimbusds.jwt.proc.DefaultJWTProcessor;
+import com.nimbusds.jwt.proc.JWTClaimsSetVerifier;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.text.ParseException;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class UserPrincipalManager {
@@ -73,6 +79,37 @@ public class UserPrincipalManager {
         try {
             keySource = new RemoteJWKSet<>(new URL(serviceEndpointsProps
                     .getServiceEndpoints(aadAuthProps.getEnvironment()).getAadKeyDiscoveryUri()), resourceRetriever);
+        } catch (MalformedURLException e) {
+            log.error("Failed to parse active directory key discovery uri.", e);
+            throw new IllegalStateException("Failed to parse active directory key discovery uri.", e);
+        }
+    }
+
+    /**
+     * Create a new {@link UserPrincipalManager} based of the {@link ServiceEndpoints#getAadKeyDiscoveryUri()} and
+     * {@link AADAuthenticationProperties#getEnvironment()}.
+     *
+     * @param serviceEndpointsProps - used to retrieve the JWKS URL
+     * @param aadAuthProps          - used to retrieve the environment.
+     * @param resourceRetriever     - configures the {@link RemoteJWKSet} call.
+     * @param jwkSetCache           - used to cache the JWK set for a finite time
+     */
+    public UserPrincipalManager(ServiceEndpointsProperties serviceEndpointsProps,
+                                AADAuthenticationProperties aadAuthProps,
+                                ResourceRetriever resourceRetriever,
+                                boolean explicitAudienceCheck,
+                                JWKSetCache jwkSetCache) {
+        this.aadAuthProps = aadAuthProps;
+        this.explicitAudienceCheck = explicitAudienceCheck;
+        if (explicitAudienceCheck) {
+            // client-id for "normal" check
+            this.validAudiences.add(this.aadAuthProps.getClientId());
+            // app id uri for client credentials flow (server to server communication)
+            this.validAudiences.add(this.aadAuthProps.getAppIdUri());
+        }
+        try {
+            keySource = new RemoteJWKSet<>(new URL(serviceEndpointsProps
+                    .getServiceEndpoints(aadAuthProps.getEnvironment()).getAadKeyDiscoveryUri()), resourceRetriever, jwkSetCache);
         } catch (MalformedURLException e) {
             log.error("Failed to parse active directory key discovery uri.", e);
             throw new IllegalStateException("Failed to parse active directory key discovery uri.", e);
