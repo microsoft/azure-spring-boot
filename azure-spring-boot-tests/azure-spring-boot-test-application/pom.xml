@@ -38,6 +38,12 @@
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.61</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

@@ -5,11 +5,11 @@
  */
 package com.microsoft.azure.keyvault.spring;
 
-import com.microsoft.azure.Page;
-import com.microsoft.azure.PagedList;
-import com.microsoft.azure.keyvault.KeyVaultClient;
-import com.microsoft.azure.keyvault.models.SecretBundle;
-import com.microsoft.azure.keyvault.models.SecretItem;
+import com.azure.core.http.rest.PagedFlux;
+import com.azure.core.http.rest.PagedIterable;
+import com.azure.security.keyvault.secrets.SecretClient;
+import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
+import com.azure.security.keyvault.secrets.models.SecretProperties;
 import com.microsoft.rest.RestException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -32,7 +32,7 @@ public class KeyVaultOperationUnitTest {
 
     private static final String secretKey1 = "key1";
 
-    private static final String fakeVaultUri = "https://fake.vault.com";
+    private static final String fakeVaultUri = "https:fake.vault.com";
 
     private static final String TEST_SPRING_RELAXED_BINDING_NAME_0 = "acme.my-project.person.first-name";
 
@@ -52,7 +52,7 @@ public class KeyVaultOperationUnitTest {
     );
 
     @Mock
-    private KeyVaultClient keyVaultClient;
+    private SecretClient keyVaultClient;
     private KeyVaultOperation keyVaultOperation;
 
     public void setupSecretBundle(String id, String value, String secretKeysConfig) {
@@ -62,16 +62,12 @@ public class KeyVaultOperationUnitTest {
                 return new MockPage();
             }
         };
-
-        final SecretItem secretItem = new SecretItem();
-        secretItem.withId(id);
+        final KeyVaultSecret secretItem = new KeyVaultSecret(id, value);
         mockResult.add(secretItem);
 
-        final SecretBundle secretBundle = new SecretBundle();
+        final KeyVaultSecret secretBundle = new KeyVaultSecret(id, value);
 
-        secretBundle.withId(id).withValue(value);
-
-        when(keyVaultClient.listSecrets(anyString())).thenReturn(mockResult);
+        when(keyVaultClient.listPropertiesOfSecrets()).thenReturn(mockResult);
         when(keyVaultClient.getSecret(anyString(), anyString())).thenReturn(secretBundle);
         keyVaultOperation = new KeyVaultOperation(keyVaultClient,
                 fakeVaultUri,
@@ -136,19 +132,18 @@ public class KeyVaultOperationUnitTest {
     }
 
 
-    class MockPage implements Page<SecretItem> {
+    class MockPage extends PagedIterable<SecretProperties> {
 
-        final SecretItem mockSecretItem = new SecretItem();
+        final SecretProperties mockSecretItem = new SecretProperties();
 
-        @Override
-        public String nextPageLink() {
-            return null;
-        }
 
-        @Override
-        public List<SecretItem> items() {
-            mockSecretItem.withId("testPropertyName1");
-            return Collections.singletonList(mockSecretItem);
+        /**
+         * Creates instance given {@link PagedFlux}.
+         *
+         * @param pagedFlux to use as iterable
+         */
+        public MockPage(PagedFlux<SecretProperties> pagedFlux) {
+            super(pagedFlux);
         }
     }
 }
