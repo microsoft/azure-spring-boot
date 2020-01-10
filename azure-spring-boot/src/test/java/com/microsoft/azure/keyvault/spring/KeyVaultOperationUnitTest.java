@@ -10,17 +10,16 @@ import com.azure.core.http.rest.PagedIterable;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
 import com.azure.security.keyvault.secrets.models.SecretProperties;
-import com.microsoft.rest.RestException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -56,19 +55,11 @@ public class KeyVaultOperationUnitTest {
     private KeyVaultOperation keyVaultOperation;
 
     public void setupSecretBundle(String id, String value, String secretKeysConfig) {
-        final PagedList<SecretItem> mockResult = new PagedList<SecretItem>() {
-            @Override
-            public Page<SecretItem> nextPage(String s) throws RestException {
-                return new MockPage();
-            }
-        };
-        final KeyVaultSecret secretItem = new KeyVaultSecret(id, value);
-        mockResult.add(secretItem);
-
+        //provision for list
+        when(keyVaultClient.listPropertiesOfSecrets()).thenReturn(new MockPage(new PagedFlux<>(() -> null), id));
+        //provison for get
         final KeyVaultSecret secretBundle = new KeyVaultSecret(id, value);
-
-        when(keyVaultClient.listPropertiesOfSecrets()).thenReturn(mockResult);
-        when(keyVaultClient.getSecret(anyString(), anyString())).thenReturn(secretBundle);
+        when(keyVaultClient.getSecret(anyString())).thenReturn(secretBundle);
         keyVaultOperation = new KeyVaultOperation(keyVaultClient,
                 fakeVaultUri,
                 Constants.TOKEN_ACQUIRE_TIMEOUT_SECS,
@@ -131,11 +122,13 @@ public class KeyVaultOperationUnitTest {
         );
     }
 
-
     class MockPage extends PagedIterable<SecretProperties> {
+        private String name;
 
-        final SecretProperties mockSecretItem = new SecretProperties();
-
+        public MockPage(PagedFlux<SecretProperties> pagedFlux, String name) {
+            super(pagedFlux);
+            this.name = name;
+        }
 
         /**
          * Creates instance given {@link PagedFlux}.
@@ -144,6 +137,24 @@ public class KeyVaultOperationUnitTest {
          */
         public MockPage(PagedFlux<SecretProperties> pagedFlux) {
             super(pagedFlux);
+        }
+
+        @Override
+        public void forEach(Consumer<? super SecretProperties> action) {
+            action.accept(new MockSecretProperties(name));
+        }
+    }
+
+    class MockSecretProperties extends SecretProperties {
+        private String name;
+
+        public MockSecretProperties(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getName() {
+            return name;
         }
     }
 }
