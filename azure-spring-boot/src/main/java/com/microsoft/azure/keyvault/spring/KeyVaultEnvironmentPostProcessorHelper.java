@@ -71,7 +71,7 @@ class KeyVaultEnvironmentPostProcessorHelper {
         }
     }
 
-    TokenCredential getCredentials() {
+    private TokenCredential getCredentials() {
         //use service principle to authenticate
         if (this.environment.containsProperty(Constants.AZURE_KEYVAULT_CLIENT_ID)
                 && this.environment.containsProperty(Constants.AZURE_KEYVAULT_CLIENT_KEY)
