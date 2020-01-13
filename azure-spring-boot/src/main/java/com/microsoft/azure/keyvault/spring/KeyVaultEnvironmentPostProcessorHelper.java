@@ -15,6 +15,9 @@ import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
 import com.microsoft.azure.telemetry.TelemetrySender;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.boot.context.properties.bind.Bindable;
+import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.StandardEnvironment;
@@ -22,7 +25,9 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -45,7 +50,9 @@ class KeyVaultEnvironmentPostProcessorHelper {
         final Long refreshInterval = Optional.ofNullable(
                 this.environment.getProperty(Constants.AZURE_KEYVAULT_REFRESH_INTERVAL))
                 .map(Long::valueOf).orElse(Constants.DEFAULT_REFRESH_INTERVAL_MS);
-        final String secretKeys = this.environment.getProperty(Constants.AZURE_KEYVAULT_SECRET_KEYS);
+        final Binder binder = Binder.get(this.environment);
+        final List<String> secretKeys = binder.bind(Constants.AZURE_KEYVAULT_SECRET_KEYS, Bindable.listOf(String.class))
+                .orElse(Collections.emptyList());
 
         final TokenCredential tokenCredential = getCredentials();
         final SecretClient secretClient = new SecretClientBuilder()
