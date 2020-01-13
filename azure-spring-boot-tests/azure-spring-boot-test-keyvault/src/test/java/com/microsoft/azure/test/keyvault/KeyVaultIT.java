@@ -113,7 +113,7 @@ public class KeyVaultIT {
             app.property("azure.keyvault.client-id", access.clientId());
             app.property("azure.keyvault.client-key", access.clientSecret());
             app.property("azure.keyvault.tenant-id", access.tenant());
-            app.property("azure.keyvault.secret.keys", "key");
+            app.property("azure.keyvault.secret.keys", "key , azure-cosmosdb-key");
 
             app.start();
             assertEquals(KEY_VAULT_VALUE, app.getProperty("key"));

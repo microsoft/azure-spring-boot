@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class KeyVaultOperationUnitTest {
-    private static final String secretKeysConfig = "key1,key2,key3";
+    private static final List<String> secretKeysConfig = Arrays.asList("key1", "key2", "key3");
 
     private static final String testPropertyName1 = "testPropertyName1";
 
@@ -54,7 +54,7 @@ public class KeyVaultOperationUnitTest {
     private SecretClient keyVaultClient;
     private KeyVaultOperation keyVaultOperation;
 
-    public void setupSecretBundle(String id, String value, String secretKeysConfig) {
+    public void setupSecretBundle(String id, String value, List<String> secretKeysConfig) {
         //provision for list
         when(keyVaultClient.listPropertiesOfSecrets()).thenReturn(new MockPage(new PagedFlux<>(() -> null), id));
         //provison for get
@@ -98,7 +98,7 @@ public class KeyVaultOperationUnitTest {
         setupSecretBundle(testPropertyName1, testPropertyName1, secretKeysConfig);
         final String[] specificResult = keyVaultOperation.list();
         assertThat(specificResult.length).isEqualTo(3);
-        assertThat(specificResult[0]).isEqualTo(secretKeysConfig.split(",")[0]);
+        assertThat(specificResult[0]).isEqualTo(secretKeysConfig.get(0));
     }
 
     @Test
@@ -111,7 +111,7 @@ public class KeyVaultOperationUnitTest {
         );
 
         //test list with specific secret key configs
-        setupSecretBundle(TEST_AZURE_KEYVAULT_NAME, TEST_AZURE_KEYVAULT_NAME, TEST_AZURE_KEYVAULT_NAME);
+        setupSecretBundle(TEST_AZURE_KEYVAULT_NAME, TEST_AZURE_KEYVAULT_NAME, Arrays.asList(TEST_AZURE_KEYVAULT_NAME));
         TEST_SPRING_RELAXED_BINDING_NAMES.forEach(
                 n -> assertThat(keyVaultOperation.get(n)).isEqualTo(TEST_AZURE_KEYVAULT_NAME)
         );
