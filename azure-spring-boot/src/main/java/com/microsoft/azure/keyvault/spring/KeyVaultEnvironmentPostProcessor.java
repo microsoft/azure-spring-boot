@@ -6,6 +6,7 @@
 
 package com.microsoft.azure.keyvault.spring;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.boot.env.EnvironmentPostProcessor;
@@ -13,13 +14,13 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.util.ClassUtils;
 
+@Slf4j
 public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcessor, Ordered {
     public static final int DEFAULT_ORDER = ConfigFileApplicationListener.DEFAULT_ORDER + 1;
     private int order = DEFAULT_ORDER;
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-
         if (isKeyVaultEnabled(environment)) {
             final KeyVaultEnvironmentPostProcessorHelper helper =
                     new KeyVaultEnvironmentPostProcessorHelper(environment);
@@ -37,7 +38,7 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
     }
 
     private boolean isKeyVaultClientAvailable() {
-        return ClassUtils.isPresent("com.microsoft.azure.keyvault.KeyVaultClient",
+        return ClassUtils.isPresent("com.azure.security.keyvault.secrets.SecretClient",
                 KeyVaultEnvironmentPostProcessor.class.getClassLoader());
     }
 
