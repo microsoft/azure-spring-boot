@@ -6,10 +6,10 @@
 
 package com.microsoft.azure.keyvault.spring;
 
-import com.microsoft.azure.PagedList;
-import com.microsoft.azure.keyvault.KeyVaultClient;
-import com.microsoft.azure.keyvault.models.SecretBundle;
-import com.microsoft.azure.keyvault.models.SecretItem;
+import com.azure.core.http.rest.PagedIterable;
+import com.azure.security.keyvault.secrets.SecretClient;
+import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
+import com.azure.security.keyvault.secrets.models.SecretProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
@@ -27,7 +27,7 @@ public class KeyVaultOperation {
     private final String[] secretKeys;
 
     private final Object refreshLock = new Object();
-    private final KeyVaultClient keyVaultClient;
+    private final SecretClient keyVaultClient;
     private final String vaultUri;
 
     private ArrayList<String> propertyNames = new ArrayList<>();
@@ -36,7 +36,7 @@ public class KeyVaultOperation {
     private final AtomicLong lastUpdateTime = new AtomicLong();
     private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
 
-    public KeyVaultOperation(final KeyVaultClient keyVaultClient,
+    public KeyVaultOperation(final SecretClient keyVaultClient,
                              String vaultUri,
                              final long refreshInterval,
                              final String secretKeysConfig) {
@@ -111,8 +111,8 @@ public class KeyVaultOperation {
             refreshPropertyNames();
         }
         if (this.propertyNames.contains(secretName)) {
-            final SecretBundle secretBundle = this.keyVaultClient.getSecret(this.vaultUri, secretName);
-            return secretBundle == null ? null : secretBundle.value();
+            final KeyVaultSecret secret = this.keyVaultClient.getSecret(secretName);
+            return secret == null ? null : secret.getValue();
         } else {
             return null;
         }
@@ -135,11 +135,9 @@ public class KeyVaultOperation {
             if (this.secretKeys == null || secretKeys.length == 0) {
                 this.propertyNames.clear();
 
-                final PagedList<SecretItem> secrets = this.keyVaultClient.listSecrets(this.vaultUri);
-                secrets.loadAll();
-
-                secrets.forEach(s -> {
-                    final String secretName = s.id().replace(vaultUri + "/secrets/", "");
+                final PagedIterable<SecretProperties> secretProperties = keyVaultClient.listPropertiesOfSecrets();
+                secretProperties.forEach(s -> {
+                    final String secretName = s.getName().replace(vaultUri + "/secrets/", "");
                     addSecretIfNotExist(secretName);
                 });
 
@@ -157,12 +155,9 @@ public class KeyVaultOperation {
 
     private void addSecretIfNotExist(final String secretName) {
         final String secretNameLowerCase = secretName.toLowerCase(Locale.US);
-        
         if (!propertyNames.contains(secretNameLowerCase)) {
             propertyNames.add(secretNameLowerCase);
         }
-
-
         final String secretNameSeparatedByDot = secretNameLowerCase.replaceAll("-", ".");
         if (!propertyNames.contains(secretNameSeparatedByDot)) {
             propertyNames.add(secretNameSeparatedByDot);

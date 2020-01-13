@@ -70,6 +70,7 @@ Open `application.properties` file and add below properties to specify your Azur
 azure.keyvault.uri=put-your-azure-keyvault-uri-here
 azure.keyvault.client-id=put-your-azure-client-id-here
 azure.keyvault.client-key=put-your-azure-client-key-here
+azure.keyvault.tenant-id=put-your-azure-tenant-id-here
 
 # Uncomment following property if you want to specify the secrets to load from Key Vault
 # azure.keyvault.secret.keys=yourSecretPropertyName1,yourSecretPropertyName2

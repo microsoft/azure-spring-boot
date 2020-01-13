@@ -5,20 +5,19 @@
  */
 package com.microsoft.azure.keyvault.spring;
 
-import com.microsoft.azure.Page;
-import com.microsoft.azure.PagedList;
-import com.microsoft.azure.keyvault.KeyVaultClient;
-import com.microsoft.azure.keyvault.models.SecretBundle;
-import com.microsoft.azure.keyvault.models.SecretItem;
-import com.microsoft.rest.RestException;
+import com.azure.core.http.rest.PagedFlux;
+import com.azure.core.http.rest.PagedIterable;
+import com.azure.security.keyvault.secrets.SecretClient;
+import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
+import com.azure.security.keyvault.secrets.models.SecretProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -32,7 +31,7 @@ public class KeyVaultOperationUnitTest {
 
     private static final String secretKey1 = "key1";
 
-    private static final String fakeVaultUri = "https://fake.vault.com";
+    private static final String fakeVaultUri = "https:fake.vault.com";
 
     private static final String TEST_SPRING_RELAXED_BINDING_NAME_0 = "acme.my-project.person.first-name";
 
@@ -52,27 +51,15 @@ public class KeyVaultOperationUnitTest {
     );
 
     @Mock
-    private KeyVaultClient keyVaultClient;
+    private SecretClient keyVaultClient;
     private KeyVaultOperation keyVaultOperation;
 
     public void setupSecretBundle(String id, String value, String secretKeysConfig) {
-        final PagedList<SecretItem> mockResult = new PagedList<SecretItem>() {
-            @Override
-            public Page<SecretItem> nextPage(String s) throws RestException {
-                return new MockPage();
-            }
-        };
-
-        final SecretItem secretItem = new SecretItem();
-        secretItem.withId(id);
-        mockResult.add(secretItem);
-
-        final SecretBundle secretBundle = new SecretBundle();
-
-        secretBundle.withId(id).withValue(value);
-
-        when(keyVaultClient.listSecrets(anyString())).thenReturn(mockResult);
-        when(keyVaultClient.getSecret(anyString(), anyString())).thenReturn(secretBundle);
+        //provision for list
+        when(keyVaultClient.listPropertiesOfSecrets()).thenReturn(new MockPage(new PagedFlux<>(() -> null), id));
+        //provison for get
+        final KeyVaultSecret secretBundle = new KeyVaultSecret(id, value);
+        when(keyVaultClient.getSecret(anyString())).thenReturn(secretBundle);
         keyVaultOperation = new KeyVaultOperation(keyVaultClient,
                 fakeVaultUri,
                 Constants.TOKEN_ACQUIRE_TIMEOUT_SECS,
@@ -135,20 +122,39 @@ public class KeyVaultOperationUnitTest {
         );
     }
 
+    class MockPage extends PagedIterable<SecretProperties> {
+        private String name;
 
-    class MockPage implements Page<SecretItem> {
+        public MockPage(PagedFlux<SecretProperties> pagedFlux, String name) {
+            super(pagedFlux);
+            this.name = name;
+        }
 
-        final SecretItem mockSecretItem = new SecretItem();
-
-        @Override
-        public String nextPageLink() {
-            return null;
+        /**
+         * Creates instance given {@link PagedFlux}.
+         *
+         * @param pagedFlux to use as iterable
+         */
+        public MockPage(PagedFlux<SecretProperties> pagedFlux) {
+            super(pagedFlux);
         }
 
         @Override
-        public List<SecretItem> items() {
-            mockSecretItem.withId("testPropertyName1");
-            return Collections.singletonList(mockSecretItem);
+        public void forEach(Consumer<? super SecretProperties> action) {
+            action.accept(new MockSecretProperties(name));
+        }
+    }
+
+    class MockSecretProperties extends SecretProperties {
+        private String name;
+
+        public MockSecretProperties(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String getName() {
+            return name;
         }
     }
 }

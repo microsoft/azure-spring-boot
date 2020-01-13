@@ -36,6 +36,7 @@
         <cobertura.version>2.1.1</cobertura.version>
         <secure.channel.version>0.1.53</secure.channel.version>
         <expect4j.version>1.6</expect4j.version>
+        <commons.net.version>3.3</commons.net.version>
     </properties>
 
     <dependencyManagement>
@@ -92,9 +93,8 @@
             <dependency>
                 <groupId>commons-net</groupId>
                 <artifactId>commons-net</artifactId>
-                <version>3.3</version>
+                <version>${commons.net.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -168,8 +168,12 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <systemPropertyVariables>
-                        <keyvault.app.jar.path>${project.rootdir}/azure-spring-boot-tests/azure-spring-boot-test-application/target/app.jar</keyvault.app.jar.path>
-                        <keyvault.app.zip.path>${project.rootdir}/azure-spring-boot-tests/azure-spring-boot-test-application/target/app.zip</keyvault.app.zip.path>
+                        <keyvault.app.jar.path>
+                            ${project.rootdir}/azure-spring-boot-tests/azure-spring-boot-test-application/target/app.jar
+                        </keyvault.app.jar.path>
+                        <keyvault.app.zip.path>
+                            ${project.rootdir}/azure-spring-boot-tests/azure-spring-boot-test-application/target/app.zip
+                        </keyvault.app.zip.path>
                     </systemPropertyVariables>
                 </configuration>
                 <executions>
