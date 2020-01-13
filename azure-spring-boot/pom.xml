@@ -151,17 +151,13 @@
             <artifactId>azure-storage-blob</artifactId>
             <optional>true</optional>
         </dependency>
-        <!-- declare version in current pom temporarily, move to azure-dependency-bom later -->
         <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-security-keyvault-secrets</artifactId>
-            <version>4.1.0</version>
         </dependency>
-        <!-- declare version in current pom temporarily, move to azure-dependency-bom later -->
         <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-identity</artifactId>
-            <version>1.0.2</version>
         </dependency>
         <dependency>
             <groupId>com.microsoft.azure</groupId>
