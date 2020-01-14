@@ -33,7 +33,6 @@
         <maven-javadoc-plugin.version>3.0.0</maven-javadoc-plugin.version>
         <wiremock-standalone.version>2.19.0</wiremock-standalone.version>
         <commons-io.version>2.3</commons-io.version>
-        <javax.jms-api.version>2.0.1</javax.jms-api.version>
         <qpid-jms-client.version>0.43.0</qpid-jms-client.version>
         <junit-params.version>1.1.1</junit-params.version>
     </properties>
@@ -107,14 +106,12 @@
                 <artifactId>wiremock-standalone</artifactId>
                 <version>${wiremock-standalone.version}</version>
             </dependency>
-
             <!--Qpid-->
             <dependency>
                 <groupId>org.apache.qpid</groupId>
                 <artifactId>qpid-jms-client</artifactId>
                 <version>${qpid-jms-client.version}</version>
             </dependency>
-
             <!-- TEST -->
             <dependency>
                 <groupId>pl.pragmatists</groupId>

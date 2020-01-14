@@ -15,7 +15,7 @@ If you are using Maven, add the following dependency.
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
-    <version>0.2.3</version>
+    <version>2.1.8</version>
 </dependency>
 ```
 
@@ -26,6 +26,7 @@ azure.keyvault.enabled=true
 azure.keyvault.uri=put-your-azure-keyvault-uri-here
 azure.keyvault.client-id=put-your-azure-client-id-here
 azure.keyvault.client-key=put-your-azure-client-key-here
+azure.keyvault.tenant-id=put-your-azure-tenant-id-here
 azure.keyvault.token-acquire-timeout-seconds=60
 azure.keyvault.refresh-interval=1800000
 azure.keyvault.secret.keys=key1,key2,key3

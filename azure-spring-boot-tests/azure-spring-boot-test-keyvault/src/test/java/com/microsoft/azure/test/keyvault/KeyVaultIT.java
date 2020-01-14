@@ -22,6 +22,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.MutablePropertySources;
+import org.springframework.core.env.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -85,8 +89,16 @@ public class KeyVaultIT {
             app.property("azure.keyvault.uri", vault.vaultUri());
             app.property("azure.keyvault.client-id", access.clientId());
             app.property("azure.keyvault.client-key", access.clientSecret());
-            
-            app.start();
+            app.property("azure.keyvault.tenant-id", access.tenant());
+
+            final ConfigurableApplicationContext dummy = app.start("dummy");
+            final ConfigurableEnvironment environment = dummy.getEnvironment();
+            final MutablePropertySources propertySources = environment.getPropertySources();
+            for (final PropertySource<?> propertySource : propertySources) {
+                System.out.println("name =  " + propertySource.getName() + "\nsource = " + propertySource
+                        .getSource().getClass() + "\n");
+            }
+
             assertEquals(KEY_VAULT_VALUE, app.getProperty("key"));
             app.close();
             log.info("--------------------->test over");
@@ -100,6 +112,7 @@ public class KeyVaultIT {
             app.property("azure.keyvault.uri", vault.vaultUri());
             app.property("azure.keyvault.client-id", access.clientId());
             app.property("azure.keyvault.client-key", access.clientSecret());
+            app.property("azure.keyvault.tenant-id", access.tenant());
             app.property("azure.keyvault.secret.keys", "key");
 
             app.start();
@@ -133,6 +146,7 @@ public class KeyVaultIT {
                 appService.zipDeploy(zipFile);
                 log.info(String.format("Successfully deployed the artifact to https://%s",
                         appService.defaultHostName()));
+                break;
             } catch (Exception e) {
                 log.debug(
                         String.format("Exception occurred when deploying the zip package: %s, " +
@@ -141,7 +155,9 @@ public class KeyVaultIT {
         }
 
         // Restart App Service
+        log.info("restarting app service...");
         appService.restart();
+        log.info("restarting app service finished...");
 
         final String resourceUrl = "https://" + appService.name() + ".azurewebsites.net" + "/get";
         // warm up
@@ -179,7 +195,13 @@ public class KeyVaultIT {
         // run java application
         final List<String> commands = new ArrayList<>();
         commands.add(String.format("cd /home/%s", VM_USER_NAME));
-        commands.add(String.format("nohup java -jar -Dazure.keyvault.uri=%s %s &", vault.vaultUri(),
+        commands.add(
+                String.
+                format("nohup java -jar -Xdebug " +
+                                "-Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n " +
+                                "-Dazure.keyvault.uri=%s %s &" +
+                                " >/log.txt  2>&1"
+                        , vault.vaultUri(),
                 TEST_KEY_VAULT_JAR_FILE_NAME));
         vmTool.runCommandOnVM(vm, commands);
 
@@ -191,6 +213,7 @@ public class KeyVaultIT {
 
         assertEquals(response.getStatusCode(), HttpStatus.OK);
         assertEquals(response.getBody(), KEY_VAULT_VALUE);
+        log.info("key vault value is: {}", response.getBody());
         log.info("--------------------->test virtual machine with MSI over");
     }
 

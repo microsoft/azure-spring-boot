@@ -42,6 +42,18 @@ public class AppRunner implements AutoCloseable {
             app = builder.build().run();
         }
     }
+
+    public ConfigurableApplicationContext start(String dummy) {
+        if (app == null) {
+            final SpringApplicationBuilder builder = new SpringApplicationBuilder(appClass);
+            builder.properties("spring.jmx.enabled=false");
+            builder.properties(String.format("server.port=%d", availableTcpPort()));
+            builder.properties(props());
+
+            app = builder.build().run();
+        }
+        return app;
+    }
     
     private int availableTcpPort() {
         return SocketUtils.findAvailableTcpPort();
