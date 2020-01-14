@@ -16,6 +16,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -24,7 +25,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 @Slf4j
 public class KeyVaultOperation {
     private final long cacheRefreshIntervalInMs;
-    private final String[] secretKeys;
+    private final List<String> secretKeys;
 
     private final Object refreshLock = new Object();
     private final SecretClient keyVaultClient;
@@ -39,28 +40,13 @@ public class KeyVaultOperation {
     public KeyVaultOperation(final SecretClient keyVaultClient,
                              String vaultUri,
                              final long refreshInterval,
-                             final String secretKeysConfig) {
+                             final List<String> secretKeys) {
         this.cacheRefreshIntervalInMs = refreshInterval;
-        this.secretKeys = parseSecretKeys(secretKeysConfig);
+        this.secretKeys = secretKeys;
         this.keyVaultClient = keyVaultClient;
         // TODO(pan): need to validate why last '/' need to be truncated.
         this.vaultUri = StringUtils.trimTrailingCharacter(vaultUri.trim(), '/');
         fillSecretsList();
-    }
-
-    private String[] parseSecretKeys(String secretKeysConfig) {
-        if (StringUtils.isEmpty(secretKeysConfig)) {
-            log.info("specific secret keys haven't set, so apply global list mode");
-            return new String[0];
-        }
-
-        final String[] split = secretKeysConfig.split(",");
-        if (split.length == 0) {
-            log.info("specific secret keys haven't set, so apply global list mode");
-            return new String[0];
-        }
-
-        return split;
     }
 
     public String[] list() {
@@ -106,7 +92,7 @@ public class KeyVaultOperation {
         final String secretName = getKeyvaultSecretName(property);
 
         //if user don't set specific secret keys, then refresh token
-        if (this.secretKeys == null || secretKeys.length == 0) {
+        if (this.secretKeys == null || secretKeys.size() == 0) {
             // refresh periodically
             refreshPropertyNames();
         }
@@ -132,7 +118,7 @@ public class KeyVaultOperation {
     private void fillSecretsList() {
         try {
             this.rwLock.writeLock().lock();
-            if (this.secretKeys == null || secretKeys.length == 0) {
+            if (this.secretKeys == null || secretKeys.size() == 0) {
                 this.propertyNames.clear();
 
                 final PagedIterable<SecretProperties> secretProperties = keyVaultClient.listPropertiesOfSecrets();
