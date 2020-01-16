@@ -48,8 +48,8 @@
     <properties>
         <azure.spring.boot.version>2.2.3-SNAPSHOT</azure.spring.boot.version>
         <azure.dependencies.bom.version>2.2.0.M3</azure.dependencies.bom.version>
-        <spring.data.cosmosdb.version>2.2.3-SNAPSHOT</spring.data.cosmosdb.version>
-        <spring.data.gremlin.version>2.2.3-SNAPSHOT</spring.data.gremlin.version>
+        <spring.data.cosmosdb.version>2.2.2</spring.data.cosmosdb.version>
+        <spring.data.gremlin.version>2.2.2</spring.data.gremlin.version>
     </properties>
 
     <dependencyManagement>
