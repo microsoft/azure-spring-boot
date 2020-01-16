@@ -15,7 +15,7 @@ If you are using Maven, add the following dependency.
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
-    <version>2.1.8</version>
+    <version>2.1.9-SNAPSHOT</version>
 </dependency>
 ```
 
