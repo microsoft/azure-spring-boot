@@ -51,7 +51,7 @@ public class AADOAuth2AuthorizationRequestResolver implements OAuth2Authorizatio
         if (req.getAdditionalParameters() != null) {
             extraParams.putAll(req.getAdditionalParameters());
         }
-        extraParams.put(AADConstants.CLAIMS, conditionalAccessPolicyClaims);
+        extraParams.put(AADConstantsHelper.CLAIMS, conditionalAccessPolicyClaims);
         return OAuth2AuthorizationRequest
                 .from(req)
                 .additionalParameters(extraParams)
@@ -61,12 +61,12 @@ public class AADOAuth2AuthorizationRequestResolver implements OAuth2Authorizatio
     private String getConditionalAccessPolicyClaims(HttpServletRequest request) {
         //claims just for one use
         final String claims = request.getSession()
-                .getAttribute(AADConstants.CAP_CLAIMS) == null ? "" : (String) request
+                .getAttribute(AADConstantsHelper.CAP_CLAIMS) == null ? "" : (String) request
                 .getSession()
-                .getAttribute(AADConstants.CAP_CLAIMS);
+                .getAttribute(AADConstantsHelper.CAP_CLAIMS);
         //remove claims in session
         if (!StringUtils.isEmpty(claims)) {
-            request.getSession().removeAttribute(AADConstants.CAP_CLAIMS);
+            request.getSession().removeAttribute(AADConstantsHelper.CAP_CLAIMS);
         }
         return claims;
     }
