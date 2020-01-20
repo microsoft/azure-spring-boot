@@ -7,11 +7,14 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microsoft.aad.adal4j.AdalClaimsChallengeException;
 import com.microsoft.aad.adal4j.AuthenticationContext;
 import com.microsoft.aad.adal4j.AuthenticationResult;
 import com.microsoft.aad.adal4j.ClientCredential;
 import com.microsoft.aad.adal4j.UserAssertion;
 import com.nimbusds.oauth2.sdk.http.HTTPResponse;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.http.HttpHeaders;
@@ -24,17 +27,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@Slf4j
 public class AzureADGraphClient {
     private static final SimpleGrantedAuthority DEFAULT_AUTHORITY = new SimpleGrantedAuthority("ROLE_USER");
     private static final String DEFAULT_ROLE_PREFIX = "ROLE_";
@@ -72,8 +74,8 @@ public class AzureADGraphClient {
 
         if (this.aadMicrosoftGraphApiBool) {
             conn.setRequestMethod(HttpMethod.GET.toString());
-            conn.setRequestProperty(HttpHeaders.AUTHORIZATION, 
-                                    String.format("%s %s", OAuth2AccessToken.TokenType.BEARER.getValue(), accessToken));
+            conn.setRequestProperty(HttpHeaders.AUTHORIZATION,
+                    String.format("%s %s", OAuth2AccessToken.TokenType.BEARER.getValue(), accessToken));
             conn.setRequestProperty(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
             conn.setRequestProperty(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
         } else {
@@ -135,7 +137,6 @@ public class AzureADGraphClient {
      * Checks that the JSON Node is a valid User Group to extract User Groups from
      *
      * @param node - json node to look for a key/value to equate against the {@link UserGroupProperties}
-     *
      * @return true if the json node contains the correct key, and expected value to identify a user group.
      */
     private boolean isMatchingUserGroupKey(final JsonNode node) {
@@ -154,6 +155,7 @@ public class AzureADGraphClient {
 
     /**
      * Converts UserGroup list to Set of GrantedAuthorities
+     *
      * @param groups
      * @return
      */
@@ -177,7 +179,6 @@ public class AzureADGraphClient {
      * true.
      *
      * @param group - User Group to check if valid to grant an authority to.
-     *
      * @return true if either of the allowed-groups or active-directory-groups contains the UserGroup display name
      */
     private boolean isValidUserGroupToGrantAuthority(final UserGroup group) {
@@ -186,7 +187,7 @@ public class AzureADGraphClient {
     }
 
     public AuthenticationResult acquireTokenForGraphApi(String idToken, String tenantId)
-            throws MalformedURLException, ServiceUnavailableException, InterruptedException, ExecutionException {
+            throws ServiceUnavailableException {
 
         final ClientCredential credential = new ClientCredential(clientId, clientSecret);
         final UserAssertion assertion = new UserAssertion(idToken);
@@ -201,6 +202,14 @@ public class AzureADGraphClient {
             final Future<AuthenticationResult> future = context
                     .acquireToken(serviceEndpoints.getAadGraphApiUri(), assertion, credential, null);
             result = future.get();
+        } catch (Exception e) {
+            //handle conditional access policy
+            final Throwable cause = e.getCause();
+            if (cause instanceof AdalClaimsChallengeException) {
+                final AdalClaimsChallengeException acce = (AdalClaimsChallengeException) cause;
+                throw acce;
+            }
+            log.error("acquire on behalf of token for graph api error", e);
         } finally {
             if (service != null) {
                 service.shutdown();
