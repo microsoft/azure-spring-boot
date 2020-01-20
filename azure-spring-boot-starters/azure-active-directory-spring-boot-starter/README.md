@@ -170,6 +170,39 @@ spring.security.oauth2.client.registration.azure.scope=openid, https://graph.mic
 ```
 You can see more details in this link: [details](https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens)
 
+### AAD Conditional Access Policy
+Now azure-active-directory-spring-boot-starter has supported AAD conditional access policy, if you are using this policy, you need add **AADOAuth2AuthorizationRequestResolver** and **AADAuthenticationFailureHandler** to your WebSecurityConfigurerAdapter.
+```
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class AADOAuth2LoginSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService;
+
+    @Autowired
+    ApplicationContext applicationContext;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        final ClientRegistrationRepository clientRegistrationRepository =
+                applicationContext.getBean(ClientRegistrationRepository.class);
+        http.authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .oidcUserService(oidcUserService)
+                .and()
+                .authorizationEndpoint()
+                .authorizationRequestResolver(
+                        new AADOAuth2AuthorizationRequestResolver(clientRegistrationRepository))
+                .and()
+                .failureHandler(new AADAuthenticationFailureHandler());
+    }
+}
+```
+Please 
+
 #### Allow telemetry
 Microsoft would like to collect data about how users use this Spring boot starter.
 Microsoft uses this information to improve our tooling experience. Participation is voluntary.
