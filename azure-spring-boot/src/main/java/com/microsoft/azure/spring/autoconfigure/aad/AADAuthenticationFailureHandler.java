@@ -24,7 +24,7 @@ public class AADAuthenticationFailureHandler implements AuthenticationFailureHan
     private AuthenticationFailureHandler defaultHandler;
 
     public AADAuthenticationFailureHandler() {
-        this.defaultHandler = new SimpleUrlAuthenticationFailureHandler(AADConstants.FAILURE_DEFUALT_URL);
+        this.defaultHandler = new SimpleUrlAuthenticationFailureHandler(AADConstantsHelper.FAILURE_DEFUALT_URL);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class AADAuthenticationFailureHandler implements AuthenticationFailureHan
                                         AuthenticationException exception) throws IOException, ServletException {
         final OAuth2AuthenticationException targetException = (OAuth2AuthenticationException) exception;
         //handle conditional access policy
-        if (AADConstants.CONDITIONAL_ACCESS_POLICY.equals((targetException.getError().getErrorCode()))) {
+        if (AADConstantsHelper.CONDITIONAL_ACCESS_POLICY.equals((targetException.getError().getErrorCode()))) {
             //get infos
             final Throwable cause = targetException.getCause();
             if (cause instanceof AdalClaimsChallengeException) {
@@ -40,10 +40,10 @@ public class AADAuthenticationFailureHandler implements AuthenticationFailureHan
                 final String claims = acce.getClaims();
 
                 final DefaultSavedRequest savedRequest = (DefaultSavedRequest) request.getSession()
-                        .getAttribute(AADConstants.SAVED_REQUEST);
+                        .getAttribute(AADConstantsHelper.SAVED_REQUEST);
                 final String savedRequestUrl = savedRequest.getRedirectUrl();
                 //put claims into session
-                request.getSession().setAttribute(AADConstants.CAP_CLAIMS, claims);
+                request.getSession().setAttribute(AADConstantsHelper.CAP_CLAIMS, claims);
                 //redirect
                 response.setStatus(302);
                 response.sendRedirect(savedRequestUrl);
