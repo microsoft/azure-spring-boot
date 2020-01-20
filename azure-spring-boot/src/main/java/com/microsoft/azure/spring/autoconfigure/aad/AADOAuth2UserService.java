@@ -5,6 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import com.microsoft.aad.adal4j.AdalClaimsChallengeException;
 import com.microsoft.aad.adal4j.ClientCredential;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
@@ -23,9 +24,9 @@ import javax.naming.ServiceUnavailableException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 public class AADOAuth2UserService implements OAuth2UserService<OidcUserRequest, OidcUser> {
+    private static final String CONDITIONAL_ACCESS_POLICY = "conditional_access_policy";
     private static final String INVALID_REQUEST = "invalid_request";
     private static final String SERVER_ERROR = "server_error";
     private static final String DEFAULT_USERNAME_ATTR_NAME = "name";
@@ -66,10 +67,12 @@ public class AADOAuth2UserService implements OAuth2UserService<OidcUserRequest, 
             mappedAuthorities = graphClient.getGrantedAuthorities(graphApiToken);
         } catch (MalformedURLException e) {
             throw wrapException(INVALID_REQUEST, "Failed to acquire token for Graph API.", null, e);
-        } catch (ServiceUnavailableException | InterruptedException | ExecutionException e) {
+        } catch (ServiceUnavailableException e) {
             throw wrapException(SERVER_ERROR, "Failed to acquire token for Graph API.", null, e);
         } catch (IOException e) {
             throw wrapException(SERVER_ERROR, "Failed to map group to authorities.", null, e);
+        } catch (AdalClaimsChallengeException e) {
+            throw wrapException(CONDITIONAL_ACCESS_POLICY, "Handle conditional access policy", null, e);
         }
 
         // Create a copy of oidcUser but use the mappedAuthorities instead
