@@ -38,6 +38,13 @@ private ServiceURL serviceURL;
 private ContainerURL containerURL;
 ```
 
+### Enable HTTPs
+
+It's possible to configure Azure to allow only HTTPs connections. By default, the library uses HTTP. If you want to use HTTPs, just add the following configuration in `application.properties`.
+```
+azure.storage.enable-https=true
+```
+
 ### Allow telemetry
 Microsoft would like to collect data about how users use this Spring boot starter. Microsoft uses this information to improve our tooling experience. Participation is voluntary. If you don't want to participate, just simply disable it by setting below configuration in `application.properties`.
 ```
