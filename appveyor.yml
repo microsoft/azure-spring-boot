@@ -9,6 +9,6 @@ install:
   - cmd: copy "C:\Program Files (x86)\Apache\Maven\bin\mvn.cmd" "C:\Program Files (x86)\Apache\Maven\bin\mvn.bat"
 
 build_script:
-  - mvn clean install -B -V
+  - mvn clean install -B -V -DskipITs
 
 

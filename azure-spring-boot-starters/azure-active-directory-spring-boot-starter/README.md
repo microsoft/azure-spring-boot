@@ -91,6 +91,118 @@ private AADAuthenticationFilter aadAuthFilter;
 * Role-based Authorization with annotation `@PreAuthorize("hasRole('GROUP_NAME')")`
 * Role-based Authorization with method `isMemberOf()`
 
+##### Authenticate stateless APIs using AAD app roles
+This scenario fits best for stateless Spring backends exposing an API to SPAs ([OAuth 2.0 implicit grant flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/v1-oauth2-implicit-grant-flow)) 
+or service-to-service access using the [client credentials grant flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/v1-oauth2-client-creds-grant-flow).
+
+The stateless processing can be activated with the `azure.activedirectory.session-stateless` property. 
+The authorization is using the [AAD AppRole feature](https://docs.microsoft.com/en-us/azure/architecture/multitenant-identity/app-roles#roles-using-azure-ad-app-roles),
+so instead of using the `groups` claim the token has a `roles` claim which contains roles [configured in your manifest](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-add-app-roles-in-azure-ad-apps#examples). 
+
+Configure your `application properties`:
+
+```properties
+azure.activedirectory.session-stateless=true
+azure.activedirectory.client-id=xxxxxx-your-client-id-xxxxxx
+```
+
+Define your roles in your application registration manifest: 
+```json
+  "appRoles": [
+    {
+      "allowedMemberTypes": [
+        "User"
+      ],
+      "displayName": "My demo",
+      "id": "00000000-0000-0000-0000-000000000000",
+      "isEnabled": true,
+      "description": "My demo role.",
+      "value": "MY_ROLE"
+    }
+  ],
+```
+
+Autowire the auth filter and attach it to the filter chain:
+```java
+    @Autowired
+    private AADAppRoleStatelessAuthenticationFilter appRoleAuthFilter;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        [...]
+        http.csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .addFilterBefore(appRoleAuthFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+```
+
+* Role-based Authorization with annotation `@PreAuthorize("hasRole('MY_ROLE')")`
+* Role-based Authorization with method `isMemberOf()`
+
+The roles you want to use within your application have to be [set up in the manifest of your
+application registration](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-add-app-roles-in-azure-ad-apps).
+
+##### Using The Microsoft Graph API
+By default, azure-spring-boot is set up to utilize the Azure AD Graph.  If you would prefer, it can be set up to utilize the Microsoft Graph instead.  In order to do this, you will need to update the app registration in Azure to grant the application permissions to the Microsoft Graph API and add some properties to the application.properties file.
+
+* **Grant permissions to the application**: After application registration succeeded, go to API permissions - Add a permission, select `Microsoft Graph`, select Delegated permissions,  tick `Directory.AccessAsUser.All - Access the directory as the signed-in user` and `Use.Read - Sign in and read user profile`. Click `Add Permissions` (Note: you will need administrator privilege to grant permission).  Furthermore, you can remove the API permissions to the Azure Active Directory Graph, as these will not be needed.
+
+* **Configure your `application properties`**:
+```properties
+azure.activedirectory.environment=global-v2-graph
+azure.activedirectory.user-group.key=@odata.type
+azure.activedirectory.user-group.value=#microsoft.graph.group
+azure.activedirectory.user-group.object-id-key=id
+```
+
+If you're using [Azure China](https://docs.microsoft.com/en-us/azure/china/china-welcome), please set the environment property in the `application.properties` file to:
+```properties
+azure.activedirectory.environment=cn-v2-graph
+```
+
+Please refer to [azure-active-directory-v2-spring-boot-backend-sample](../../azure-spring-boot-samples/azure-active-directory-v2-spring-boot-backend-sample/) to see a sample configured to use the Microsoft Graph API.
+### Using Microsoft identity platform endpoints
+If you want to use v2 version endpoints to do authorization and authentication, please pay attention to the attributes of claims, because there are some attributes exits in v1 version id-token by default but not in v2 version id-token, if you have to get that attribute, please make sure to add it into your scope.
+There is the doc [Difference between v1 and v2](https://docs.microsoft.com/en-us/azure/active-directory/develop/azure-ad-endpoint-comparison), For example, the name attribute doesn't exist in v2 token, if you want it, you need add `profile` to your scope, like this:
+```properties
+spring.security.oauth2.client.registration.azure.scope=openid, https://graph.microsoft.com/user.read, profile
+```
+You can see more details in this link: [details](https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens)
+
+### AAD Conditional Access Policy
+Now azure-active-directory-spring-boot-starter has supported AAD conditional access policy, if you are using this policy, you need add **AADOAuth2AuthorizationRequestResolver** and **AADAuthenticationFailureHandler** to your WebSecurityConfigurerAdapter.
+```
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class AADOAuth2LoginSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService;
+
+    @Autowired
+    ApplicationContext applicationContext;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        final ClientRegistrationRepository clientRegistrationRepository =
+                applicationContext.getBean(ClientRegistrationRepository.class);
+        http.authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .oauth2Login()
+                .userInfoEndpoint()
+                .oidcUserService(oidcUserService)
+                .and()
+                .authorizationEndpoint()
+                .authorizationRequestResolver(
+                        new AADOAuth2AuthorizationRequestResolver(clientRegistrationRepository))
+                .and()
+                .failureHandler(new AADAuthenticationFailureHandler());
+    }
+}
+```
+Please 
+
 #### Allow telemetry
 Microsoft would like to collect data about how users use this Spring boot starter.
 Microsoft uses this information to improve our tooling experience. Participation is voluntary.
@@ -98,5 +210,6 @@ If you don't want to participate, just simply disable it by setting below config
 ```properties
 azure.activedirectory.allow-telemetry=false
 ```
+When telemetry is enabled, an HTTP request will be sent to URL `https://dc.services.visualstudio.com/v2/track`. So please make sure it's not blocked by your firewall.  
 Find more information about Azure Service Privacy Statement, please check [Microsoft Online Services Privacy Statement](https://www.microsoft.com/en-us/privacystatement/OnlineServices/Default.aspx). 
 

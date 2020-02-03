@@ -7,14 +7,14 @@
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-parent</artifactId>
-        <version>2.1.7-SNAPSHOT</version>
+        <version>2.2.3-SNAPSHOT</version>
         <relativePath>../azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>azure-spring-boot-starters</artifactId>
     <packaging>pom</packaging>
 
-    <name>Azure Spring Boot Starers</name>
+    <name>Azure Spring Boot Starters</name>
     <description>Spring Boot Starters for Azure</description>
     <url>https://github.com/Microsoft/azure-spring-boot</url>
 
@@ -29,7 +29,7 @@
         <module>azure-servicebus-spring-boot-starter</module>
         <module>azure-storage-spring-boot-starter</module>
         <module>spring-data-gremlin-boot-starter</module>
-        <module>azure-sqlserver-spring-boot-starter</module>
+        <module>azure-servicebus-jms-spring-boot-starter</module>
     </modules>
 
 </project>

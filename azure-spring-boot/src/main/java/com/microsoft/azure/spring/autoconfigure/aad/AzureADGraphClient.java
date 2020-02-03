@@ -7,31 +7,36 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microsoft.aad.adal4j.AdalClaimsChallengeException;
 import com.microsoft.aad.adal4j.AuthenticationContext;
 import com.microsoft.aad.adal4j.AuthenticationResult;
 import com.microsoft.aad.adal4j.ClientCredential;
 import com.microsoft.aad.adal4j.UserAssertion;
-import com.microsoft.azure.spring.autoconfigure.aad.AADAuthenticationProperties.UserGroupProperties;
 import com.nimbusds.oauth2.sdk.http.HTTPResponse;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 
 import javax.naming.ServiceUnavailableException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@Slf4j
 public class AzureADGraphClient {
     private static final SimpleGrantedAuthority DEFAULT_AUTHORITY = new SimpleGrantedAuthority("ROLE_USER");
     private static final String DEFAULT_ROLE_PREFIX = "ROLE_";
@@ -42,22 +47,43 @@ public class AzureADGraphClient {
     private final ServiceEndpoints serviceEndpoints;
     private final AADAuthenticationProperties aadAuthenticationProperties;
 
+    private static final String V2_VERSION_ENV_FLAG = "v2-graph";
+    private boolean aadMicrosoftGraphApiBool;
+
     public AzureADGraphClient(ClientCredential clientCredential, AADAuthenticationProperties aadAuthProps,
                               ServiceEndpointsProperties serviceEndpointsProps) {
         this.clientId = clientCredential.getClientId();
         this.clientSecret = clientCredential.getClientSecret();
         this.aadAuthenticationProperties = aadAuthProps;
         this.serviceEndpoints = serviceEndpointsProps.getServiceEndpoints(aadAuthProps.getEnvironment());
+
+        this.initAADMicrosoftGraphApiBool(aadAuthProps.getEnvironment());
+    }
+
+    private void initAADMicrosoftGraphApiBool(String endpointEnv) {
+        this.aadMicrosoftGraphApiBool = false;
+        if (endpointEnv.contains(V2_VERSION_ENV_FLAG)) {
+            this.aadMicrosoftGraphApiBool = true;
+        }
     }
 
     private String getUserMembershipsV1(String accessToken) throws IOException {
         final URL url = new URL(serviceEndpoints.getAadMembershipRestUri());
-
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         // Set the appropriate header fields in the request header.
-        conn.setRequestProperty("api-version", "1.6");
-        conn.setRequestProperty("Authorization", accessToken);
-        conn.setRequestProperty("Accept", "application/json;odata=minimalmetadata");
+
+        if (this.aadMicrosoftGraphApiBool) {
+            conn.setRequestMethod(HttpMethod.GET.toString());
+            conn.setRequestProperty(HttpHeaders.AUTHORIZATION,
+                    String.format("%s %s", OAuth2AccessToken.TokenType.BEARER.getValue(), accessToken));
+            conn.setRequestProperty(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
+            conn.setRequestProperty(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE);
+        } else {
+            conn.setRequestMethod(HttpMethod.GET.toString());
+            conn.setRequestProperty("api-version", "1.6");
+            conn.setRequestProperty(HttpHeaders.AUTHORIZATION, String.format("%s", accessToken));
+            conn.setRequestProperty(HttpHeaders.ACCEPT, "application/json;odata=minimalmetadata");
+        }
         final String responseInJson = getResponseStringFromConn(conn);
         final int responseCode = conn.getResponseCode();
         if (responseCode == HTTPResponse.SC_OK) {
@@ -93,7 +119,6 @@ public class AzureADGraphClient {
         final JsonNode valuesNode = rootNode.get("value");
 
         if (valuesNode != null) {
-
             lUserGroups
                     .addAll(StreamSupport.stream(valuesNode.spliterator(), false).filter(this::isMatchingUserGroupKey)
                             .map(node -> {
@@ -112,7 +137,6 @@ public class AzureADGraphClient {
      * Checks that the JSON Node is a valid User Group to extract User Groups from
      *
      * @param node - json node to look for a key/value to equate against the {@link UserGroupProperties}
-     *
      * @return true if the json node contains the correct key, and expected value to identify a user group.
      */
     private boolean isMatchingUserGroupKey(final JsonNode node) {
@@ -130,7 +154,8 @@ public class AzureADGraphClient {
 
 
     /**
-     * Converts UserGroup list to Set of GrantedAutorities
+     * Converts UserGroup list to Set of GrantedAuthorities
+     *
      * @param groups
      * @return
      */
@@ -154,7 +179,6 @@ public class AzureADGraphClient {
      * true.
      *
      * @param group - User Group to check if valid to grant an authority to.
-     *
      * @return true if either of the allowed-groups or active-directory-groups contains the UserGroup display name
      */
     private boolean isValidUserGroupToGrantAuthority(final UserGroup group) {
@@ -163,7 +187,7 @@ public class AzureADGraphClient {
     }
 
     public AuthenticationResult acquireTokenForGraphApi(String idToken, String tenantId)
-            throws MalformedURLException, ServiceUnavailableException, InterruptedException, ExecutionException {
+            throws ServiceUnavailableException {
 
         final ClientCredential credential = new ClientCredential(clientId, clientSecret);
         final UserAssertion assertion = new UserAssertion(idToken);
@@ -178,6 +202,14 @@ public class AzureADGraphClient {
             final Future<AuthenticationResult> future = context
                     .acquireToken(serviceEndpoints.getAadGraphApiUri(), assertion, credential, null);
             result = future.get();
+        } catch (Exception e) {
+            //handle conditional access policy
+            final Throwable cause = e.getCause();
+            if (cause instanceof AdalClaimsChallengeException) {
+                final AdalClaimsChallengeException acce = (AdalClaimsChallengeException) cause;
+                throw acce;
+            }
+            log.error("acquire on behalf of token for graph api error", e);
         } finally {
             if (service != null) {
                 service.shutdown();

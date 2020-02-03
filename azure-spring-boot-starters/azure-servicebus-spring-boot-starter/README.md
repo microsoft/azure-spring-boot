@@ -10,12 +10,12 @@ Add the following dependency to your project:
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-servicebus-spring-boot-starter</artifactId>
-    <version>2.0.4</version>
+    <version>2.1.7</version>
 </dependency>
 ```
 
 *Gradle*<br>
-```compile 'com.microsoft.azure:azure-servicebus-spring-boot-starter:2.0.4'```
+```compile 'com.microsoft.azure:azure-servicebus-spring-boot-starter:2.1.7'```
 
 ### Add the property setting
 
@@ -70,6 +70,7 @@ Microsoft would like to collect data about how users use this Spring boot starte
 ```
 azure.servicebus.allow-telemetry=false
 ```
+When telemetry is enabled, an HTTP request will be sent to URL `https://dc.services.visualstudio.com/v2/track`. So please make sure it's not blocked by your firewall.  
 Find more information about Azure Service Privacy Statement, please check [Microsoft Online Services Privacy Statement](https://www.microsoft.com/en-us/privacystatement/OnlineServices/Default.aspx). 
 
 

@@ -32,6 +32,10 @@ az keyvault set-policy --name <your_keyvault_name>   \
                        --secret-permission get list  \
                        --spn <your_sp_id_create_in_step1>
 ```
+> **IMPORTANT** 
+>
+> The property `azure.keyvault.secret.keys` specifies which exact secrets the application will load from Key Vault. If this property is not set, which means the application will have to **list** all the secrets in Key Vault, you have to grant both **LIST** and **GET** secret permission to the service principal. Otherwise, only **GET** secret permission is needed.  
+
 Save the displayed Key Vault uri for later use.
 
 - Set secret in Azure Key Vault by using Azure CLI or via Azure Portal. 
@@ -45,7 +49,7 @@ az keyvault secret set --name <yourSecretPropertyName>   \
                        --vault-name <your_keyvault_name>
 ```
 
- 
+
 ## Add Dependency
 
 "azure-keyvault-secrets-spring-boot-starter" is published on Maven Central Repository.  
@@ -55,17 +59,21 @@ If you are using Maven, add the following dependency.
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
-    <version>0.2.3</version>
+    <version>2.1.7</version>
 </dependency>
 ```
 
 ## Add the property setting
 Open `application.properties` file and add below properties to specify your Azure Key Vault url, Azure service principle client id and client key.
 
-```
+```properties
 azure.keyvault.uri=put-your-azure-keyvault-uri-here
 azure.keyvault.client-id=put-your-azure-client-id-here
 azure.keyvault.client-key=put-your-azure-client-key-here
+azure.keyvault.tenant-id=put-your-azure-tenant-id-here
+
+# Uncomment following property if you want to specify the secrets to load from Key Vault
+# azure.keyvault.secret.keys=yourSecretPropertyName1,yourSecretPropertyName2
 ```
 
 ## Get Key Vault secret value as property

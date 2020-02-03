@@ -5,7 +5,7 @@
 
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-spring-boot-bom</artifactId>
-    <version>2.1.7-SNAPSHOT</version>
+    <version>2.2.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Azure Spring Boot BOM</name>
@@ -46,12 +46,25 @@
     </scm>
 
     <properties>
-        <azure.spring.boot.version>2.1.7-SNAPSHOT</azure.spring.boot.version>
-        <azure.dependencies.bom.version>2.1.0.M5</azure.dependencies.bom.version>
+        <azure.spring.boot.version>2.2.3-SNAPSHOT</azure.spring.boot.version>
+        <azure.dependencies.bom.version>2.2.0.M3</azure.dependencies.bom.version>
+        <spring.data.cosmosdb.version>2.2.2</spring.data.cosmosdb.version>
+        <spring.data.gremlin.version>2.2.2</spring.data.gremlin.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
+                <artifactId>spring-data-cosmosdb</artifactId>
+                <version>${spring.data.cosmosdb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.spring.data.gremlin</groupId>
+                <artifactId>spring-data-gremlin</artifactId>
+                <version>${spring.data.gremlin.version}</version>
+            </dependency>
+
             <!-- Azure Dependencies Bom -->
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
@@ -92,6 +105,11 @@
             </dependency>
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
+                <artifactId>azure-servicebus-jms-spring-boot-starter</artifactId>
+                <version>${azure.spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-keyvault-secrets-spring-boot-starter</artifactId>
                 <version>${azure.spring.boot.version}</version>
             </dependency>
@@ -108,11 +126,6 @@
             <dependency>
                 <groupId>com.microsoft.azure</groupId>
                 <artifactId>azure-spring-boot-metrics-starter</artifactId>
-                <version>${azure.spring.boot.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.microsoft.azure</groupId>
-                <artifactId>azure-sqlserver-spring-boot-starter</artifactId>
                 <version>${azure.spring.boot.version}</version>
             </dependency>
             <dependency>

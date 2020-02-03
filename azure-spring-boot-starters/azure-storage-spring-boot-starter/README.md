@@ -9,7 +9,7 @@ If you are using Maven, add the following dependency.
 <dependency>
     <groupId>com.microsoft.azure</groupId>
     <artifactId>azure-storage-spring-boot-starter</artifactId>
-    <version>2.0.5</version>
+    <version>2.2.0</version>
 </dependency>
 ```
 
@@ -38,10 +38,18 @@ private ServiceURL serviceURL;
 private ContainerURL containerURL;
 ```
 
+### Enable HTTPs
+
+It's possible to configure Azure to allow only HTTPs connections. By default, the library uses HTTP. If you want to use HTTPs, just add the following configuration in `application.properties`.
+```
+azure.storage.enable-https=true
+```
+
 ### Allow telemetry
 Microsoft would like to collect data about how users use this Spring boot starter. Microsoft uses this information to improve our tooling experience. Participation is voluntary. If you don't want to participate, just simply disable it by setting below configuration in `application.properties`.
 ```
 azure.storage.allow-telemetry=false
 ```
+When telemetry is enabled, an HTTP request will be sent to URL `https://dc.services.visualstudio.com/v2/track`. So please make sure it's not blocked by your firewall.  
 Find more information about Azure Service Privacy Statement, please check [Microsoft Online Services Privacy Statement](https://www.microsoft.com/en-us/privacystatement/OnlineServices/Default.aspx). 
 
