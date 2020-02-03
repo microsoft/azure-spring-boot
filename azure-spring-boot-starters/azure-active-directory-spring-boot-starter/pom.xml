@@ -50,10 +50,9 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.microsoft.azure</groupId>
-            <artifactId>adal4j</artifactId>
+            <artifactId>msal4j</artifactId>
         </dependency>
         <dependency>
             <groupId>com.nimbusds</groupId>
