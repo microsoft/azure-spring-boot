@@ -5,6 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
+import com.microsoft.aad.msal4j.MsalServiceException;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.proc.BadJOSEException;
 import com.nimbusds.jose.util.ResourceRetriever;
@@ -23,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.ParseException;
-import java.util.concurrent.ExecutionException;
 
 public class AADAuthenticationFilter extends OncePerRequestFilter {
     private static final Logger log = LoggerFactory.getLogger(AADAuthenticationFilter.class);
@@ -92,9 +92,15 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
             } catch (MalformedURLException | ParseException | BadJOSEException | JOSEException ex) {
                 log.error("Failed to initialize UserPrincipal.", ex);
                 throw new ServletException(ex);
-            } catch (ServiceUnavailableException | InterruptedException | ExecutionException ex) {
+            } catch (ServiceUnavailableException ex) {
                 log.error("Failed to acquire graph api token.", ex);
                 throw new ServletException(ex);
+            } catch (MsalServiceException ex) {
+                if (ex.claims() != null && !ex.claims().isEmpty()) {
+                    throw new ServletException("Handle conditional access policy", ex);
+                } else {
+                    throw ex;
+                }
             }
         }
 

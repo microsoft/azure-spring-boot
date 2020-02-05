@@ -72,11 +72,12 @@ In this auto-configuration, by [default](https://github.com/Microsoft/azure-spri
 
 Configure endpoints with specific tenant-id by replacing `common` in your application.properties file:
 ```properties
-spring.security.oauth2.client.provider.azure-oauth-provider.authorization-uri=https://login.microsoftonline.com/{your-tenant-id}/oauth2/authorize
-spring.security.oauth2.client.provider.azure-oauth-provider.token-uri=https://login.microsoftonline.com/{your-tenant-id}/oauth2/token
-spring.security.oauth2.client.provider.azure-oauth-provider.user-info-uri=https://login.microsoftonline.com/{your-tenant-id}/openid/userinfo
-spring.security.oauth2.client.provider.azure-oauth-provider.jwk-set-uri=https://login.microsoftonline.com/{your-tenant-id}/discovery/keys
+spring.security.oauth2.client.provider.azure.authorization-uri=https://login.microsoftonline.com/{your-tenant-id}/oauth2/authorize
+spring.security.oauth2.client.provider.azure.token-uri=https://login.microsoftonline.com/{your-tenant-id}/oauth2/token
+spring.security.oauth2.client.provider.azure.user-info-uri=https://login.microsoftonline.com/{your-tenant-id}/openid/userinfo
+spring.security.oauth2.client.provider.azure.jwk-set-uri=https://login.microsoftonline.com/{your-tenant-id}/discovery/keys
 ```
 
 #### Meet with `AADSTS240002: Input id_token cannot be used as 'urn:ietf:params:oauth:grant-type:jwt-bearer' grant` error.
 In Azure portal, app registration manifest page, configure `oauth2AllowImplicitFlow` in your application manifest to `true`. See [this issue](https://github.com/MicrosoftDocs/azure-docs/issues/8121#issuecomment-387090099) for details on this workaround.
+
