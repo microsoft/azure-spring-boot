@@ -159,6 +159,12 @@ public class KeyVaultIT {
         appService.restart();
         log.info("restarting app service finished...");
 
+        try {
+            Thread.sleep(60 * 1000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         final String resourceUrl = "https://" + appService.name() + ".azurewebsites.net" + "/get";
         // warm up
         final ResponseEntity<String> response = curlWithRetry(resourceUrl, 3, 120_000, String.class);
