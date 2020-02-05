@@ -80,6 +80,8 @@ public class AADAuthenticationFilterAutoConfiguration {
                 aadAuthProps.getJwtSizeLimit());
     }
 
+    // test commit
+
     @PostConstruct
     private void sendTelemetry() {
         if (aadAuthProps.isAllowTelemetry()) {
