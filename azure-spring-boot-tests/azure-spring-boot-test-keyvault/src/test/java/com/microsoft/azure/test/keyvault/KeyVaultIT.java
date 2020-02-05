@@ -20,7 +20,6 @@ import com.microsoft.azure.utils.SSHShell;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -79,12 +78,11 @@ public class KeyVaultIT {
     @AfterClass
     public static void deleteResourceGroup() {
         final ResourceGroupTool tool = new ResourceGroupTool(access);
-//        tool.deleteGroup(resourceGroupName);
-        log.info("--------------------->resources clean over, resourceGroup: {}", resourceGroupName);
+        tool.deleteGroup(resourceGroupName);
+        log.info("--------------------->resources clean over");
     }
 
     @Test
-    @Ignore
     public void keyVaultAsPropertySource() {
         try (AppRunner app = new AppRunner(DumbApp.class)) {
             app.property("azure.keyvault.enabled", "true");
@@ -108,7 +106,6 @@ public class KeyVaultIT {
     }
 
     @Test
-    @Ignore
     public void keyVaultAsPropertySourceWithSpecificKeys() {
         try (AppRunner app = new AppRunner(DumbApp.class)) {
             app.property("azure.keyvault.enabled", "true");
@@ -172,7 +169,6 @@ public class KeyVaultIT {
     }
 
     @Test
-    @Ignore
     public void keyVaultWithVirtualMachineMSI() throws Exception {
         final VirtualMachineTool vmTool = new VirtualMachineTool(access);
 
