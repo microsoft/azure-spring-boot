@@ -78,7 +78,7 @@ public class KeyVaultIT {
     @AfterClass
     public static void deleteResourceGroup() {
         final ResourceGroupTool tool = new ResourceGroupTool(access);
-        tool.deleteGroup(resourceGroupName);
+//        tool.deleteGroup(resourceGroupName);
         log.info("--------------------->resources clean over");
     }
 
