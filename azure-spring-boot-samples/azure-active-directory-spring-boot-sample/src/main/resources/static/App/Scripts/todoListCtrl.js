@@ -1,6 +1,6 @@
 ﻿'use strict';
 angular.module('todoApp')
-    .controller('todoListCtrl', ['$scope', '$location', 'todoListSvc', 'adalAuthenticationService', function ($scope, $location, todoListSvc, adalService) {
+    .controller('todoListCtrl', ['$scope', '$location', 'todoListSvc', 'msalAuthenticationService', function ($scope, $location, todoListSvc, msalService) {
         $scope.error = "";
         $scope.loadingMessage = "";
         $scope.todoList = null;
@@ -53,10 +53,9 @@ angular.module('todoApp')
             })
         };
         $scope.add = function () {
-
             todoListSvc.postItem({
                 'Description': $scope.newTodoCaption,
-                'Owner': adalService.userInfo.userName
+                'Owner': msalService.userInfo.userName
             }).success(function (results) {
                 $scope.newTodoCaption = "";
                 $scope.populate();

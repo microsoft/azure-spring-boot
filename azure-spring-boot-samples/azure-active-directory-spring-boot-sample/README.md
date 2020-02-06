@@ -107,19 +107,24 @@ Open application.properties in your project to configure
    
    
 ### Step 5: Angular JS
-In `app.js`, make following changes. The client leverages Azure AD library for JS to handle AAD authentication in single page application. The following snippet of code configures adal provider for your registered app.
+In `app.js`, make following changes. The client leverages Azure AD library for JS to handle AAD authentication in single page application. The following snippet of code configures msal provider for your registered app. ClientID is your application ID and \<tenant\> is a identifier within the directory itself (e.g. a domain associated to the tenant, such as contoso.onmicrosoft.com, or the GUID representing the TenantID property of the directory). 
 ```
-        adalProvider.init(
-            {
-                instance: 'https://login.microsoftonline.com/',
-                tenant: 'your-aad-tenant',
-                clientId: 'your-application-id',
-                extraQueryParameter: 'nux=1',
-                cacheLocation: 'localStorage',
-            },
-            $httpProvider
-        );
+window.applicationConfig = {
+    clientID: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+};
 
+msalProvider.init(
+    {
+        authority: 'https://login.microsoftonline.com/<tenant>',
+        clientID: applicationConfig.clientID,
+        cacheLocation: 'localStorage',
+        postLogoutRedirectUri: 'http://localhost:8080/logout',
+
+        tokenReceivedCallback: function (errorDesc, token, error, tokenType) {
+        },
+    },
+    $httpProvider
+);
 ```
 
 ### Step 6: Give it a run

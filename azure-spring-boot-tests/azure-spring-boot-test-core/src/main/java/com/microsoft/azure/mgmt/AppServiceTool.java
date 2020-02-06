@@ -47,6 +47,7 @@ public class AppServiceTool {
                 .withJavaVersion(JavaVersion.JAVA_8_NEWEST)
                 .withWebContainer(WebContainer.JAVA_8)
                 .withAppSettings(settings)
+                .withContainerLoggingEnabled()
                 .create();
 
         log.info("Created web app " + app.name());
