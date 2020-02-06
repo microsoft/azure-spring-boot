@@ -5,19 +5,17 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.microsoft.aad.adal4j.AdalClaimsChallengeException;
-
+import com.microsoft.aad.msal4j.MsalServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class AADAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
@@ -35,9 +33,9 @@ public class AADAuthenticationFailureHandler implements AuthenticationFailureHan
         if (AADConstantsHelper.CONDITIONAL_ACCESS_POLICY.equals((targetException.getError().getErrorCode()))) {
             //get infos
             final Throwable cause = targetException.getCause();
-            if (cause instanceof AdalClaimsChallengeException) {
-                final AdalClaimsChallengeException acce = (AdalClaimsChallengeException) cause;
-                final String claims = acce.getClaims();
+            if (cause instanceof MsalServiceException) {
+                final MsalServiceException e = (MsalServiceException) cause;
+                final String claims = e.claims();
 
                 final DefaultSavedRequest savedRequest = (DefaultSavedRequest) request.getSession()
                         .getAttribute(AADConstantsHelper.SAVED_REQUEST);
