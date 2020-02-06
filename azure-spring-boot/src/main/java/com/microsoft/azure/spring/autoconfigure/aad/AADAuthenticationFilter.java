@@ -5,8 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.microsoft.aad.adal4j.AdalClaimsChallengeException;
-import com.microsoft.aad.adal4j.ClientCredential;
+import com.microsoft.aad.msal4j.MsalServiceException;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.proc.BadJOSEException;
 import com.nimbusds.jose.util.ResourceRetriever;
@@ -64,11 +63,8 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                 final String currentToken = (String) request
                         .getSession().getAttribute(CURRENT_USER_PRINCIPAL_JWT_TOKEN);
 
-                final ClientCredential credential =
-                        new ClientCredential(aadAuthProps.getClientId(), aadAuthProps.getClientSecret());
-
-                final AzureADGraphClient client =
-                        new AzureADGraphClient(credential, aadAuthProps, serviceEndpointsProps);
+                final AzureADGraphClient client = new AzureADGraphClient(aadAuthProps.getClientId(),
+                        aadAuthProps.getClientSecret(), aadAuthProps, serviceEndpointsProps);
 
                 if (principal == null ||
                     graphApiToken == null ||
@@ -78,7 +74,7 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
                     principal = principalManager.buildUserPrincipal(idToken);
 
                     final String tenantId = principal.getClaim().toString();
-                    graphApiToken = client.acquireTokenForGraphApi(idToken, tenantId).getAccessToken();
+                    graphApiToken = client.acquireTokenForGraphApi(idToken, tenantId).accessToken();
 
                     principal.setUserGroups(client.getGroups(graphApiToken));
 
@@ -99,8 +95,12 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
             } catch (ServiceUnavailableException ex) {
                 log.error("Failed to acquire graph api token.", ex);
                 throw new ServletException(ex);
-            }  catch (AdalClaimsChallengeException ex) {
-                throw new ServletException("Handle conditional access policy", ex);
+            } catch (MsalServiceException ex) {
+                if (ex.claims() != null && !ex.claims().isEmpty()) {
+                    throw new ServletException("Handle conditional access policy", ex);
+                } else {
+                    throw ex;
+                }
             }
         }
 

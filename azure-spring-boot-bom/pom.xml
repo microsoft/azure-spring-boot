@@ -47,7 +47,7 @@
 
     <properties>
         <azure.spring.boot.version>2.1.9-SNAPSHOT</azure.spring.boot.version>
-        <azure.dependencies.bom.version>2.1.0.M8</azure.dependencies.bom.version>
+        <azure.dependencies.bom.version>2.1.0.M9</azure.dependencies.bom.version>
         <spring.data.cosmosdb.version>2.1.9</spring.data.cosmosdb.version>
         <spring.data.gremlin.version>2.1.8</spring.data.gremlin.version>
     </properties>

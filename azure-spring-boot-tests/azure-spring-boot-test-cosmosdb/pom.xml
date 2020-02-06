@@ -39,5 +39,11 @@
             <artifactId>spring-data-cosmosdb</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- TODO: Remove this dependency when azure-mgmt upgrade to track 2  -->
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>oauth2-oidc-sdk</artifactId>
+            <version>5.64.4</version>
+        </dependency>
     </dependencies>
 </project>

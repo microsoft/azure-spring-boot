@@ -5,8 +5,7 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import com.microsoft.aad.adal4j.AdalClaimsChallengeException;
-import com.microsoft.aad.adal4j.ClientCredential;
+import com.microsoft.aad.msal4j.MsalServiceException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
@@ -55,14 +54,12 @@ public class AADOAuth2UserService implements OAuth2UserService<OidcUserRequest, 
             // https://github.com/MicrosoftDocs/azure-docs/issues/8121#issuecomment-387090099
             // In AAD App Registration configure oauth2AllowImplicitFlow to true
             final ClientRegistration registration = userRequest.getClientRegistration();
-            final ClientCredential credential =
-                    new ClientCredential(registration.getClientId(), registration.getClientSecret());
 
-            final AzureADGraphClient graphClient =
-                    new AzureADGraphClient(credential, aadAuthProps, serviceEndpointsProps);
+            final AzureADGraphClient graphClient = new AzureADGraphClient(registration.getClientId(),
+                    registration.getClientSecret(), aadAuthProps, serviceEndpointsProps);
 
             graphApiToken = graphClient.acquireTokenForGraphApi(idToken.getTokenValue(),
-                    aadAuthProps.getTenantId()).getAccessToken();
+                    aadAuthProps.getTenantId()).accessToken();
 
             mappedAuthorities = graphClient.getGrantedAuthorities(graphApiToken);
         } catch (MalformedURLException e) {
@@ -71,8 +68,12 @@ public class AADOAuth2UserService implements OAuth2UserService<OidcUserRequest, 
             throw wrapException(SERVER_ERROR, "Failed to acquire token for Graph API.", null, e);
         } catch (IOException e) {
             throw wrapException(SERVER_ERROR, "Failed to map group to authorities.", null, e);
-        } catch (AdalClaimsChallengeException e) {
-            throw wrapException(CONDITIONAL_ACCESS_POLICY, "Handle conditional access policy", null, e);
+        } catch (MsalServiceException e) {
+            if (e.claims() != null && !e.claims().isEmpty()) {
+                throw wrapException(CONDITIONAL_ACCESS_POLICY, "Handle conditional access policy", null, e);
+            } else {
+                throw e;
+            }
         }
 
         // Create a copy of oidcUser but use the mappedAuthorities instead
