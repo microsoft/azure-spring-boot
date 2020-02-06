@@ -159,12 +159,18 @@ public class KeyVaultIT {
         appService.restart();
         log.info("restarting app service finished...");
 
+        try {
+            Thread.sleep(60 * 1000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         final String resourceUrl = "https://" + appService.name() + ".azurewebsites.net" + "/get";
         // warm up
         final ResponseEntity<String> response = curlWithRetry(resourceUrl, 3, 120_000, String.class);
 
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
-        assertEquals(response.getBody(), KEY_VAULT_VALUE);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(KEY_VAULT_VALUE, response.getBody());
         log.info("--------------------->test app service with MSI over");
     }
 
@@ -211,8 +217,8 @@ public class KeyVaultIT {
                 60_000,
                 String.class);
 
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
-        assertEquals(response.getBody(), KEY_VAULT_VALUE);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(KEY_VAULT_VALUE, response.getBody());
         log.info("key vault value is: {}", response.getBody());
         log.info("--------------------->test virtual machine with MSI over");
     }

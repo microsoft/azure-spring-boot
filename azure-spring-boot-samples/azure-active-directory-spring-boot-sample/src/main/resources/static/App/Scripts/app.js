@@ -1,6 +1,6 @@
 ﻿'use strict';
-angular.module('todoApp', ['ngRoute', 'AdalAngular'])
-    .config(['$routeProvider', '$httpProvider', 'adalAuthenticationServiceProvider', function ($routeProvider, $httpProvider, adalProvider) {
+angular.module('todoApp', ['ngRoute', 'MsalAngular'])
+    .config(['$routeProvider', '$httpProvider', 'msalAuthenticationServiceProvider', function ($routeProvider, $httpProvider, msalProvider) {
 
         $routeProvider.when("/Home", {
             controller: "homeCtrl",
@@ -8,20 +8,25 @@ angular.module('todoApp', ['ngRoute', 'AdalAngular'])
         }).when("/TodoList", {
             controller: "todoListCtrl",
             templateUrl: "/App/Views/TodoList.html",
-            requireADLogin: true,
+            requireLogin: true,
         }).when("/UserData", {
             controller: "userDataCtrl",
             templateUrl: "/App/Views/UserData.html",
         }).otherwise({redirectTo: "/Home"});
 
-        adalProvider.init(
+        window.applicationConfig = {
+            clientID: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        };
+
+        msalProvider.init(
             {
-                instance: 'https://login.microsoftonline.com/',
-                tenant: 'xxxorg.onmicrosoft.com',
-                clientId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
-                extraQueryParameter: 'nux=1',
+                authority: 'https://login.microsoftonline.com/xxxorg.onmicrosoft.com',
+                clientID: applicationConfig.clientID,
                 cacheLocation: 'localStorage',
                 postLogoutRedirectUri: 'http://localhost:8080/logout',
+
+                tokenReceivedCallback: function (errorDesc, token, error, tokenType) {
+                },
             },
             $httpProvider
         );

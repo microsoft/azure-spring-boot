@@ -6,26 +6,37 @@
 package com.microsoft.azure.spring.autoconfigure.aad;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import com.microsoft.aad.adal4j.ClientCredential;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jwt.JWTClaimsSet;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.util.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.util.StringUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
+import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -35,7 +46,8 @@ public class UserPrincipalTest {
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(9519);
 
-    private ClientCredential credential;
+    private String clientId;
+    private String clientSecret;
     private AADAuthenticationProperties aadAuthProps;
     private ServiceEndpointsProperties endpointsProps;
     private String accessToken;
@@ -49,7 +61,8 @@ public class UserPrincipalTest {
         final ServiceEndpoints serviceEndpoints = new ServiceEndpoints();
         serviceEndpoints.setAadMembershipRestUri("http://localhost:9519/memberOf");
         endpointsProps.getEndpoints().put("global", serviceEndpoints);
-        credential = new ClientCredential("client", "pass");
+        clientId = "client";
+        clientSecret = "pass";
     }
 
 
@@ -57,7 +70,7 @@ public class UserPrincipalTest {
     public void getAuthoritiesByUserGroups() throws Exception {
 
         aadAuthProps.getUserGroup().setAllowedGroups(Collections.singletonList("group1"));
-        this.graphClientMock = new AzureADGraphClient(credential, aadAuthProps, endpointsProps);
+        this.graphClientMock = new AzureADGraphClient(clientId, clientSecret, aadAuthProps, endpointsProps);
 
         stubFor(get(urlEqualTo("/memberOf")).withHeader(HttpHeaders.ACCEPT, 
                 equalTo("application/json;odata=minimalmetadata"))
@@ -79,7 +92,7 @@ public class UserPrincipalTest {
     public void getGroups() throws Exception {
 
         aadAuthProps.setActiveDirectoryGroups(Arrays.asList("group1", "group2", "group3"));
-        this.graphClientMock = new AzureADGraphClient(credential, aadAuthProps, endpointsProps);
+        this.graphClientMock = new AzureADGraphClient(clientId, clientSecret, aadAuthProps, endpointsProps);
 
         stubFor(get(urlEqualTo("/memberOf")).withHeader(HttpHeaders.ACCEPT, 
                 equalTo("application/json;odata=minimalmetadata"))
