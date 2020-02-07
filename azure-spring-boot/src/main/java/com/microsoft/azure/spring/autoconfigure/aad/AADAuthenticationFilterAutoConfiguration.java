@@ -64,7 +64,10 @@ public class AADAuthenticationFilterAutoConfiguration {
     @ConditionalOnExpression("${azure.activedirectory.session-stateless:false} == false")
     public AADAuthenticationFilter azureADJwtTokenFilter() {
         LOG.info("AzureADJwtTokenFilter Constructor.");
-        return new AADAuthenticationFilter(aadAuthProps, serviceEndpointsProps, getJWTResourceRetriever(), getJWKSetCache());
+        return new AADAuthenticationFilter(aadAuthProps,
+                serviceEndpointsProps,
+                getJWTResourceRetriever(),
+                getJWKSetCache());
     }
 
     @Bean
@@ -87,7 +90,7 @@ public class AADAuthenticationFilterAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(JWKSetCache.class)
     public JWKSetCache getJWKSetCache() {
-    	return new DefaultJWKSetCache(aadAuthProps.getJwkSetCacheLifespan(), TimeUnit.MILLISECONDS);
+        return new DefaultJWKSetCache(aadAuthProps.getJwkSetCacheLifespan(), TimeUnit.MILLISECONDS);
     }
 
 

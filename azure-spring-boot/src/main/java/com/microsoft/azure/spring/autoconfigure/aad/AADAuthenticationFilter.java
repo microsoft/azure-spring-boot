@@ -49,18 +49,21 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
     }
     
     public AADAuthenticationFilter(AADAuthenticationProperties aadAuthProps,
-			ServiceEndpointsProperties serviceEndpointsProps, ResourceRetriever resourceRetriever,
-			JWKSetCache jwkSetCache) {
-		this.aadAuthProps = aadAuthProps;
-		this.serviceEndpointsProps = serviceEndpointsProps;
-		this.principalManager = new UserPrincipalManager(serviceEndpointsProps, aadAuthProps, resourceRetriever, false,
-				jwkSetCache);
-	}
+                                   ServiceEndpointsProperties serviceEndpointsProps,
+                                   ResourceRetriever resourceRetriever,
+                                   JWKSetCache jwkSetCache) {
+        this.aadAuthProps = aadAuthProps;
+        this.serviceEndpointsProps = serviceEndpointsProps;
+        this.principalManager = new UserPrincipalManager(serviceEndpointsProps,
+                aadAuthProps,
+                resourceRetriever,
+                false,
+                jwkSetCache);
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-
         final String authHeader = request.getHeader(TOKEN_HEADER);
 
         if (authHeader != null && authHeader.startsWith(TOKEN_TYPE)) {
