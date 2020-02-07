@@ -92,8 +92,8 @@ public class UserPrincipalManager {
      * @param serviceEndpointsProps - used to retrieve the JWKS URL
      * @param aadAuthProps          - used to retrieve the environment.
      * @param resourceRetriever     - configures the {@link RemoteJWKSet} call.
-     * @param jwkSetCache           - used to cache the JWK set for a finite time, default set to 5 minutes which 
-     * 								  matches constructor above if no jwkSetCache is passed in
+     * @param jwkSetCache           - used to cache the JWK set for a finite time, default set to 5 minutes
+     *                                which matches constructor above if no jwkSetCache is passed in
      */
     public UserPrincipalManager(ServiceEndpointsProperties serviceEndpointsProps,
                                 AADAuthenticationProperties aadAuthProps,
@@ -110,7 +110,9 @@ public class UserPrincipalManager {
         }
         try {
             keySource = new RemoteJWKSet<>(new URL(serviceEndpointsProps
-                    .getServiceEndpoints(aadAuthProps.getEnvironment()).getAadKeyDiscoveryUri()), resourceRetriever, jwkSetCache);
+                    .getServiceEndpoints(aadAuthProps.getEnvironment()).getAadKeyDiscoveryUri()),
+                    resourceRetriever,
+                    jwkSetCache);
         } catch (MalformedURLException e) {
             log.error("Failed to parse active directory key discovery uri.", e);
             throw new IllegalStateException("Failed to parse active directory key discovery uri.", e);
