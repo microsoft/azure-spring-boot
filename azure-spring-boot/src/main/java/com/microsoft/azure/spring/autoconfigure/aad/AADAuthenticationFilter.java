@@ -7,6 +7,7 @@ package com.microsoft.azure.spring.autoconfigure.aad;
 
 import com.microsoft.aad.msal4j.MsalServiceException;
 import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.jwk.source.JWKSetCache;
 import com.nimbusds.jose.proc.BadJOSEException;
 import com.nimbusds.jose.util.ResourceRetriever;
 import org.slf4j.Logger;
@@ -46,6 +47,15 @@ public class AADAuthenticationFilter extends OncePerRequestFilter {
         this.serviceEndpointsProps = serviceEndpointsProps;
         this.principalManager = new UserPrincipalManager(serviceEndpointsProps, aadAuthProps, resourceRetriever, false);
     }
+    
+    public AADAuthenticationFilter(AADAuthenticationProperties aadAuthProps,
+			ServiceEndpointsProperties serviceEndpointsProps, ResourceRetriever resourceRetriever,
+			JWKSetCache jwkSetCache) {
+		this.aadAuthProps = aadAuthProps;
+		this.serviceEndpointsProps = serviceEndpointsProps;
+		this.principalManager = new UserPrincipalManager(serviceEndpointsProps, aadAuthProps, resourceRetriever, false,
+				jwkSetCache);
+	}
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,

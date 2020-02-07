@@ -16,6 +16,7 @@ import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Validated
 @ConfigurationProperties("azure.activedirectory")
@@ -24,6 +25,8 @@ import java.util.List;
 public class AADAuthenticationProperties {
 
     private static final String DEFAULT_SERVICE_ENVIRONMENT = "global";
+    
+    private static final long DEFAULT_JWKSETCACHE_LIFESPAN = TimeUnit.MINUTES.toMillis(5);
 
     /**
      * Default UserGroup configuration.
@@ -70,6 +73,11 @@ public class AADAuthenticationProperties {
      * Size limit in Bytes of the JWKSet Remote URL call.
      */
     private int jwtSizeLimit = RemoteJWKSet.DEFAULT_HTTP_SIZE_LIMIT; /* bytes */
+    
+    /**
+     * The lifespan of the cached JWK set before it expires, default is 5 minutes. 
+     */
+    private long jwkSetCacheLifespan = DEFAULT_JWKSETCACHE_LIFESPAN;
 
     /**
      * Azure Tenant ID.
