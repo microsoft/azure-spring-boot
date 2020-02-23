@@ -201,7 +201,6 @@ public class AADOAuth2LoginSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 }
 ```
-Please 
 
 #### Allow telemetry
 Microsoft would like to collect data about how users use this Spring boot starter.
