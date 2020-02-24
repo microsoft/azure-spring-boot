@@ -63,7 +63,7 @@ public class CosmosDBProperties {
         }
     };
 
-    private ConnectionPolicy connectionPolicy = ConnectionPolicy.defaultPolicy();
+    private ConnectionPolicy connectionPolicy;
 
     public String getUri() {
         return uri;
@@ -106,6 +106,9 @@ public class CosmosDBProperties {
     }
 
     public ConnectionPolicy getConnectionPolicy() {
+        if (null == connectionPolicy) {
+            return ConnectionPolicy.defaultPolicy();
+        }
         return connectionPolicy;
     }
 
