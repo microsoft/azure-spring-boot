@@ -154,6 +154,12 @@ public class KeyVaultIT {
             }
         }
 
+        try {
+            Thread.sleep(60 * 1000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         // Restart App Service
         log.info("restarting app service...");
         appService.restart();
