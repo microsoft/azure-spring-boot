@@ -154,22 +154,14 @@ public class KeyVaultIT {
             }
         }
 
-        try {
-            Thread.sleep(60 * 1000L);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        SdkContext.sleep(120_000);
 
         // Restart App Service
         log.info("restarting app service...");
         appService.restart();
         log.info("restarting app service finished...");
 
-        try {
-            Thread.sleep(60 * 1000L);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        SdkContext.sleep(120_000);
 
         final String resourceUrl = "https://" + appService.name() + ".azurewebsites.net" + "/get";
         // warm up
