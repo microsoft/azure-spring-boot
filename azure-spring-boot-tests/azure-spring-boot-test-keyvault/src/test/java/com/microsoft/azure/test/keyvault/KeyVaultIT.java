@@ -20,7 +20,6 @@ import com.microsoft.azure.utils.SSHShell;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -124,7 +123,6 @@ public class KeyVaultIT {
     }
 
     @Test
-    @Ignore
     public void keyVaultWithAppServiceMSI() {
         final AppServiceTool appServiceTool = new AppServiceTool(access);
 
@@ -156,14 +154,10 @@ public class KeyVaultIT {
             }
         }
 
-        SdkContext.sleep(120_000);
-
         // Restart App Service
         log.info("restarting app service...");
         appService.restart();
         log.info("restarting app service finished...");
-
-        SdkContext.sleep(120_000);
 
         final String resourceUrl = "https://" + appService.name() + ".azurewebsites.net" + "/get";
         // warm up
