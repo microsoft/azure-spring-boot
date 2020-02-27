@@ -16,6 +16,7 @@ import com.microsoft.aad.msal4j.OnBehalfOfParameters;
 import com.microsoft.aad.msal4j.UserAssertion;
 import com.nimbusds.oauth2.sdk.http.HTTPResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -199,8 +200,12 @@ public class AzureADGraphClient {
         try {
             service = Executors.newFixedThreadPool(1);
 
-            final ConfidentialClientApplication application = ConfidentialClientApplication.builder(clientId,
-                    clientCredential).build();
+            final ConfidentialClientApplication.Builder builder = ConfidentialClientApplication.builder(clientId,
+                    clientCredential);
+            if (StringUtils.isNotBlank(aadAuthenticationProperties.getAuthority())) {
+                builder.authority(aadAuthenticationProperties.getAuthority());
+            }
+            final ConfidentialClientApplication application = builder.build();
 
             final Set<String> scopes = new HashSet<>();
             scopes.add(aadMicrosoftGraphApiBool ? MICROSOFT_GRAPH_SCOPE : AAD_GRAPH_API_SCOPE);

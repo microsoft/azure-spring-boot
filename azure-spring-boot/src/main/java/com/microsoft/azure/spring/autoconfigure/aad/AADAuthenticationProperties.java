@@ -33,6 +33,10 @@ public class AADAuthenticationProperties {
      */
     private UserGroupProperties userGroup = new UserGroupProperties();
 
+    /**
+     * Leave blank for default (usually: "https://login.microsoftonline.com/common/")
+     */
+    private String authority;
 
     /**
      * Azure service environment/region name, e.g., cn, global
