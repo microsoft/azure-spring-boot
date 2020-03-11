@@ -51,20 +51,28 @@ public class AADAuthenticationFilterIT {
 
     @Test
     public void testAADAuthenticationFilterWithSingleTenantApp() {
-        testAADAuthenticationFilter(System.getenv(SINGLE_TENANT_AAD_CLIENT_ID),
-                System.getenv(SINGLE_TENANT_AAD_CLIENT_SECRET));
+        final String clientId = System.getenv(SINGLE_TENANT_AAD_CLIENT_ID);
+        final String clientSecret = System.getenv(SINGLE_TENANT_AAD_CLIENT_SECRET);
+
+        final OAuthResponse authResponse = OAuthUtils.executeOAuth2ROPCFlow(clientId, clientSecret);
+        assertNotNull(authResponse);
+
+        testAADAuthenticationFilter(clientId, clientSecret, authResponse.getIdToken());
     }
 
     @Test
     public void testAADAuthenticationFilterWithMultiTenantApp() {
-        testAADAuthenticationFilter(System.getenv(AAD_CLIENT_ID), System.getenv(AAD_CLIENT_SECRET));
-    }
+        final String clientId = System.getenv(AAD_CLIENT_ID);
+        final String clientSecret = System.getenv(AAD_CLIENT_SECRET);
 
-
-    private void testAADAuthenticationFilter(String clientId, String clientSecret) {
         final OAuthResponse authResponse = OAuthUtils.executeOAuth2ROPCFlow(clientId, clientSecret);
         assertNotNull(authResponse);
 
+        testAADAuthenticationFilter(clientId, clientSecret, authResponse.getIdToken());
+    }
+
+
+    private void testAADAuthenticationFilter(String clientId, String clientSecret, String idToken) {
         try (AppRunner app = new AppRunner(DumbApp.class)) {
 
             app.property("azure.activedirectory.client-id", clientId);
@@ -79,7 +87,7 @@ public class AADAuthenticationFilterIT {
             assertEquals("home", response.getBody());
 
             final HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", String.format("Bearer %s", authResponse.getIdToken()));
+            headers.set("Authorization", String.format("Bearer %s", idToken));
             HttpEntity entity = new HttpEntity(headers);
 
             final ResponseEntity<String> response2 = restTemplate.exchange(app.root() + "api/all",
