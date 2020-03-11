@@ -37,6 +37,8 @@ import java.util.Optional;
 
 import static com.microsoft.azure.test.oauth.OAuthUtils.AAD_CLIENT_ID;
 import static com.microsoft.azure.test.oauth.OAuthUtils.AAD_CLIENT_SECRET;
+import static com.microsoft.azure.test.oauth.OAuthUtils.SINGLE_TENANT_AAD_CLIENT_ID;
+import static com.microsoft.azure.test.oauth.OAuthUtils.SINGLE_TENANT_AAD_CLIENT_SECRET;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.http.HttpHeaders.COOKIE;
@@ -48,14 +50,25 @@ public class AADAuthenticationFilterIT {
     private RestTemplate restTemplate = new RestTemplate();
 
     @Test
-    public void testAADAuthenticationFilter() {
-        final OAuthResponse authResponse = OAuthUtils.executeOAuth2ROPCFlow();
+    public void testAADAuthenticationFilterWithSingleTenantApp() {
+        testAADAuthenticationFilter(System.getenv(SINGLE_TENANT_AAD_CLIENT_ID),
+                System.getenv(SINGLE_TENANT_AAD_CLIENT_SECRET));
+    }
+
+    @Test
+    public void testAADAuthenticationFilterWithMultiTenantApp() {
+        testAADAuthenticationFilter(System.getenv(AAD_CLIENT_ID), System.getenv(AAD_CLIENT_SECRET));
+    }
+
+
+    private void testAADAuthenticationFilter(String clientId, String clientSecret) {
+        final OAuthResponse authResponse = OAuthUtils.executeOAuth2ROPCFlow(clientId, clientSecret);
         assertNotNull(authResponse);
 
         try (AppRunner app = new AppRunner(DumbApp.class)) {
 
-            app.property("azure.activedirectory.client-id", System.getenv(AAD_CLIENT_ID));
-            app.property("azure.activedirectory.client-secret", System.getenv(AAD_CLIENT_SECRET));
+            app.property("azure.activedirectory.client-id", clientId);
+            app.property("azure.activedirectory.client-secret", clientSecret);
             app.property("azure.activedirectory.ActiveDirectoryGroups", "group1,group2");
 
             app.start();

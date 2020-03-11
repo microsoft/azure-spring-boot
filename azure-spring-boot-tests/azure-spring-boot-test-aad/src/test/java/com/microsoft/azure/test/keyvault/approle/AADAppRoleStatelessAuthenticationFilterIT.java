@@ -33,6 +33,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 
 import static com.microsoft.azure.test.oauth.OAuthUtils.AAD_CLIENT_ID;
+import static com.microsoft.azure.test.oauth.OAuthUtils.AAD_CLIENT_SECRET;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -44,7 +45,8 @@ public class AADAppRoleStatelessAuthenticationFilterIT {
     @Test
     @Ignore
     public void testAADAppRoleStatelessAuthenticationFilter() {
-        final OAuthResponse authResponse = OAuthUtils.executeOAuth2ROPCFlow();
+        final OAuthResponse authResponse = OAuthUtils.executeOAuth2ROPCFlow(System.getenv(AAD_CLIENT_ID),
+                System.getenv(AAD_CLIENT_SECRET));
         assertNotNull(authResponse);
 
         try (AppRunner app = new AppRunner(DumbApp.class)) {
