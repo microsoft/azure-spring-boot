@@ -201,8 +201,10 @@ public class AzureADGraphClient {
         try {
             service = Executors.newFixedThreadPool(1);
 
-            final ConfidentialClientApplication application = ConfidentialClientApplication.builder(clientId,
-                    clientCredential).build();
+            final ConfidentialClientApplication application = ConfidentialClientApplication
+                    .builder(clientId, clientCredential)
+                    .authority(serviceEndpoints.getAadSigninUri() + tenantId + "/")
+                    .build();
 
             final Set<String> scopes = new HashSet<>();
             scopes.add(aadMicrosoftGraphApiBool ? MICROSOFT_GRAPH_SCOPE : AAD_GRAPH_API_SCOPE);
