@@ -20,6 +20,8 @@ public class OAuthUtils {
 
     public static final String AAD_CLIENT_ID = "AAD_CLIENT_ID";
     public static final String AAD_CLIENT_SECRET = "AAD_CLIENT_SECRET";
+    public static final String SINGLE_TENANT_AAD_CLIENT_ID = "SINGLE_TENANT_AAD_CLIENT_ID";
+    public static final String SINGLE_TENANT_AAD_CLIENT_SECRET = "SINGLE_TENANT_AAD_CLIENT_SECRET";
     private static final String AAD_TENANT_ID = "AAD_TENANT_ID";
     private static final String AAD_USER_NAME = "AAD_USER_NAME";
     private static final String AAD_USER_PASSWORD = "AAD_USER_PASSWORD";
@@ -27,15 +29,13 @@ public class OAuthUtils {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final OkHttpClient client = new OkHttpClient();
 
-    public static OAuthResponse executeOAuth2ROPCFlow() {
+    public static OAuthResponse executeOAuth2ROPCFlow(String aadClientId, String aadClientSecret) {
         final MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-        final String aadClientId = System.getenv(AAD_CLIENT_ID);
-        final String aadClientSecret = System.getenv(AAD_CLIENT_SECRET);
         final String aadUsername = System.getenv(AAD_USER_NAME);
         final String aadUserPassword = System.getenv(AAD_USER_PASSWORD);
 
-        assertNotEmpty(aadClientId, AAD_CLIENT_ID);
-        assertNotEmpty(aadClientSecret, AAD_CLIENT_SECRET);
+        assertNotEmpty(aadClientId, "client id");
+        assertNotEmpty(aadClientSecret, "client secret");
         assertNotEmpty(aadUsername, AAD_USER_NAME);
         assertNotEmpty(aadUserPassword, AAD_USER_PASSWORD);
 
