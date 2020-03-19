@@ -22,8 +22,7 @@ If you don't have an Azure subscription, create a [free account](https://azure.m
 
 2. Click **+Create a resource**, then **Identity**, and then **Azure Active Directory B2C**.
 
-3. Enter your **Organization name** and your **Initial domain name**, record the **domain name** as your
-`${your-tenant-name}` and click **Create**.
+3. Enter your **Organization name** and your **Initial domain name**, then click **Create**. The domain name's format is like ${your-tenant-name}.onmicrosoft.com, so record the tenant name for later use.
 
 4. Select your account name on the top-right of the Azure portal toolbar, then click **Switch directory**.
 
@@ -93,7 +92,7 @@ respectively. Specify your user flow **Name** and **User attributes and claims**
 
    | Parameter | Description |
    |---|---|
-   | `azure.activedirectory.b2c.tenant` | Contains your AD B2C's `${your-tenant-name` from earlier. |
+   | `azure.activedirectory.b2c.tenant` | Contains your AD B2C's `${your-tenant-name}` from earlier. |
    | `azure.activedirectory.b2c.client-id` | Contains the `${your-client-id}` from your application that you completed earlier. |
    | `azure.activedirectory.b2c.client-secret` | Contains the `${your-client-secret}` from your application that you completed earlier. |
    | `azure.activedirectory.b2c.reply-url` | Contains one of the **Reply URL** from your application that you completed earlier. |
