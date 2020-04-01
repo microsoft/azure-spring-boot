@@ -7,6 +7,7 @@
 package com.microsoft.azure.keyvault.spring;
 
 import com.azure.core.credential.TokenCredential;
+import com.azure.core.http.policy.HttpLogOptions;
 import com.azure.identity.ClientCertificateCredentialBuilder;
 import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
@@ -15,7 +16,6 @@ import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
 import com.microsoft.azure.telemetry.TelemetrySender;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.microsoft.azure.keyvault.spring.Constants.SPRINGBOOT_KEY_VAULT_APPLICATION_ID;
 import static com.microsoft.azure.telemetry.TelemetryData.SERVICE_NAME;
 import static com.microsoft.azure.telemetry.TelemetryData.getClassPackageSimpleName;
 
@@ -58,6 +59,7 @@ class KeyVaultEnvironmentPostProcessorHelper {
         final SecretClient secretClient = new SecretClientBuilder()
                 .vaultUrl(vaultUri)
                 .credential(tokenCredential)
+                .httpLogOptions(new HttpLogOptions().setApplicationId(SPRINGBOOT_KEY_VAULT_APPLICATION_ID))
                 .buildClient();
         try {
             final MutablePropertySources sources = this.environment.getPropertySources();
