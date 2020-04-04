@@ -64,6 +64,10 @@ public class StorageAutoConfiguration {
     }
 
     private URL getURL() throws MalformedURLException {
+        if (properties.isUseEmulator()) {
+            LOG.debug("Using emulator address instead..");
+            return new URL(String.format("%s/%s", properties.getEmulatorBlobHost(), properties.getAccountName()));
+        }
         if (properties.isEnableHttps()) {
             return new URL(String.format(BLOB_HTTPS_URL, properties.getAccountName()));
         }

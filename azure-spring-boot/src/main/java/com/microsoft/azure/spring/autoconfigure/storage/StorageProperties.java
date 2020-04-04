@@ -27,6 +27,14 @@ public class StorageProperties {
 
     @Getter
     @Setter
+    private boolean useEmulator = false;
+
+    @Getter
+    @Setter
+    private String emulatorBlobHost;
+
+    @Getter
+    @Setter
     private String containerName;
 
     @Getter
