@@ -27,7 +27,7 @@ public class Constants {
     public static final long TOKEN_ACQUIRE_TIMEOUT_SECS = 60L;
 
     // for the User-Agent header set in track2 SDKs
-    public static final String SPRINGBOOT_VERSION = "2.1.11-SNAP";
+    public static final String SPRINGBOOT_VERSION = "snapshot";
     public static final String SPRINGBOOT_KEY_VAULT_APPLICATION_ID = "az-sb-kv/" +
             SPRINGBOOT_VERSION;
 
