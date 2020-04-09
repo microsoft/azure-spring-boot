@@ -27,8 +27,14 @@ public class Constants {
     public static final long TOKEN_ACQUIRE_TIMEOUT_SECS = 60L;
 
     // for the User-Agent header set in track2 SDKs
-    public static final String SPRINGBOOT_VERSION = "snapshot";
-    public static final String SPRINGBOOT_KEY_VAULT_APPLICATION_ID = "az-sb-kv/" +
-            SPRINGBOOT_VERSION;
+    private static final String SNAPSHOT_VERSION = "snapshot";
+    private static final String AZURE = "az";
+    private static final String SPRING = "sp";
+    private static final String KEY_VAULT = "kv";
+
+    public static final String SPRINGBOOT_VERSION = SNAPSHOT_VERSION;
+    // the max length of application id is 24
+    public static final String SPRINGBOOT_KEY_VAULT_APPLICATION_ID =
+            String.join("-", AZURE, SPRING, KEY_VAULT) + "/" + SPRINGBOOT_VERSION;
 
 }
