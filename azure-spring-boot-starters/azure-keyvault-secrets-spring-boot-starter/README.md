@@ -56,7 +56,7 @@ If you are using system assigned identity you don't need to specify the client-i
 
 #### Azure Spring Cloud
 
-Azure Spring Cloud supports system assigned identity only at present To use it for Azure Spring Cloud apps, add the below properties:
+Azure Spring Cloud supports system assigned identity only at present. To use it for Azure Spring Cloud apps, add the below properties:
 ```
 azure.keyvault.enabled=true
 azure.keyvault.uri=put-your-azure-keyvault-uri-here
