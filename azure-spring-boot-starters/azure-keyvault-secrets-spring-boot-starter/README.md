@@ -33,6 +33,14 @@ azure.keyvault.secret.keys=key1,key2,key3
 ```
 
 ### Use MSI / Managed identities 
+#### Azure Spring Cloud
+
+Azure Spring Cloud supports system assigned identity only at present. To use it for Azure Spring Cloud apps, add the below properties:
+```
+azure.keyvault.enabled=true
+azure.keyvault.uri=put-your-azure-keyvault-uri-here
+```
+
 #### App Services
 To use managed identities for App Services - please refer to [How to use managed identities for App Service and Azure Functions](https://docs.microsoft.com/en-us/azure/app-service/app-service-managed-service-identity).
 
@@ -54,13 +62,6 @@ azure.keyvault.client-id=put-your-azure-client-id-here
 
 If you are using system assigned identity you don't need to specify the client-id.
 
-#### Azure Spring Cloud
-
-Azure Spring Cloud supports system assigned identity only at present. To use it for Azure Spring Cloud apps, add the below properties:
-```
-azure.keyvault.enabled=true
-azure.keyvault.uri=put-your-azure-keyvault-uri-here
-```
 
 ### Save secrets in Azure Key Vault
 Save secrets in Azure Key Vault through [Azure Portal](https://blogs.technet.microsoft.com/kv/2016/09/12/manage-your-key-vaults-from-new-azure-portal/) or [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/keyvault/secret).
@@ -103,5 +104,3 @@ azure.keyvault.allow.telemetry=false
 ```
 When telemetry is enabled, an HTTP request will be sent to URL `https://dc.services.visualstudio.com/v2/track`. So please make sure it's not blocked by your firewall.    
 Find more information about Azure Service Privacy Statement, please check [Microsoft Online Services Privacy Statement](https://www.microsoft.com/en-us/privacystatement/OnlineServices/Default.aspx). 
-
-
