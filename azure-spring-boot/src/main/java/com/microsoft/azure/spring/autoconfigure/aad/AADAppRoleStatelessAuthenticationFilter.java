@@ -52,27 +52,8 @@ public class AADAppRoleStatelessAuthenticationFilter extends OncePerRequestFilte
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         boolean cleanupRequired = false;
 
-        if (hasText(authHeader) && authHeader.startsWith(TOKEN_TYPE)) {
-            try {
-                final String token = authHeader.replace(TOKEN_TYPE, "");
-                final UserPrincipal principal = principalManager.buildUserPrincipal(token);
-                final JSONArray roles = Optional.ofNullable((JSONArray) principal.getClaims().get("roles"))
-                    .filter(r -> !r.isEmpty())
-                    .orElse(DEFAULT_ROLE_CLAIM);
-                final Authentication authentication = new PreAuthenticatedAuthenticationToken(
-                    principal, null, rolesToGrantedAuthorities(roles));
-                authentication.setAuthenticated(true);
-                log.info("Request token verification success. {}", authentication);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                cleanupRequired = true;
-            } catch (BadJWTException ex) {
-                final String errorMessage = "Invalid JWT. Either expired or not yet valid. " + ex.getMessage();
-                log.warn(errorMessage);
-                throw new ServletException(errorMessage, ex);
-            } catch (ParseException | BadJOSEException | JOSEException ex) {
-                log.error("Failed to initialize UserPrincipal.", ex);
-                throw new ServletException(ex);
-            }
+        if (!alreadyAuthenticated() && hasText(authHeader) && authHeader.startsWith(TOKEN_TYPE)) {
+            cleanupRequired = verifyToken(authHeader.replace(TOKEN_TYPE, ""));
         }
 
         try {
@@ -83,6 +64,39 @@ public class AADAppRoleStatelessAuthenticationFilter extends OncePerRequestFilte
                 SecurityContextHolder.clearContext();
             }
         }
+    }
+
+    private boolean verifyToken(String token) throws ServletException {
+        if (!principalManager.isTokenIssuedByAAD(token)) {
+            log.info("Token {} is not issued by AAD", token);
+            return false;
+        }
+
+        try {
+            final UserPrincipal principal = principalManager.buildUserPrincipal(token);
+            final JSONArray roles = Optional.ofNullable((JSONArray) principal.getClaims().get("roles"))
+                    .filter(r -> !r.isEmpty())
+                    .orElse(DEFAULT_ROLE_CLAIM);
+
+            final Authentication authentication = new PreAuthenticatedAuthenticationToken(
+                    principal, null, rolesToGrantedAuthorities(roles));
+            authentication.setAuthenticated(true);
+            log.info("Request token verification success. {}", authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return true;
+        } catch (BadJWTException ex) {
+            final String errorMessage = "Invalid JWT. Either expired or not yet valid. " + ex.getMessage();
+            log.warn(errorMessage);
+            throw new ServletException(errorMessage, ex);
+        } catch (ParseException | BadJOSEException | JOSEException ex) {
+            log.error("Failed to initialize UserPrincipal.", ex);
+            throw new ServletException(ex);
+        }
+    }
+
+    private boolean alreadyAuthenticated() {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.isAuthenticated();
     }
 
     protected Set<SimpleGrantedAuthority> rolesToGrantedAuthorities(JSONArray roles) {
