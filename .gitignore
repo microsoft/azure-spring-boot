@@ -55,3 +55,6 @@ azure-spring-boot-samples/**/bin
 gradle-app.setting
 !gradle-wrapper.jar
 .gradletasknamecache
+
+nb-configuration.xml
+nbactions.xml

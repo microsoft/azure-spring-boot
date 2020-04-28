@@ -3,7 +3,6 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-
 package com.microsoft.azure.keyvault.spring;
 
 import com.azure.core.credential.TokenCredential;
@@ -32,6 +31,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
 public class KeyVaultEnvironmentPostProcessorTest {
+
     private KeyVaultEnvironmentPostProcessorHelper keyVaultEnvironmentPostProcessorHelper;
     private ConfigurableEnvironment environment;
     private MutablePropertySources propertySources;
@@ -84,8 +84,6 @@ public class KeyVaultEnvironmentPostProcessorTest {
         assertThat(credentials, IsInstanceOf.instanceOf(ManagedIdentityCredential.class));
     }
 
-
-
     @Test
     public void testGetCredentialsWhenMSIEnabledInVMWithClientId() {
         testProperties.put("azure.keyvault.client-id", "aaaa-bbbb-cccc-dddd");
@@ -120,18 +118,42 @@ public class KeyVaultEnvironmentPostProcessorTest {
                 .withPropertyValues("azure.keyvault.uri=fakeuri", "azure.keyvault.enabled=true");
 
         contextRunner.run(context -> {
-            assertThat("Configured order for KeyVaultEnvironmentPostProcessor is different with default order " +
-                            "value.",
+            assertThat("Configured order for KeyVaultEnvironmentPostProcessor is different with default order "
+                    + "value.",
                     KeyVaultEnvironmentPostProcessor.DEFAULT_ORDER != OrderedProcessConfig.TEST_ORDER);
             assertEquals("KeyVaultEnvironmentPostProcessor order should be changed.",
                     OrderedProcessConfig.TEST_ORDER,
                     context.getBean(KeyVaultEnvironmentPostProcessor.class).getOrder());
         });
     }
+
+    /**
+     * Test the multiple key vault support.
+     */
+    @Test
+    public void testMultipleKeyVaults() {
+        testProperties.put("azure.keyvault.names", "myvault, myvault2");
+        testProperties.put("myvault.azure.keyvault.client-id", "aaaa-bbbb-cccc-dddd");
+        testProperties.put("myvault.azure.keyvault.client-key", "mySecret");
+        testProperties.put("myvault.azure.keyvault.tenant-id", "myid");
+        testProperties.put("myvault2.azure.keyvault.client-id", "aaaa-bbbb-cccc-dddd");
+        testProperties.put("myvault2.azure.keyvault.client-key", "mySecret");
+        testProperties.put("myvault2.azure.keyvault.tenant-id", "myid");
+        propertySources.addLast(new MapPropertySource("Test_Properties", testProperties));
+
+        keyVaultEnvironmentPostProcessorHelper = new KeyVaultEnvironmentPostProcessorHelper(environment);
+
+        final TokenCredential credentials = keyVaultEnvironmentPostProcessorHelper.getCredentials("myvault.");
+        assertThat(credentials, IsInstanceOf.instanceOf(ClientSecretCredential.class));
+
+        final TokenCredential credentials2 = keyVaultEnvironmentPostProcessorHelper.getCredentials("myvault2.");
+        assertThat(credentials2, IsInstanceOf.instanceOf(ClientSecretCredential.class));
+    }
 }
 
 @Configuration
 class OrderedProcessConfig {
+
     static final int TEST_ORDER = KeyVaultEnvironmentPostProcessor.DEFAULT_ORDER + 1;
 
     @Bean
@@ -142,4 +164,3 @@ class OrderedProcessConfig {
         return processor;
     }
 }
-
