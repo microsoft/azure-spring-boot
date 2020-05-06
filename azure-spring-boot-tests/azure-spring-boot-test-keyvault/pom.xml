@@ -42,6 +42,10 @@
                                     <variableName>AZURE_CLIENT_ID</variableName>
                                     <message>Set the AZURE_CLIENT_ID environment variable to your Application (Client) ID</message>
                                 </requireEnvironmentVariable>
+                                <requireEnvironmentVariable>
+                                    <variableName>AZURE_CLIENT_SECRET</variableName>
+                                    <message>Set the AZURE_CLIENT_SECRET environment variable to your Application (Client) Secret</message>
+                                </requireEnvironmentVariable>
                             </rules>
                             <fail>true</fail>
                         </configuration>
