@@ -51,10 +51,11 @@ class KeyVaultEnvironmentPostProcessorHelper {
      * <p>
      * The normalizedName is used to target a specific key vault (note if the
      * name is the empty string it works as before with only one key vault
-     * present).
+     * present). The normalized name is the name of the specific key vault plus
+     * a trailing "." at the end.
      * </p>
      *
-     * @param postfix the postfix.
+     * @param normalizedName the normalized name.
      */
     public void addKeyVaultPropertySource(String normalizedName) {
         final String vaultUri = getProperty(this.environment, normalizedName + Constants.AZURE_KEYVAULT_VAULT_URI);
