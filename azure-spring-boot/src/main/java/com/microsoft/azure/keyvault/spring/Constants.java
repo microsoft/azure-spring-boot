@@ -36,11 +36,11 @@ public class Constants {
     // the max length of application id is 24
     public static final String SPRINGBOOT_KEY_VAULT_APPLICATION_ID =
             String.join("-", AZURE, SPRING, KEY_VAULT) + "/" + SPRINGBOOT_VERSION;
-    
+
     /**
-     * The constant that allows you to define the names of the key vaults you are
+     * The constant used to define the order of the key vaults you are
      * delivering (comma delimited, e.g 'myvault, myvault2').
      */
-    public static final String AZURE_KEYVAULT_NAMES = "azure.keyvault.names";
+    public static final String AZURE_KEYVAULT_ORDER = "azure.keyvault.order";
 
 }

@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.keyvault.spring;
 
-import java.util.Collections;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.config.ConfigFileApplicationListener;
@@ -40,7 +39,7 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
             helper.addKeyVaultPropertySource("");
         }
         if (hasMultipleKeyVaultsEnabled(environment)) {
-            final String property = environment.getProperty(Constants.AZURE_KEYVAULT_NAMES, "");
+            final String property = environment.getProperty(Constants.AZURE_KEYVAULT_ORDER, "");
             final String[] keyVaultNames = property.split(",");
             for (int i = keyVaultNames.length - 1; i >= 0; i--) {
                 if (isKeyVaultEnabled(environment, keyVaultNames[i].trim() + ".")) {
@@ -84,8 +83,8 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
      * Determine whether or not multiple key vaults are enabled.
      *
      * <p>
-     * Look for the AZURE_KEYVAULT_NAMES to determine if multiple key vault
-     * support should be enabled.
+     * Look for the AZURE_KEYVAULT_ORDER property to determine if multiple key
+     * vault support should be enabled.
      * </p>
      *
      * @param environment the environment.
@@ -93,7 +92,7 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
      */
     private boolean hasMultipleKeyVaultsEnabled(ConfigurableEnvironment environment) {
         boolean result = false;
-        if (environment.getProperty(Constants.AZURE_KEYVAULT_NAMES) != null) {
+        if (environment.getProperty(Constants.AZURE_KEYVAULT_ORDER) != null) {
             result = true;
         }
         return result;
