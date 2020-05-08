@@ -37,4 +37,8 @@ public class Constants {
     public static final String SPRINGBOOT_KEY_VAULT_APPLICATION_ID =
             String.join("-", AZURE, SPRING, KEY_VAULT) + "/" + SPRINGBOOT_VERSION;
 
+    /**
+     * Defines the constant for the property that enables/disables case sensitive keys.
+     */
+    public static final String AZURE_KEYVAULT_CASE_SENSITIVE_KEYS = "azure.keyvault.case-sensitive-keys";
 }
