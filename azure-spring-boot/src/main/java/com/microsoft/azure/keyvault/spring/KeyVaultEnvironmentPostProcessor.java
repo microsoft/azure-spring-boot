@@ -5,6 +5,10 @@
  */
 package com.microsoft.azure.keyvault.spring;
 
+import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_ENABLED;
+import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_ORDER;
+import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_PREFIX;
+import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_VAULT_URI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.config.ConfigFileApplicationListener;
@@ -39,7 +43,7 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
             helper.addKeyVaultPropertySource("");
         }
         if (hasMultipleKeyVaultsEnabled(environment)) {
-            final String property = environment.getProperty(Constants.AZURE_KEYVAULT_ORDER, "");
+            final String property = environment.getProperty(AZURE_KEYVAULT_PREFIX + AZURE_KEYVAULT_ORDER, "");
             final String[] keyVaultNames = property.split(",");
             for (int i = keyVaultNames.length - 1; i >= 0; i--) {
                 if (isKeyVaultEnabled(environment, keyVaultNames[i].trim() + ".")) {
@@ -72,10 +76,10 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
      * @return true if the key vault is enabled, false otherwise.
      */
     private boolean isKeyVaultEnabled(ConfigurableEnvironment environment, String normalizedName) {
-        if (environment.getProperty(normalizedName + Constants.AZURE_KEYVAULT_VAULT_URI) == null) {
+        if (environment.getProperty(AZURE_KEYVAULT_PREFIX + normalizedName + AZURE_KEYVAULT_VAULT_URI) == null) {
             return false;
         }
-        return environment.getProperty(normalizedName + Constants.AZURE_KEYVAULT_ENABLED,
+        return environment.getProperty(AZURE_KEYVAULT_PREFIX + normalizedName + AZURE_KEYVAULT_ENABLED,
                 Boolean.class, true) && isKeyVaultClientAvailable();
     }
 
@@ -92,7 +96,7 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
      */
     private boolean hasMultipleKeyVaultsEnabled(ConfigurableEnvironment environment) {
         boolean result = false;
-        if (environment.getProperty(Constants.AZURE_KEYVAULT_ORDER) != null) {
+        if (environment.getProperty(AZURE_KEYVAULT_PREFIX + AZURE_KEYVAULT_ORDER) != null) {
             result = true;
         }
         return result;
