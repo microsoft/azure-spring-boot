@@ -89,7 +89,7 @@ public class MultipleKeyVaultsIT {
     @Test
     public void testGetValueFromKeyVault1() {
         try (AppRunner app = new AppRunner(TestApp.class)) {
-            app.property("azure.keyvault.names", "keyvault1");
+            app.property("azure.keyvault.order", "keyvault1");
             app.property("azure.keyvault.keyvault1.uri", keyVault1.vaultUri());
             app.property("azure.keyvault.keyvault1.enabled", "true");
             app.property("azure.keyvault.keyvault1.client-id", access.clientId());
@@ -107,7 +107,7 @@ public class MultipleKeyVaultsIT {
     @Test
     public void testGetValueFromKeyVault2() {
         try (AppRunner app = new AppRunner(TestApp.class)) {
-            app.property("azure.keyvault.names", "keyvault2");
+            app.property("azure.keyvault.order", "keyvault2");
             app.property("azure.keyvault.keyvault2.uri", keyVault2.vaultUri());
             app.property("azure.keyvault.keyvault2.enabled", "true");
             app.property("azure.keyvault.keyvault2.client-id", access.clientId());
@@ -126,7 +126,7 @@ public class MultipleKeyVaultsIT {
     @Test
     public void testGetValueForDuplicateKey() {
         try (AppRunner app = new AppRunner(TestApp.class)) {
-            app.property("azure.keyvault.names", "keyvault1, keyvault2");
+            app.property("azure.keyvault.order", "keyvault1, keyvault2");
             app.property("azure.keyvault.keyvault1.uri", keyVault1.vaultUri());
             app.property("azure.keyvault.keyvault1.enabled", "true");
             app.property("azure.keyvault.keyvault1.client-id", access.clientId());
@@ -155,7 +155,7 @@ public class MultipleKeyVaultsIT {
             app.property("azure.keyvault.client-id", access.clientId());
             app.property("azure.keyvault.client-key", access.clientSecret());
             app.property("azure.keyvault.tenant-id", access.tenant());
-            app.property("azure.keyvault.names", "keyvault2");
+            app.property("azure.keyvault.order", "keyvault2");
             app.property("azure.keyvault.keyvault2.enabled", "true");
             app.property("azure.keyvault.keyvault2.uri", keyVault2.vaultUri());
             app.property("azure.keyvault.keyvault2.client-id", access.clientId());
@@ -163,6 +163,7 @@ public class MultipleKeyVaultsIT {
             app.property("azure.keyvault.keyvault2.tenant-id", access.tenant());
             app.start("dummy");
             assertEquals("vault1", app.getProperty("key1"));
+            assertEquals("vault2", app.getProperty("key2"));
             app.close();
         }
     }

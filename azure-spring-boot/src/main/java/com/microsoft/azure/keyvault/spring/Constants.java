@@ -46,5 +46,5 @@ public class Constants {
      * The constant used to define the order of the key vaults you are
      * delivering (comma delimited, e.g 'myvault, myvault2').
      */
-    public static final String AZURE_KEYVAULT_ORDER = AZURE_KEYVAULT_PREFIX + "order";
+    public static final String AZURE_KEYVAULT_ORDER = "order";
 }

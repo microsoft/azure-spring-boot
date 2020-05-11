@@ -58,7 +58,7 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
      *
      * <p>
      * If the (normalizedName+) AZURE_KEYVAULT_URI is not present then the user
-     * does not want to enable the key vault.
+     * does not want to enable the key vault at all.
      * </p>
      * </p>
      * If the (normalizedName+) AZURE_KEYVAULT_ENABLED is set to false the user
