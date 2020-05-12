@@ -15,9 +15,11 @@ import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -31,7 +33,7 @@ public class KeyVaultOperation {
     private final SecretClient keyVaultClient;
     private final String vaultUri;
 
-    private ArrayList<String> propertyNames = new ArrayList<>();
+    private final Map<String, String> keyVaultItems = new HashMap<>();
     private String[] propertyNamesArr;
 
     private final AtomicLong lastUpdateTime = new AtomicLong();
@@ -58,7 +60,7 @@ public class KeyVaultOperation {
         }
     }
 
-    private String getKeyvaultSecretName(@NonNull String property) {
+    private String getKeyVaultSecretName(@NonNull String property) {
         if (property.matches("[a-z0-9A-Z-]+")) {
             return property.toLowerCase(Locale.US);
         } else if (property.matches("[A-Z0-9_]+")) {
@@ -89,25 +91,17 @@ public class KeyVaultOperation {
      */
     public String get(final String property) {
         Assert.hasText(property, "property should contain text.");
-        final String secretName = getKeyvaultSecretName(property);
-
-        //if user don't set specific secret keys, then refresh token
-        if (this.secretKeys == null || secretKeys.size() == 0) {
-            // refresh periodically
-            refreshPropertyNames();
-        }
-        if (this.propertyNames.contains(secretName)) {
-            final KeyVaultSecret secret = this.keyVaultClient.getSecret(secretName);
-            return secret == null ? null : secret.getValue();
-        } else {
-            return null;
-        }
+        refreshKeyVaultItemsIfNeeded();
+        return Optional.of(property)
+                .map(this::getKeyVaultSecretName)
+                .map(keyVaultItems::get)
+                .orElse(null);
     }
 
-    private void refreshPropertyNames() {
-        if (System.currentTimeMillis() - this.lastUpdateTime.get() > this.cacheRefreshIntervalInMs) {
+    private void refreshKeyVaultItemsIfNeeded() {
+        if (needRefreshKeyVaultItems()) {
             synchronized (this.refreshLock) {
-                if (System.currentTimeMillis() - this.lastUpdateTime.get() > this.cacheRefreshIntervalInMs) {
+                if (needRefreshKeyVaultItems()) {
                     this.lastUpdateTime.set(System.currentTimeMillis());
                     fillSecretsList();
                 }
@@ -115,11 +109,16 @@ public class KeyVaultOperation {
         }
     }
 
+    private boolean needRefreshKeyVaultItems() {
+        return (secretKeys == null || secretKeys.size() == 0)
+                && System.currentTimeMillis() - this.lastUpdateTime.get() > this.cacheRefreshIntervalInMs;
+    }
+
     private void fillSecretsList() {
         try {
             this.rwLock.writeLock().lock();
             if (this.secretKeys == null || secretKeys.size() == 0) {
-                this.propertyNames.clear();
+                this.keyVaultItems.clear();
 
                 final PagedIterable<SecretProperties> secretProperties = keyVaultClient.listPropertiesOfSecrets();
                 secretProperties.forEach(s -> {
@@ -133,21 +132,28 @@ public class KeyVaultOperation {
                     addSecretIfNotExist(secretKey);
                 }
             }
-            propertyNamesArr = propertyNames.toArray(new String[0]);
+            propertyNamesArr = keyVaultItems.keySet().toArray(new String[0]);
         } finally {
             this.rwLock.writeLock().unlock();
         }
     }
 
-    private void addSecretIfNotExist(final String secretName) {
-        final String secretNameLowerCase = secretName.toLowerCase(Locale.US);
-        if (!propertyNames.contains(secretNameLowerCase)) {
-            propertyNames.add(secretNameLowerCase);
+    private void addSecretIfNotExist(final String name) {
+        final String secretNameLowerCase = name.toLowerCase(Locale.US);
+        if (!keyVaultItems.containsKey(secretNameLowerCase)) {
+            keyVaultItems.put(secretNameLowerCase, getValueFromKeyVault(name));
         }
         final String secretNameSeparatedByDot = secretNameLowerCase.replaceAll("-", ".");
-        if (!propertyNames.contains(secretNameSeparatedByDot)) {
-            propertyNames.add(secretNameSeparatedByDot);
+        if (!keyVaultItems.containsKey(secretNameSeparatedByDot)) {
+            keyVaultItems.put(secretNameSeparatedByDot, getValueFromKeyVault(name));
         }
+    }
+
+    private String getValueFromKeyVault(String name) {
+        return Optional.ofNullable(name)
+                .map(keyVaultClient::getSecret)
+                .map(KeyVaultSecret::getName)
+                .orElse(null);
     }
 
 }
