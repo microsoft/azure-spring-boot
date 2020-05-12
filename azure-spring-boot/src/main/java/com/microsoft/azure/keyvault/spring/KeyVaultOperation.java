@@ -11,12 +11,14 @@ import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
 import com.azure.security.keyvault.secrets.models.SecretProperties;
 import com.sun.org.apache.bcel.internal.generic.ANEWARRAY;
+import io.jsonwebtoken.lang.Collections;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -35,7 +37,7 @@ public class KeyVaultOperation {
     private final AtomicLong lastUpdateTime = new AtomicLong();
 
     private volatile Map<String, String> keyVaultItems;
-    private volatile String[] propertyNames;
+    private volatile List<String> propertyNames;
 
     public KeyVaultOperation(
             final SecretClient keyVaultClient,
@@ -52,12 +54,12 @@ public class KeyVaultOperation {
                 .orElseGet(Stream::empty)
                 .map(this::toUniformedPropertyName)
                 .distinct()
-                .toArray(String[]::new);
+                .collect(Collectors.toList());
         refreshKeyVaultItems();
     }
 
     public String[] getPropertyNames() {
-        return propertyNames;
+        return propertyNames.toArray(new String[0]);
     }
 
 
@@ -107,16 +109,16 @@ public class KeyVaultOperation {
     }
 
     private boolean needRefreshKeyVaultItems() {
-        return (propertyNames == null || propertyNames.length == 0)
+        return (Collections.isEmpty(propertyNames))
                 && System.currentTimeMillis() - this.lastUpdateTime.get() > this.cacheRefreshIntervalInMs;
     }
 
     private synchronized void refreshKeyVaultItems() {
-        if (this.propertyNames == null || propertyNames.length == 0) {
+        if (Collections.isEmpty(propertyNames)) {
             propertyNames = Optional.of(keyVaultClient)
                     .map(SecretClient::listPropertiesOfSecrets)
                     .map(secretProperties -> {
-                        List<String> secretNameList = new ArrayList<>();
+                        final List<String> secretNameList = new ArrayList<>();
                         secretProperties.forEach(s -> {
                             final String secretName = s.getName().replace(vaultUri + "/secrets/", "");
                             secretNameList.add(secretName);
@@ -127,9 +129,11 @@ public class KeyVaultOperation {
                     .orElseGet(Stream::empty)
                     .map(this::toUniformedPropertyName)
                     .distinct()
-                    .toArray(String[]::new);
+                    .collect(Collectors.toList());
         }
-        keyVaultItems = Stream.of(propertyNames)
+        keyVaultItems = Optional.ofNullable(propertyNames)
+                .map(Collection::stream)
+                .orElseGet(Stream::empty)
                 .collect(Collectors.toMap(
                         name -> name,
                         this::getValueFromKeyVault
