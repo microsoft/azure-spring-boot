@@ -6,19 +6,14 @@
 
 package com.microsoft.azure.keyvault.spring;
 
-import com.azure.core.http.rest.PagedIterable;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
-import com.azure.security.keyvault.secrets.models.SecretProperties;
-import com.sun.org.apache.bcel.internal.generic.ANEWARRAY;
-import io.jsonwebtoken.lang.Collections;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -109,12 +104,12 @@ public class KeyVaultOperation {
     }
 
     private boolean needRefreshKeyVaultItems() {
-        return (Collections.isEmpty(propertyNames))
+        return Optional.ofNullable(propertyNames).map(Collection::isEmpty).orElse(false)
                 && System.currentTimeMillis() - this.lastUpdateTime.get() > this.cacheRefreshIntervalInMs;
     }
 
     private synchronized void refreshKeyVaultItems() {
-        if (Collections.isEmpty(propertyNames)) {
+        if (Optional.ofNullable(propertyNames).map(Collection::isEmpty).orElse(false)) {
             propertyNames = Optional.of(keyVaultClient)
                     .map(SecretClient::listPropertiesOfSecrets)
                     .map(secretProperties -> {
