@@ -104,12 +104,12 @@ public class KeyVaultOperation {
     }
 
     private boolean needRefreshKeyVaultItems() {
-        return Optional.ofNullable(propertyNames).map(Collection::isEmpty).orElse(false)
+        return (propertyNames == null || propertyNames.isEmpty())
                 && System.currentTimeMillis() - this.lastUpdateTime.get() > this.cacheRefreshIntervalInMs;
     }
 
     private synchronized void refreshKeyVaultItems() {
-        if (Optional.ofNullable(propertyNames).map(Collection::isEmpty).orElse(false)) {
+        if (propertyNames == null || propertyNames.isEmpty()) {
             propertyNames = Optional.of(keyVaultClient)
                     .map(SecretClient::listPropertiesOfSecrets)
                     .map(secretProperties -> {
