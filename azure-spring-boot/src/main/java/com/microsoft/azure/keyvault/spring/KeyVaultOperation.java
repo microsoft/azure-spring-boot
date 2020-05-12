@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -29,10 +28,9 @@ public class KeyVaultOperation {
     private final SecretClient keyVaultClient;
     private final String vaultUri;
     private final long cacheRefreshIntervalInMs;
-    private final AtomicLong lastUpdateTime = new AtomicLong();
-
-    private volatile Map<String, String> keyVaultItems;
+    private volatile long lastUpdateTime;
     private volatile List<String> propertyNames;
+    private volatile Map<String, String> keyVaultItems;
 
     public KeyVaultOperation(
             final SecretClient keyVaultClient,
@@ -99,16 +97,16 @@ public class KeyVaultOperation {
     private synchronized void refreshKeyVaultItemsIfNeeded() {
         if (needRefreshKeyVaultItems()) {
             refreshKeyVaultItems();
-            this.lastUpdateTime.set(System.currentTimeMillis());
+            this.lastUpdateTime = System.currentTimeMillis();
         }
     }
 
     private boolean needRefreshKeyVaultItems() {
         return (propertyNames == null || propertyNames.isEmpty())
-                && System.currentTimeMillis() - this.lastUpdateTime.get() > this.cacheRefreshIntervalInMs;
+                && System.currentTimeMillis() - this.lastUpdateTime > this.cacheRefreshIntervalInMs;
     }
 
-    private synchronized void refreshKeyVaultItems() {
+    private void refreshKeyVaultItems() {
         if (propertyNames == null || propertyNames.isEmpty()) {
             propertyNames = Optional.of(keyVaultClient)
                     .map(SecretClient::listPropertiesOfSecrets)
