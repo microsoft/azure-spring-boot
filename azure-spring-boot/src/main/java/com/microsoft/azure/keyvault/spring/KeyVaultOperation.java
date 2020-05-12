@@ -9,11 +9,14 @@ package com.microsoft.azure.keyvault.spring;
 import com.azure.core.http.rest.PagedIterable;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
+import com.azure.security.keyvault.secrets.models.SecretProperties;
+import com.sun.org.apache.bcel.internal.generic.ANEWARRAY;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
@@ -112,11 +115,17 @@ public class KeyVaultOperation {
         if (this.propertyNames == null || propertyNames.length == 0) {
             propertyNames = Optional.of(keyVaultClient)
                     .map(SecretClient::listPropertiesOfSecrets)
-                    .map(PagedIterable::stream)
+                    .map(secretProperties -> {
+                        List<String> secretNameList = new ArrayList<>();
+                        secretProperties.forEach(s -> {
+                            final String secretName = s.getName().replace(vaultUri + "/secrets/", "");
+                            secretNameList.add(secretName);
+                        });
+                        return secretNameList;
+                    })
+                    .map(Collection::stream)
                     .orElseGet(Stream::empty)
-                    .map(secretProperties -> secretProperties.getName().replace(vaultUri + "/secrets/", ""))
-                    .map(String::toLowerCase)
-                    .flatMap(name -> Stream.of(name, name.replaceAll("-", ".")))
+                    .map(this::toUniformedPropertyName)
                     .distinct()
                     .toArray(String[]::new);
         }
