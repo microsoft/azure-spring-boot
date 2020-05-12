@@ -29,7 +29,7 @@ public class KeyVaultOperation {
     private final String vaultUri;
     private final long cacheRefreshIntervalInMs;
     private volatile long lastUpdateTime;
-    private volatile List<String> propertyNames;
+    private volatile List<String> secretKeys;
     private volatile Map<String, String> keyVaultItems;
 
     public KeyVaultOperation(
@@ -42,7 +42,7 @@ public class KeyVaultOperation {
         // TODO(pan): need to validate why last '/' need to be truncated.
         this.vaultUri = StringUtils.trimTrailingCharacter(vaultUri.trim(), '/');
         this.cacheRefreshIntervalInMs = cacheRefreshIntervalInMs;
-        this.propertyNames = Optional.ofNullable(secretKeys)
+        this.secretKeys = Optional.ofNullable(secretKeys)
                 .map(Collection::stream)
                 .orElseGet(Stream::empty)
                 .map(this::toUniformedPropertyName)
@@ -52,7 +52,9 @@ public class KeyVaultOperation {
     }
 
     public String[] getPropertyNames() {
-        return propertyNames.toArray(new String[0]);
+        return secretKeys.stream()
+                .flatMap(p -> Stream.of(p, p.replaceAll("-", ".")))
+                .toArray(String[]::new);
     }
 
 
@@ -102,13 +104,13 @@ public class KeyVaultOperation {
     }
 
     private boolean needRefreshKeyVaultItems() {
-        return (propertyNames == null || propertyNames.isEmpty())
+        return (secretKeys == null || secretKeys.isEmpty())
                 && System.currentTimeMillis() - this.lastUpdateTime > this.cacheRefreshIntervalInMs;
     }
 
     private void refreshKeyVaultItems() {
-        if (propertyNames == null || propertyNames.isEmpty()) {
-            propertyNames = Optional.of(keyVaultClient)
+        if (secretKeys == null || secretKeys.isEmpty()) {
+            secretKeys = Optional.of(keyVaultClient)
                     .map(SecretClient::listPropertiesOfSecrets)
                     .map(secretProperties -> {
                         final List<String> secretNameList = new ArrayList<>();
@@ -124,7 +126,7 @@ public class KeyVaultOperation {
                     .distinct()
                     .collect(Collectors.toList());
         }
-        keyVaultItems = Optional.ofNullable(propertyNames)
+        keyVaultItems = Optional.ofNullable(secretKeys)
                 .map(Collection::stream)
                 .orElseGet(Stream::empty)
                 .collect(Collectors.toMap(
