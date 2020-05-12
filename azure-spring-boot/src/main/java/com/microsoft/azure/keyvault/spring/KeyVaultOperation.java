@@ -6,6 +6,7 @@
 
 package com.microsoft.azure.keyvault.spring;
 
+import com.azure.core.http.rest.PagedIterable;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -38,15 +40,16 @@ public class KeyVaultOperation {
             final long cacheRefreshIntervalInMs,
             final List<String> secretKeys
     ) {
-        this.cacheRefreshIntervalInMs = cacheRefreshIntervalInMs;
-        this.propertyNames = (String[]) secretKeys.stream()
-                .map(String::toLowerCase)
-                .flatMap(name -> Stream.of(name, name.replaceAll("-", ".")))
-                .distinct()
-                .toArray();
         this.keyVaultClient = keyVaultClient;
         // TODO(pan): need to validate why last '/' need to be truncated.
         this.vaultUri = StringUtils.trimTrailingCharacter(vaultUri.trim(), '/');
+        this.cacheRefreshIntervalInMs = cacheRefreshIntervalInMs;
+        this.propertyNames = Optional.ofNullable(secretKeys)
+                .map(Collection::stream)
+                .orElseGet(Stream::empty)
+                .map(this::toUniformedPropertyName)
+                .distinct()
+                .toArray(String[]::new);
         refreshKeyVaultItems();
     }
 
@@ -54,18 +57,6 @@ public class KeyVaultOperation {
         return propertyNames;
     }
 
-    private String getKeyVaultSecretName(@NonNull String property) {
-        if (property.matches("[a-z0-9A-Z-]+")) {
-            return property.toLowerCase(Locale.US);
-        } else if (property.matches("[A-Z0-9_]+")) {
-            return property.toLowerCase(Locale.US).replaceAll("_", "-");
-        } else {
-            return property.toLowerCase(Locale.US)
-                    .replaceAll("-", "")     // my-project -> myproject
-                    .replaceAll("_", "")     // my_project -> myproject
-                    .replaceAll("\\.", "-"); // acme.myproject -> acme-myproject
-        }
-    }
 
     /**
      * For convention we need to support all relaxed binding format from spring, these may include:
@@ -83,11 +74,24 @@ public class KeyVaultOperation {
      * @param property of secret instance.
      * @return the value of secret with given name or null.
      */
+    private String toUniformedPropertyName(@NonNull String property) {
+        if (property.matches("[a-z0-9A-Z-]+")) {
+            return property.toLowerCase(Locale.US);
+        } else if (property.matches("[A-Z0-9_]+")) {
+            return property.toLowerCase(Locale.US).replaceAll("_", "-");
+        } else {
+            return property.toLowerCase(Locale.US)
+                    .replaceAll("-", "")     // my-project -> myproject
+                    .replaceAll("_", "")     // my_project -> myproject
+                    .replaceAll("\\.", "-"); // acme.myproject -> acme-myproject
+        }
+    }
+
     public String get(final String property) {
         Assert.hasText(property, "property should contain text.");
         refreshKeyVaultItemsIfNeeded();
         return Optional.of(property)
-                .map(this::getKeyVaultSecretName)
+                .map(this::toUniformedPropertyName)
                 .map(keyVaultItems::get)
                 .orElse(null);
     }
@@ -106,12 +110,15 @@ public class KeyVaultOperation {
 
     private synchronized void refreshKeyVaultItems() {
         if (this.propertyNames == null || propertyNames.length == 0) {
-            propertyNames = (String[]) keyVaultClient.listPropertiesOfSecrets().stream()
+            propertyNames = Optional.of(keyVaultClient)
+                    .map(SecretClient::listPropertiesOfSecrets)
+                    .map(PagedIterable::stream)
+                    .orElseGet(Stream::empty)
                     .map(secretProperties -> secretProperties.getName().replace(vaultUri + "/secrets/", ""))
                     .map(String::toLowerCase)
                     .flatMap(name -> Stream.of(name, name.replaceAll("-", ".")))
                     .distinct()
-                    .toArray();
+                    .toArray(String[]::new);
         }
         keyVaultItems = Stream.of(propertyNames)
                 .collect(Collectors.toMap(
