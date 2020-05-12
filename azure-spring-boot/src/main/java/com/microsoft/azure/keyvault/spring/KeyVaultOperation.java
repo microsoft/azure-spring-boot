@@ -54,6 +54,7 @@ public class KeyVaultOperation {
     public String[] getPropertyNames() {
         return secretKeys.stream()
                 .flatMap(p -> Stream.of(p, p.replaceAll("-", ".")))
+                .distinct()
                 .toArray(String[]::new);
     }
 
