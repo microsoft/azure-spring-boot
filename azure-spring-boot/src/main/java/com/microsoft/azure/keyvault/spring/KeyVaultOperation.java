@@ -6,58 +6,52 @@
 
 package com.microsoft.azure.keyvault.spring;
 
-import com.azure.core.http.rest.PagedIterable;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
-import com.azure.security.keyvault.secrets.models.SecretProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 public class KeyVaultOperation {
-    private final long cacheRefreshIntervalInMs;
-    private final List<String> secretKeys;
 
-    private final Object refreshLock = new Object();
     private final SecretClient keyVaultClient;
     private final String vaultUri;
-
-    private final Map<String, String> keyVaultItems = new HashMap<>();
-    private String[] propertyNamesArr;
-
+    private final long cacheRefreshIntervalInMs;
     private final AtomicLong lastUpdateTime = new AtomicLong();
-    private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
 
-    public KeyVaultOperation(final SecretClient keyVaultClient,
-                             String vaultUri,
-                             final long refreshInterval,
-                             final List<String> secretKeys) {
-        this.cacheRefreshIntervalInMs = refreshInterval;
-        this.secretKeys = secretKeys;
+    private volatile Map<String, String> keyVaultItems;
+    private volatile String[] propertyNames;
+
+    public KeyVaultOperation(
+            final SecretClient keyVaultClient,
+            String vaultUri,
+            final long cacheRefreshIntervalInMs,
+            final List<String> secretKeys
+    ) {
+        this.cacheRefreshIntervalInMs = cacheRefreshIntervalInMs;
+        this.propertyNames = (String[]) secretKeys.stream()
+                .map(String::toLowerCase)
+                .flatMap(name -> Stream.of(name, name.replaceAll("-", ".")))
+                .distinct()
+                .toArray();
         this.keyVaultClient = keyVaultClient;
         // TODO(pan): need to validate why last '/' need to be truncated.
         this.vaultUri = StringUtils.trimTrailingCharacter(vaultUri.trim(), '/');
-        fillSecretsList();
+        refreshKeyVaultItems();
     }
 
-    public String[] list() {
-        try {
-            this.rwLock.readLock().lock();
-            return propertyNamesArr;
-        } finally {
-            this.rwLock.readLock().unlock();
-        }
+    public String[] getPropertyNames() {
+        return propertyNames;
     }
 
     private String getKeyVaultSecretName(@NonNull String property) {
@@ -98,55 +92,32 @@ public class KeyVaultOperation {
                 .orElse(null);
     }
 
-    private void refreshKeyVaultItemsIfNeeded() {
+    private synchronized void refreshKeyVaultItemsIfNeeded() {
         if (needRefreshKeyVaultItems()) {
-            synchronized (this.refreshLock) {
-                if (needRefreshKeyVaultItems()) {
-                    this.lastUpdateTime.set(System.currentTimeMillis());
-                    fillSecretsList();
-                }
-            }
+            refreshKeyVaultItems();
+            this.lastUpdateTime.set(System.currentTimeMillis());
         }
     }
 
     private boolean needRefreshKeyVaultItems() {
-        return (secretKeys == null || secretKeys.size() == 0)
+        return (propertyNames == null || propertyNames.length == 0)
                 && System.currentTimeMillis() - this.lastUpdateTime.get() > this.cacheRefreshIntervalInMs;
     }
 
-    private void fillSecretsList() {
-        try {
-            this.rwLock.writeLock().lock();
-            if (this.secretKeys == null || secretKeys.size() == 0) {
-                this.keyVaultItems.clear();
-
-                final PagedIterable<SecretProperties> secretProperties = keyVaultClient.listPropertiesOfSecrets();
-                secretProperties.forEach(s -> {
-                    final String secretName = s.getName().replace(vaultUri + "/secrets/", "");
-                    addSecretIfNotExist(secretName);
-                });
-
-                this.lastUpdateTime.set(System.currentTimeMillis());
-            } else {
-                for (final String secretKey : secretKeys) {
-                    addSecretIfNotExist(secretKey);
-                }
-            }
-            propertyNamesArr = keyVaultItems.keySet().toArray(new String[0]);
-        } finally {
-            this.rwLock.writeLock().unlock();
+    private synchronized void refreshKeyVaultItems() {
+        if (this.propertyNames == null || propertyNames.length == 0) {
+            propertyNames = (String[]) keyVaultClient.listPropertiesOfSecrets().stream()
+                    .map(secretProperties -> secretProperties.getName().replace(vaultUri + "/secrets/", ""))
+                    .map(String::toLowerCase)
+                    .flatMap(name -> Stream.of(name, name.replaceAll("-", ".")))
+                    .distinct()
+                    .toArray();
         }
-    }
-
-    private void addSecretIfNotExist(final String name) {
-        final String secretNameLowerCase = name.toLowerCase(Locale.US);
-        if (!keyVaultItems.containsKey(secretNameLowerCase)) {
-            keyVaultItems.put(secretNameLowerCase, getValueFromKeyVault(name));
-        }
-        final String secretNameSeparatedByDot = secretNameLowerCase.replaceAll("-", ".");
-        if (!keyVaultItems.containsKey(secretNameSeparatedByDot)) {
-            keyVaultItems.put(secretNameSeparatedByDot, getValueFromKeyVault(name));
-        }
+        keyVaultItems = Stream.of(propertyNames)
+                .collect(Collectors.toMap(
+                        name -> name,
+                        this::getValueFromKeyVault
+                ));
     }
 
     private String getValueFromKeyVault(String name) {

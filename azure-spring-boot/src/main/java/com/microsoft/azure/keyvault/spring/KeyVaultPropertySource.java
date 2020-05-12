@@ -25,7 +25,7 @@ public class KeyVaultPropertySource extends EnumerablePropertySource<KeyVaultOpe
 
 
     public String[] getPropertyNames() {
-        return this.operations.list();
+        return this.operations.getPropertyNames();
     }
 
 
