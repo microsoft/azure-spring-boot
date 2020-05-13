@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,32 +26,36 @@ public class KeyVaultOperation {
 
     private final SecretClient keyVaultClient;
     private final String vaultUri;
-    private final long cacheRefreshIntervalInMs;
-    private volatile long lastUpdateTime;
-    private volatile List<String> secretKeys;
-    private volatile Map<String, String> keyVaultItems;
+    private volatile List<String> secretNames;
+    private final boolean secretNamesAlreadyConfigured;
+    private final long secretNamesRefreshIntervalInMs;
+    private volatile long secretNamesLastUpdateTime;
 
     public KeyVaultOperation(
             final SecretClient keyVaultClient,
             String vaultUri,
-            final long cacheRefreshIntervalInMs,
-            final List<String> secretKeys
+            final long secretKeysRefreshIntervalInMs,
+            final List<String> secretNames
     ) {
         this.keyVaultClient = keyVaultClient;
         // TODO(pan): need to validate why last '/' need to be truncated.
         this.vaultUri = StringUtils.trimTrailingCharacter(vaultUri.trim(), '/');
-        this.cacheRefreshIntervalInMs = cacheRefreshIntervalInMs;
-        this.secretKeys = Optional.ofNullable(secretKeys)
+        this.secretNames = Optional.ofNullable(secretNames)
                 .map(Collection::stream)
                 .orElseGet(Stream::empty)
-                .map(this::toUniformedPropertyName)
+                .map(this::toKeyVaultSecretName)
                 .distinct()
                 .collect(Collectors.toList());
-        refreshKeyVaultItems();
+        this.secretNamesAlreadyConfigured = !this.secretNames.isEmpty();
+        this.secretNamesRefreshIntervalInMs = secretKeysRefreshIntervalInMs;
+        this.secretNamesLastUpdateTime = 0;
     }
 
     public String[] getPropertyNames() {
-        return secretKeys.stream()
+        refreshSecretKeysIfNeeded();
+        return Optional.ofNullable(secretNames)
+                .map(Collection::stream)
+                .orElseGet(Stream::empty)
                 .flatMap(p -> Stream.of(p, p.replaceAll("-", ".")))
                 .distinct()
                 .toArray(String[]::new);
@@ -75,7 +78,7 @@ public class KeyVaultOperation {
      * @param property of secret instance.
      * @return the value of secret with given name or null.
      */
-    private String toUniformedPropertyName(@NonNull String property) {
+    private String toKeyVaultSecretName(@NonNull String property) {
         if (property.matches("[a-z0-9A-Z-]+")) {
             return property.toLowerCase(Locale.US);
         } else if (property.matches("[A-Z0-9_]+")) {
@@ -90,50 +93,42 @@ public class KeyVaultOperation {
 
     public String get(final String property) {
         Assert.hasText(property, "property should contain text.");
-        refreshKeyVaultItemsIfNeeded();
+        refreshSecretKeysIfNeeded();
         return Optional.of(property)
-                .map(this::toUniformedPropertyName)
-                .map(keyVaultItems::get)
+                .map(this::toKeyVaultSecretName)
+                .filter(secretNames::contains)
+                .map(this::getValueFromKeyVault)
                 .orElse(null);
     }
 
-    private synchronized void refreshKeyVaultItemsIfNeeded() {
-        if (needRefreshKeyVaultItems()) {
-            refreshKeyVaultItems();
-            this.lastUpdateTime = System.currentTimeMillis();
+    private synchronized void refreshSecretKeysIfNeeded() {
+        if (needRefreshSecretKeys()) {
+            refreshKeyVaultSecretNames();
         }
     }
 
-    private boolean needRefreshKeyVaultItems() {
-        return (secretKeys == null || secretKeys.isEmpty())
-                && System.currentTimeMillis() - this.lastUpdateTime > this.cacheRefreshIntervalInMs;
+    private boolean needRefreshSecretKeys() {
+        return !secretNamesAlreadyConfigured
+                && System.currentTimeMillis() - this.secretNamesLastUpdateTime > this.secretNamesRefreshIntervalInMs;
     }
 
-    private void refreshKeyVaultItems() {
-        if (secretKeys == null || secretKeys.isEmpty()) {
-            secretKeys = Optional.of(keyVaultClient)
-                    .map(SecretClient::listPropertiesOfSecrets)
-                    .map(secretProperties -> {
-                        final List<String> secretNameList = new ArrayList<>();
-                        secretProperties.forEach(s -> {
-                            final String secretName = s.getName().replace(vaultUri + "/secrets/", "");
-                            secretNameList.add(secretName);
-                        });
-                        return secretNameList;
-                    })
-                    .map(Collection::stream)
-                    .orElseGet(Stream::empty)
-                    .map(this::toUniformedPropertyName)
-                    .distinct()
-                    .collect(Collectors.toList());
-        }
-        keyVaultItems = Optional.ofNullable(secretKeys)
+    private void refreshKeyVaultSecretNames() {
+        secretNames = Optional.of(keyVaultClient)
+                .map(SecretClient::listPropertiesOfSecrets)
+                .map(secretProperties -> {
+                    final List<String> secretNameList = new ArrayList<>();
+                    secretProperties.forEach(s -> {
+                        final String secretName = s.getName().replace(vaultUri + "/secrets/", "");
+                        secretNameList.add(secretName);
+                    });
+                    return secretNameList;
+                })
                 .map(Collection::stream)
                 .orElseGet(Stream::empty)
-                .collect(Collectors.toMap(
-                        name -> name,
-                        this::getValueFromKeyVault
-                ));
+                .map(this::toKeyVaultSecretName)
+                .distinct()
+                .collect(Collectors.toList());
+        this.secretNamesLastUpdateTime = System.currentTimeMillis();
     }
 
     private String getValueFromKeyVault(String name) {
