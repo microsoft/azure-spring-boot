@@ -134,7 +134,7 @@ public class KeyVaultOperation {
     private String getValueFromKeyVault(String name) {
         return Optional.ofNullable(name)
                 .map(keyVaultClient::getSecret)
-                .map(KeyVaultSecret::getName)
+                .map(KeyVaultSecret::getValue)
                 .orElse(null);
     }
 
