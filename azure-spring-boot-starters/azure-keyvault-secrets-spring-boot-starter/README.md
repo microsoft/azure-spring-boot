@@ -117,3 +117,8 @@ azure.keyvault.keyvault2.client-id=put-a-azure-client-id-here
 azure.keyvault.keyvault2.client-key=put-a-azure-client-key-here
 azure.keyvault.keyvault2.tenant-id=put-a-azure-tenant-id-here
 ```
+
+Note if you decide to use multiple key vault support and you already have an
+existing configuration, please make sure you migrate that configuration to the
+multiple key vault variant. Mixing multiple key vaults with an existing single
+key vault configuration is a non supported scenario.
