@@ -17,14 +17,26 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SampleApplication implements CommandLineRunner {
 
     @Value("${yourSecretPropertyName9}")
-    private String mySecretProperty;
+    private String yourSecretPropertyName9;
+
+    @Value("${property.in.raw}")
+    private String propertyInRaw;
+
+    @Value("${property.refer.to.another.property}")
+    private String propertyReferToAnotherProperty;
+
+    @Value("${property.refer.to.another.property.another}")
+    private String propertyReferToAnotherPropertyAnother;
 
     public static void main(String[] args) {
         SpringApplication.run(SampleApplication.class, args);
     }
 
     public void run(String[] args) {
-        log.info("property yourSecretPropertyName9 in Azure Key Vault: {}", mySecretProperty);
+        log.info("yourSecretPropertyName9 = {}", yourSecretPropertyName9);
+        log.info("propertyInRaw = {}", propertyInRaw);
+        log.info("propertyReferToAnotherProperty = {}", propertyReferToAnotherProperty);
+        log.info("propertyReferToAnotherPropertyAnother = {}", propertyReferToAnotherPropertyAnother);
     }
 
 }
