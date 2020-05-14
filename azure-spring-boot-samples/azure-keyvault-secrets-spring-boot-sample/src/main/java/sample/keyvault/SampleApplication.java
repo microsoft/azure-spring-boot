@@ -28,6 +28,9 @@ public class SampleApplication implements CommandLineRunner {
     @Value("${property.refer.to.another.property.another}")
     private String propertyReferToAnotherPropertyAnother;
 
+    @Value("${key-vault-value-contain-spel}")
+    private String keyVaultValueContainSpel;
+
     public static void main(String[] args) {
         SpringApplication.run(SampleApplication.class, args);
     }
@@ -37,6 +40,7 @@ public class SampleApplication implements CommandLineRunner {
         log.info("propertyInRaw = {}", propertyInRaw);
         log.info("propertyReferToAnotherProperty = {}", propertyReferToAnotherProperty);
         log.info("propertyReferToAnotherPropertyAnother = {}", propertyReferToAnotherPropertyAnother);
+        log.info("keyVaultKeyContainSpel = {}", keyVaultValueContainSpel);
     }
 
 }
