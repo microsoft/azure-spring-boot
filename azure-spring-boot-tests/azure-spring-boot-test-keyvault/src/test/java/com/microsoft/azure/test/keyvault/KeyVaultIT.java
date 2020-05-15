@@ -64,6 +64,10 @@ public class KeyVaultIT {
     private static final String VM_USER_PASSWORD = "12NewPAwX0rd!";
     private static final String KEY_VAULT_SECRET_NAME_1 = "key-vault-secret-name-1";
     private static final String KEY_VAULT_SECRET_VALUE_1 = "key-vault-secret-value-1";
+    private static final String APP_PROPERTY_NAME = "app.property.name";
+    private static final String APP_PROPERTY_VALUE = "app.property.value";
+    private static final String APP_PROPERTY_NAME_WITH_SPEL_IN_VALUE = "app.property.name.with.spel.in.value";
+    private static final String KEY_VAULT_SECRET_NAME_WITH_SPEL_IN_VALUE = "key-vault-secret-name-with-spel-in-value";
     private static final String AZURE_COSMOSDB_KEY = "azure-cosmosdb-key";
     private static final String TEST_KEY_VAULT_JAR_FILE_NAME = "app.jar";
     private static final int DEFAULT_MAX_RETRY_TIMES = 3;
@@ -77,6 +81,10 @@ public class KeyVaultIT {
         final KeyVaultTool tool = new KeyVaultTool(access);
         vault = tool.createVaultInNewGroup(resourceGroupName, prefix);
         vault.secrets().define(KEY_VAULT_SECRET_NAME_1).withValue(KEY_VAULT_SECRET_VALUE_1).create();
+        vault.secrets()
+                .define(KEY_VAULT_SECRET_NAME_WITH_SPEL_IN_VALUE)
+                .withValue(String.format("${%s}", APP_PROPERTY_NAME))
+                .create();
         vault.secrets().define(AZURE_COSMOSDB_KEY).withValue(KEY_VAULT_SECRET_VALUE_1).create();
         restTemplate = new RestTemplate();
 
@@ -135,6 +143,42 @@ public class KeyVaultIT {
 
             app.start();
             assertEquals(KEY_VAULT_SECRET_VALUE_1, app.getProperty(KEY_VAULT_SECRET_NAME_1));
+            app.close();
+            log.info("--------------------->test over");
+        }
+    }
+
+    @Test
+    public void keyVaultAsPropertySourceWithSpELInValue() {
+        try (AppRunner app = new AppRunner(DumbApp.class)) {
+            app.property("azure.keyvault.enabled", "true");
+            app.property("azure.keyvault.uri", vault.vaultUri());
+            app.property("azure.keyvault.client-id", access.clientId());
+            app.property("azure.keyvault.client-key", access.clientSecret());
+            app.property("azure.keyvault.tenant-id", access.tenant());
+            app.property(
+                    "azure.keyvault.secret.keys",
+                    String.join(",",
+                            KEY_VAULT_SECRET_NAME_1,
+                            AZURE_COSMOSDB_KEY,
+                            KEY_VAULT_SECRET_NAME_WITH_SPEL_IN_VALUE
+                    )
+            );
+            app.property(APP_PROPERTY_NAME, APP_PROPERTY_VALUE);
+            app.property(
+                    APP_PROPERTY_NAME_WITH_SPEL_IN_VALUE,
+                    String.format("${%s}", KEY_VAULT_SECRET_NAME_1)
+            );
+
+            app.start();
+            assertEquals(
+                    KEY_VAULT_SECRET_VALUE_1,
+                    app.getProperty(APP_PROPERTY_NAME_WITH_SPEL_IN_VALUE)
+            );
+            assertEquals(
+                    APP_PROPERTY_VALUE,
+                    app.getProperty(KEY_VAULT_SECRET_NAME_WITH_SPEL_IN_VALUE)
+            );
             app.close();
             log.info("--------------------->test over");
         }
