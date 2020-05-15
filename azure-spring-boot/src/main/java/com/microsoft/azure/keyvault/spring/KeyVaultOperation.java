@@ -3,7 +3,6 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-
 package com.microsoft.azure.keyvault.spring;
 
 import com.azure.core.http.rest.PagedIterable;
@@ -24,6 +23,12 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Slf4j
 public class KeyVaultOperation {
+
+    /**
+     * Stores the case sensitive flag.
+     */
+    private final boolean caseSensitive;
+
     private final long cacheRefreshIntervalInMs;
     private final List<String> secretKeys;
 
@@ -38,14 +43,16 @@ public class KeyVaultOperation {
     private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
 
     public KeyVaultOperation(final SecretClient keyVaultClient,
-                             String vaultUri,
-                             final long refreshInterval,
-                             final List<String> secretKeys) {
+            String vaultUri,
+            final long refreshInterval,
+            final List<String> secretKeys,
+            boolean caseSensitive) {
         this.cacheRefreshIntervalInMs = refreshInterval;
         this.secretKeys = secretKeys;
         this.keyVaultClient = keyVaultClient;
         // TODO(pan): need to validate why last '/' need to be truncated.
         this.vaultUri = StringUtils.trimTrailingCharacter(vaultUri.trim(), '/');
+        this.caseSensitive = caseSensitive;
         fillSecretsList();
     }
 
@@ -58,16 +65,32 @@ public class KeyVaultOperation {
         }
     }
 
+    /**
+     * Get the key vault key name.
+     *
+     * <p>
+     * If the case sensitive flag is false, operate as before. If the case
+     * sensitive flag is true we assume the user gave us a property name that
+     * honors the limitation as prescribed by the Azure Key Vault documentation
+     * and we return it as-is.
+     * </p>
+     *
+     * @param property the property.
+     */
     private String getKeyvaultSecretName(@NonNull String property) {
-        if (property.matches("[a-z0-9A-Z-]+")) {
-            return property.toLowerCase(Locale.US);
-        } else if (property.matches("[A-Z0-9_]+")) {
-            return property.toLowerCase(Locale.US).replaceAll("_", "-");
+        if (!caseSensitive) {
+            if (property.matches("[a-z0-9A-Z-]+")) {
+                return property.toLowerCase(Locale.US);
+            } else if (property.matches("[A-Z0-9_]+")) {
+                return property.toLowerCase(Locale.US).replaceAll("_", "-");
+            } else {
+                return property.toLowerCase(Locale.US)
+                        .replaceAll("-", "") // my-project -> myproject
+                        .replaceAll("_", "") // my_project -> myproject
+                        .replaceAll("\\.", "-"); // acme.myproject -> acme-myproject
+            }
         } else {
-            return property.toLowerCase(Locale.US)
-                    .replaceAll("-", "")     // my-project -> myproject
-                    .replaceAll("_", "")     // my_project -> myproject
-                    .replaceAll("\\.", "-"); // acme.myproject -> acme-myproject
+            return property;
         }
     }
 
@@ -139,15 +162,29 @@ public class KeyVaultOperation {
         }
     }
 
+    /**
+     * Add the secret if it does not exist.
+     *
+     * <p>
+     * If the case sensitive flag is false, operate as before. If the case
+     * sensitive flag is true we assume the user gave us a key vault key name
+     * with the limitation as prescribed by the Azure Key Vault documentation.
+     * </p>
+     *
+     * @param secretName the secret name.
+     */
     private void addSecretIfNotExist(final String secretName) {
-        final String secretNameLowerCase = secretName.toLowerCase(Locale.US);
-        if (!propertyNames.contains(secretNameLowerCase)) {
-            propertyNames.add(secretNameLowerCase);
-        }
-        final String secretNameSeparatedByDot = secretNameLowerCase.replaceAll("-", ".");
-        if (!propertyNames.contains(secretNameSeparatedByDot)) {
-            propertyNames.add(secretNameSeparatedByDot);
+        if (!caseSensitive) {
+            final String secretNameLowerCase = secretName.toLowerCase(Locale.US);
+            if (!propertyNames.contains(secretNameLowerCase)) {
+                propertyNames.add(secretNameLowerCase);
+            }
+            final String secretNameSeparatedByDot = secretNameLowerCase.replaceAll("-", ".");
+            if (!propertyNames.contains(secretNameSeparatedByDot)) {
+                propertyNames.add(secretNameSeparatedByDot);
+            }
+        } else {
+            propertyNames.add(secretName);
         }
     }
-
 }

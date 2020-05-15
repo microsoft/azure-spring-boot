@@ -96,4 +96,31 @@ azure.keyvault.allow.telemetry=false
 When telemetry is enabled, an HTTP request will be sent to URL `https://dc.services.visualstudio.com/v2/track`. So please make sure it's not blocked by your firewall.    
 Find more information about Azure Service Privacy Statement, please check [Microsoft Online Services Privacy Statement](https://www.microsoft.com/en-us/privacystatement/OnlineServices/Default.aspx). 
 
+## Case sensitive key mode
 
+The new case sensitive mode allows you to use case sensitive key vault names. Note
+that the key vault secret key still needs to honor the naming limitation as 
+described in [About keys, secrets, and certificates](https://docs.microsoft.com/en-us/azure/key-vault/general/about-keys-secrets-certificates).
+
+To enable case sensitive mode use:
+
+```
+azure.keyvault.case-sensitive-keys=true
+```
+
+## Placeholders in properties
+
+If your Spring property is using a name that does not honor the key vault secret
+key limitation use the following technique as described by 
+[Externalized Configuration](https://docs.spring.io/autorepo/docs/spring-boot/2.2.7.RELEASE/reference/html/spring-boot-features.html#boot-features-external-config-placeholders-in-properties) 
+in the Spring Boot documentation.
+
+An example of using a placeholder:
+
+```
+my.not.compliant.property=${myCompliantKeyVaultSecret}
+```
+
+The application will take care of getting the value that is backed by the 
+`myCompliantKeyVaultSecret` key name and assign its value to the non compliant
+`my.not.compliant.property`.
