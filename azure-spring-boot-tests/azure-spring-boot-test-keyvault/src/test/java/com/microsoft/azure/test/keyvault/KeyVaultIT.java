@@ -64,6 +64,7 @@ public class KeyVaultIT {
     private static final String VM_USER_PASSWORD = "12NewPAwX0rd!";
     private static final String KEY_VAULT_SECRET_NAME_1 = "key-vault-secret-name-1";
     private static final String KEY_VAULT_SECRET_VALUE_1 = "key-vault-secret-value-1";
+    private static final String AZURE_COSMOSDB_KEY = "azure-cosmosdb-key";
     private static final String TEST_KEY_VAULT_JAR_FILE_NAME = "app.jar";
     private static final int DEFAULT_MAX_RETRY_TIMES = 3;
     private static String TEST_KEYVAULT_APP_JAR_PATH;
@@ -76,7 +77,7 @@ public class KeyVaultIT {
         final KeyVaultTool tool = new KeyVaultTool(access);
         vault = tool.createVaultInNewGroup(resourceGroupName, prefix);
         vault.secrets().define(KEY_VAULT_SECRET_NAME_1).withValue(KEY_VAULT_SECRET_VALUE_1).create();
-        vault.secrets().define("azure-cosmosdb-key").withValue(KEY_VAULT_SECRET_VALUE_1).create();
+        vault.secrets().define(AZURE_COSMOSDB_KEY).withValue(KEY_VAULT_SECRET_VALUE_1).create();
         restTemplate = new RestTemplate();
 
         TEST_KEYVAULT_APP_JAR_PATH = new File(System.getProperty("keyvault.app.jar.path")).getCanonicalPath();
@@ -124,7 +125,13 @@ public class KeyVaultIT {
             app.property("azure.keyvault.client-id", access.clientId());
             app.property("azure.keyvault.client-key", access.clientSecret());
             app.property("azure.keyvault.tenant-id", access.tenant());
-            app.property("azure.keyvault.secret.keys", String.join(",", KEY_VAULT_SECRET_NAME_1, "azure-cosmosdb-key"));
+            app.property(
+                    "azure.keyvault.secret.keys",
+                    String.join(",",
+                            KEY_VAULT_SECRET_NAME_1,
+                            AZURE_COSMOSDB_KEY
+                    )
+            );
 
             app.start();
             assertEquals(KEY_VAULT_SECRET_VALUE_1, app.getProperty(KEY_VAULT_SECRET_NAME_1));
