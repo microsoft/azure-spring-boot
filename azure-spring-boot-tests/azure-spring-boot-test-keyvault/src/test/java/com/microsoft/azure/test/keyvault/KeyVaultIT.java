@@ -54,7 +54,7 @@ import static org.junit.Assert.assertEquals;
  */
 @Slf4j
 public class KeyVaultIT {
-  
+
     private static ClientSecretAccess access;
     private static Vault vault;
     private static String resourceGroupName;
@@ -84,7 +84,7 @@ public class KeyVaultIT {
         log.info("keyvault.app.zip.path={}", TEST_KEYVAULT_APP_ZIP_PATH);
         log.info("--------------------->resources provision over");
     }
-    
+
     @AfterClass
     public static void deleteResourceGroup() {
         final ResourceGroupTool tool = new ResourceGroupTool(access);
@@ -206,13 +206,12 @@ public class KeyVaultIT {
         final List<String> commands = new ArrayList<>();
         commands.add(String.format("cd /home/%s", VM_USER_NAME));
         commands.add(
-                String.
-                format("nohup java -jar -Xdebug " +
+                String.format("nohup java -jar -Xdebug " +
                                 "-Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n " +
                                 "-Dazure.keyvault.uri=%s %s &" +
-                                " >/log.txt  2>&1"
-                        , vault.vaultUri(),
-                TEST_KEY_VAULT_JAR_FILE_NAME));
+                                " >/log.txt  2>&1",
+                        vault.vaultUri(),
+                        TEST_KEY_VAULT_JAR_FILE_NAME));
         vmTool.runCommandOnVM(vm, commands);
 
         final ResponseEntity<String> response = curlWithRetry(
@@ -227,10 +226,12 @@ public class KeyVaultIT {
         log.info("--------------------->test virtual machine with MSI over");
     }
 
-    private static <T> ResponseEntity<T> curlWithRetry(String resourceUrl,
-                                                    final int retryTimes,
-                                                    int sleepMills,
-                                                    Class<T> clazz) {
+    private static <T> ResponseEntity<T> curlWithRetry(
+            String resourceUrl,
+            final int retryTimes,
+            int sleepMills,
+            Class<T> clazz
+    ) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         ResponseEntity<T> response = ResponseEntity.of(Optional.empty());
         int rt = retryTimes;
@@ -252,5 +253,6 @@ public class KeyVaultIT {
     }
 
     @SpringBootApplication
-    public static class DumbApp {}
+    public static class DumbApp {
+    }
 }
