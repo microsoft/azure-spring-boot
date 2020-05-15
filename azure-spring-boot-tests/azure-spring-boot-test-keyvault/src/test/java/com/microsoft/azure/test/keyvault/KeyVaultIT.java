@@ -62,8 +62,8 @@ public class KeyVaultIT {
     private static final String prefix = "test-keyvault";
     private static final String VM_USER_NAME = "deploy";
     private static final String VM_USER_PASSWORD = "12NewPAwX0rd!";
-    private static final String KEY_VAULT_SECRET_NAME_1 = "key-vault-secret-name-1";
-    private static final String KEY_VAULT_SECRET_VALUE_1 = "key-vault-secret-value-1";
+    private static final String KEY_VAULT_SECRET_NAME = "key-vault-secret-name";
+    private static final String KEY_VAULT_SECRET_VALUE = "key-vault-secret-value";
     private static final String APP_PROPERTY_NAME = "app.property.name";
     private static final String APP_PROPERTY_VALUE = "app.property.value";
     private static final String APP_PROPERTY_NAME_WITH_SPEL_IN_VALUE = "app.property.name.with.spel.in.value";
@@ -80,12 +80,12 @@ public class KeyVaultIT {
         resourceGroupName = SdkContext.randomResourceName(ConstantsHelper.TEST_RESOURCE_GROUP_NAME_PREFIX, 30);
         final KeyVaultTool tool = new KeyVaultTool(access);
         vault = tool.createVaultInNewGroup(resourceGroupName, prefix);
-        vault.secrets().define(KEY_VAULT_SECRET_NAME_1).withValue(KEY_VAULT_SECRET_VALUE_1).create();
+        vault.secrets().define(KEY_VAULT_SECRET_NAME).withValue(KEY_VAULT_SECRET_VALUE).create();
         vault.secrets()
                 .define(KEY_VAULT_SECRET_NAME_WITH_SPEL_IN_VALUE)
                 .withValue(String.format("${%s}", APP_PROPERTY_NAME))
                 .create();
-        vault.secrets().define(AZURE_COSMOSDB_KEY).withValue(KEY_VAULT_SECRET_VALUE_1).create();
+        vault.secrets().define(AZURE_COSMOSDB_KEY).withValue(KEY_VAULT_SECRET_VALUE).create();
         restTemplate = new RestTemplate();
 
         TEST_KEYVAULT_APP_JAR_PATH = new File(System.getProperty("keyvault.app.jar.path")).getCanonicalPath();
@@ -119,7 +119,7 @@ public class KeyVaultIT {
                         .getSource().getClass() + "\n");
             }
 
-            assertEquals(KEY_VAULT_SECRET_VALUE_1, app.getProperty(KEY_VAULT_SECRET_NAME_1));
+            assertEquals(KEY_VAULT_SECRET_VALUE, app.getProperty(KEY_VAULT_SECRET_NAME));
             app.close();
             log.info("--------------------->test over");
         }
@@ -136,13 +136,13 @@ public class KeyVaultIT {
             app.property(
                     "azure.keyvault.secret.keys",
                     String.join(",",
-                            KEY_VAULT_SECRET_NAME_1,
+                            KEY_VAULT_SECRET_NAME,
                             AZURE_COSMOSDB_KEY
                     )
             );
 
             app.start();
-            assertEquals(KEY_VAULT_SECRET_VALUE_1, app.getProperty(KEY_VAULT_SECRET_NAME_1));
+            assertEquals(KEY_VAULT_SECRET_VALUE, app.getProperty(KEY_VAULT_SECRET_NAME));
             app.close();
             log.info("--------------------->test over");
         }
@@ -159,7 +159,7 @@ public class KeyVaultIT {
             app.property(
                     "azure.keyvault.secret.keys",
                     String.join(",",
-                            KEY_VAULT_SECRET_NAME_1,
+                            KEY_VAULT_SECRET_NAME,
                             AZURE_COSMOSDB_KEY,
                             KEY_VAULT_SECRET_NAME_WITH_SPEL_IN_VALUE
                     )
@@ -167,12 +167,12 @@ public class KeyVaultIT {
             app.property(APP_PROPERTY_NAME, APP_PROPERTY_VALUE);
             app.property(
                     APP_PROPERTY_NAME_WITH_SPEL_IN_VALUE,
-                    String.format("${%s}", KEY_VAULT_SECRET_NAME_1)
+                    String.format("${%s}", KEY_VAULT_SECRET_NAME)
             );
 
             app.start();
             assertEquals(
-                    KEY_VAULT_SECRET_VALUE_1,
+                    KEY_VAULT_SECRET_VALUE,
                     app.getProperty(APP_PROPERTY_NAME_WITH_SPEL_IN_VALUE)
             );
             assertEquals(
@@ -226,7 +226,7 @@ public class KeyVaultIT {
         final ResponseEntity<String> response = curlWithRetry(resourceUrl, 3, 120_000, String.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(KEY_VAULT_SECRET_VALUE_1, response.getBody());
+        assertEquals(KEY_VAULT_SECRET_VALUE, response.getBody());
         log.info("--------------------->test app service with MSI over");
     }
 
@@ -273,7 +273,7 @@ public class KeyVaultIT {
                 String.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(KEY_VAULT_SECRET_VALUE_1, response.getBody());
+        assertEquals(KEY_VAULT_SECRET_VALUE, response.getBody());
         log.info("key vault value is: {}", response.getBody());
         log.info("--------------------->test virtual machine with MSI over");
     }
