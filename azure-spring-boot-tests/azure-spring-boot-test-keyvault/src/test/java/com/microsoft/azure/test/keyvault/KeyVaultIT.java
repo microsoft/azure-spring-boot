@@ -42,6 +42,16 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * This test requires the following environment variables to be set.
+ * 
+ * <ul>
+ *  <li>AZURE_TENANT - your Azure tenant id</li>
+ *  <li>AZURE_SUBSCRIPTION - your Azure subscription id</li>
+ *  <li>AZURE_CLIENT_ID - an Application (client) id</li>
+ *  <li>AZURE_CLIENT_SECRET - an Application (client) secret</li>
+ * </ul>
+ */
 @Slf4j
 public class KeyVaultIT {
   
