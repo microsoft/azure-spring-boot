@@ -90,13 +90,13 @@ public class KeyVaultOperationUnitTest {
     public void testList() {
         //test list with no specific secret keys
         setupSecretBundle(testPropertyName1, testPropertyName1, null);
-        final String[] result = keyVaultOperation.list();
+        final String[] result = keyVaultOperation.getPropertyNames();
         assertThat(result.length).isEqualTo(1);
         assertThat(result[0]).isEqualToIgnoringCase(testPropertyName1);
 
         //test list with specific secret key configs
         setupSecretBundle(testPropertyName1, testPropertyName1, secretKeysConfig);
-        final String[] specificResult = keyVaultOperation.list();
+        final String[] specificResult = keyVaultOperation.getPropertyNames();
         assertThat(specificResult.length).isEqualTo(3);
         assertThat(specificResult[0]).isEqualTo(secretKeysConfig.get(0));
     }
