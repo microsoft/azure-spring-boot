@@ -16,21 +16,22 @@ import com.nimbusds.jose.proc.JWSKeySelector;
 import com.nimbusds.jose.proc.JWSVerificationKeySelector;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.nimbusds.jose.util.ResourceRetriever;
+import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import lombok.extern.slf4j.Slf4j;
-
+import com.nimbusds.jwt.JWTParser;
 import com.nimbusds.jwt.proc.BadJWTException;
 import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
 import com.nimbusds.jwt.proc.DefaultJWTClaimsVerifier;
 import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import com.nimbusds.jwt.proc.JWTClaimsSetVerifier;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 public class UserPrincipalManager {
@@ -130,6 +131,24 @@ public class UserPrincipalManager {
         return new UserPrincipal(jwsObject, jwtClaimsSet);
     }
 
+    public boolean isTokenIssuedByAAD(String token) {
+        try {
+            final JWT jwt = JWTParser.parse(token);
+            return isAADIssuer(jwt.getJWTClaimsSet().getIssuer());
+        } catch (ParseException e) {
+            log.info("Fail to parse JWT {}, exception {}", token, e);
+        }
+        return false;
+    }
+
+    private static boolean isAADIssuer(String issuer) {
+        if (issuer == null) {
+            return false;
+        }
+        return issuer.startsWith(LOGIN_MICROSOFT_ONLINE_ISSUER) || issuer.startsWith(STS_WINDOWS_ISSUER)
+                || issuer.startsWith(STS_CHINA_CLOUD_API_ISSUER);
+    }
+
     private ConfigurableJWTProcessor<SecurityContext> getAadJwtTokenValidator(JWSAlgorithm jwsAlgorithm) {
         final ConfigurableJWTProcessor<SecurityContext> jwtProcessor = new DefaultJWTProcessor<>();
 
@@ -143,9 +162,7 @@ public class UserPrincipalManager {
             public void verify(JWTClaimsSet claimsSet, SecurityContext ctx) throws BadJWTException {
                 super.verify(claimsSet, ctx);
                 final String issuer = claimsSet.getIssuer();
-                if (issuer == null || !(issuer.startsWith(LOGIN_MICROSOFT_ONLINE_ISSUER)
-                        || issuer.startsWith(STS_WINDOWS_ISSUER)
-                        || issuer.startsWith(STS_CHINA_CLOUD_API_ISSUER))) {
+                if (!isAADIssuer(issuer)) {
                     throw new BadJWTException("Invalid token issuer");
                 }
                 if (explicitAudienceCheck) {
