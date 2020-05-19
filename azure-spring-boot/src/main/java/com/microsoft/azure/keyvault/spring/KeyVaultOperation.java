@@ -43,6 +43,7 @@ public class KeyVaultOperation {
             final List<String> secretNames,
             boolean caseSensitive
     ) {
+        this.caseSensitive = caseSensitive;
         this.keyVaultClient = keyVaultClient;
         // TODO(pan): need to validate why last '/' need to be truncated.
         this.vaultUri = StringUtils.trimTrailingCharacter(vaultUri.trim(), '/');
@@ -55,7 +56,6 @@ public class KeyVaultOperation {
         this.secretNamesAlreadyConfigured = !this.secretNames.isEmpty();
         this.secretNamesRefreshIntervalInMs = secretKeysRefreshIntervalInMs;
         this.secretNamesLastUpdateTime = 0;
-        this.caseSensitive = caseSensitive;
     }
 
     public String[] getPropertyNames() {
