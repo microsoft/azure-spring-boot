@@ -33,4 +33,13 @@ public class KeyVaultPropertySource extends PropertySource<KeyVaultOperation> {
     public Object getProperty(String name) {
         return operations.get(name);
     }
+
+    /**
+     * Are we up?
+     * 
+     * @return true if we are, false otherwise.
+     */
+    boolean isUp() {
+        return operations.isUp();
+    }
 }

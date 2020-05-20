@@ -3,9 +3,12 @@
  * Licensed under the MIT License. See LICENSE in the project root for
  * license information.
  */
-
 package com.microsoft.azure.keyvault.spring;
 
+import com.azure.core.exception.HttpRequestException;
+import com.azure.core.exception.ResourceNotFoundException;
+import com.azure.core.http.rest.Response;
+import com.azure.core.util.Context;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
 import lombok.extern.slf4j.Slf4j;
@@ -138,4 +141,20 @@ public class KeyVaultOperation {
                 .orElse(null);
     }
 
+    /**
+     * Are we up?
+     *
+     * @return true if we are, false otherwise.
+     */
+    boolean isUp() {
+        boolean up;
+        try {
+            final Response<KeyVaultSecret> response = keyVaultClient
+                    .getSecretWithResponse("should_not_be_empty", null, Context.NONE);
+            up = response.getStatusCode() < 500;
+        } catch (HttpRequestException | ResourceNotFoundException e) {
+            up = true;
+        }
+        return up;
+    }
 }
