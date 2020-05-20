@@ -76,13 +76,12 @@ public class KeyVaultEnvironmentPostProcessor implements EnvironmentPostProcesso
      * @return true if the key vault is enabled, false otherwise.
      */
     private boolean isKeyVaultEnabled(ConfigurableEnvironment environment, String normalizedName) {
-        if (environment.getProperty(AZURE_KEYVAULT_PREFIX + normalizedName + AZURE_KEYVAULT_VAULT_URI) == null) {
-            return false;
-        }
-        return environment.getProperty(AZURE_KEYVAULT_PREFIX + normalizedName + AZURE_KEYVAULT_ENABLED,
-                Boolean.class, true) && isKeyVaultClientAvailable();
+        final String normalizedPrefix = AZURE_KEYVAULT_PREFIX + normalizedName;
+        return environment.getProperty(normalizedPrefix + AZURE_KEYVAULT_ENABLED,
+                Boolean.class, true) && environment.getProperty(normalizedPrefix + AZURE_KEYVAULT_VAULT_URI) != null
+                && isKeyVaultClientAvailable();
     }
-
+   
     /**
      * Determine whether or not multiple key vaults are enabled.
      *
