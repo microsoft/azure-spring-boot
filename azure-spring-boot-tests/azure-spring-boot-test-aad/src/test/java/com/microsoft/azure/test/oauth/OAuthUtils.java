@@ -40,7 +40,7 @@ public class OAuthUtils {
         assertNotEmpty(aadUserPassword, AAD_USER_PASSWORD);
 
         final RequestBody body = RequestBody.create(mediaType, String.format("client_id=%s" +
-                        "&scope=user.read openid profile offline_access" +
+                        "&scope=openid" +
                         "&client_secret=%s" +
                         "&username=%s" +
                         "&password=%s" +
