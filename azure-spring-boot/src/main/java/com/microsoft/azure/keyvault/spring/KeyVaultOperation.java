@@ -116,21 +116,25 @@ public class KeyVaultOperation {
     }
 
     private void refreshKeyVaultSecretNames() {
-        secretNames = Optional.of(keyVaultClient)
-                .map(SecretClient::listPropertiesOfSecrets)
-                .map(secretProperties -> {
-                    final List<String> secretNameList = new ArrayList<>();
-                    secretProperties.forEach(s -> {
-                        final String secretName = s.getName().replace(vaultUri + "/secrets/", "");
-                        secretNameList.add(secretName);
-                    });
-                    return secretNameList;
-                })
-                .map(Collection::stream)
-                .orElseGet(Stream::empty)
-                .map(this::toKeyVaultSecretName)
-                .distinct()
-                .collect(Collectors.toList());
+        try {
+            secretNames = Optional.of(keyVaultClient)
+                    .map(SecretClient::listPropertiesOfSecrets)
+                    .map(secretProperties -> {
+                        final List<String> secretNameList = new ArrayList<>();
+                        secretProperties.forEach(s -> {
+                            final String secretName = s.getName().replace(vaultUri + "/secrets/", "");
+                            secretNameList.add(secretName);
+                        });
+                        return secretNameList;
+                    })
+                    .map(Collection::stream)
+                    .orElseGet(Stream::empty)
+                    .map(this::toKeyVaultSecretName)
+                    .distinct()
+                    .collect(Collectors.toList());
+        } catch (RuntimeException e) {
+            secretNames = new ArrayList<>();
+        }
         this.secretNamesLastUpdateTime = System.currentTimeMillis();
     }
 
