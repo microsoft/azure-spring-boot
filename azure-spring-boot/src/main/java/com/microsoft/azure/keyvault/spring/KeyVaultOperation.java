@@ -140,9 +140,9 @@ public class KeyVaultOperation {
 
     private String getValueFromKeyVault(String name) {
         return Optional.ofNullable(name)
-                .map(keyVaultClient::getSecret)
-                .map(KeyVaultSecret::getValue)
-                .orElse(null);
+                    .map(keyVaultClient::getSecret)
+                    .map(KeyVaultSecret::getValue)
+                    .orElse(null);
     }
 
     /**
@@ -158,6 +158,8 @@ public class KeyVaultOperation {
             up = response.getStatusCode() < 500;
         } catch (HttpRequestException | ResourceNotFoundException e) {
             up = true;
+        } catch (RuntimeException re) {
+            up = false;
         }
         return up;
     }
