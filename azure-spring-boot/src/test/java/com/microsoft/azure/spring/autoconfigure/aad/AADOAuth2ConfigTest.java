@@ -5,7 +5,6 @@
  */
 package com.microsoft.azure.spring.autoconfigure.aad;
 
-import io.jsonwebtoken.lang.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -18,6 +17,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.test.context.support.TestPropertySourceUtils;
+import org.springframework.util.Assert;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 import java.util.Map;
