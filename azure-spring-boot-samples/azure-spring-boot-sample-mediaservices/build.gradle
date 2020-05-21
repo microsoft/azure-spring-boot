@@ -1,0 +1,7 @@
+
+description = 'Spring Boot sample for azure mediaservices'
+dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter', version:"${springBootVersion}"
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version:"${springBootVersion}"
+    compile group: 'com.microsoft.azure', name: 'azure-media', version:"0.9.8"
+}
