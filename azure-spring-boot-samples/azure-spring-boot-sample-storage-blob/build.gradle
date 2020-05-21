@@ -1,0 +1,7 @@
+
+description = 'Spring Boot sample for azure service bus'
+dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: "${springBootVersion}"
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: "${springBootVersion}"
+    compile group: 'com.azure', name: 'azure-storage-blob', version: "12.6.0"
+}
