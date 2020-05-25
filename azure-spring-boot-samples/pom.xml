@@ -150,13 +150,13 @@
         <module>azure-active-directory-spring-boot-stateless-sample</module>
         <module>azure-cosmosdb-spring-boot-sample</module>
         <module>azure-keyvault-secrets-spring-boot-sample</module>
-        <module>azure-mediaservices-spring-boot-sample</module>
-        <module>azure-servicebus-spring-boot-sample</module>
-        <module>azure-storage-spring-boot-sample</module>
-        <module>azure-cloud-foundry-service-sample</module>
+<!--    <module>azure-cloud-foundry-service-sample</module>-->
         <module>spring-data-gremlin-boot-sample</module>
         <module>azure-servicebus-jms-queue-spring-boot-sample</module>
         <module>azure-servicebus-jms-topic-spring-boot-sample</module>
+        <module>azure-spring-boot-sample-mediaservices</module>
+        <module>azure-spring-boot-sample-servicebus</module>
+        <module>azure-spring-boot-sample-storage-blob</module>
     </modules>
 
 </project>

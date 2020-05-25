@@ -27,7 +27,7 @@ public class KeyVaultPropertySourceUnitTest {
         final String[] propertyNameList = new String[]{testPropertyName1};
 
         when(keyVaultOperation.get(anyString())).thenReturn(testPropertyName1);
-        when(keyVaultOperation.list()).thenReturn(propertyNameList);
+        when(keyVaultOperation.getPropertyNames()).thenReturn(propertyNameList);
 
         keyVaultPropertySource = new KeyVaultPropertySource(keyVaultOperation);
     }

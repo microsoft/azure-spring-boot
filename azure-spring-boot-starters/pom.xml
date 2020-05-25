@@ -25,9 +25,6 @@
         <module>azure-active-directory-spring-boot-starter</module>
         <module>azure-cosmosdb-spring-boot-starter</module>
         <module>azure-keyvault-secrets-spring-boot-starter</module>
-        <module>azure-mediaservices-spring-boot-starter</module>
-        <module>azure-servicebus-spring-boot-starter</module>
-        <module>azure-storage-spring-boot-starter</module>
         <module>spring-data-gremlin-boot-starter</module>
         <module>azure-servicebus-jms-spring-boot-starter</module>
     </modules>

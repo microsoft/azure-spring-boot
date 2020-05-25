@@ -42,9 +42,19 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * This test requires the following environment variables to be set.
+ * 
+ * <ul>
+ *  <li>AZURE_TENANT - your Azure tenant id</li>
+ *  <li>AZURE_SUBSCRIPTION - your Azure subscription id</li>
+ *  <li>AZURE_CLIENT_ID - an Application (client) id</li>
+ *  <li>AZURE_CLIENT_SECRET - an Application (client) secret</li>
+ * </ul>
+ */
 @Slf4j
 public class KeyVaultIT {
-  
+
     private static ClientSecretAccess access;
     private static Vault vault;
     private static String resourceGroupName;
@@ -52,7 +62,13 @@ public class KeyVaultIT {
     private static final String prefix = "test-keyvault";
     private static final String VM_USER_NAME = "deploy";
     private static final String VM_USER_PASSWORD = "12NewPAwX0rd!";
-    private static final String KEY_VAULT_VALUE = "value";
+    private static final String KEY_VAULT_SECRET_NAME = "key-vault-secret-name";
+    private static final String KEY_VAULT_SECRET_VALUE = "key-vault-secret-value";
+    private static final String APP_PROPERTY_NAME = "app.property.name";
+    private static final String APP_PROPERTY_VALUE = "app.property.value";
+    private static final String APP_PROPERTY_NAME_WITH_SPEL_IN_VALUE = "app.property.name.with.spel.in.value";
+    private static final String KEY_VAULT_SECRET_NAME_WITH_SPEL_IN_VALUE = "key-vault-secret-name-with-spel-in-value";
+    private static final String AZURE_COSMOSDB_KEY = "azure-cosmosdb-key";
     private static final String TEST_KEY_VAULT_JAR_FILE_NAME = "app.jar";
     private static final int DEFAULT_MAX_RETRY_TIMES = 3;
     private static String TEST_KEYVAULT_APP_JAR_PATH;
@@ -64,8 +80,12 @@ public class KeyVaultIT {
         resourceGroupName = SdkContext.randomResourceName(ConstantsHelper.TEST_RESOURCE_GROUP_NAME_PREFIX, 30);
         final KeyVaultTool tool = new KeyVaultTool(access);
         vault = tool.createVaultInNewGroup(resourceGroupName, prefix);
-        vault.secrets().define("key").withValue(KEY_VAULT_VALUE).create();
-        vault.secrets().define("azure-cosmosdb-key").withValue(KEY_VAULT_VALUE).create();
+        vault.secrets().define(KEY_VAULT_SECRET_NAME).withValue(KEY_VAULT_SECRET_VALUE).create();
+        vault.secrets()
+                .define(KEY_VAULT_SECRET_NAME_WITH_SPEL_IN_VALUE)
+                .withValue(String.format("${%s}", APP_PROPERTY_NAME))
+                .create();
+        vault.secrets().define(AZURE_COSMOSDB_KEY).withValue(KEY_VAULT_SECRET_VALUE).create();
         restTemplate = new RestTemplate();
 
         TEST_KEYVAULT_APP_JAR_PATH = new File(System.getProperty("keyvault.app.jar.path")).getCanonicalPath();
@@ -74,7 +94,7 @@ public class KeyVaultIT {
         log.info("keyvault.app.zip.path={}", TEST_KEYVAULT_APP_ZIP_PATH);
         log.info("--------------------->resources provision over");
     }
-    
+
     @AfterClass
     public static void deleteResourceGroup() {
         final ResourceGroupTool tool = new ResourceGroupTool(access);
@@ -99,7 +119,7 @@ public class KeyVaultIT {
                         .getSource().getClass() + "\n");
             }
 
-            assertEquals(KEY_VAULT_VALUE, app.getProperty("key"));
+            assertEquals(KEY_VAULT_SECRET_VALUE, app.getProperty(KEY_VAULT_SECRET_NAME));
             app.close();
             log.info("--------------------->test over");
         }
@@ -113,10 +133,52 @@ public class KeyVaultIT {
             app.property("azure.keyvault.client-id", access.clientId());
             app.property("azure.keyvault.client-key", access.clientSecret());
             app.property("azure.keyvault.tenant-id", access.tenant());
-            app.property("azure.keyvault.secret.keys", "key , azure-cosmosdb-key");
+            app.property(
+                    "azure.keyvault.secret.keys",
+                    String.join(",",
+                            KEY_VAULT_SECRET_NAME,
+                            AZURE_COSMOSDB_KEY
+                    )
+            );
 
             app.start();
-            assertEquals(KEY_VAULT_VALUE, app.getProperty("key"));
+            assertEquals(KEY_VAULT_SECRET_VALUE, app.getProperty(KEY_VAULT_SECRET_NAME));
+            app.close();
+            log.info("--------------------->test over");
+        }
+    }
+
+    @Test
+    public void keyVaultAsPropertySourceWithSpELInValue() {
+        try (AppRunner app = new AppRunner(DumbApp.class)) {
+            app.property("azure.keyvault.enabled", "true");
+            app.property("azure.keyvault.uri", vault.vaultUri());
+            app.property("azure.keyvault.client-id", access.clientId());
+            app.property("azure.keyvault.client-key", access.clientSecret());
+            app.property("azure.keyvault.tenant-id", access.tenant());
+            app.property(
+                    "azure.keyvault.secret.keys",
+                    String.join(",",
+                            KEY_VAULT_SECRET_NAME,
+                            AZURE_COSMOSDB_KEY,
+                            KEY_VAULT_SECRET_NAME_WITH_SPEL_IN_VALUE
+                    )
+            );
+            app.property(APP_PROPERTY_NAME, APP_PROPERTY_VALUE);
+            app.property(
+                    APP_PROPERTY_NAME_WITH_SPEL_IN_VALUE,
+                    String.format("${%s}", KEY_VAULT_SECRET_NAME)
+            );
+
+            app.start();
+            assertEquals(
+                    KEY_VAULT_SECRET_VALUE,
+                    app.getProperty(APP_PROPERTY_NAME_WITH_SPEL_IN_VALUE)
+            );
+            assertEquals(
+                    APP_PROPERTY_VALUE,
+                    app.getProperty(KEY_VAULT_SECRET_NAME_WITH_SPEL_IN_VALUE)
+            );
             app.close();
             log.info("--------------------->test over");
         }
@@ -164,7 +226,7 @@ public class KeyVaultIT {
         final ResponseEntity<String> response = curlWithRetry(resourceUrl, 3, 120_000, String.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(KEY_VAULT_VALUE, response.getBody());
+        assertEquals(KEY_VAULT_SECRET_VALUE, response.getBody());
         log.info("--------------------->test app service with MSI over");
     }
 
@@ -196,13 +258,12 @@ public class KeyVaultIT {
         final List<String> commands = new ArrayList<>();
         commands.add(String.format("cd /home/%s", VM_USER_NAME));
         commands.add(
-                String.
-                format("nohup java -jar -Xdebug " +
+                String.format("nohup java -jar -Xdebug " +
                                 "-Xrunjdwp:server=y,transport=dt_socket,address=4000,suspend=n " +
                                 "-Dazure.keyvault.uri=%s %s &" +
-                                " >/log.txt  2>&1"
-                        , vault.vaultUri(),
-                TEST_KEY_VAULT_JAR_FILE_NAME));
+                                " >/log.txt  2>&1",
+                        vault.vaultUri(),
+                        TEST_KEY_VAULT_JAR_FILE_NAME));
         vmTool.runCommandOnVM(vm, commands);
 
         final ResponseEntity<String> response = curlWithRetry(
@@ -212,15 +273,17 @@ public class KeyVaultIT {
                 String.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(KEY_VAULT_VALUE, response.getBody());
+        assertEquals(KEY_VAULT_SECRET_VALUE, response.getBody());
         log.info("key vault value is: {}", response.getBody());
         log.info("--------------------->test virtual machine with MSI over");
     }
 
-    private static <T> ResponseEntity<T> curlWithRetry(String resourceUrl,
-                                                    final int retryTimes,
-                                                    int sleepMills,
-                                                    Class<T> clazz) {
+    private static <T> ResponseEntity<T> curlWithRetry(
+            String resourceUrl,
+            final int retryTimes,
+            int sleepMills,
+            Class<T> clazz
+    ) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         ResponseEntity<T> response = ResponseEntity.of(Optional.empty());
         int rt = retryTimes;
@@ -242,5 +305,6 @@ public class KeyVaultIT {
     }
 
     @SpringBootApplication
-    public static class DumbApp {}
+    public static class DumbApp {
+    }
 }
