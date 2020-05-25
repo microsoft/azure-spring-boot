@@ -35,7 +35,7 @@ azure.keyvault.secret.keys=key1,key2,key3
 ### Use MSI / Managed identities 
 #### Azure Spring Cloud
 
-Azure Spring Cloud supports system assigned identity only at present. To use it for Azure Spring Cloud apps, add the below properties:
+Azure Spring Cloud supports system-assigned managed identity only at present. To use it for Azure Spring Cloud apps, add the below properties:
 ```
 azure.keyvault.enabled=true
 azure.keyvault.uri=put-your-azure-keyvault-uri-here
