@@ -47,9 +47,9 @@
 
     <properties>
         <azure.spring.boot.version>2.3.0</azure.spring.boot.version>
-        <azure.dependencies.bom.version>2.2.0.M6</azure.dependencies.bom.version>
-        <spring.data.cosmosdb.version>2.2.3.FIX1</spring.data.cosmosdb.version>
-        <spring.data.gremlin.version>2.2.3</spring.data.gremlin.version>
+        <azure.dependencies.bom.version>2.3.0</azure.dependencies.bom.version>
+        <spring.data.cosmosdb.version>2.3.0</spring.data.cosmosdb.version>
+        <spring.data.gremlin.version>2.3.0</spring.data.gremlin.version>
     </properties>
 
     <dependencyManagement>
