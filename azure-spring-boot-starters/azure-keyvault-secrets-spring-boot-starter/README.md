@@ -62,7 +62,6 @@ azure.keyvault.client-id=put-your-azure-client-id-here
 
 If you are using system assigned identity you don't need to specify the client-id.
 
-
 ### Save secrets in Azure Key Vault
 Save secrets in Azure Key Vault through [Azure Portal](https://blogs.technet.microsoft.com/kv/2016/09/12/manage-your-key-vaults-from-new-azure-portal/) or [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/keyvault/secret).
 
