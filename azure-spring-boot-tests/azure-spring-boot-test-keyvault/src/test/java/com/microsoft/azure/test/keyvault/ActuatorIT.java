@@ -15,6 +15,7 @@ import com.microsoft.azure.test.AppRunner;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -96,7 +97,7 @@ public class ActuatorIT {
      * Test the Spring Boot Health indicator integration.
      */
     @Test
-    public void testSpringBootHealthActuator() {
+    public void testSpringBootActuatorHealth() {
         try (AppRunner app = new AppRunner(ActuatorTestApp.class)) {
             app.property("azure.keyvault.enabled", "true");
             app.property("azure.keyvault.uri", vault.vaultUri());
@@ -112,6 +113,31 @@ public class ActuatorIT {
             final String response = restTemplate.getForObject(
                     "http://localhost:" + app.port() + "/actuator/health/keyVault", String.class);
             assertEquals("{\"status\":\"UP\"}", response);
+            
+            app.close();
+        }
+    }
+    
+    /**
+     * Test the Spring Boot /actuator/env integration.
+     */
+    @Test
+    public void testSpringBootActuatorEnv() {
+        try (AppRunner app = new AppRunner(ActuatorTestApp.class)) {
+            app.property("azure.keyvault.enabled", "true");
+            app.property("azure.keyvault.uri", vault.vaultUri());
+            app.property("azure.keyvault.client-id", access.clientId());
+            app.property("azure.keyvault.client-key", access.clientSecret());
+            app.property("azure.keyvault.tenant-id", access.tenant());
+            app.property("azure.keyvault.secret.keys", KEY_VAULT_SECRET_KEY);
+            app.property("management.endpoint.health.show-details", "always");
+            app.property("management.endpoints.web.exposure.include", "*");
+            app.property("management.health.azure-key-vault.enabled", "true");
+            app.start();
+            
+            final String response = restTemplate.getForObject(
+                    "http://localhost:" + app.port() + "/actuator/env", String.class);
+            assertTrue(response.contains("azurekv"));
             
             app.close();
         }
