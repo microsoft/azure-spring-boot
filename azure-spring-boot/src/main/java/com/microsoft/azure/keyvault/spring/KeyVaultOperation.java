@@ -172,7 +172,7 @@ public class KeyVaultOperation {
         boolean up;
         try {
             final Response<KeyVaultSecret> response = keyVaultClient
-                    .getSecretWithResponse("should_not_be_empty", null, Context.NONE);
+                    .getSecretWithResponse("should-not-be-empty", null, Context.NONE);
             up = response.getStatusCode() < 500;
         } catch (HttpRequestException | ResourceNotFoundException e) {
             up = true;
