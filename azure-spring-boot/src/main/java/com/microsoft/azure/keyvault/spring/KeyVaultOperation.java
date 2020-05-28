@@ -31,7 +31,7 @@ public class KeyVaultOperation {
      * Stores the case sensitive flag.
      */
     private final boolean caseSensitive;
-
+    
     private final SecretClient keyVaultClient;
     private final String vaultUri;
     private volatile List<String> secretNames;
@@ -151,6 +151,7 @@ public class KeyVaultOperation {
                     .distinct()
                     .collect(Collectors.toList());
         } catch (RuntimeException e) {
+            log.error("An error occurred while refreshing key vault secret names", e);
             secretNames = new ArrayList<>();
         }
         this.secretNamesLastUpdateTime = System.currentTimeMillis();
@@ -174,9 +175,13 @@ public class KeyVaultOperation {
             final Response<KeyVaultSecret> response = keyVaultClient
                     .getSecretWithResponse("should-not-be-empty", null, Context.NONE);
             up = response.getStatusCode() < 500;
-        } catch (HttpRequestException | ResourceNotFoundException e) {
+        } catch (ResourceNotFoundException e) {
+            up = true;
+        } catch (HttpRequestException hre) {
+            log.error("An HTTP error occurred while checking key vault connectivity", hre);
             up = true;
         } catch (RuntimeException re) {
+            log.error("A runtime error occurred while checking key vault connectivity", re);
             up = false;
         }
         return up;
