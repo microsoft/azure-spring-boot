@@ -88,10 +88,13 @@ class KeyVaultEnvironmentPostProcessorHelper {
                 .buildClient();
         try {
             final MutablePropertySources sources = this.environment.getPropertySources();
+            final boolean caseSensitive = Boolean.parseBoolean(
+                    this.environment.getProperty(Constants.AZURE_KEYVAULT_CASE_SENSITIVE_KEYS, "false"));
             final KeyVaultOperation kvOperation = new KeyVaultOperation(secretClient,
                     vaultUri,
                     refreshInterval,
-                    secretKeys);
+                    secretKeys,
+                    caseSensitive);
 
             if (normalizedName.equals("")) {
                 if (sources.contains(StandardEnvironment.SYSTEM_ENVIRONMENT_PROPERTY_SOURCE_NAME)) {
