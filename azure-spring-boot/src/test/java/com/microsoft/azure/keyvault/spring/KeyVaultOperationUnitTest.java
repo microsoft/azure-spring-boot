@@ -63,7 +63,8 @@ public class KeyVaultOperationUnitTest {
         keyVaultOperation = new KeyVaultOperation(keyVaultClient,
                 fakeVaultUri,
                 Constants.TOKEN_ACQUIRE_TIMEOUT_SECS,
-                secretKeysConfig);
+                secretKeysConfig,
+                false);
     }
 
     @Test
