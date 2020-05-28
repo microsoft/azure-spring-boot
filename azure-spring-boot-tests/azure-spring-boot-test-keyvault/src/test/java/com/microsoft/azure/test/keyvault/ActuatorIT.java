@@ -15,7 +15,6 @@ import com.microsoft.azure.test.AppRunner;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -110,7 +109,7 @@ public class ActuatorIT {
             app.property("management.health.azure-key-vault.enabled", "true");
             app.start();
             
-            String response = restTemplate.getForObject(
+            final String response = restTemplate.getForObject(
                     "http://localhost:" + app.port() + "/actuator/health/keyVault", String.class);
             assertEquals("{\"status\":\"UP\"}", response);
             
