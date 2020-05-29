@@ -7,9 +7,7 @@ package com.microsoft.azure.keyvault.spring;
 
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
-import static com.microsoft.azure.keyvault.spring.Constants.TOKEN_ACQUIRE_TIMEOUT_SECS;
-import java.util.Arrays;
-import java.util.List;
+import static com.microsoft.azure.keyvault.spring.Constants.DEFAULT_REFRESH_INTERVAL_MS;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,13 +23,9 @@ public class CaseSensitiveKeyVaultTest {
 
     @Test
     public void testGet() {
-        final List<String> keys = Arrays.asList("key1", "Key2");
-        
         final KeyVaultOperation keyVaultOperation = new KeyVaultOperation(
                 keyVaultClient,
-                "https:fake.vault.com",
-                TOKEN_ACQUIRE_TIMEOUT_SECS,
-                keys,
+                DEFAULT_REFRESH_INTERVAL_MS,
                 true);
 
         final KeyVaultSecret key1 = new KeyVaultSecret("key1", "value1");
@@ -39,7 +33,7 @@ public class CaseSensitiveKeyVaultTest {
         final KeyVaultSecret key2 = new KeyVaultSecret("Key2", "Value2");
         when(keyVaultClient.getSecret("Key2")).thenReturn(key2);
         
-        assertEquals("value1", keyVaultOperation.get("key1"));
-        assertEquals("Value2", keyVaultOperation.get("Key2"));
+        assertEquals("value1", keyVaultOperation.getProperty("key1"));
+        assertEquals("Value2", keyVaultOperation.getProperty("Key2"));
     }
 }

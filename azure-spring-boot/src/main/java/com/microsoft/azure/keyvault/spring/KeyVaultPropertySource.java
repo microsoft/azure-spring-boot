@@ -31,6 +31,6 @@ public class KeyVaultPropertySource extends PropertySource<KeyVaultOperation> {
 
 
     public Object getProperty(String name) {
-        return operations.get(name);
+        return operations.getProperty(name);
     }
 }
