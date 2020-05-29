@@ -5,10 +5,8 @@
  */
 package com.microsoft.azure.keyvault.spring;
 
-import com.azure.core.http.rest.PagedIterable;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
-import com.azure.security.keyvault.secrets.models.SecretProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 
