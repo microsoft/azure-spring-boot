@@ -5,12 +5,15 @@
  */
 package com.microsoft.azure.keyvault.spring;
 
+import com.azure.core.http.rest.PagedIterable;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
+import com.azure.security.keyvault.secrets.models.SecretProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,6 +38,11 @@ public class KeyVaultOperation {
     private final SecretClient secretClient;
 
     /**
+     * Stores the secret keys.
+     */
+    private List<String> secretKeys;
+
+    /**
      * Constructor.
      *
      * @param secretClient the Key Vault secret client.
@@ -45,10 +53,12 @@ public class KeyVaultOperation {
     public KeyVaultOperation(
             final SecretClient secretClient,
             final long refreshInMillis,
+            List<String> secretKeys,
             boolean caseSensitive) {
 
         this.caseSensitive = caseSensitive;
         this.secretClient = secretClient;
+        this.secretKeys = secretKeys;
 
         if (refreshInMillis > 0) {
             final Timer timer = new Timer();
@@ -99,12 +109,25 @@ public class KeyVaultOperation {
      */
     private void refreshProperties() {
         final LinkedHashMap<String, String> newProperties = new LinkedHashMap<>();
-        secretClient.listPropertiesOfSecrets().iterableByPage().forEach(r -> {
-            r.getElements().forEach(p -> {
-                final KeyVaultSecret secret = secretClient.getSecret(p.getName(), p.getVersion());
-                newProperties.put(secret.getName(), secret.getValue());
-            });
-        });
+        if (secretKeys == null || secretKeys.isEmpty()) {
+            final PagedIterable<SecretProperties> pagedIterable = secretClient.listPropertiesOfSecrets();
+            if (pagedIterable != null) {
+                pagedIterable.iterableByPage().forEach(r -> {
+                    r.getElements().forEach(p -> {
+                        final KeyVaultSecret secret = secretClient.getSecret(
+                                p.getName(), p.getVersion());
+                        newProperties.put(secret.getName(), secret.getValue());
+                    });
+                });
+            }
+        } else {
+            for (final String secretKey : secretKeys) {
+                final KeyVaultSecret secret = secretClient.getSecret(toKeyVaultSecretName(secretKey));
+                if (secret != null) {
+                    newProperties.put(secretKey, secret.getValue());
+                }
+            }
+        }
         properties = newProperties;
     }
 
@@ -141,5 +164,14 @@ public class KeyVaultOperation {
         } else {
             return property;
         }
+    }
+
+    /**
+     * Set the properties.
+     *
+     * @param properties the properties.
+     */
+    void setProperties(LinkedHashMap<String, String> properties) {
+        this.properties = properties;
     }
 }

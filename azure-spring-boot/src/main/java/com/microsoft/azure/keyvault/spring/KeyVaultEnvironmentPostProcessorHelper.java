@@ -20,12 +20,14 @@ import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_CLIEN
 import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_CLIENT_KEY;
 import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_PREFIX;
 import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_REFRESH_INTERVAL;
+import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_SECRET_KEYS;
 import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_TENANT_ID;
 import static com.microsoft.azure.keyvault.spring.Constants.AZURE_KEYVAULT_VAULT_URI;
 import static com.microsoft.azure.keyvault.spring.Constants.DEFAULT_REFRESH_INTERVAL_MS;
 import static com.microsoft.azure.keyvault.spring.Constants.SPRINGBOOT_KEY_VAULT_APPLICATION_ID;
 import com.microsoft.azure.telemetry.TelemetrySender;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
@@ -34,7 +36,9 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -71,6 +75,10 @@ class KeyVaultEnvironmentPostProcessorHelper {
                 this.environment.getProperty(
                         AZURE_KEYVAULT_PREFIX + normalizedName + AZURE_KEYVAULT_REFRESH_INTERVAL))
                 .map(Long::valueOf).orElse(DEFAULT_REFRESH_INTERVAL_MS);
+        final Binder binder = Binder.get(this.environment);
+        final List<String> secretKeys = binder.bind(
+                AZURE_KEYVAULT_PREFIX + normalizedName + AZURE_KEYVAULT_SECRET_KEYS, Bindable.listOf(String.class))
+                .orElse(Collections.emptyList());
 
         final TokenCredential tokenCredential = getCredentials(normalizedName);
         final SecretClient secretClient = new SecretClientBuilder()
@@ -84,6 +92,7 @@ class KeyVaultEnvironmentPostProcessorHelper {
                     this.environment.getProperty(Constants.AZURE_KEYVAULT_CASE_SENSITIVE_KEYS, "false"));
             final KeyVaultOperation kvOperation = new KeyVaultOperation(secretClient,
                     refreshInterval,
+                    secretKeys,
                     caseSensitive);
 
             if (normalizedName.equals("")) {
