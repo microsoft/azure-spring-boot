@@ -38,9 +38,9 @@ public class KeyVaultOperation {
      * Constructor.
      *
      * @param secretClient the Key Vault secret client.
-     * @param refreshInMillis the refresh in milliseconds (<=0 disables
-     * refresh). @param caseSen
-     * sitive the case sensitive flag.
+     * @param refreshInMillis the refresh in milliseconds (0 or less disables
+     * refresh).
+     * @param caseSensitive the case sensitive flag.
      */
     public KeyVaultOperation(
             final SecretClient secretClient,
