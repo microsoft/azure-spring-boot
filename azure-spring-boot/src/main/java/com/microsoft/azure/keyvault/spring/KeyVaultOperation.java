@@ -40,8 +40,9 @@ public class KeyVaultOperation {
      * Constructor.
      *
      * @param secretClient the Key Vault secret client.
-     * @param refreshInMillis the refresh in milliseconds (<=0 disables refresh).
-     * @param caseSensitive the case sensitive flag.
+     * @param refreshInMillis the refresh in milliseconds (<=0 disables
+     * refresh). @param caseSen
+     * sitive the case sensitive flag.
      */
     public KeyVaultOperation(
             final SecretClient secretClient,
@@ -100,9 +101,11 @@ public class KeyVaultOperation {
      */
     private void refreshProperties() {
         final LinkedHashMap<String, String> newProperties = new LinkedHashMap<>();
-        secretClient.listPropertiesOfSecrets().iterableByPage().forEach(p -> {
-            final KeyVaultSecret secret = secretClient.getSecret(p.getName(), p.getVersion());
-            newProperties.put(secret.getName(), secret.getValue());
+        secretClient.listPropertiesOfSecrets().iterableByPage().forEach(r -> {
+            r.getElements().forEach(p -> {
+                final KeyVaultSecret secret = secretClient.getSecret(p.getName(), p.getVersion());
+                newProperties.put(secret.getName(), secret.getValue());
+            });
         });
         properties = newProperties;
     }
