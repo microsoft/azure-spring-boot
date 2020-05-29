@@ -100,8 +100,7 @@ public class KeyVaultOperation {
      */
     private void refreshProperties() {
         final LinkedHashMap<String, String> newProperties = new LinkedHashMap<>();
-        final PagedIterable<SecretProperties> iterable = secretClient.listPropertiesOfSecrets();
-        iterable.forEach(p -> {
+        secretClient.listPropertiesOfSecrets().iterableByPage().forEach(p -> {
             final KeyVaultSecret secret = secretClient.getSecret(p.getName(), p.getVersion());
             newProperties.put(secret.getName(), secret.getValue());
         });
