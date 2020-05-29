@@ -149,6 +149,11 @@
             <artifactId>azure-client-authentication</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-servicebus-jms</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <!-- Micrometer metrics -->
         <dependency>
@@ -220,11 +225,5 @@
             <optional>true</optional>
         </dependency>
 
-        <!--Qpid-->
-        <dependency>
-            <groupId>org.apache.qpid</groupId>
-            <artifactId>qpid-jms-client</artifactId>
-            <optional>true</optional>
-        </dependency>
     </dependencies>
 </project>
