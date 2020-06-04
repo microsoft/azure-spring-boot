@@ -34,7 +34,7 @@
         <wiremock-standalone.version>2.19.0</wiremock-standalone.version>
         <commons-io.version>2.3</commons-io.version>
         <junit-params.version>1.1.1</junit-params.version>
-        <azure-servicebus-jms.version>0.0.1</azure-servicebus-jms.version>
+        <azure-servicebus-jms.version>0.0.2</azure-servicebus-jms.version>
     </properties>
 
     <profiles>

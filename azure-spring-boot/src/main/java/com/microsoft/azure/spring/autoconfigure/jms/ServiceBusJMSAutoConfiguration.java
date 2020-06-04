@@ -35,13 +35,15 @@ public class ServiceBusJMSAutoConfiguration {
     @ConditionalOnMissingBean
     public ConnectionFactory jmsConnectionFactory(AzureServiceBusJMSProperties serviceBusJMSProperties) {
         final String connectionString = serviceBusJMSProperties.getConnectionString();
-
+        final String clientID = serviceBusJMSProperties.getTopicClientId();
         final long idleTimeout = serviceBusJMSProperties.getIdleTimeout();
 
         final ServiceBusJmsConnectionFactorySettings settings =
                 new ServiceBusJmsConnectionFactorySettings(idleTimeout, false);
         final ServiceBusJmsConnectionFactory serviceBusJmsConnectionFactory =
                 new ServiceBusJmsConnectionFactory(connectionString, settings);
+
+        serviceBusJmsConnectionFactory.setClientId(clientID);
 
         return new CachingConnectionFactory(serviceBusJmsConnectionFactory);
     }
