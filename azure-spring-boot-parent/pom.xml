@@ -36,6 +36,7 @@
         <commons-io.version>2.3</commons-io.version>
         <qpid-jms-client.version>0.43.0</qpid-jms-client.version>
         <junit-params.version>1.1.1</junit-params.version>
+        <json-smart.version>2.3</json-smart.version>
     </properties>
 
     <profiles>
@@ -64,6 +65,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>net.minidev</groupId>
+                <artifactId>json-smart</artifactId>
+                <version>${json-smart.version}</version>
+            </dependency>
             <dependency>
                 <!-- Import dependency management from Spring Boot -->
                 <groupId>org.springframework.boot</groupId>
