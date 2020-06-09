@@ -10,7 +10,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>azure-active-directory-b2c-spring-boot-sample</artifactId>
+    <artifactId>azure-active-directory-b2c-oidc-spring-boot-sample</artifactId>
     <packaging>jar</packaging>
 
     <name>Azure AD B2C Spring Security 5 OAuth2 Integration Spring Boot Sample</name>

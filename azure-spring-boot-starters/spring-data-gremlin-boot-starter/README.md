@@ -13,7 +13,7 @@ This project works with *any Gremlin-compatible* data store, and also with [Azur
 <dependency>
     <groupId>com.microsoft.spring.data.gremlin</groupId>
     <artifactId>spring-data-gremlin</artifactId>
-    <version>2.2.0</version>
+    <version>2.3.0</version>
 </dependency>
 ```
 

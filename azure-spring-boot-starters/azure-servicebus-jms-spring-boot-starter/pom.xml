@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-parent</artifactId>
-        <version>2.2.5-SNAPSHOT</version>
+        <version>2.3.2-SNAPSHOT</version>
         <relativePath>../../azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
@@ -33,11 +33,9 @@
             <artifactId>spring-jms</artifactId>
         </dependency>
 
-        <!--Qpid-->
         <dependency>
-            <groupId>org.apache.qpid</groupId>
-            <artifactId>qpid-jms-client</artifactId>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-servicebus-jms</artifactId>
         </dependency>
-
     </dependencies>
 </project>

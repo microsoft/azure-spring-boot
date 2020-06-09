@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>debug.test.single</actionName>
+            <packagings>
+                <packaging>*</packaging>
+            </packagings>
+            <goals>
+                <goal>test-compile</goal>
+                <goal>surefire:test</goal>
+            </goals>
+            <properties>
+                <test>${packageClassName}</test>
+                <forkMode>once</forkMode>
+                <maven.surefire.debug>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</maven.surefire.debug>
+                <jpda.listen>true</jpda.listen>
+                <Env.AZURE_TENANT>72f988bf-86f1-41af-91ab-2d7cd011db47</Env.AZURE_TENANT>
+            </properties>
+        </action>
+    </actions>

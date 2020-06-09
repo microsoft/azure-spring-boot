@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.microsoft.azure</groupId>
         <artifactId>azure-spring-boot-parent</artifactId>
-        <version>2.2.5-SNAPSHOT</version>
+        <version>2.3.2-SNAPSHOT</version>
         <relativePath>../azure-spring-boot-parent/pom.xml</relativePath>
     </parent>
 
@@ -137,21 +137,6 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-media</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-servicebus</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-storage-blob</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>com.azure</groupId>
             <artifactId>azure-security-keyvault-secrets</artifactId>
         </dependency>
@@ -160,19 +145,17 @@
             <artifactId>azure-identity</artifactId>
         </dependency>
         <dependency>
+            <groupId>net.minidev</groupId>
+            <artifactId>json-smart</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.microsoft.azure</groupId>
             <artifactId>azure-client-authentication</artifactId>
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <!-- Spring JDBC -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
+            <groupId>com.microsoft.azure</groupId>
+            <artifactId>azure-servicebus-jms</artifactId>
             <optional>true</optional>
         </dependency>
 
@@ -246,11 +229,5 @@
             <optional>true</optional>
         </dependency>
 
-        <!--Qpid-->
-        <dependency>
-            <groupId>org.apache.qpid</groupId>
-            <artifactId>qpid-jms-client</artifactId>
-            <optional>true</optional>
-        </dependency>
     </dependencies>
 </project>
