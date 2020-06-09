@@ -35,6 +35,7 @@
         <commons-io.version>2.3</commons-io.version>
         <junit-params.version>1.1.1</junit-params.version>
         <azure-servicebus-jms.version>0.0.1</azure-servicebus-jms.version>
+        <json-smart.version>2.3</json-smart.version>
     </properties>
 
     <profiles>
@@ -63,6 +64,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>net.minidev</groupId>
+                <artifactId>json-smart</artifactId>
+                <version>${json-smart.version}</version>
+            </dependency>
             <dependency>
                 <!-- Import dependency management from Spring Boot -->
                 <groupId>org.springframework.boot</groupId>
