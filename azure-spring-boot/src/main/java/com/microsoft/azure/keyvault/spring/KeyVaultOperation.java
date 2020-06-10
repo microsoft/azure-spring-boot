@@ -9,10 +9,10 @@ import com.azure.core.http.rest.PagedIterable;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
 import com.azure.security.keyvault.secrets.models.SecretProperties;
+import java.util.HashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -30,7 +30,7 @@ public class KeyVaultOperation {
     /**
      * Stores the properties.
      */
-    private LinkedHashMap<String, String> properties = new LinkedHashMap<>();
+    private HashMap<String, String> properties = new HashMap<>();
 
     /**
      * Stores the secret client.
@@ -109,7 +109,7 @@ public class KeyVaultOperation {
      * Refresh the properties by accessing key vault.
      */
     private void refreshProperties() {
-        final LinkedHashMap<String, String> newProperties = new LinkedHashMap<>();
+        final HashMap<String, String> newProperties = new HashMap<>();
         if (secretKeys == null || secretKeys.isEmpty()) {
             final PagedIterable<SecretProperties> pagedIterable = secretClient.listPropertiesOfSecrets();
             if (pagedIterable != null) {
@@ -172,7 +172,7 @@ public class KeyVaultOperation {
      *
      * @param properties the properties.
      */
-    void setProperties(LinkedHashMap<String, String> properties) {
+    void setProperties(HashMap<String, String> properties) {
         this.properties = properties;
     }
 }

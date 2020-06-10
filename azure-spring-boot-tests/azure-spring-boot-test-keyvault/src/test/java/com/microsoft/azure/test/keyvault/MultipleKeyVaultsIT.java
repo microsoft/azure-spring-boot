@@ -127,6 +127,7 @@ public class MultipleKeyVaultsIT {
     public void testGetValueForDuplicateKey() {
         try (AppRunner app = new AppRunner(TestApp.class)) {
             app.property("azure.keyvault.order", "keyvault1, keyvault2");
+            app.property("azure.keyvault.case-sensitive-keys", "true");
             app.property("azure.keyvault.keyvault1.uri", keyVault1.vaultUri());
             app.property("azure.keyvault.keyvault1.enabled", "true");
             app.property("azure.keyvault.keyvault1.client-id", access.clientId());
