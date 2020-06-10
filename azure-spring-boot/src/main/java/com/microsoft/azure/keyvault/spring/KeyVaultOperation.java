@@ -48,6 +48,7 @@ public class KeyVaultOperation {
      * @param secretClient the Key Vault secret client.
      * @param refreshInMillis the refresh in milliseconds (0 or less disables
      * refresh).
+     * @param secretKeys the secret keys to look for.
      * @param caseSensitive the case sensitive flag.
      */
     public KeyVaultOperation(
@@ -60,6 +61,8 @@ public class KeyVaultOperation {
         this.secretClient = secretClient;
         this.secretKeys = secretKeys;
 
+        refreshProperties();
+            
         if (refreshInMillis > 0) {
             final Timer timer = new Timer();
             final TimerTask task = new TimerTask() {
@@ -68,9 +71,7 @@ public class KeyVaultOperation {
                     refreshProperties();
                 }
             };
-            timer.scheduleAtFixedRate(task, 0, refreshInMillis);
-        } else {
-            refreshProperties();
+            timer.scheduleAtFixedRate(task, refreshInMillis, refreshInMillis);
         }
     }
 
