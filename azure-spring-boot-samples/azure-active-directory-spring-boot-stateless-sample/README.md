@@ -68,7 +68,7 @@ You have to activate the stateless app-role auth filter and configure the `clien
 azure.activedirectory.session-stateless=true
 azure.activedirectory.client-id=xxxxxx-your-client-id-xxxxxx
 azure.activedirectory.appIdUri=xxxxxx-your-appIDUri-xxxxxx
-spring.security.oauth2.client.registration.azure.client-id=xxxxxx-your-client-id-xxxxxx
+
 
 ```
 
