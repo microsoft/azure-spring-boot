@@ -116,15 +116,15 @@ public class KeyVaultOperation {
     public String get(final String property) {
         Assert.hasText(property, "property should contain text.");
         refreshSecretKeysIfNeeded();
-        String secretName = toKeyVaultSecretName(property);
+        final String secretName = toKeyVaultSecretName(property);
         if (!secretNames.contains(secretName)) {
             return null;
         }
-        String cachedValue = keyVaultVaultCache.getOrDefault(secretName, null);
+        final String cachedValue = keyVaultVaultCache.getOrDefault(secretName, null);
         if (cachedValue != null) {
             return cachedValue;
         }
-        String secretValue = getValueFromKeyVault(secretName);
+        final String secretValue = getValueFromKeyVault(secretName);
         keyVaultVaultCache.put(secretName, secretValue);
         return secretValue;
     }
