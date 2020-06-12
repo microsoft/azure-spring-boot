@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,6 +36,7 @@ public class KeyVaultOperation {
     private volatile List<String> secretNames;
     private final boolean secretNamesAlreadyConfigured;
     private final long secretNamesRefreshIntervalInMs;
+    private final Map<String, String> keyVaultVaultCache;
     private volatile long secretNamesLastUpdateTime;
 
     public KeyVaultOperation(
@@ -55,6 +58,7 @@ public class KeyVaultOperation {
                 .collect(Collectors.toList());
         this.secretNamesAlreadyConfigured = !this.secretNames.isEmpty();
         this.secretNamesRefreshIntervalInMs = secretKeysRefreshIntervalInMs;
+        keyVaultVaultCache = new ConcurrentHashMap<>();
         this.secretNamesLastUpdateTime = 0;
     }
 
@@ -112,11 +116,17 @@ public class KeyVaultOperation {
     public String get(final String property) {
         Assert.hasText(property, "property should contain text.");
         refreshSecretKeysIfNeeded();
-        return Optional.of(property)
-                .map(this::toKeyVaultSecretName)
-                .filter(secretNames::contains)
-                .map(this::getValueFromKeyVault)
-                .orElse(null);
+        String secretName = toKeyVaultSecretName(property);
+        if (!secretNames.contains(secretName)) {
+            return null;
+        }
+        String cachedValue = keyVaultVaultCache.getOrDefault(secretName, null);
+        if (cachedValue != null) {
+            return cachedValue;
+        }
+        String secretValue = getValueFromKeyVault(secretName);
+        keyVaultVaultCache.put(secretName, secretValue);
+        return secretValue;
     }
 
     private synchronized void refreshSecretKeysIfNeeded() {
@@ -146,6 +156,7 @@ public class KeyVaultOperation {
                 .map(this::toKeyVaultSecretName)
                 .distinct()
                 .collect(Collectors.toList());
+        keyVaultVaultCache.clear();
         this.secretNamesLastUpdateTime = System.currentTimeMillis();
     }
 
