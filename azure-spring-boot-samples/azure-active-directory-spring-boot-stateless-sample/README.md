@@ -66,7 +66,10 @@ You have to activate the stateless app-role auth filter and configure the `clien
 
 ```properties
 azure.activedirectory.session-stateless=true
-azure.aad.app-role.client-id=xxxxxx-your-client-id-xxxxxx
+azure.activedirectory.client-id=xxxxxx-your-client-id-xxxxxx
+azure.activedirectory.appIdUri=xxxxxx-your-appIDUri-xxxxxx
+
+
 ```
 
 #### Configure Webapp
