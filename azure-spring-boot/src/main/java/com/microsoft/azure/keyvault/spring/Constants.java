@@ -28,7 +28,7 @@ public class Constants {
     public static final String AZURE_TOKEN_ACQUIRE_TIMEOUT_IN_SECONDS = "token-acquire-timeout-seconds";
     public static final String AZURE_KEYVAULT_ALLOW_TELEMETRY = "allow.telemetry";
 
-    public static final long DEFAULT_REFRESH_INTERVAL_MS = 1800000L;
+    public static final long DEFAULT_REFRESH_INTERVAL_MS = 60_000L;
     public static final long TOKEN_ACQUIRE_TIMEOUT_SECS = 60L;
 
     // for the User-Agent header set in track2 SDKs
