@@ -62,17 +62,21 @@ public class KeyVaultOperation {
         this.secretNamesLastUpdateTime = 0;
     }
 
-    public String[] getPropertyNames() {
+    private List<String> refreshAndGetSecretNames(){
         refreshSecretKeysIfNeeded();
+        return secretNames;
+    }
+
+    public String[] getPropertyNames() {
         if (!caseSensitive) {
-            return Optional.ofNullable(secretNames)
+            return Optional.of(refreshAndGetSecretNames())
                 .map(Collection::stream)
                 .orElseGet(Stream::empty)
                 .flatMap(p -> Stream.of(p, p.replaceAll("-", ".")))
                 .distinct()
                 .toArray(String[]::new);
         } else {
-            return Optional.ofNullable(secretNames)
+            return Optional.ofNullable(refreshAndGetSecretNames())
                 .map(Collection::stream)
                 .orElseGet(Stream::empty)
                 .distinct()
@@ -115,9 +119,8 @@ public class KeyVaultOperation {
 
     public String get(final String property) {
         Assert.hasText(property, "property should contain text.");
-        refreshSecretKeysIfNeeded();
         final String secretName = toKeyVaultSecretName(property);
-        if (!secretNames.contains(secretName)) {
+        if (!refreshAndGetSecretNames().contains(secretName)) {
             return null;
         }
         final String cachedValue = keyVaultVaultCache.getOrDefault(secretName, null);
