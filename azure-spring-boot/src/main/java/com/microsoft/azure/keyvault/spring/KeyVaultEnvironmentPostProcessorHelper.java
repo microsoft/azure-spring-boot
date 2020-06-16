@@ -91,7 +91,6 @@ class KeyVaultEnvironmentPostProcessorHelper {
             final boolean caseSensitive = Boolean.parseBoolean(
                     this.environment.getProperty(Constants.AZURE_KEYVAULT_CASE_SENSITIVE_KEYS, "false"));
             final KeyVaultOperation kvOperation = new KeyVaultOperation(secretClient,
-                    vaultUri,
                     refreshInterval,
                     secretKeys,
                     caseSensitive);
