@@ -46,7 +46,7 @@ public class VirtualMachineTool {
 
         final NetworkSecurityGroup nsg = azure.networkSecurityGroups()
                 .define("debnsg")
-                    .withRegion(Region.US_EAST)
+                    .withRegion(Region.US_WEST)
                     .withExistingResourceGroup(resourceGroup)
                     .defineRule("http")
                         .allowInbound()
@@ -70,7 +70,7 @@ public class VirtualMachineTool {
 
         final NetworkInterface ni = azure.networkInterfaces()
                 .define("debnet")
-                    .withRegion(Region.US_EAST)
+                    .withRegion(Region.US_WEST)
                     .withExistingResourceGroup(resourceGroup)
                     .withNewPrimaryNetwork("10.0.0.0/24")
                     .withPrimaryPrivateIPAddressDynamic()
@@ -82,7 +82,7 @@ public class VirtualMachineTool {
 
         final VirtualMachine virtualMachine = azure.virtualMachines()
                 .define(vmName)
-                    .withRegion(Region.US_EAST)
+                    .withRegion(Region.US_WEST)
                     .withExistingResourceGroup(resourceGroup)
                     .withExistingPrimaryNetworkInterface(ni)
                     .withPopularLinuxImage(KnownLinuxVirtualMachineImage.UBUNTU_SERVER_16_04_LTS)
