@@ -5,7 +5,11 @@
  */
 package com.microsoft.azure.keyvault.spring;
 
+import com.azure.core.exception.HttpRequestException;
+import com.azure.core.exception.ResourceNotFoundException;
 import com.azure.core.http.rest.PagedIterable;
+import com.azure.core.http.rest.Response;
+import com.azure.core.util.Context;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.models.KeyVaultSecret;
 import com.azure.security.keyvault.secrets.models.SecretProperties;
@@ -174,5 +178,28 @@ public class KeyVaultOperation {
      */
     void setProperties(HashMap<String, String> properties) {
         this.properties = properties;
+    }
+    
+    /**
+     * Are we up?
+     *
+     * @return true if we are, false otherwise.
+     */
+    boolean isUp() {
+        boolean up;
+        try {
+            final Response<KeyVaultSecret> response = secretClient
+                    .getSecretWithResponse("should-not-be-empty", null, Context.NONE);
+            up = response.getStatusCode() < 500;
+        } catch (ResourceNotFoundException e) {
+            up = true;
+        } catch (HttpRequestException hre) {
+            log.error("An HTTP error occurred while checking key vault connectivity", hre);
+            up = true;
+        } catch (RuntimeException re) {
+            log.error("A runtime error occurred while checking key vault connectivity", re);
+            up = false;
+        }
+        return up;
     }
 }
