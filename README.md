@@ -10,9 +10,9 @@
 
 - [azure-active-directory-b2c-spring-boot-starter](https://github.com/Azure/azure-sdk-for-java/tree/master/sdk/spring/azure-spring-boot-starter-active-directory-b2c)
 - [azure-active-directory-spring-boot-starter](https://github.com/Azure/azure-sdk-for-java/tree/master/sdk/spring/azure-spring-boot-starter-active-directory) 
-- [azure-cosmosdb-spring-boot-starter](https://github.com/Azure/azure-sdk-for-java/tree/master/sdk/spring/azure-spring-boot-starter-cosmosdb)
+- [azure-spring-boot-starter-cosmos](https://github.com/Azure/azure-sdk-for-java/tree/main/sdk/spring/azure-spring-boot-starter-cosmos)
 - [azure-keyvault-secrets-spring-boot-starter](https://github.com/Azure/azure-sdk-for-java/tree/master/sdk/spring/azure-spring-boot-starter-keyvault-secrets)
 - [azure-servicebus-jms-spring-boot-starter](https://github.com/Azure/azure-sdk-for-java/tree/master/sdk/spring/azure-spring-boot-starter-servicebus-jms)
-- [azure-spring-boot-metrics-starter](https://github.com/Azure/azure-sdk-for-java/tree/master/sdk/spring/azure-spring-boot-starter-metrics)
+- [azure-spring-boot-metrics-starter](https://github.com/Azure/azure-sdk-for-java/tree/azure-spring-data-cosmos_3.9.0/sdk/spring/azure-spring-boot-starter-metrics)
 - [azure-spring-boot-starter-storage](https://github.com/Azure/azure-sdk-for-java/tree/master/sdk/spring/azure-spring-boot-starter-storage)
-- [spring-data-gremlin-boot-starter](https://github.com/Azure/azure-sdk-for-java/tree/master/sdk/spring/azure-spring-boot-starter-data-gremlin)
+- [spring-data-gremlin-boot-starter](https://github.com/Azure/azure-sdk-for-java/tree/azure-spring-data-cosmos_3.7.0/sdk/spring/azure-spring-boot-starter-data-gremlin)
