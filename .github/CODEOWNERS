@@ -1,0 +1,5 @@
+# Instructions for CODEOWNERS file format and automatic build failure notifications:
+# https://github.blog/2017-07-06-introducing-code-owners/
+# https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+*                         @microsoft/spring-cloud-azure
