@@ -2,7 +2,7 @@
 
 ## The Spring modules in this repo are moved to [Azure Java SDK repo](https://github.com/Azure/azure-sdk-for-java/tree/master/sdk/spring).
 
-Spring Cloud Azure 4.x libraries have been GAed and it bring much more consistent experience, check this [reference doc](https://microsoft.github.io/spring-cloud-azure/) for more details.
+Spring Cloud Azure 4.x has been GAed and it bring much more consistent experience, check this [reference doc](https://microsoft.github.io/spring-cloud-azure/) for more details.
 
 ## We will continue to respond to open issues here, new issues should be reported on [Azure Java SDK repo](https://github.com/Azure/azure-sdk-for-java/).
 
