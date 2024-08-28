@@ -1,3 +1,6 @@
+> [!IMPORTANT]  
+> The repository microsoft/azure-spring-boot has been **archived** and is no longer actively maintained. The development for Spring related modules has been transitioned to the new [repository](https://github.com/Azure/azure-sdk-for-java/tree/main/sdk/spring). We strongly encourage you to use new version: **Spring Cloud Azure 4.x/5.x**. If you have any questions or issues, please raise an issue in the https://github.com/Azure/azure-sdk-for-java/issues.
+
 # Azure Spring Boot
 
 ## The Spring modules in this repo are moved to [Azure Java SDK repo](https://github.com/Azure/azure-sdk-for-java/tree/master/sdk/spring).
